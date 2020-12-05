@@ -1,17 +1,17 @@
 # Build the client
 FROM node:12.13.0-alpine
 
-WORKDIR /usr/app/app/
-COPY app/package*.json ./
+WORKDIR /usr/app/client/
+COPY client/package*.json ./
 RUN yarn install --only=prod
-COPY app/ ./
+COPY client/ ./
 RUN npm run build
 
-# Setup the server
-WORKDIR /usr/app/server/
-COPY server/package*.json ./
+# Setup the api
+WORKDIR /usr/app/api/
+COPY api/package*.json ./
 RUN npm install -qy --only=prod
-COPY server/ ./
+COPY api/ ./
 
 ENV PORT 8080
 EXPOSE 8080
