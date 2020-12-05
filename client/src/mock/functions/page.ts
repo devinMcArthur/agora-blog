@@ -8,15 +8,20 @@ import Page, {
 } from "../../typescript/interfaces/documents/Page";
 
 import ParagraphFunctions from "./paragraph";
-import SentenceFunctions from "./sentence";
+import PageConnectionFunctions from "./pageConnections";
 
 const getRootPages = () => {
   const pages = MockData.pages;
 
-  const populatedPages: PagePopulated[] = [];
+  let populatedPages: PagePopulated[] = [];
   pages.forEach((page) => {
     populatedPages.push(populatePage(page!)!);
   });
+
+  // Sort by how many times the page is referenced
+  populatedPages = populatedPages.sort(
+    (a, b) => b.referencedCount - a.referencedCount
+  );
 
   return populatedPages;
 };
@@ -46,11 +51,13 @@ const populatePage = (page: Page) => {
       currentParagraph
     );
 
-    populatedPage = {
-      ...page,
-      currentParagraph: populatedCurrentParagraph!,
-    };
+    populatedPage.currentParagraph = populatedCurrentParagraph!;
   }
+
+  // Times referenced
+  populatedPage.referencedCount = PageConnectionFunctions.getReferencedCount(
+    page._id
+  );
 
   return populatedPage;
 };
@@ -60,22 +67,9 @@ const fullPopulatePage = (page: Page) => {
 
   const fullObject: PagePopulatedFull = JSON.parse(JSON.stringify(populated));
 
-  // Get all sentences that reference this page
-  const sentencesThatReference = SentenceFunctions.findSentenceThatReferencesPage(
+  const relatedPages = PageConnectionFunctions.getPagesThatReference(
     page._id
-  );
-
-  // Get all pageIDs these sentences are linked to
-  let pageIDs = sentencesThatReference.map((sentence) => sentence.pageID);
-
-  // Make list unique
-  pageIDs = pageIDs.filter((id, index) => pageIDs.indexOf(id) === index);
-
-  // Get and populate all pages
-  let relatedPages = pageIDs.map((id) => {
-    const page = findPage(id);
-    return populatePage(page!);
-  });
+  ).map((page) => populatePage(page!));
 
   fullObject.relatedPages = relatedPages;
 

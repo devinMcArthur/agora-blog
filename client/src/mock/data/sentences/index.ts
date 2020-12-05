@@ -4,6 +4,7 @@ import page_covid_19_transmission_sentences from "./page_covid_19_transmission";
 import page_covid_19_symptoms_sentences from "./page_covid_19_symptoms";
 import page_covid_19_pandemic_sentences from "./page_covid_19_pandemic";
 import covid_19_masks_sentences from "./covid_19_masks";
+import page_covid_19_deaths_sentences from "./page_covid_19_deaths";
 
 const sentences = [
   ...page_sars_cov_2_sentences,
@@ -12,6 +13,7 @@ const sentences = [
   ...page_covid_19_symptoms_sentences,
   ...page_covid_19_pandemic_sentences,
   ...covid_19_masks_sentences,
+  ...page_covid_19_deaths_sentences,
 ];
 
 export default sentences;

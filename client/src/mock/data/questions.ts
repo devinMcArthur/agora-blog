@@ -79,6 +79,36 @@ const why_are_people_against_wearing_masks: Question = {
   question: "Why are people against wearing masks?",
 };
 
+const what_are_the_common_symptoms_of_covid_19: Question = {
+  _id: _ids.questions.what_are_the_common_symptoms_of_covid_19._id,
+  question: "What are the common symptoms of COVID-19?",
+};
+
+const why_is_covid_19_dangerous: Question = {
+  _id: _ids.questions.why_is_covid_19_dangerous._id,
+  question: "Why is COVID-19 dangerous?",
+};
+
+const what_is_long_covid: Question = {
+  _id: _ids.questions.what_is_long_covid._id,
+  question: "What is long COVID?",
+};
+
+const what_counts_as_a_covid_19_death: Question = {
+  _id: _ids.questions.what_counts_as_a_covid_19_death._id,
+  question: "What counts as a COVID-19 death?",
+};
+
+const how_many_covid_19_deaths_have_there_been: Question = {
+  _id: _ids.questions.how_many_covid_19_deaths_have_there_been._id,
+  question: "How many COVID-19 deaths have there been?",
+};
+
+const who_is_most_likely_to_die_from_covid_19: Question = {
+  _id: _ids.questions.who_is_most_likely_to_die_from_covid_19._id,
+  question: "Who is most likely to die from COVID-19?",
+};
+
 const questions = [
   what_is_sars_cov_2,
   how_is_sars_cov_2_related_to_sars_cov_1,
@@ -95,6 +125,12 @@ const questions = [
   which_masks_are_effective_against_covid_19,
   why_do_people_want_mask_mandates,
   why_are_people_against_wearing_masks,
+  what_are_the_common_symptoms_of_covid_19,
+  why_is_covid_19_dangerous,
+  what_is_long_covid,
+  what_counts_as_a_covid_19_death,
+  how_many_covid_19_deaths_have_there_been,
+  who_is_most_likely_to_die_from_covid_19,
 ];
 
 export default questions;

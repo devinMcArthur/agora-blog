@@ -8,6 +8,7 @@ import Sentence, {
 
 import PageFunctions from "./page";
 import QuestionFunctions from "./question";
+import VariableFunctions from "./variable";
 
 const findSentence = (sentenceID: Types.ObjectId) => {
   return MockData.sentences.find((sentence) => {
@@ -41,6 +42,12 @@ const populateSentence = (sentence: Sentence) => {
           if (style.variant === "internal") {
             style.value.page = PageFunctions.findPage(style.value.pageID)!;
           }
+          break;
+        case "variable":
+          const variable = VariableFunctions.findVariable(
+            style.value.variableID
+          );
+          style.value.variable = VariableFunctions.populateVariable(variable!);
           break;
         default:
           break;

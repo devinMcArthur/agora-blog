@@ -121,11 +121,38 @@ const page_covid_2019_sentence_4_v1: Sentence = {
   questionConnections: [],
 };
 
+const page_covid_2019_sentence_5_v1: Sentence = {
+  _id: _ids.pages.page_covid_2019.paragraphs[0].sentences[4],
+  pageID: _ids.pages.page_covid_2019._id,
+  current: true,
+  versions: [
+    {
+      createdAt: new Date("2020-12-04"),
+      stringArray: [
+        {
+          string: "",
+          styles: [
+            {
+              type: "quote",
+              value: {
+                sentenceID:
+                  _ids.pages.page_covid_19_deaths.paragraphs[0].sentences[1],
+              },
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  questionConnections: [],
+};
+
 const sentences = [
   page_covid_2019_sentence_1_v1,
   page_covid_2019_sentence_2_v1,
   page_covid_2019_sentence_3_v1,
   page_covid_2019_sentence_4_v1,
+  page_covid_2019_sentence_5_v1,
 ];
 
 export default sentences;

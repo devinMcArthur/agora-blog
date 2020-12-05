@@ -5,7 +5,23 @@ import Question, {
 
 import MockData from "../data";
 import PageFunctions from "./page";
-import SentenceFunctions from "./sentence";
+import QuestionPageConnectionFunctions from "./questionPageConnection";
+
+const getRootQuestions = () => {
+  const questions = MockData.questions;
+
+  let populatedQuestions: QuestionPopulated[] = [];
+  questions.forEach((question) => {
+    populatedQuestions.push(populateQuestion(question!));
+  });
+
+  // Sort by how many times the page is referenced
+  populatedQuestions = populatedQuestions.sort(
+    (a, b) => b.referencedCount - a.referencedCount
+  );
+
+  return populatedQuestions;
+};
 
 const findQuestion = (questionID: Types.ObjectId) => {
   return MockData.questions.find((question) => {
@@ -16,29 +32,21 @@ const findQuestion = (questionID: Types.ObjectId) => {
 const populateQuestion = (question: Question) => {
   const fullObject: QuestionPopulated = JSON.parse(JSON.stringify(question));
 
-  // Get all sentences that reference this question
-  const sentencesThatReference = SentenceFunctions.findSentenceThatReferencesQuestion(
+  const relatedPages = QuestionPageConnectionFunctions.getPagesThatReference(
     question._id
-  );
-
-  // Get all pageIDs these sentences are linked to
-  let pageIDs = sentencesThatReference.map((sentence) => sentence.pageID);
-
-  // Make list unique
-  pageIDs = pageIDs.filter((id, index) => pageIDs.indexOf(id) === index);
-
-  // Get and populate all pages
-  let relatedPages = pageIDs.map((id) => {
-    const page = PageFunctions.findPage(id);
-    return PageFunctions.populatePage(page!);
-  });
+  ).map((page) => PageFunctions.populatePage(page!));
 
   fullObject.relatedPages = relatedPages;
+
+  fullObject.referencedCount = QuestionPageConnectionFunctions.getReferencedCount(
+    question._id
+  );
 
   return fullObject;
 };
 
 const QuestionFunctions = {
+  getRootQuestions,
   findQuestion,
   populateQuestion,
 };

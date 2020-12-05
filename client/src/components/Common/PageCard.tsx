@@ -6,8 +6,8 @@ import Card from "./Card";
 
 import { PagePopulated } from "../../typescript/interfaces/documents/Page";
 
-import PageService from "../../services/pageService";
 import ParagraphService from "../../services/paragraphService";
+import SentenceService from "../../services/sentenceService";
 
 type ReferenceObject =
   | {
@@ -17,7 +17,8 @@ type ReferenceObject =
   | {
       type: "question";
       questionID: Types.ObjectId;
-    };
+    }
+  | { type: "variable"; variableID: Types.ObjectId };
 
 type PageContainerProps = {
   page: PagePopulated;
@@ -50,6 +51,12 @@ class PageContainer extends React.Component<
             referenceObject.questionID
           );
           break;
+        case "variable":
+          referenceSentence = ParagraphService().findSentenceWithVariableReference(
+            page.currentParagraph,
+            referenceObject.variableID
+          );
+          break;
         default:
           break;
       }
@@ -61,7 +68,7 @@ class PageContainer extends React.Component<
         <Link to={`/p/${page.slug}`} style={{ margin: "0" }}>
           <h4>{page.title}</h4>
         </Link>
-        {PageService().translateSentenceToJSX(sentence)}
+        {SentenceService().translateSentenceToJSX(sentence)}
       </Card>
     );
   }

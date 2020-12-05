@@ -32,7 +32,6 @@ class HomePage extends React.Component<HomePageProps, HomePageState> {
   }
 
   render() {
-    console.log(this.state.pages);
     const pagesJSX = this.state.pages.map((page) => <PageCard page={page} />);
 
     return (

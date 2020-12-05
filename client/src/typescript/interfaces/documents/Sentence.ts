@@ -4,72 +4,76 @@ import Page, { PagePopulated } from "./Page";
 import Question from "./Question";
 import { VariablePopulated } from "./Variable";
 
-type StyleTypes = Array<
-  | {
-      type: "mention";
-      variant: "internal";
-      value: {
-        pageID: Types.ObjectId;
-      };
-    }
-  | {
-      type: "mention";
-      variant: "external";
-      value: {
-        url: string;
-      };
-    }
-  | {
-      type: "variable";
-      value: {
-        variableID: Types.ObjectId;
-      };
-    }
-  | {
-      type: "quote";
-      value: {
-        sentenceID: Types.ObjectId;
-      };
-    }
-  | {
-      type: "bold";
-    }
+export type InternalMentionStyleType = {
+  type: "mention";
+  variant: "internal";
+  value: {
+    pageID: Types.ObjectId;
+  };
+};
+
+export type ExternalMentionStyleType = {
+  type: "mention";
+  variant: "external";
+  value: {
+    url: string;
+  };
+};
+
+export type VariableStyleType = {
+  type: "variable";
+  value: {
+    variableID: Types.ObjectId;
+  };
+};
+
+export type QuoteStyleType = {
+  type: "quote";
+  value: {
+    sentenceID: Types.ObjectId;
+  };
+};
+
+export type BoldStyleType = {
+  type: "bold";
+};
+
+export type StyleTypes = Array<
+  | InternalMentionStyleType
+  | ExternalMentionStyleType
+  | VariableStyleType
+  | QuoteStyleType
+  | BoldStyleType
 >;
 
-type PopulatedStyleTypes = Array<
-  | {
-      type: "mention";
-      variant: "internal";
-      value: {
-        page: Page;
-        pageID: Types.ObjectId;
-      };
-    }
-  | {
-      type: "mention";
-      variant: "external";
-      value: {
-        url: string;
-      };
-    }
-  | {
-      type: "variable";
-      value: {
-        variable: VariablePopulated;
-        variableID: Types.ObjectId;
-      };
-    }
-  | {
-      type: "quote";
-      value: {
-        page: Page;
-        sentence: SentencePopulated;
-        sentenceID: Types.ObjectId;
-      };
-    }
-  | {
-      type: "bold";
-    }
+export type PopulatedInternalMentionStyleType = InternalMentionStyleType & {
+  value: {
+    pageID: Types.ObjectId;
+    page: Page;
+  };
+};
+
+export type PopulatedVariableStyleType = VariableStyleType & {
+  value: {
+    variable: VariablePopulated;
+    variableID: Types.ObjectId;
+  };
+};
+
+export type PopulatedQuoteStyleType = QuoteStyleType & {
+  value: {
+    page: Page;
+    sentence: SentencePopulated;
+    sentenceID: Types.ObjectId;
+  };
+};
+
+export type PopulatedStyleTypes = Array<
+  | PopulatedInternalMentionStyleType
+  | ExternalMentionStyleType
+  | PopulatedVariableStyleType
+  | PopulatedQuoteStyleType
+  | BoldStyleType
 >;
 
 export default interface Sentence {

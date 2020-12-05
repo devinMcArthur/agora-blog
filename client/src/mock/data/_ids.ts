@@ -29,6 +29,7 @@ const _ids = {
             Types.ObjectId("5fca84ddd24f0800006b7781"),
             Types.ObjectId("5fca84e4d24f0800006b7782"),
             Types.ObjectId("5fca84ebd24f0800006b7783"),
+            Types.ObjectId("5fcc15c016b3060000894df0"),
           ],
         },
       ],
@@ -80,6 +81,19 @@ const _ids = {
             Types.ObjectId("5fca8567d24f0800006b77da"),
             Types.ObjectId("5fca856dd24f0800006b77db"),
             Types.ObjectId("5fca8573d24f0800006b77dc"),
+          ],
+        },
+      ],
+    },
+    page_covid_19_deaths: {
+      _id: Types.ObjectId("5fcbfaf432319c0000516e70"),
+      paragraphs: [
+        {
+          _id: Types.ObjectId("5fcbfb0332319c0000516e71"),
+          sentences: [
+            Types.ObjectId("5fcbfb1032319c0000516e72"),
+            Types.ObjectId("5fcbfcae32319c0000516e76"),
+            Types.ObjectId("5fcbfcbe32319c0000516e77"),
           ],
         },
       ],
@@ -147,6 +161,15 @@ const _ids = {
     },
     why_are_people_against_wearing_masks: {
       _id: Types.ObjectId("5fca85efd24f0800006b77f0"),
+    },
+    how_many_covid_19_deaths_have_there_been: {
+      _id: Types.ObjectId("5fcbfb3332319c0000516e73"),
+    },
+    what_counts_as_a_covid_19_death: {
+      _id: Types.ObjectId("5fcbfc0832319c0000516e74"),
+    },
+    who_is_most_likely_to_die_from_covid_19: {
+      _id: Types.ObjectId("5fcbfc2c32319c0000516e75"),
     },
   },
 };

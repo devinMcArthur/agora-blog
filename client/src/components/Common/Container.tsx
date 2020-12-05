@@ -4,7 +4,7 @@ import { layout, space, flexbox } from "styled-system";
 import { AgoraTheme } from "../Providers/ThemeProvider";
 
 interface ContainerProps {
-  layout?: string;
+  layout?: "mini" | "midi" | "maxi" | "full";
   shadowType?: keyof typeof AgoraTheme.shadows;
   flexDirection?: string;
   height?: string;

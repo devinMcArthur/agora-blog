@@ -8,4 +8,5 @@ export default interface Question {
 
 export interface QuestionPopulated extends Question {
   relatedPages: PagePopulated[];
+  referencedCount: number;
 }

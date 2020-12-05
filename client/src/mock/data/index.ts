@@ -4,7 +4,7 @@ import paragraphs from "./paragraphs";
 import variables from "./variables";
 import questions from "./questions";
 
-const mockData = {
+const MockData = {
   pages,
   sentences,
   paragraphs,
@@ -12,4 +12,4 @@ const mockData = {
   questions,
 };
 
-export default mockData;
+export default MockData;

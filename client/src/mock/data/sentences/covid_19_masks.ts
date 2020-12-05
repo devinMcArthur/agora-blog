@@ -65,7 +65,24 @@ const page_covid_19_masks_sentence_2_v1: Sentence = {
       stringArray: [
         {
           string:
-            "Masks are likely to be effective at preventing the spread of SARS-CoV-2, although the level of effectiveness is still being researched.",
+            "Masks are likely to be effective at preventing the spread of ",
+          styles: [],
+        },
+        {
+          string: "SARS-CoV-2",
+          styles: [
+            {
+              type: "mention",
+              variant: "internal",
+              value: {
+                pageID: _ids.pages.page_sars_cov_2._id,
+              },
+            },
+          ],
+        },
+        {
+          string:
+            ", although the level of effectiveness is still being researched.",
           styles: [],
         },
       ],

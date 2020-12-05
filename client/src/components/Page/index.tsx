@@ -70,7 +70,7 @@ class Page extends React.Component<PageProps & RouterProps, PageState> {
       );
     }
 
-    return <Container>{content}</Container>;
+    return <Container layout="maxi">{content}</Container>;
   }
 }
 

@@ -31,36 +31,36 @@ const Heading = styled.div`
   }
 `;
 
-// const Nav = styled.div`
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: flex-end;
-// `;
+const Nav = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+`;
 
-// interface NavItemProps {
-//   active: boolean;
-// }
+interface NavItemProps {
+  active: boolean;
+}
 
-// const NavItem = styled.div<NavItemProps>`
-//   font-size: 14px;
-//   color: ${(props) => props.theme.colors.fontLight};
-//   font-weight: bold;
-//   cursor: pointer;
-//   margin-left: 30px;
+const NavItem = styled.div<NavItemProps>`
+  font-size: 14px;
+  color: ${(props) => props.theme.colors.fontLight};
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 30px;
 
-//   ${(props) =>
-//     props.active &&
-//     `
-//         color: ${props.theme.colors.fontDark};
-//         border-bottom: 2px solid ${props.theme.colors.fontDark};
-//     `}
-// `;
+  ${(props) =>
+    props.active &&
+    `
+        color: ${props.theme.colors.fontDark};
+        border-bottom: 2px solid ${props.theme.colors.fontDark};
+    `}
+`;
 
 interface Props extends RouteComponentProps {}
 
 class WebadminNavbar extends React.Component<Props> {
   render() {
-    // const { pathname } = this.props.history.location;
+    const { pathname } = this.props.history.location;
 
     return (
       <Container
@@ -71,7 +71,6 @@ class WebadminNavbar extends React.Component<Props> {
         shadowType="bottomShadow"
         marginLeft="0"
         marginRight="0"
-        width="100%"
         marginBottom="1rem"
         maxWidth="none"
       >
@@ -82,14 +81,14 @@ class WebadminNavbar extends React.Component<Props> {
           alignItems="center"
         >
           <Heading onClick={() => this.props.history.push("/")}>agora</Heading>
-          {/* <Nav>
+          <Nav>
             <NavItem
-              onClick={() => this.props.history.push("/tiamat")}
-              active={pathname === "/tiamat"}
+              onClick={() => this.props.history.push("/questions")}
+              active={pathname === "/questions"}
             >
-              Organizations
+              Questions
             </NavItem>
-            <NavItem
+            {/* <NavItem
               data-testid="templates-button-nav"
               onClick={() =>
                 this.props.history.push("/tiamat/template-careplans")
@@ -97,8 +96,8 @@ class WebadminNavbar extends React.Component<Props> {
               active={pathname === "/tiamat/template-careplans"}
             >
               Templates
-            </NavItem>
-          </Nav> */}
+            </NavItem> */}
+          </Nav>
         </Flex>
       </Container>
     );

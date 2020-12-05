@@ -33,8 +33,26 @@ export default function ParagraphService() {
     );
   };
 
+  const findSentenceWithVariableReference = (
+    paragraph: ParagraphPopulated,
+    variableID: Types.ObjectId
+  ) => {
+    return paragraph.sentences.find((sentence) =>
+      sentence.versions[
+        sentence.versions.length - 1
+      ].stringArray.find((stringArray) =>
+        stringArray.styles.find(
+          (style) =>
+            style.type === "variable" &&
+            style.value.variableID.toString() === variableID.toString()
+        )
+      )
+    );
+  };
+
   return {
     findSentenceWithPageReference,
     findSentenceWithQuestionReference,
+    findSentenceWithVariableReference,
   };
 }

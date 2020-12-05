@@ -12,6 +12,7 @@ export default interface Page {
 
 export interface PagePopulated extends Page {
   currentParagraph: ParagraphPopulated;
+  referencedCount: number;
 }
 
 export interface PagePopulatedFull extends PagePopulated {

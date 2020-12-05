@@ -68,6 +68,17 @@ const page_covid_19_masks: Page = {
   ],
 };
 
+const page_covid_19_deaths: Page = {
+  _id: _ids.pages.page_covid_19_deaths._id,
+  title: "COVID-19 Deaths",
+  slug: "COVID-19_Deaths",
+  paragraphVersionConnections: [
+    {
+      paragraphID: _ids.pages.page_covid_19_deaths.paragraphs[0]._id,
+    },
+  ],
+};
+
 const pages = [
   page_sars_cov_2,
   page_covid_2019,
@@ -75,6 +86,7 @@ const pages = [
   page_covid_19_symptoms,
   page_covid_19_pandemic,
   page_covid_19_masks,
+  page_covid_19_deaths,
 ];
 
 export default pages;

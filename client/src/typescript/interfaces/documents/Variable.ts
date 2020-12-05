@@ -1,6 +1,9 @@
 import { Types } from "mongoose";
+import { PagePopulated } from "./Page";
 
-type ValueTypes = { number: number } | { equation: EquationTypes };
+type ValueTypes =
+  | { type: "number"; number: number }
+  | { type: "equation"; equation: EquationTypes };
 
 type EquationTypes = Array<
   | {
@@ -14,10 +17,13 @@ type EquationTypes = Array<
 export default interface Variable {
   _id: Types.ObjectId;
   title: string;
-  type: "number" | "equation";
   value: ValueTypes;
 }
 
 export interface VariablePopulated extends Variable {
   finalValue: number;
+}
+
+export interface VariablePopulatedFull extends VariablePopulated {
+  relatedPages: PagePopulated[];
 }
