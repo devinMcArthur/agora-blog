@@ -14,7 +14,7 @@ var forceSsl = function (req, res, next) {
 
 if (process.env.NODE_ENV === "production") {
   app.use(forceSsl);
-  app.use(express.static("../app/build"));
+  app.use(express.static("../client/build"));
   app.get("/*", (req, res) => {
     res.sendFile(path.resolve("../", "client", "build", "index.html"));
   });
