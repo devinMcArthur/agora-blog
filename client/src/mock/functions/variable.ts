@@ -1,8 +1,10 @@
 import { Types } from "mongoose";
+import { versions } from "process";
 
 import Variable, {
   VariablePopulated,
   VariablePopulatedFull,
+  VariableValueTypes,
 } from "../../typescript/interfaces/documents/Variable";
 import MockData from "../data";
 import PageFunctions from "./page";
@@ -19,7 +21,9 @@ const populateVariable = (variable: Variable) => {
     JSON.stringify(variable)
   );
 
-  variableObject.finalValue = getFinalValue(variable);
+  variableObject.versions[
+    variableObject.versions.length - 1
+  ].finalValue = getFinalValue(variable.versions[variable.versions.length - 1]);
 
   return variableObject;
 };
@@ -38,20 +42,23 @@ const fullPopulateVariable = (variable: Variable) => {
   return full;
 };
 
-const getFinalValue = (variable: Variable) => {
-  switch (variable.value.type) {
+const getFinalValue = (variableValue: VariableValueTypes) => {
+  switch (variableValue.type) {
     case "number":
-      return variable.value.number;
+      return variableValue.number;
     case "equation":
       let equation = "";
-      for (let i = 0; i < variable.value.equation.length; i++) {
-        const item = variable.value.equation[i];
+      for (let i = 0; i < variableValue.equation.length; i++) {
+        const item = variableValue.equation[i];
         if (item.type === "number") {
           equation += item.number;
         } else if (item.type === "operator") {
           equation += item.operator;
         } else if (item.type === "variable") {
-          equation += getFinalValue(findVariable(item.variableID)!);
+          const variable = findVariable(item.variableID);
+          equation += getFinalValue(
+            variable?.versions[variable.versions.length - 1]!
+          );
         }
       }
       // eslint-disable-next-line no-eval

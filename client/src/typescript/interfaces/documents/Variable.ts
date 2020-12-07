@@ -1,9 +1,30 @@
 import { Types } from "mongoose";
 import { PagePopulated } from "./Page";
 
-type ValueTypes =
-  | { type: "number"; number: number }
-  | { type: "equation"; equation: EquationTypes };
+export type VariableValueTypes =
+  | { type: "number"; number: number; sourceURL: string; createdAt: Date }
+  | {
+      type: "equation";
+      equation: EquationTypes;
+      sourceURL?: string;
+      createdAt: Date;
+    };
+
+export type PopulatedVariableValueTypes =
+  | {
+      type: "number";
+      number: number;
+      sourceURL: string;
+      createdAt: Date;
+      finalValue: number;
+    }
+  | {
+      type: "equation";
+      equation: EquationTypes;
+      sourceURL: string;
+      createdAt: Date;
+      finalValue: number;
+    };
 
 type EquationTypes = Array<
   | {
@@ -17,11 +38,11 @@ type EquationTypes = Array<
 export default interface Variable {
   _id: Types.ObjectId;
   title: string;
-  value: ValueTypes;
+  versions: Array<VariableValueTypes>;
 }
 
 export interface VariablePopulated extends Variable {
-  finalValue: number;
+  versions: Array<PopulatedVariableValueTypes>;
 }
 
 export interface VariablePopulatedFull extends VariablePopulated {

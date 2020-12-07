@@ -109,6 +109,85 @@ const who_is_most_likely_to_die_from_covid_19: Question = {
   question: "Who is most likely to die from COVID-19?",
 };
 
+const what_does_a_covid_19_test_do: Question = {
+  _id: _ids.questions.what_does_a_covid_19_test_do._id,
+  question: "What does a COVID-19 test do?",
+};
+
+const what_tests_are_used_to_test_for_covid_19: Question = {
+  _id: _ids.questions.what_tests_are_used_to_test_for_covid_19._id,
+  question: "What tests are used to test for COVID-19?",
+};
+
+const what_is_the_effectiveness_of_covid_19_testing: Question = {
+  _id: _ids.questions.what_is_the_effectiveness_of_covid_19_testing._id,
+  question: "What is the effectiveness of COVID-19 testing?",
+};
+
+const what_are_the_benefits_of_testing_for_covid_19: Question = {
+  _id: _ids.questions.what_are_the_benefits_of_testing_for_covid_19._id,
+  question: "What are the benefits of testing for COVID-19?",
+};
+
+const what_are_the_downsides_of_testing_for_covid_19: Question = {
+  _id: _ids.questions.what_are_the_downsides_of_testing_for_covid_19._id,
+  question: "What are the downsides of testing for COVID-19?",
+};
+
+const what_is_a_covid_19_rt_pcr_test: Question = {
+  _id: _ids.questions.what_is_a_covid_19_rt_pcr_test._id,
+  question: "What is a COVID-19 RT-PCR test?",
+};
+
+const what_is_the_effectiveness_of_rt_pcr_covid_19_tests: Question = {
+  _id: _ids.questions.what_is_the_effectiveness_of_rt_pcr_covid_19_tests._id,
+  question: "What is the effectiveness of RT-PCR COVID-19 tests?",
+};
+
+const what_is_the_false_positive_rate_of_rt_pcr_covid_19_tests: Question = {
+  _id:
+    _ids.questions.what_is_the_false_positive_rate_of_rt_pcr_covid_19_tests._id,
+  question: "What is the false positive rate of RT-PCR COVID-19 tests?",
+};
+
+const what_is_the_false_negative_rate_of_rt_pcr_covid_19_tests: Question = {
+  _id:
+    _ids.questions.what_is_the_false_negative_rate_of_rt_pcr_covid_19_tests._id,
+  question: "What is the false negative rate of RT-PCR COVID-19 tests?",
+};
+
+const how_does_cycle_threshold_ct_affect_rt_pcr_test_accuracy: Question = {
+  _id:
+    _ids.questions.how_does_cycle_threshold_ct_affect_rt_pcr_test_accuracy._id,
+  question: "How does Cycle Threshold (Ct) affect RT-PCR test accuracy?",
+};
+
+const what_is_the_significance_of_cycle_threshold_for_rt_pcr_tests: Question = {
+  _id:
+    _ids.questions.what_is_the_significance_of_cycle_threshold_for_rt_pcr_tests
+      ._id,
+  question: "What is the significance of Cycle Threshold for RT-PCR tests?",
+};
+
+const what_is_the_significance_of_cycle_threshold_value: Question = {
+  _id: _ids.questions.what_is_the_significance_of_cycle_threshold_value._id,
+  question: "What is the significane of Cycle Threshold value?",
+};
+
+const how_is_cycle_threshold_used: Question = {
+  _id: _ids.questions.how_is_cycle_threshold_used._id,
+  question: "How is Cycle Threshold used?",
+};
+
+const why_did_florida_mandate_reporting_of_cycle_threshold_value_for_rt_pcr_tests: Question = {
+  _id:
+    _ids.questions
+      .why_did_florida_mandate_reporting_of_cycle_threshold_value_for_rt_pcr_tests
+      ._id,
+  question:
+    "Why did Florida mandate reporting of Cycle Threshold value for RT-PCR tests?",
+};
+
 const questions = [
   what_is_sars_cov_2,
   how_is_sars_cov_2_related_to_sars_cov_1,
@@ -131,6 +210,20 @@ const questions = [
   what_counts_as_a_covid_19_death,
   how_many_covid_19_deaths_have_there_been,
   who_is_most_likely_to_die_from_covid_19,
+  what_does_a_covid_19_test_do,
+  what_tests_are_used_to_test_for_covid_19,
+  what_is_the_effectiveness_of_covid_19_testing,
+  what_are_the_benefits_of_testing_for_covid_19,
+  what_are_the_downsides_of_testing_for_covid_19,
+  what_is_a_covid_19_rt_pcr_test,
+  what_is_the_effectiveness_of_rt_pcr_covid_19_tests,
+  what_is_the_false_positive_rate_of_rt_pcr_covid_19_tests,
+  what_is_the_false_negative_rate_of_rt_pcr_covid_19_tests,
+  how_does_cycle_threshold_ct_affect_rt_pcr_test_accuracy,
+  what_is_the_significance_of_cycle_threshold_for_rt_pcr_tests,
+  what_is_the_significance_of_cycle_threshold_value,
+  how_is_cycle_threshold_used,
+  why_did_florida_mandate_reporting_of_cycle_threshold_value_for_rt_pcr_tests,
 ];
 
 export default questions;

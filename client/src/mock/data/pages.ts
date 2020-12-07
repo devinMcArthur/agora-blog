@@ -79,6 +79,39 @@ const page_covid_19_deaths: Page = {
   ],
 };
 
+const page_covid_19_testing: Page = {
+  _id: _ids.pages.page_covid_19_testing._id,
+  title: "COVID-19 Testing",
+  slug: "COVID-19_Testing",
+  paragraphVersionConnections: [
+    {
+      paragraphID: _ids.pages.page_covid_19_testing.paragraphs[0]._id,
+    },
+  ],
+};
+
+const page_covid_19_rt_pcr_test: Page = {
+  _id: _ids.pages.page_covid_19_rt_pcr_test._id,
+  title: "COVID-19 RT-PCR Test",
+  slug: "COVID-19_RT-PCR_Test",
+  paragraphVersionConnections: [
+    {
+      paragraphID: _ids.pages.page_covid_19_rt_pcr_test.paragraphs[0]._id,
+    },
+  ],
+};
+
+const page_rt_pcr_cycle_threshold: Page = {
+  _id: _ids.pages.page_rt_pcr_cycle_threshold._id,
+  title: "RT-PCR Cycle Threshold",
+  slug: "RT-PCR_Cycle_Threshold",
+  paragraphVersionConnections: [
+    {
+      paragraphID: _ids.pages.page_rt_pcr_cycle_threshold.paragraphs[0]._id,
+    },
+  ],
+};
+
 const pages = [
   page_sars_cov_2,
   page_covid_2019,
@@ -87,6 +120,9 @@ const pages = [
   page_covid_19_pandemic,
   page_covid_19_masks,
   page_covid_19_deaths,
+  page_covid_19_testing,
+  page_covid_19_rt_pcr_test,
+  page_rt_pcr_cycle_threshold,
 ];
 
 export default pages;

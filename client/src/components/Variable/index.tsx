@@ -60,12 +60,20 @@ class Variable extends React.Component<Props & RouterProps, State> {
         />
       ));
 
+      const currentVersion = variable.versions[variable.versions.length - 1];
+
       content = (
         <Flex flexDirection="column">
           <h2>{variable.title}</h2>
           <h3>
-            Current: <FinalValue finalValue={variable.finalValue} />
+            Current: <FinalValue finalValue={currentVersion.finalValue} />
           </h3>
+          <i>updated: {currentVersion.createdAt}</i>
+          <i>
+            <a href={currentVersion.sourceURL} target="_blank" rel="noreferrer">
+              source
+            </a>
+          </i>
           <Flex>{relatedPageList}</Flex>
         </Flex>
       );

@@ -58,7 +58,7 @@ const page_covid_19_deaths_sentence_2_v1: Sentence = {
             {
               type: "variable",
               value: {
-                variableID: _ids.variables.var_global_cases_covid_19._id,
+                variableID: _ids.variables.var_global_deaths_covid_19._id,
               },
             },
           ],

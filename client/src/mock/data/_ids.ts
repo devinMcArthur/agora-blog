@@ -98,10 +98,66 @@ const _ids = {
         },
       ],
     },
+    page_covid_19_testing: {
+      _id: Types.ObjectId("5fce6989cf98ce0000e11730"),
+      paragraphs: [
+        {
+          _id: Types.ObjectId("5fce69b2cf98ce0000e11731"),
+          sentences: [
+            Types.ObjectId("5fce69c7cf98ce0000e11732"),
+            Types.ObjectId("5fce69d7cf98ce0000e11733"),
+            Types.ObjectId("5fce69e6cf98ce0000e11734"),
+            Types.ObjectId("5fce69f2cf98ce0000e11735"),
+            Types.ObjectId("5fce6a03cf98ce0000e11736"),
+          ],
+        },
+      ],
+    },
+    page_covid_19_rt_pcr_test: {
+      _id: Types.ObjectId("5fce6b50cf98ce0000e1173c"),
+      paragraphs: [
+        {
+          _id: Types.ObjectId("5fce6b62cf98ce0000e1173d"),
+          sentences: [
+            Types.ObjectId("5fce6b72cf98ce0000e1173e"),
+            Types.ObjectId("5fce6bdbcf98ce0000e1173f"),
+            Types.ObjectId("5fce6be7cf98ce0000e11740"),
+          ],
+        },
+      ],
+    },
+    page_rt_pcr_cycle_threshold: {
+      _id: Types.ObjectId("5fce6cf8cf98ce0000e11746"),
+      paragraphs: [
+        {
+          _id: Types.ObjectId("5fce6d07cf98ce0000e11747"),
+          sentences: [
+            Types.ObjectId("5fce6d18cf98ce0000e11748"),
+            Types.ObjectId("5fce6d23cf98ce0000e11749"),
+            Types.ObjectId("5fce6d2dcf98ce0000e1174a"),
+          ],
+        },
+      ],
+    },
   },
   variables: {
     var_global_cases_covid_19: {
       _id: Types.ObjectId("5fca857bd24f0800006b77dd"),
+    },
+    var_global_deaths_covid_19: {
+      _id: Types.ObjectId("5fce75edcf98ce0000e1174f"),
+    },
+    var_covid_19_rt_pcr_test_false_negative_rate: {
+      _id: Types.ObjectId("5fce9893cf98ce0000e11750"),
+    },
+    var_covid_19_rt_pcr_test_false_positive_rate: {
+      _id: Types.ObjectId("5fcea84dcf98ce0000e11753"),
+    },
+    var_covid_19_rt_pcr_test_specificity: {
+      _id: Types.ObjectId("5fce98b4cf98ce0000e11751"),
+    },
+    var_covid_19_rt_pcr_test_sensitivity: {
+      _id: Types.ObjectId("5fce990dcf98ce0000e11752"),
     },
   },
   questions: {
@@ -170,6 +226,48 @@ const _ids = {
     },
     who_is_most_likely_to_die_from_covid_19: {
       _id: Types.ObjectId("5fcbfc2c32319c0000516e75"),
+    },
+    what_does_a_covid_19_test_do: {
+      _id: Types.ObjectId("5fce6a2dcf98ce0000e11737"),
+    },
+    what_tests_are_used_to_test_for_covid_19: {
+      _id: Types.ObjectId("5fce6a4acf98ce0000e11738"),
+    },
+    what_is_the_effectiveness_of_covid_19_testing: {
+      _id: Types.ObjectId("5fce6a6acf98ce0000e11739"),
+    },
+    what_are_the_benefits_of_testing_for_covid_19: {
+      _id: Types.ObjectId("5fce6a84cf98ce0000e1173a"),
+    },
+    what_are_the_downsides_of_testing_for_covid_19: {
+      _id: Types.ObjectId("5fce6aa5cf98ce0000e1173b"),
+    },
+    what_is_a_covid_19_rt_pcr_test: {
+      _id: Types.ObjectId("5fce6c17cf98ce0000e11741"),
+    },
+    what_is_the_effectiveness_of_rt_pcr_covid_19_tests: {
+      _id: Types.ObjectId("5fce6c35cf98ce0000e11742"),
+    },
+    what_is_the_false_positive_rate_of_rt_pcr_covid_19_tests: {
+      _id: Types.ObjectId("5fce6c58cf98ce0000e11743"),
+    },
+    what_is_the_false_negative_rate_of_rt_pcr_covid_19_tests: {
+      _id: Types.ObjectId("5fce6c75cf98ce0000e11744"),
+    },
+    how_does_cycle_threshold_ct_affect_rt_pcr_test_accuracy: {
+      _id: Types.ObjectId("5fce6caccf98ce0000e11745"),
+    },
+    what_is_the_significance_of_cycle_threshold_for_rt_pcr_tests: {
+      _id: Types.ObjectId("5fce6d5dcf98ce0000e1174b"),
+    },
+    what_is_the_significance_of_cycle_threshold_value: {
+      _id: Types.ObjectId("5fce6d7fcf98ce0000e1174c"),
+    },
+    how_is_cycle_threshold_used: {
+      _id: Types.ObjectId("5fce6d95cf98ce0000e1174d"),
+    },
+    why_did_florida_mandate_reporting_of_cycle_threshold_value_for_rt_pcr_tests: {
+      _id: Types.ObjectId("5fce6dbacf98ce0000e1174e"),
     },
   },
 };

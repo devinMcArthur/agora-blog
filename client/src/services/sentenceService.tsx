@@ -43,7 +43,13 @@ export default function SentenceService() {
                 style.value.page.slug
               }">src</a>]</sup>`;
             } else if (style.type === "variable") {
-              newHTML = `<span data-variable_id=${style.value.variableID} class="variable-block" contenteditable="false">${style.value.variable.finalValue}</span>`;
+              newHTML = `<span data-variable_id=${
+                style.value.variableID
+              } class="variable-block" contenteditable="false">${
+                style.value.variable.versions[
+                  style.value.variable.versions.length - 1
+                ].finalValue
+              }</span>`;
             }
           });
         }

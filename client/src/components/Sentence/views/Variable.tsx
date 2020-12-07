@@ -22,7 +22,9 @@ const SourceLink = styled.a`
 `;
 
 const Variable = (props: Props) => {
-  const { finalValue } = props.style.value.variable;
+  const { finalValue } = props.style.value.variable.versions[
+    props.style.value.variable.versions.length - 1
+  ];
 
   return (
     <SourceLink
