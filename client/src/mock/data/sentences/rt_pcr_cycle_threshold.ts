@@ -91,6 +91,54 @@ const page_rt_pcr_cycle_threshold_sentence_3_v1: Sentence = {
       stringArray: [
         {
           string:
+            "A study has shown that with a Ct value of 25, 70% of patients remain positive in cell cultures, at 30, this value drops to 20%, and at Ct = 35, <3% of cultures are positive for viral ",
+          styles: [],
+        },
+        {
+          string: "SARS-CoV-2",
+          styles: [
+            {
+              type: "mention",
+              variant: "internal",
+              value: {
+                pageID: _ids.pages.page_sars_cov_2._id,
+              },
+            },
+          ],
+        },
+        {
+          string:
+            " RNA. Confirming that high Ct values are mostly correlated with low viral loads.",
+          styles: [],
+        },
+      ],
+    },
+  ],
+  questionConnections: [
+    {
+      questionID: _ids.questions.how_does_ct_value_effect_testing_outcomes._id,
+    },
+  ],
+  sources: {
+    urls: [
+      {
+        url:
+          "https://academic.oup.com/cid/advance-article/doi/10.1093/cid/ciaa1491/5912603",
+      },
+    ],
+  },
+};
+
+const page_rt_pcr_cycle_threshold_sentence_4_v1: Sentence = {
+  _id: _ids.pages.page_rt_pcr_cycle_threshold.paragraphs[0].sentences[3],
+  pageID: _ids.pages.page_rt_pcr_cycle_threshold._id,
+  current: true,
+  versions: [
+    {
+      createdAt: new Date("2020-12-07"),
+      stringArray: [
+        {
+          string:
             "Cycle threshold is typically used by health officials to determine how much viral load should be considered a positive result, with ",
           styles: [],
         },
@@ -139,6 +187,7 @@ const sentences = [
   page_rt_pcr_cycle_threshold_sentence_1_v1,
   page_rt_pcr_cycle_threshold_sentence_2_v1,
   page_rt_pcr_cycle_threshold_sentence_3_v1,
+  page_rt_pcr_cycle_threshold_sentence_4_v1,
 ];
 
 export default sentences;

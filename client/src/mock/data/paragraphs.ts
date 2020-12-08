@@ -121,6 +121,7 @@ const page_rt_pcr_cycle_threshold_paragraph_v1: Paragraph = {
     _ids.pages.page_rt_pcr_cycle_threshold.paragraphs[0].sentences[0],
     _ids.pages.page_rt_pcr_cycle_threshold.paragraphs[0].sentences[1],
     _ids.pages.page_rt_pcr_cycle_threshold.paragraphs[0].sentences[2],
+    _ids.pages.page_rt_pcr_cycle_threshold.paragraphs[0].sentences[3],
   ],
   version: 1,
   mostRecent: true,

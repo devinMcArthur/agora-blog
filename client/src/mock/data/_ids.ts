@@ -135,6 +135,7 @@ const _ids = {
             Types.ObjectId("5fce6d18cf98ce0000e11748"),
             Types.ObjectId("5fce6d23cf98ce0000e11749"),
             Types.ObjectId("5fce6d2dcf98ce0000e1174a"),
+            Types.ObjectId("5fcfddf283d6a50000a16ae7"),
           ],
         },
       ],
@@ -268,6 +269,9 @@ const _ids = {
     },
     why_did_florida_mandate_reporting_of_cycle_threshold_value_for_rt_pcr_tests: {
       _id: Types.ObjectId("5fce6dbacf98ce0000e1174e"),
+    },
+    how_does_ct_value_effect_testing_outcomes: {
+      _id: Types.ObjectId("5fcfdf0b83d6a50000a16ae8"),
     },
   },
 };

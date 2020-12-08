@@ -188,6 +188,11 @@ const why_did_florida_mandate_reporting_of_cycle_threshold_value_for_rt_pcr_test
     "Why did Florida mandate reporting of Cycle Threshold value for RT-PCR tests?",
 };
 
+const how_does_ct_value_effect_testing_outcomes: Question = {
+  _id: _ids.questions.how_does_ct_value_effect_testing_outcomes._id,
+  question: "How does Ct value effect testing outcomes",
+};
+
 const questions = [
   what_is_sars_cov_2,
   how_is_sars_cov_2_related_to_sars_cov_1,
@@ -224,6 +229,7 @@ const questions = [
   what_is_the_significance_of_cycle_threshold_value,
   how_is_cycle_threshold_used,
   why_did_florida_mandate_reporting_of_cycle_threshold_value_for_rt_pcr_tests,
+  how_does_ct_value_effect_testing_outcomes,
 ];
 
 export default questions;
