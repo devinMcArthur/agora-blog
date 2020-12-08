@@ -8,7 +8,7 @@ import GlobalStyle from "./GlobalStyle";
 
 const history = createBrowserHistory();
 
-ReactGA.initialize("G-Q1KPBQK41S");
+ReactGA.initialize("UA-185033350-1");
 
 history.listen((location) => {
   ReactGA.set({ page: location.pathname });
