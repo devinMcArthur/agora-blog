@@ -22,7 +22,6 @@ const Sentence = (props: {
   // Default show sources to true
   let { showSources } = props;
   if (showSources !== false) showSources = true;
-  console.log(showSources);
 
   let sourcePages, sourceURLs, questions;
   if (sentence.sources && showSources) {

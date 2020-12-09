@@ -1,5 +1,7 @@
 import * as React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import ReactGA from "react-ga";
 
 import HomePage from "./HomePage";
 import Navbar from "./Navbar";
@@ -8,7 +10,16 @@ import Question from "./Question";
 import Questions from "./Questions";
 import Variable from "./Variable";
 
+const history = createBrowserHistory();
+
+history.listen((location) => {
+  ReactGA.set({ page: location.pathname });
+  ReactGA.pageview(location.pathname);
+});
+
 function Router() {
+  console.log("HI");
+
   return (
     <BrowserRouter>
       <Navbar />
