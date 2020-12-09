@@ -13,6 +13,7 @@ const Heading = styled.div`
   font-family: "Source Serif Pro";
   color: ${(props) => props.theme.colors.fontDark};
   font-weight: bold;
+  cursor: pointer;
 
   > .header-icon {
     margin-right: 10px;

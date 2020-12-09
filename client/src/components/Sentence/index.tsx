@@ -26,8 +26,10 @@ const Sentence = (props: {
 
   let sourcePages, sourceURLs, questions;
   if (sentence.sources && showSources) {
+    let index = 1;
     if (sentence.sources.pages) {
-      sourcePages = sentence.sources.pages.map((page, index) => {
+      sourcePages = sentence.sources.pages.map((page) => {
+        index++;
         return (
           <sup>
             [<LinkTag href={`/p/${page.page.slug}`}>p-{index}</LinkTag>]
@@ -36,12 +38,13 @@ const Sentence = (props: {
       });
     }
     if (sentence.sources.urls) {
-      sourceURLs = sentence.sources.urls.map((url, index) => {
+      sourceURLs = sentence.sources.urls.map((url) => {
+        index++;
         return (
           <sup>
             [
             <LinkTag href={url.url} target="_blank" rel="noreferrer">
-              u-{index}
+              {index}
             </LinkTag>
             ]
           </sup>
@@ -54,7 +57,7 @@ const Sentence = (props: {
       if (question)
         return (
           <sup key={index} title={question.question}>
-            [<LinkTag href={`/q/${question._id}`}>q-{index}</LinkTag>]
+            [<LinkTag href={`/q/${question._id}`}>q{index + 1}</LinkTag>]
           </sup>
         );
       else return null;
