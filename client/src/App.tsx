@@ -11,6 +11,7 @@ ReactGA.initialize("UA-185033350-1");
 function App() {
   const history = createBrowserHistory();
 
+  console.log("HI");
   history.listen((location) => {
     console.log(location);
     ReactGA.set({ page: location.pathname });
