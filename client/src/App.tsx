@@ -1,6 +1,5 @@
 import * as React from "react";
 import ReactGA from "react-ga";
-import { createBrowserHistory } from "history";
 
 import Provider from "./components/Providers";
 import Router from "./components/Router";
