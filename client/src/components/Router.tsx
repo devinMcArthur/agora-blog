@@ -1,5 +1,10 @@
 import * as React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  Router as RRDRouter,
+} from "react-router-dom";
 import { createBrowserHistory } from "history";
 import ReactGA from "react-ga";
 
@@ -21,16 +26,18 @@ function Router() {
   console.log("HI");
 
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/p/:pageSlug" component={Page} />
-        <Route exact path="/q/:questionID" component={Question} />
-        <Route exact path="/questions" component={Questions} />
-        <Route exact path="/v/:variableID" component={Variable} />
-      </Switch>
-    </BrowserRouter>
+    <RRDRouter history={history}>
+      <BrowserRouter>
+        <Navbar />
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route exact path="/p/:pageSlug" component={Page} />
+          <Route exact path="/q/:questionID" component={Question} />
+          <Route exact path="/questions" component={Questions} />
+          <Route exact path="/v/:variableID" component={Variable} />
+        </Switch>
+      </BrowserRouter>
+    </RRDRouter>
   );
 }
 
