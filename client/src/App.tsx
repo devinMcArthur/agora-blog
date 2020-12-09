@@ -12,6 +12,7 @@ function App() {
   const history = createBrowserHistory();
 
   history.listen((location) => {
+    console.log(location);
     ReactGA.set({ page: location.pathname });
     ReactGA.pageview(location.pathname);
   });
