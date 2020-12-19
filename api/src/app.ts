@@ -1,6 +1,9 @@
 import * as path from "path";
 import express from "express";
 import * as bodyParser from "body-parser";
+import cors from "cors";
+
+import pages from "./routes/api/pages";
 
 const app = express();
 
@@ -14,11 +17,10 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-const cors = require("cors");
 app.use(cors());
 
 // Setup API routes
 
-app.use("/api/page", require("./routes/api/pages"));
+app.use("/api/page", pages);
 
-module.exports = app;
+export default app;

@@ -1,17 +1,19 @@
 // Setup environment variables
+import path from "path";
 import * as dotenv from "dotenv";
+import seedDatabase from "./testDB/seedDatabase";
+
 if (process.env.NODE_ENV === "development" || !process.env.NODE_ENV) {
-  dotenv.config({ path: __dirname + "development.env" });
+  dotenv.config({ path: path.join(__dirname, "..", "..", ".env.development") });
 } else {
   throw new Error("Cannot set ENV variables with provided NODE_ENV");
 }
 
 // Setup up mongoose
-import * as mongoose from "mongoose";
+import mongoose from "mongoose";
 
 // require("./config/environmentVariables");
 
-console.log(process.env);
 mongoose
   .connect(process.env.MONGO_URI!, {
     useNewUrlParser: true,
@@ -19,13 +21,13 @@ mongoose
   })
   .then(async () => {
     console.log("MongoDB Connected");
-    await require("./testDB/seedDatabase")();
+    await seedDatabase();
   })
   .catch((err: Error) => console.error(err));
 
 let port = process.env.PORT || 8080;
 
-const app = require("./app");
+import app from "./app";
 
 const server = app.listen(port, () =>
   console.log(`Server running on port ${port}`)

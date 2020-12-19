@@ -25,7 +25,7 @@ type ParagraphGetReturn<
 
 export type ParagraphGetByID = <opts extends ParagraphGetOptions>(
   id: Types.ObjectId | string,
-  options: opts
+  options?: opts
 ) => ParagraphGetReturn<opts>;
 const byIDDefaultOptions: ParagraphGetOptions = {
   throwError: false,

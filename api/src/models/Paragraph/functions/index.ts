@@ -21,7 +21,6 @@ export interface ParagraphModel extends Model<ParagraphDocument> {
 // GET //
 
 ParagraphSchema.statics.getByID = async function (
-  this: Model<ParagraphDocument>,
   id: Types.ObjectId | string,
   options: ParagraphGetOptions
 ) {

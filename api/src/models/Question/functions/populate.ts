@@ -13,8 +13,12 @@ function normal(question: QuestionDocument) {
       const relatedPages = await QuestionPageConnection.getPagesThatReferenceQuestion(
         question._id
       );
+      const populatedPages: AgoraTypes.Page.Documents.PagePopulated[] = [];
+      relatedPages.forEach(async (page) =>
+        populatedPages.push(await page.populateNormal())
+      );
 
-      populated.relatedPages = relatedPages;
+      populated.relatedPages = populatedPages;
 
       populated.referencedCount = await QuestionPageConnection.getQuestionReferencedCount(
         question._id

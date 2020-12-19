@@ -25,7 +25,7 @@ type VariableGetReturn<
 
 export type VariableGetByID = <opts extends GetByIDOptions>(
   variableID: Types.ObjectId,
-  options: opts
+  options?: opts
 ) => VariableGetReturn<opts>;
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,

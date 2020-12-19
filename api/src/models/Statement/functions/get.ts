@@ -26,7 +26,7 @@ type StatementGetReturn<
 
 export type StatementGetByID = <opts extends GetByIDOptions>(
   id: Types.ObjectId | string,
-  options: opts
+  options?: opts
 ) => StatementGetReturn<opts>;
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,

@@ -25,7 +25,7 @@ export interface QuestionModel extends Model<QuestionDocument> {
 
 QuestionSchema.statics.getByID = async function (
   id: Types.ObjectId | string,
-  options: GetByIDOptions
+  options: QuestionGetByID["arguments"]["options"]
 ) {
   return get.byID(this, id, options);
 };
