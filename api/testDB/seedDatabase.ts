@@ -33,6 +33,8 @@ const seedDatabase = () => {
       await createQuestionPageConnections();
       await createVariablePageConnections();
 
+      console.log("Database seeded");
+
       resolve({
         pages,
         paragraphs,
