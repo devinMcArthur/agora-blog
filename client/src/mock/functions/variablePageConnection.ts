@@ -17,15 +17,8 @@ const getPagesThatReference = (variableID: Types.ObjectId) => {
   return pages;
 };
 
-const getReferencedCount = (pageID: Types.ObjectId) => {
-  return variablePageConnections.filter(
-    (connection) => connection.variableID.toString() === pageID.toString()
-  ).length;
-};
-
 const VariablePageConnectionFunctions = {
   getPagesThatReference,
-  getReferencedCount,
 };
 
 export default VariablePageConnectionFunctions;
