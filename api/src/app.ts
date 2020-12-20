@@ -3,7 +3,9 @@ import express from "express";
 import * as bodyParser from "body-parser";
 import cors from "cors";
 
-import pages from "./routes/api/pages";
+import pages from "./api/routes/pages";
+import questions from "./api/routes/questions";
+import variables from "./api/routes/variables";
 
 const app = express();
 
@@ -22,5 +24,7 @@ app.use(cors());
 // Setup API routes
 
 app.use("/api/page", pages);
+app.use("/api/question", questions);
+app.use("/api/variable", variables);
 
 export default app;

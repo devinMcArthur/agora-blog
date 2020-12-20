@@ -24,7 +24,7 @@ type VariableGetReturn<
     VariableGetPopulatedReturn<opts> | null;
 
 export type VariableGetByID = <opts extends GetByIDOptions>(
-  variableID: Types.ObjectId,
+  variableID: Types.ObjectId | string,
   options?: opts
 ) => VariableGetReturn<opts>;
 const byIDDefaultOptions: GetByIDOptions = {

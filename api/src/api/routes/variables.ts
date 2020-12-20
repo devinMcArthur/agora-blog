@@ -1,14 +1,14 @@
 import { Router } from "express";
 
-import PageController from "../../controllers/PageController";
+import VariableController from "../controllers/VariableController";
 
 import routeErrorHandler from "../utils/routeErrorHandler";
 
 const router = Router();
 
-router.get("/list", async (req, res) => {
+router.get("/:variableID", async (req, res) => {
   try {
-    res.json(await PageController.get.list(req, res));
+    res.json(await VariableController.get.byID(req, res));
   } catch (e) {
     routeErrorHandler(e, req, res);
   }
