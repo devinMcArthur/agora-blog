@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src",
     "sourceMap": true,
     "target": "es6",
     "allowJs": true,
@@ -12,6 +11,7 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "commonjs",
+    "lib": ["dom", "ES6", "ES2017", "ESNext.AsyncIterable"],
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -24,7 +24,9 @@
     "alwaysStrict": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "typeRoots": ["./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types"],
+    "baseUrl": "."
   },
-  "lib": ["es2015"]
+  "exclude": ["node_modules"],
+  "include": ["./src/**/*.ts"]
 }
