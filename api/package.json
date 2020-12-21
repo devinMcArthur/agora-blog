@@ -5,8 +5,9 @@
   "main": "server.js",
   "scripts": {
     "build": "tsc",
-    "start": "npm run build && node dist/server.js",
+    "start": "node dist/server.js",
     "start:dev": "nodemon",
+    "postinstall": "npm run build",
     "test": "jest"
   },
   "author": "Devin McArthur",
