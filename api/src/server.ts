@@ -12,9 +12,6 @@ if (process.env.NODE_ENV === "development" || !process.env.NODE_ENV) {
 // Setup up mongoose
 import mongoose from "mongoose";
 
-// require("./config/environmentVariables");
-console.log(process.env.MONGO_URI, process.env.NODE_ENV);
-
 mongoose
   .connect(process.env.MONGO_URI!, {
     useNewUrlParser: true,
