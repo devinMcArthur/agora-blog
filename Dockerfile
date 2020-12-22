@@ -7,7 +7,7 @@ RUN yarn install --only=prod
 COPY client/ ./
 RUN npm run build
 
-# Setup the api
+# Setup the Api
 WORKDIR /usr/app/api/
 COPY api/package*.json ./
 RUN npm install -qy
