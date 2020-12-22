@@ -10,7 +10,7 @@ RUN npm run build
 # Setup the api
 WORKDIR /usr/app/api/
 COPY api/package*.json ./
-RUN npm install -qy --only=prod
+RUN npm install -qy
 COPY api/ ./
 RUN npm run build
 
