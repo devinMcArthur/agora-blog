@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "build": "rimraf dist && tsc",
+    "build": "rimraf dist && tsc && dir",
     "start": "node dist/server.js",
     "start:dev": "nodemon",
     "postinstall": "npm run build",
