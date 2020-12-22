@@ -12,9 +12,9 @@ WORKDIR /usr/app/api/
 COPY api/package*.json ./
 RUN npm install -qy --only=prod
 COPY api/ ./
-# RUN npm run build
+RUN npm run build
 
 ENV PORT 8080
 EXPOSE 8080
 
-CMD ["npm", "run", "build"]
+CMD ["npm", "start"]
