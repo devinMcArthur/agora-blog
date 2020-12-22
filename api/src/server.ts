@@ -5,8 +5,6 @@ import seedDatabase from "./testDB/seedDatabase";
 
 if (process.env.NODE_ENV === "development" || !process.env.NODE_ENV) {
   dotenv.config({ path: path.join(__dirname, "..", ".env.development") });
-} else {
-  throw new Error("Cannot set ENV variables with provided NODE_ENV");
 }
 
 // Setup up mongoose
