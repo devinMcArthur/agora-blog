@@ -1,15 +1,14 @@
-import * as mongoose from "mongoose";
+import {
+  getModelForClass,
+  DocumentType,
+  ReturnModelType,
+} from "@typegoose/typegoose";
+import VariablePageConnectionClass from "./class";
 
-import VariablePageConnectionSchema, {
-  VariablePageConnectionModel as VPCM,
-  VariablePageConnectionDocument as VPCD,
-} from "./functions";
+export default getModelForClass(VariablePageConnectionClass);
 
-export interface VariablePageConnectionModel extends VPCM {}
+export interface VariablePageConnectionDocument
+  extends DocumentType<VariablePageConnectionClass> {}
 
-export interface VariablePageConnectionDocument extends VPCD {}
-
-export default mongoose.model<VPCD, VPCM>(
-  "VariablePageConnection",
-  VariablePageConnectionSchema
-);
+export interface VariablePageConnectionModel
+  extends ReturnModelType<typeof VariablePageConnectionClass> {}

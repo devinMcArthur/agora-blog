@@ -2,9 +2,9 @@ import _ids from "../../_ids";
 
 import Statement from "../../../models/Statement";
 
-const page_rt_pcr_cycle_threshold_sentence_1_v1 = new Statement({
+const page_rt_pcr_cycle_threshold_statement_1_v1 = new Statement({
   _id: _ids.pages.page_rt_pcr_cycle_threshold.paragraphs[0].statements[0],
-  pageID: _ids.pages.page_rt_pcr_cycle_threshold._id,
+  page: _ids.pages.page_rt_pcr_cycle_threshold._id,
   current: true,
   versions: [
     {
@@ -21,7 +21,7 @@ const page_rt_pcr_cycle_threshold_sentence_1_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_covid_19_rt_pcr_test._id,
+                page: _ids.pages.page_covid_19_rt_pcr_test._id,
               },
             },
           ],
@@ -32,20 +32,20 @@ const page_rt_pcr_cycle_threshold_sentence_1_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [
+        _ids.questions
+          .what_is_the_significance_of_cycle_threshold_for_rt_pcr_tests._id,
+      ],
+      sources: {
+        urls: ["https://academic.oup.com/cid/article/71/16/2252/5841456"],
+      },
     },
   ],
-  questions: [
-    _ids.questions.what_is_the_significance_of_cycle_threshold_for_rt_pcr_tests
-      ._id,
-  ],
-  sources: {
-    urls: ["https://academic.oup.com/cid/article/71/16/2252/5841456"],
-  },
 });
 
-const page_rt_pcr_cycle_threshold_sentence_2_v1 = new Statement({
+const page_rt_pcr_cycle_threshold_statement_2_v1 = new Statement({
   _id: _ids.pages.page_rt_pcr_cycle_threshold.paragraphs[0].statements[1],
-  pageID: _ids.pages.page_rt_pcr_cycle_threshold._id,
+  page: _ids.pages.page_rt_pcr_cycle_threshold._id,
   current: true,
   versions: [
     {
@@ -57,19 +57,19 @@ const page_rt_pcr_cycle_threshold_sentence_2_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [
+        _ids.questions.what_is_the_significance_of_cycle_threshold_value._id,
+      ],
+      sources: {
+        urls: ["https://academic.oup.com/cid/article/71/16/2252/5841456"],
+      },
     },
   ],
-  questionConnections: [
-    _ids.questions.what_is_the_significance_of_cycle_threshold_value._id,
-  ],
-  sources: {
-    urls: ["https://academic.oup.com/cid/article/71/16/2252/5841456"],
-  },
 });
 
-const page_rt_pcr_cycle_threshold_sentence_3_v1 = new Statement({
+const page_rt_pcr_cycle_threshold_statement_3_v1 = new Statement({
   _id: _ids.pages.page_rt_pcr_cycle_threshold.paragraphs[0].statements[2],
-  pageID: _ids.pages.page_rt_pcr_cycle_threshold._id,
+  page: _ids.pages.page_rt_pcr_cycle_threshold._id,
   current: true,
   versions: [
     {
@@ -87,7 +87,7 @@ const page_rt_pcr_cycle_threshold_sentence_3_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_sars_cov_2._id,
+                page: _ids.pages.page_sars_cov_2._id,
               },
             },
           ],
@@ -98,21 +98,19 @@ const page_rt_pcr_cycle_threshold_sentence_3_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.how_does_ct_value_effect_testing_outcomes._id],
+      sources: {
+        urls: [
+          "https://academic.oup.com/cid/advance-article/doi/10.1093/cid/ciaa1491/5912603",
+        ],
+      },
     },
   ],
-  questionConnections: [
-    _ids.questions.how_does_ct_value_effect_testing_outcomes._id,
-  ],
-  sources: {
-    urls: [
-      "https://academic.oup.com/cid/advance-article/doi/10.1093/cid/ciaa1491/5912603",
-    ],
-  },
 });
 
-const page_rt_pcr_cycle_threshold_sentence_4_v1 = new Statement({
+const page_rt_pcr_cycle_threshold_statement_4_v1 = new Statement({
   _id: _ids.pages.page_rt_pcr_cycle_threshold.paragraphs[0].statements[3],
-  pageID: _ids.pages.page_rt_pcr_cycle_threshold._id,
+  page: _ids.pages.page_rt_pcr_cycle_threshold._id,
   current: true,
   versions: [
     {
@@ -141,26 +139,26 @@ const page_rt_pcr_cycle_threshold_sentence_4_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [
+        _ids.questions.how_is_cycle_threshold_used._id,
+        _ids.questions
+          .why_did_florida_mandate_reporting_of_cycle_threshold_value_for_rt_pcr_tests
+          ._id,
+      ],
+      sources: {
+        urls: [
+          "https://www.flhealthsource.gov/files/Laboratory-Reporting-CT-Values-12032020.pdf",
+        ],
+      },
     },
   ],
-  questions: [
-    _ids.questions.how_is_cycle_threshold_used._id,
-    _ids.questions
-      .why_did_florida_mandate_reporting_of_cycle_threshold_value_for_rt_pcr_tests
-      ._id,
-  ],
-  sources: {
-    urls: [
-      "https://www.flhealthsource.gov/files/Laboratory-Reporting-CT-Values-12032020.pdf",
-    ],
-  },
 });
 
 const statements = [
-  page_rt_pcr_cycle_threshold_sentence_1_v1,
-  page_rt_pcr_cycle_threshold_sentence_2_v1,
-  page_rt_pcr_cycle_threshold_sentence_3_v1,
-  page_rt_pcr_cycle_threshold_sentence_4_v1,
+  page_rt_pcr_cycle_threshold_statement_1_v1,
+  page_rt_pcr_cycle_threshold_statement_2_v1,
+  page_rt_pcr_cycle_threshold_statement_3_v1,
+  page_rt_pcr_cycle_threshold_statement_4_v1,
 ];
 
 export default statements;

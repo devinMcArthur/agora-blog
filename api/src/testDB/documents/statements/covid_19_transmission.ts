@@ -2,9 +2,9 @@ import _ids from "../../_ids";
 
 import Statement from "../../../models/Statement";
 
-const page_covid_19_transmission_sentence_1_v1 = new Statement({
+const page_covid_19_transmission_statement_1_v1 = new Statement({
   _id: _ids.pages.page_covid_19_transmission.paragraphs[0].statements[0],
-  pageID: _ids.pages.page_covid_19_transmission._id,
+  page: _ids.pages.page_covid_19_transmission._id,
   current: true,
   versions: [
     {
@@ -22,7 +22,7 @@ const page_covid_19_transmission_sentence_1_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_sars_cov_2._id,
+                page: _ids.pages.page_sars_cov_2._id,
               },
             },
           ],
@@ -33,14 +33,14 @@ const page_covid_19_transmission_sentence_1_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.how_is_sars_cov_2_transmitted._id],
     },
   ],
-  questions: [_ids.questions.how_is_sars_cov_2_transmitted._id],
 });
 
-const page_covid_19_transmission_sentence_2_v1 = new Statement({
+const page_covid_19_transmission_statement_2_v1 = new Statement({
   _id: _ids.pages.page_covid_19_transmission.paragraphs[0].statements[1],
-  pageID: _ids.pages.page_covid_19_transmission._id,
+  page: _ids.pages.page_covid_19_transmission._id,
   current: true,
   versions: [
     {
@@ -52,19 +52,19 @@ const page_covid_19_transmission_sentence_2_v1 = new Statement({
           styles: [],
         },
       ],
+      sources: {
+        urls: ["https://onlinelibrary.wiley.com/doi/full/10.1111/irv.12743"],
+      },
+      questions: [
+        _ids.questions.does_sars_cov_2_spread_from_asymptomatic_cases._id,
+      ],
     },
-  ],
-  sources: {
-    urls: ["https://onlinelibrary.wiley.com/doi/full/10.1111/irv.12743"],
-  },
-  questions: [
-    _ids.questions.does_sars_cov_2_spread_from_asymptomatic_cases._id,
   ],
 });
 
-const page_covid_19_transmission_sentence_3_v1 = new Statement({
+const page_covid_19_transmission_statement_3_v1 = new Statement({
   _id: _ids.pages.page_covid_19_transmission.paragraphs[0].statements[2],
-  pageID: _ids.pages.page_covid_19_transmission._id,
+  page: _ids.pages.page_covid_19_transmission._id,
   current: true,
   versions: [
     {
@@ -76,21 +76,21 @@ const page_covid_19_transmission_sentence_3_v1 = new Statement({
           styles: [],
         },
       ],
+      sources: {
+        urls: ["https://www.nature.com/articles/d41586-020-03141-3"],
+      },
+      questions: [
+        _ids.questions
+          .are_asymptomatic_cases_of_covid_19_a_large_contributer_to_spread._id,
+      ],
     },
-  ],
-  sources: {
-    urls: ["https://www.nature.com/articles/d41586-020-03141-3"],
-  },
-  questions: [
-    _ids.questions
-      .are_asymptomatic_cases_of_covid_19_a_large_contributer_to_spread._id,
   ],
 });
 
 const statements = [
-  page_covid_19_transmission_sentence_1_v1,
-  page_covid_19_transmission_sentence_2_v1,
-  page_covid_19_transmission_sentence_3_v1,
+  page_covid_19_transmission_statement_1_v1,
+  page_covid_19_transmission_statement_2_v1,
+  page_covid_19_transmission_statement_3_v1,
 ];
 
 export default statements;

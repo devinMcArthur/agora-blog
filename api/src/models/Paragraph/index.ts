@@ -1,12 +1,14 @@
-import * as mongoose from "mongoose";
+import {
+  DocumentType,
+  getModelForClass,
+  ReturnModelType,
+} from "@typegoose/typegoose";
 
-import ParagraphSchema, {
-  ParagraphModel as PM,
-  ParagraphDocument as PD,
-} from "./functions";
+import ParagraphClass from "./class";
 
-export interface ParagraphModel extends PM {}
+export default getModelForClass(ParagraphClass);
 
-export interface ParagraphDocument extends PD {}
+export interface ParagraphDocument extends DocumentType<ParagraphClass> {}
 
-export default mongoose.model<PD, PM>("Paragraph", ParagraphSchema);
+export interface ParagraphModel
+  extends ReturnModelType<typeof ParagraphClass> {}

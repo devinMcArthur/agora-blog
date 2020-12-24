@@ -2,9 +2,9 @@ import _ids from "../../_ids";
 
 import Statement from "../../../models/Statement";
 
-const page_covid_19_pandemic_sentence_1_v1 = new Statement({
+const page_covid_19_pandemic_statement_1_v1 = new Statement({
   _id: _ids.pages.page_covid_19_pandemic.paragraphs[0].statements[0],
-  pageID: _ids.pages.page_covid_19_pandemic._id,
+  page: _ids.pages.page_covid_19_pandemic._id,
   current: true,
   versions: [
     {
@@ -21,7 +21,7 @@ const page_covid_19_pandemic_sentence_1_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_covid_2019._id,
+                page: _ids.pages.page_covid_2019._id,
               },
             },
           ],
@@ -48,11 +48,11 @@ const page_covid_19_pandemic_sentence_1_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.what_is_the_covid_19_pandemic._id],
     },
   ],
-  questions: [_ids.questions.what_is_the_covid_19_pandemic._id],
 });
 
-const statements = [page_covid_19_pandemic_sentence_1_v1];
+const statements = [page_covid_19_pandemic_statement_1_v1];
 
 export default statements;

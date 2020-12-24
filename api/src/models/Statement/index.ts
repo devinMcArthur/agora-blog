@@ -1,12 +1,13 @@
-import * as mongoose from "mongoose";
+import {
+  getModelForClass,
+  DocumentType,
+  ReturnModelType,
+} from "@typegoose/typegoose";
+import StatementClass from "./class";
 
-import StatementSchema, {
-  StatementModel as SM,
-  StatementDocument as SD,
-} from "./functions";
+export default getModelForClass(StatementClass);
 
-export interface StatementModel extends SM {}
+export interface StatementDocument extends DocumentType<StatementClass> {}
 
-export interface StatementDocument extends SD {}
-
-export default mongoose.model<SD, SM>("Statement", StatementSchema);
+export interface StatementModel
+  extends ReturnModelType<typeof StatementClass> {}

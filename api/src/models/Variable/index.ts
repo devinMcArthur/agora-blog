@@ -1,12 +1,12 @@
-import * as mongoose from "mongoose";
+import {
+  getModelForClass,
+  DocumentType,
+  ReturnModelType,
+} from "@typegoose/typegoose";
+import VariableClass from "./class";
 
-import VariableSchema, {
-  VariableModel as VM,
-  VariableDocument as VD,
-} from "./functions";
+export default getModelForClass(VariableClass);
 
-export interface VariableModel extends VM {}
+export interface VariableDocument extends DocumentType<VariableClass> {}
 
-export interface VariableDocument extends VD {}
-
-export default mongoose.model<VD, VM>("Variable", VariableSchema);
+export interface VariableModel extends ReturnModelType<typeof VariableClass> {}

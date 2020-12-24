@@ -2,9 +2,9 @@ import _ids from "../../_ids";
 
 import Statement from "../../../models/Statement";
 
-const page_covid_19_testing_sentence_1_v1 = new Statement({
+const page_covid_19_testing_statement_1_v1 = new Statement({
   _id: _ids.pages.page_covid_19_testing.paragraphs[0].statements[0],
-  pageID: _ids.pages.page_covid_19_testing._id,
+  page: _ids.pages.page_covid_19_testing._id,
   current: true,
   versions: [
     {
@@ -17,7 +17,7 @@ const page_covid_19_testing_sentence_1_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_covid_2019._id,
+                page: _ids.pages.page_covid_2019._id,
               },
             },
           ],
@@ -34,7 +34,7 @@ const page_covid_19_testing_sentence_1_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_sars_cov_2._id,
+                page: _ids.pages.page_sars_cov_2._id,
               },
             },
           ],
@@ -44,14 +44,14 @@ const page_covid_19_testing_sentence_1_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.what_does_a_covid_19_test_do._id],
     },
   ],
-  questions: [_ids.questions.what_does_a_covid_19_test_do._id],
 });
 
-const page_covid_19_testing_sentence_2_v1 = new Statement({
+const page_covid_19_testing_statement_2_v1 = new Statement({
   _id: _ids.pages.page_covid_19_testing.paragraphs[0].statements[1],
-  pageID: _ids.pages.page_covid_19_testing._id,
+  page: _ids.pages.page_covid_19_testing._id,
   current: true,
   versions: [
     {
@@ -81,7 +81,7 @@ const page_covid_19_testing_sentence_2_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_covid_2019._id,
+                page: _ids.pages.page_covid_2019._id,
               },
             },
           ],
@@ -97,7 +97,7 @@ const page_covid_19_testing_sentence_2_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_covid_19_rt_pcr_test._id,
+                page: _ids.pages.page_covid_19_rt_pcr_test._id,
               },
             },
           ],
@@ -108,14 +108,14 @@ const page_covid_19_testing_sentence_2_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.what_tests_are_used_to_test_for_covid_19._id],
     },
   ],
-  questions: [_ids.questions.what_tests_are_used_to_test_for_covid_19._id],
 });
 
-const page_covid_19_testing_sentence_3_v1 = new Statement({
+const page_covid_19_testing_statement_3_v1 = new Statement({
   _id: _ids.pages.page_covid_19_testing.paragraphs[0].statements[2],
-  pageID: _ids.pages.page_covid_19_testing._id,
+  page: _ids.pages.page_covid_19_testing._id,
   current: true,
   versions: [
     {
@@ -132,7 +132,7 @@ const page_covid_19_testing_sentence_3_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_covid_2019._id,
+                page: _ids.pages.page_covid_2019._id,
               },
             },
           ],
@@ -147,7 +147,7 @@ const page_covid_19_testing_sentence_3_v1 = new Statement({
             {
               type: "quote",
               value: {
-                sentenceID:
+                statement:
                   _ids.pages.page_covid_19_rt_pcr_test.paragraphs[0]
                     .statements[1],
               },
@@ -155,14 +155,16 @@ const page_covid_19_testing_sentence_3_v1 = new Statement({
           ],
         },
       ],
+      questions: [
+        _ids.questions.what_is_the_effectiveness_of_covid_19_testing._id,
+      ],
     },
   ],
-  questions: [_ids.questions.what_is_the_effectiveness_of_covid_19_testing._id],
 });
 
-const page_covid_19_testing_sentence_4_v1 = new Statement({
+const page_covid_19_testing_statement_4_v1 = new Statement({
   _id: _ids.pages.page_covid_19_testing.paragraphs[0].statements[3],
-  pageID: _ids.pages.page_covid_19_testing._id,
+  page: _ids.pages.page_covid_19_testing._id,
   current: true,
   versions: [
     {
@@ -179,7 +181,7 @@ const page_covid_19_testing_sentence_4_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_covid_2019._id,
+                page: _ids.pages.page_covid_2019._id,
               },
             },
           ],
@@ -196,7 +198,7 @@ const page_covid_19_testing_sentence_4_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_sars_cov_2._id,
+                page: _ids.pages.page_sars_cov_2._id,
               },
             },
           ],
@@ -206,14 +208,16 @@ const page_covid_19_testing_sentence_4_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [
+        _ids.questions.what_are_the_benefits_of_testing_for_covid_19._id,
+      ],
     },
   ],
-  questions: [_ids.questions.what_are_the_benefits_of_testing_for_covid_19._id],
 });
 
-const page_covid_19_testing_sentence_5_v1 = new Statement({
+const page_covid_19_testing_statement_5_v1 = new Statement({
   _id: _ids.pages.page_covid_19_testing.paragraphs[0].statements[4],
-  pageID: _ids.pages.page_covid_19_testing._id,
+  page: _ids.pages.page_covid_19_testing._id,
   current: true,
   versions: [
     {
@@ -230,7 +234,7 @@ const page_covid_19_testing_sentence_5_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_covid_19_rt_pcr_test._id,
+                page: _ids.pages.page_covid_19_rt_pcr_test._id,
               },
             },
           ],
@@ -244,7 +248,7 @@ const page_covid_19_testing_sentence_5_v1 = new Statement({
             {
               type: "variable",
               value: {
-                variableID:
+                variable:
                   _ids.variables.var_covid_19_rt_pcr_test_false_positive_rate
                     ._id,
               },
@@ -263,7 +267,7 @@ const page_covid_19_testing_sentence_5_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_rt_pcr_cycle_threshold._id,
+                page: _ids.pages.page_rt_pcr_cycle_threshold._id,
               },
             },
           ],
@@ -280,7 +284,7 @@ const page_covid_19_testing_sentence_5_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_covid_2019._id,
+                page: _ids.pages.page_covid_2019._id,
               },
             },
           ],
@@ -303,19 +307,19 @@ const page_covid_19_testing_sentence_5_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [
+        _ids.questions.what_are_the_downsides_of_testing_for_covid_19._id,
+      ],
     },
-  ],
-  questions: [
-    _ids.questions.what_are_the_downsides_of_testing_for_covid_19._id,
   ],
 });
 
 const statements = [
-  page_covid_19_testing_sentence_1_v1,
-  page_covid_19_testing_sentence_2_v1,
-  page_covid_19_testing_sentence_3_v1,
-  page_covid_19_testing_sentence_4_v1,
-  page_covid_19_testing_sentence_5_v1,
+  page_covid_19_testing_statement_1_v1,
+  page_covid_19_testing_statement_2_v1,
+  page_covid_19_testing_statement_3_v1,
+  page_covid_19_testing_statement_4_v1,
+  page_covid_19_testing_statement_5_v1,
 ];
 
 export default statements;

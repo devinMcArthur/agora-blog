@@ -31,25 +31,25 @@ const createPageConnections = () => {
 
             // Find internal mentions
             if (style.type === "mention" && style.variant === "internal") {
-              referencedPageID = style.value.pageID;
+              referencedPageID = style.value.page;
             }
 
             // Find quotes
             if (style.type === "quote") {
-              const quotedSentence = await Statement.getByID(
-                style.value.statementID
+              const quotedSentence = await Statement.findById(
+                style.value.statement
               );
 
-              if (quotedSentence) referencedPageID = quotedSentence.pageID;
+              if (quotedSentence) referencedPageID = quotedSentence.page;
             }
 
             // If page reference is found, push to statements page connections
             if (referencedPageID) {
               const pageConnection: PageConnectionDocument = new PageConnection(
                 {
-                  referrerPageID: statement.pageID,
-                  referencedPageID,
-                  statementID: statement._id,
+                  referrerPage: statement.page,
+                  referencedPage: referencedPageID,
+                  statement: statement._id,
                 }
               );
               statementsPageConnections.push(pageConnection);
@@ -66,10 +66,10 @@ const createPageConnections = () => {
         if (
           checkedConnections.find(
             (connection) =>
-              connection.referencedPageID.toString() ===
-                object.referencedPageID.toString() &&
-              connection.referrerPageID.toString() ===
-                object.referrerPageID.toString()
+              connection.referencedPage!.toString() ===
+                object.referencedPage!.toString() &&
+              connection.referrerPage!.toString() ===
+                object.referrerPage!.toString()
           )
         ) {
           // Found a duplicate

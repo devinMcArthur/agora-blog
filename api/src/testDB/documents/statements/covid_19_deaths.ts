@@ -2,9 +2,9 @@ import _ids from "../../_ids";
 
 import Statement from "../../../models/Statement";
 
-const page_covid_19_deaths_sentence_1_v1 = new Statement({
+const page_covid_19_deaths_statement_1_v1 = new Statement({
   _id: _ids.pages.page_covid_19_deaths.paragraphs[0].statements[0],
-  pageID: _ids.pages.page_covid_19_deaths._id,
+  page: _ids.pages.page_covid_19_deaths._id,
   current: true,
   versions: [
     {
@@ -22,7 +22,7 @@ const page_covid_19_deaths_sentence_1_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_covid_2019._id,
+                page: _ids.pages.page_covid_2019._id,
               },
             },
           ],
@@ -33,14 +33,14 @@ const page_covid_19_deaths_sentence_1_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.what_counts_as_a_covid_19_death._id],
     },
   ],
-  questions: [_ids.questions.what_counts_as_a_covid_19_death._id],
 });
 
-const page_covid_19_deaths_sentence_2_v1 = new Statement({
+const page_covid_19_deaths_statement_2_v1 = new Statement({
   _id: _ids.pages.page_covid_19_deaths.paragraphs[0].statements[1],
-  pageID: _ids.pages.page_covid_19_deaths._id,
+  page: _ids.pages.page_covid_19_deaths._id,
   current: true,
   versions: [
     {
@@ -56,7 +56,7 @@ const page_covid_19_deaths_sentence_2_v1 = new Statement({
             {
               type: "variable",
               value: {
-                variableID: _ids.variables.var_global_deaths_covid_19._id,
+                variable: _ids.variables.var_global_deaths_covid_19._id,
               },
             },
           ],
@@ -66,14 +66,14 @@ const page_covid_19_deaths_sentence_2_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.how_many_covid_19_deaths_have_there_been._id],
     },
   ],
-  questions: [_ids.questions.how_many_covid_19_deaths_have_there_been._id],
 });
 
-const page_covid_19_deaths_sentence_3_v1 = new Statement({
+const page_covid_19_deaths_statement_3_v1 = new Statement({
   _id: _ids.pages.page_covid_19_deaths.paragraphs[0].statements[2],
-  pageID: _ids.pages.page_covid_19_deaths._id,
+  page: _ids.pages.page_covid_19_deaths._id,
   current: true,
   versions: [
     {
@@ -85,15 +85,15 @@ const page_covid_19_deaths_sentence_3_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.who_is_most_likely_to_die_from_covid_19._id],
     },
   ],
-  questions: [_ids.questions.who_is_most_likely_to_die_from_covid_19._id],
 });
 
 const statements = [
-  page_covid_19_deaths_sentence_1_v1,
-  page_covid_19_deaths_sentence_2_v1,
-  page_covid_19_deaths_sentence_3_v1,
+  page_covid_19_deaths_statement_1_v1,
+  page_covid_19_deaths_statement_2_v1,
+  page_covid_19_deaths_statement_3_v1,
 ];
 
 export default statements;

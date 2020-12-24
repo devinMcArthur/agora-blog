@@ -1,12 +1,12 @@
-import * as mongoose from "mongoose";
+import {
+  getModelForClass,
+  DocumentType,
+  ReturnModelType,
+} from "@typegoose/typegoose";
+import QuestionClass from "./class";
 
-import QuestionSchema, {
-  QuestionModel as QM,
-  QuestionDocument as QD,
-} from "./functions";
+export default getModelForClass(QuestionClass);
 
-export interface QuestionModel extends QM {}
+export interface QuestionDocument extends DocumentType<QuestionClass> {}
 
-export interface QuestionDocument extends QD {}
-
-export default mongoose.model<QD, QM>("Question", QuestionSchema);
+export interface QuestionModel extends ReturnModelType<typeof QuestionClass> {}

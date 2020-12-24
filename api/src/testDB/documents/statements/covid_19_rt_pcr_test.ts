@@ -2,9 +2,9 @@ import _ids from "../../_ids";
 
 import Statement from "../../../models/Statement";
 
-const page_covid_19_rt_pcr_test_sentence_1_v1 = new Statement({
+const page_covid_19_rt_pcr_test_statement_1_v1 = new Statement({
   _id: _ids.pages.page_covid_19_rt_pcr_test.paragraphs[0].statements[0],
-  pageID: _ids.pages.page_covid_19_rt_pcr_test._id,
+  page: _ids.pages.page_covid_19_rt_pcr_test._id,
   current: true,
   versions: [
     {
@@ -22,7 +22,7 @@ const page_covid_19_rt_pcr_test_sentence_1_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_covid_19_testing._id,
+                page: _ids.pages.page_covid_19_testing._id,
               },
             },
           ],
@@ -32,14 +32,14 @@ const page_covid_19_rt_pcr_test_sentence_1_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.what_is_a_covid_19_rt_pcr_test._id],
     },
   ],
-  questions: [_ids.questions.what_is_a_covid_19_rt_pcr_test._id],
 });
 
-const page_covid_19_rt_pcr_test_sentence_2_v1 = new Statement({
+const page_covid_19_rt_pcr_test_statement_2_v1 = new Statement({
   _id: _ids.pages.page_covid_19_rt_pcr_test.paragraphs[0].statements[1],
-  pageID: _ids.pages.page_covid_19_rt_pcr_test._id,
+  page: _ids.pages.page_covid_19_rt_pcr_test._id,
   current: true,
   versions: [
     {
@@ -55,7 +55,7 @@ const page_covid_19_rt_pcr_test_sentence_2_v1 = new Statement({
             {
               type: "variable",
               value: {
-                variableID:
+                variable:
                   _ids.variables.var_covid_19_rt_pcr_test_sensitivity._id,
               },
             },
@@ -71,7 +71,7 @@ const page_covid_19_rt_pcr_test_sentence_2_v1 = new Statement({
             {
               type: "variable",
               value: {
-                variableID:
+                variable:
                   _ids.variables.var_covid_19_rt_pcr_test_specificity._id,
               },
             },
@@ -86,7 +86,7 @@ const page_covid_19_rt_pcr_test_sentence_2_v1 = new Statement({
             {
               type: "variable",
               value: {
-                variableID:
+                variable:
                   _ids.variables.var_covid_19_rt_pcr_test_false_positive_rate
                     ._id,
               },
@@ -99,23 +99,25 @@ const page_covid_19_rt_pcr_test_sentence_2_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [
+        _ids.questions.what_is_the_effectiveness_of_rt_pcr_covid_19_tests._id,
+        _ids.questions.what_is_the_false_positive_rate_of_rt_pcr_covid_19_tests
+          ._id,
+        _ids.questions.what_is_the_false_negative_rate_of_rt_pcr_covid_19_tests
+          ._id,
+      ],
+      sources: {
+        urls: [
+          "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013705/full",
+        ],
+      },
     },
   ],
-  questions: [
-    _ids.questions.what_is_the_effectiveness_of_rt_pcr_covid_19_tests._id,
-    _ids.questions.what_is_the_false_positive_rate_of_rt_pcr_covid_19_tests._id,
-    _ids.questions.what_is_the_false_negative_rate_of_rt_pcr_covid_19_tests._id,
-  ],
-  sources: {
-    urls: [
-      "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013705/full",
-    ],
-  },
 });
 
-const page_covid_19_rt_pcr_test_sentence_3_v1 = new Statement({
+const page_covid_19_rt_pcr_test_statement_3_v1 = new Statement({
   _id: _ids.pages.page_covid_19_rt_pcr_test.paragraphs[0].statements[2],
-  pageID: _ids.pages.page_covid_19_rt_pcr_test._id,
+  page: _ids.pages.page_covid_19_rt_pcr_test._id,
   current: true,
   versions: [
     {
@@ -132,7 +134,7 @@ const page_covid_19_rt_pcr_test_sentence_3_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_rt_pcr_cycle_threshold._id,
+                page: _ids.pages.page_rt_pcr_cycle_threshold._id,
               },
             },
           ],
@@ -143,21 +145,23 @@ const page_covid_19_rt_pcr_test_sentence_3_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [
+        _ids.questions.what_is_the_false_positive_rate_of_rt_pcr_covid_19_tests
+          ._id,
+        _ids.questions.how_does_cycle_threshold_ct_affect_rt_pcr_test_accuracy
+          ._id,
+      ],
+      sources: {
+        urls: ["https://academic.oup.com/cid/article/71/16/2252/5841456"],
+      },
     },
   ],
-  questions: [
-    _ids.questions.what_is_the_false_positive_rate_of_rt_pcr_covid_19_tests._id,
-    _ids.questions.how_does_cycle_threshold_ct_affect_rt_pcr_test_accuracy._id,
-  ],
-  sources: {
-    urls: ["https://academic.oup.com/cid/article/71/16/2252/5841456"],
-  },
 });
 
 const statements = [
-  page_covid_19_rt_pcr_test_sentence_1_v1,
-  page_covid_19_rt_pcr_test_sentence_2_v1,
-  page_covid_19_rt_pcr_test_sentence_3_v1,
+  page_covid_19_rt_pcr_test_statement_1_v1,
+  page_covid_19_rt_pcr_test_statement_2_v1,
+  page_covid_19_rt_pcr_test_statement_3_v1,
 ];
 
 export default statements;

@@ -1,9 +1,12 @@
-import * as mongoose from "mongoose";
+import {
+  getModelForClass,
+  DocumentType,
+  ReturnModelType,
+} from "@typegoose/typegoose";
+import PageClass from "./class";
 
-import PageSchema, { PageModel as PM, PageDocument as PD } from "./functions";
+export default getModelForClass(PageClass);
 
-export interface PageModel extends PM {}
+export interface PageDocument extends DocumentType<PageClass> {}
 
-export interface PageDocument extends PD {}
-
-export default mongoose.model<PD, PM>("Page", PageSchema);
+export interface PageModel extends ReturnModelType<typeof PageClass> {}

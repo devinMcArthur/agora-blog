@@ -1,6 +1,6 @@
 import Statement from "../../models/Statement";
 import VariablePageConnection from "../../models/VariablePageConnection";
-import { VariablePageConnectionDocument } from "../../models/VariablePageConnection/functions";
+import { VariablePageConnectionDocument } from "../../models/VariablePageConnection";
 
 const createVariablePageConnections = () => {
   return new Promise<void>(async (resolve, reject) => {
@@ -29,9 +29,9 @@ const createVariablePageConnections = () => {
             // Find all mentions
             if (style.type === "variable") {
               const variablePageConnection = new VariablePageConnection({
-                referrerPageID: statement.pageID,
-                variableID: style.value.variableID,
-                statementID: statement._id,
+                referrerPage: statement.page,
+                variable: style.value.variable,
+                statement: statement._id,
               });
 
               variablePageConnections.push(variablePageConnection);
@@ -50,9 +50,9 @@ const createVariablePageConnections = () => {
         if (
           checkedConnections.find(
             (connection) =>
-              connection.referrerPageID.toString() ===
-                object.referrerPageID.toString() &&
-              connection.variableID.toString() === object.variableID.toString()
+              connection.referrerPage!.toString() ===
+                object.referrerPage!.toString() &&
+              connection.variable!.toString() === object.variable!.toString()
           )
         ) {
           // Found a duplicate

@@ -1,15 +1,14 @@
-import * as mongoose from "mongoose";
+import {
+  getModelForClass,
+  DocumentType,
+  ReturnModelType,
+} from "@typegoose/typegoose";
+import QuestionPageConnectionClass from "./class";
 
-import QuestionPageConnectionSchema, {
-  QuestionPageConnectionModel as QPCM,
-  QuestionPageConnectionDocument as QPCD,
-} from "./functions";
+export default getModelForClass(QuestionPageConnectionClass);
 
-export interface QuestionPageConnectionModel extends QPCM {}
+export interface QuestionPageConnectionDocument
+  extends DocumentType<QuestionPageConnectionClass> {}
 
-export interface QuestionPageConnectionDocument extends QPCD {}
-
-export default mongoose.model<QPCD, QPCM>(
-  "QuestionPageConnection",
-  QuestionPageConnectionSchema
-);
+export interface QuestionPageConnectionModel
+  extends ReturnModelType<typeof QuestionPageConnectionClass> {}

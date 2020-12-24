@@ -1,5 +1,5 @@
 import QuestionPageConnection from "../../models/QuestionPageConnection";
-import { QuestionPageConnectionDocument } from "../../models/QuestionPageConnection/functions";
+import { QuestionPageConnectionDocument } from "../../models/QuestionPageConnection";
 import Statement from "../../models/Statement";
 
 const createQuestionPageConnections = () => {
@@ -13,11 +13,17 @@ const createQuestionPageConnections = () => {
         let statementsQuestionPageConnections: QuestionPageConnectionDocument[] = [];
 
         // Loop through questions
-        for (let s = 0; s < statement.questions.length; s++) {
+        for (
+          let s = 0;
+          s <
+          statement.versions[statement.versions.length - 1].questions.length;
+          s++
+        ) {
           const questionPageConnection = new QuestionPageConnection({
-            questionID: statement.questions[s],
-            referrerPageID: statement.pageID,
-            statementID: statement._id,
+            question:
+              statement.versions[statement.versions.length - 1].questions[s],
+            referrerPage: statement.page,
+            statement: statement._id,
           });
           statementsQuestionPageConnections.push(questionPageConnection);
         }
@@ -33,10 +39,9 @@ const createQuestionPageConnections = () => {
         if (
           checkedConnections.find(
             (connection) =>
-              connection.questionID.toString() ===
-                object.questionID.toString() &&
-              connection.referrerPageID.toString() ===
-                object.referrerPageID.toString()
+              connection.question!.toString() === object.question!.toString() &&
+              connection.referrerPage!.toString() ===
+                object.referrerPage!.toString()
           )
         ) {
           // Found a duplicate

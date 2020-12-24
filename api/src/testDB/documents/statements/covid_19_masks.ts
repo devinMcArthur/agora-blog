@@ -2,9 +2,9 @@ import _ids from "../../_ids";
 
 import Statement from "../../../models/Statement";
 
-const page_covid_19_masks_sentence_1_v1 = new Statement({
+const page_covid_19_masks_statement_1_v1 = new Statement({
   _id: _ids.pages.page_covid_19_masks.paragraphs[0].statements[0],
-  pageID: _ids.pages.page_covid_19_masks._id,
+  page: _ids.pages.page_covid_19_masks._id,
   current: true,
   versions: [
     {
@@ -21,7 +21,7 @@ const page_covid_19_masks_sentence_1_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_covid_2019._id,
+                page: _ids.pages.page_covid_2019._id,
               },
             },
           ],
@@ -38,7 +38,7 @@ const page_covid_19_masks_sentence_1_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_sars_cov_2._id,
+                page: _ids.pages.page_sars_cov_2._id,
               },
             },
           ],
@@ -48,14 +48,14 @@ const page_covid_19_masks_sentence_1_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.why_are_face_masks_used_for_covid_19._id],
     },
   ],
-  questions: [_ids.questions.why_are_face_masks_used_for_covid_19._id],
 });
 
-const page_covid_19_masks_sentence_2_v1 = new Statement({
+const page_covid_19_masks_statement_2_v1 = new Statement({
   _id: _ids.pages.page_covid_19_masks.paragraphs[0].statements[1],
-  pageID: _ids.pages.page_covid_19_masks._id,
+  page: _ids.pages.page_covid_19_masks._id,
   current: true,
   versions: [
     {
@@ -73,7 +73,7 @@ const page_covid_19_masks_sentence_2_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_sars_cov_2._id,
+                page: _ids.pages.page_sars_cov_2._id,
               },
             },
           ],
@@ -84,14 +84,14 @@ const page_covid_19_masks_sentence_2_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.are_masks_effective_against_covid_19._id],
     },
   ],
-  questions: [_ids.questions.are_masks_effective_against_covid_19._id],
 });
 
-const page_covid_19_masks_sentence_3_v1 = new Statement({
+const page_covid_19_masks_statement_3_v1 = new Statement({
   _id: _ids.pages.page_covid_19_masks.paragraphs[0].statements[2],
-  pageID: _ids.pages.page_covid_19_masks._id,
+  page: _ids.pages.page_covid_19_masks._id,
   current: true,
   versions: [
     {
@@ -120,14 +120,14 @@ const page_covid_19_masks_sentence_3_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.should_masks_be_used_to_prevent_covid_19._id],
     },
   ],
-  questions: [_ids.questions.should_masks_be_used_to_prevent_covid_19._id],
 });
 
-const page_covid_19_masks_sentence_4_v1 = new Statement({
+const page_covid_19_masks_statement_4_v1 = new Statement({
   _id: _ids.pages.page_covid_19_masks.paragraphs[0].statements[3],
-  pageID: _ids.pages.page_covid_19_masks._id,
+  page: _ids.pages.page_covid_19_masks._id,
   current: true,
   versions: [
     {
@@ -139,14 +139,16 @@ const page_covid_19_masks_sentence_4_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [
+        _ids.questions.which_masks_are_effective_against_covid_19._id,
+      ],
     },
   ],
-  questions: [_ids.questions.which_masks_are_effective_against_covid_19._id],
 });
 
-const page_covid_19_masks_sentence_5_v1 = new Statement({
+const page_covid_19_masks_statement_5_v1 = new Statement({
   _id: _ids.pages.page_covid_19_masks.paragraphs[0].statements[4],
-  pageID: _ids.pages.page_covid_19_masks._id,
+  page: _ids.pages.page_covid_19_masks._id,
   current: true,
   versions: [
     {
@@ -158,14 +160,14 @@ const page_covid_19_masks_sentence_5_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.why_do_people_want_mask_mandates._id],
     },
   ],
-  questions: [_ids.questions.why_do_people_want_mask_mandates._id],
 });
 
-const page_covid_19_masks_sentence_6_v1 = new Statement({
+const page_covid_19_masks_statement_6_v1 = new Statement({
   _id: _ids.pages.page_covid_19_masks.paragraphs[0].statements[5],
-  pageID: _ids.pages.page_covid_19_masks._id,
+  page: _ids.pages.page_covid_19_masks._id,
   current: true,
   versions: [
     {
@@ -177,18 +179,18 @@ const page_covid_19_masks_sentence_6_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.why_are_people_against_wearing_masks._id],
     },
   ],
-  questions: [_ids.questions.why_are_people_against_wearing_masks._id],
 });
 
 const statements = [
-  page_covid_19_masks_sentence_1_v1,
-  page_covid_19_masks_sentence_2_v1,
-  page_covid_19_masks_sentence_3_v1,
-  page_covid_19_masks_sentence_4_v1,
-  page_covid_19_masks_sentence_5_v1,
-  page_covid_19_masks_sentence_6_v1,
+  page_covid_19_masks_statement_1_v1,
+  page_covid_19_masks_statement_2_v1,
+  page_covid_19_masks_statement_3_v1,
+  page_covid_19_masks_statement_4_v1,
+  page_covid_19_masks_statement_5_v1,
+  page_covid_19_masks_statement_6_v1,
 ];
 
 export default statements;

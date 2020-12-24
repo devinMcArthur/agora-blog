@@ -2,9 +2,9 @@ import _ids from "../../_ids";
 
 import Statement from "../../../models/Statement";
 
-const page_covid_19_symptoms_sentence_1_v1 = new Statement({
+const page_covid_19_symptoms_statement_1_v1 = new Statement({
   _id: _ids.pages.page_covid_19_symptoms.paragraphs[0].statements[0],
-  pageID: _ids.pages.page_covid_19_symptoms._id,
+  page: _ids.pages.page_covid_19_symptoms._id,
   current: true,
   versions: [
     {
@@ -21,7 +21,7 @@ const page_covid_19_symptoms_sentence_1_v1 = new Statement({
               type: "mention",
               variant: "internal",
               value: {
-                pageID: _ids.pages.page_covid_2019._id,
+                page: _ids.pages.page_covid_2019._id,
               },
             },
           ],
@@ -32,14 +32,14 @@ const page_covid_19_symptoms_sentence_1_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.what_are_the_common_symptoms_of_covid_19._id],
     },
   ],
-  questions: [_ids.questions.what_are_the_common_symptoms_of_covid_19._id],
 });
 
-const page_covid_19_symptoms_sentence_2_v1 = new Statement({
+const page_covid_19_symptoms_statement_2_v1 = new Statement({
   _id: _ids.pages.page_covid_19_symptoms.paragraphs[0].statements[1],
-  pageID: _ids.pages.page_covid_19_symptoms._id,
+  page: _ids.pages.page_covid_19_symptoms._id,
   current: true,
   versions: [
     {
@@ -83,14 +83,14 @@ const page_covid_19_symptoms_sentence_2_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.why_is_covid_19_dangerous._id],
     },
   ],
-  questions: [_ids.questions.why_is_covid_19_dangerous._id],
 });
 
-const page_covid_19_symptoms_sentence_3_v1 = new Statement({
+const page_covid_19_symptoms_statement_3_v1 = new Statement({
   _id: _ids.pages.page_covid_19_symptoms.paragraphs[0].statements[2],
-  pageID: _ids.pages.page_covid_19_symptoms._id,
+  page: _ids.pages.page_covid_19_symptoms._id,
   current: true,
   versions: [
     {
@@ -102,15 +102,15 @@ const page_covid_19_symptoms_sentence_3_v1 = new Statement({
           styles: [],
         },
       ],
+      questions: [_ids.questions.what_is_long_covid._id],
     },
   ],
-  questions: [_ids.questions.what_is_long_covid._id],
 });
 
 const statements = [
-  page_covid_19_symptoms_sentence_1_v1,
-  page_covid_19_symptoms_sentence_2_v1,
-  page_covid_19_symptoms_sentence_3_v1,
+  page_covid_19_symptoms_statement_1_v1,
+  page_covid_19_symptoms_statement_2_v1,
+  page_covid_19_symptoms_statement_3_v1,
 ];
 
 export default statements;
