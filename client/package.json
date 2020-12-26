@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
-    "build": "npm run gen && react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "gen": "graphql-codegen --config codegen.yml"
+    "gen": "set REACT_APP_API_URL=http://localhost:8080/graphql && graphql-codegen --config codegen.js",
+    "gen:prod": "graphql-codegen --config codegen.yml -r dotenv/config .env.production"
   },
   "dependencies": {
     "@apollo/client": "3.3.6",

@@ -7,7 +7,7 @@ export default function MyApolloProvider({
   children: React.ReactNode;
 }) {
   const client = new ApolloClient({
-    uri: "http://localhost:8080/graphql",
+    uri: process.env.API_URL,
     cache: new InMemoryCache(),
   });
 
