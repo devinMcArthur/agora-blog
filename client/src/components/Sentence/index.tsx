@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { DisplayStatementSnippetFragment } from "../../generated/graphql";
 
-import SentenceService from "../../services/sentenceService";
-
-import { SentencePopulated } from "../../typescript/interfaces/documents/Sentence";
+import StatementService from "../../services/statementService";
 
 const LinkTag = styled.a`
   text-decoration-line: none;
@@ -13,36 +12,38 @@ const LinkTag = styled.a`
   }
 `;
 
-const Sentence = (props: {
-  sentence: SentencePopulated;
+const Statement = (props: {
+  statement: DisplayStatementSnippetFragment;
   showSources?: boolean;
 }) => {
-  const { sentence } = props;
+  const { statement } = props;
+
+  const currentVersion = statement.versions[statement.versions.length - 1];
 
   // Default show sources to true
   let { showSources } = props;
   if (showSources !== false) showSources = true;
 
   let sourcePages, sourceURLs, questions;
-  if (sentence.sources && showSources) {
+  if (currentVersion.sources && showSources) {
     let index = 1;
-    if (sentence.sources.pages) {
-      sourcePages = sentence.sources.pages.map((page) => {
+    if (currentVersion.sources.pages) {
+      sourcePages = currentVersion.sources.pages.map((page) => {
         index++;
         return (
           <sup>
-            [<LinkTag href={`/p/${page.page.slug}`}>p-{index}</LinkTag>]
+            [<LinkTag href={`/p/${page.slug}`}>p-{index}</LinkTag>]
           </sup>
         );
       });
     }
-    if (sentence.sources.urls) {
-      sourceURLs = sentence.sources.urls.map((url) => {
+    if (currentVersion.sources.urls) {
+      sourceURLs = currentVersion.sources.urls.map((url) => {
         index++;
         return (
           <sup>
             [
-            <LinkTag href={url.url} target="_blank" rel="noreferrer">
+            <LinkTag href={url} target="_blank" rel="noreferrer">
               {index}
             </LinkTag>
             ]
@@ -51,8 +52,12 @@ const Sentence = (props: {
       });
     }
   }
-  if (sentence.questions && sentence.questions.length > 0 && showSources) {
-    questions = sentence.questions.map((question, index) => {
+  if (
+    currentVersion.questions &&
+    currentVersion.questions.length > 0 &&
+    showSources
+  ) {
+    questions = currentVersion.questions.map((question, index) => {
       if (question)
         return (
           <sup key={index} title={question.question}>
@@ -65,7 +70,7 @@ const Sentence = (props: {
 
   return (
     <span>
-      {SentenceService().translateSentenceToJSX(props.sentence)}
+      {StatementService().translateStatementToJSX(props.statement)}
       {sourcePages}
       {sourceURLs}
       {questions}
@@ -73,4 +78,4 @@ const Sentence = (props: {
   );
 };
 
-export default Sentence;
+export default Statement;

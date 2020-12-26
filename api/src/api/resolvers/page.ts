@@ -36,7 +36,7 @@ export default class PageResolver {
     return Paragraph.findById(page.paragraphs[page.paragraphs.length - 1]);
   }
 
-  @FieldResolver(() => PageClass)
+  @FieldResolver(() => [PageClass])
   async relatedPages(@Root() page: PageDocument) {
     return await page.getPagesThatReference();
   }

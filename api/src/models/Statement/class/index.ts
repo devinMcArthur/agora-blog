@@ -32,7 +32,7 @@ export interface StatementValueDocument
   extends DocumentType<StatementValueClass> {}
 
 @ObjectType()
-class StyleClass {
+class StatementStyleClass {
   @Field()
   @prop({ required: true, enum: ["mention", "variable", "quote", "bold"] })
   public type!: "mention" | "variable" | "quote" | "bold";
@@ -49,12 +49,12 @@ class StyleClass {
 @ObjectType()
 class StringArrayClass {
   @Field({ nullable: true })
-  @prop({ required: false, trim: true })
+  @prop({ required: false, trim: false })
   public string?: string;
 
-  @Field(() => [StyleClass])
-  @prop({ type: () => StyleClass, default: [] })
-  public styles!: StyleClass[];
+  @Field(() => [StatementStyleClass])
+  @prop({ type: () => StatementStyleClass, default: [] })
+  public styles!: StatementStyleClass[];
 }
 
 @ObjectType()

@@ -37,7 +37,25 @@ const list = (Question: QuestionModel): Promise<QuestionDocument[]> => {
     try {
       const questions = await Question.find({});
 
-      resolve(questions);
+      let index = [];
+      for (const question of questions) {
+        index.push({
+          _id: question._id,
+          referencedCount: await question.getReferencedCount(),
+        });
+      }
+      index = index.sort((a, b) => b.referencedCount - a.referencedCount);
+
+      const sortedQuestions = [];
+      for (const i of index) {
+        sortedQuestions.push(
+          questions.find(
+            (question) => question._id.toString() === i._id.toString()
+          )!
+        );
+      }
+
+      resolve(sortedQuestions);
     } catch (e) {
       reject(e);
     }

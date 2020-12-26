@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 
 import Card from "./Card";
 
-import { QuestionPopulated } from "../../typescript/interfaces/documents/Question";
+import { QuestionCardSnippetFragment } from "../../generated/graphql";
 
 type Props = {
-  question: QuestionPopulated;
+  question: QuestionCardSnippetFragment;
 };
 
 type State = {};

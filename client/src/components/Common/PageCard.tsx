@@ -1,27 +1,27 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 import { Types } from "mongoose";
 
 import Card from "./Card";
 
-import { PagePopulated } from "../../typescript/interfaces/documents/Page";
-
 import ParagraphService from "../../services/paragraphService";
-import SentenceService from "../../services/sentenceService";
+import StatementService from "../../services/statementService";
+import { PageCardSnippetFragment } from "../../generated/graphql";
 
 type ReferenceObject =
   | {
       type: "page";
-      pageID: Types.ObjectId;
+      pageID: Types.ObjectId | string;
     }
   | {
       type: "question";
-      questionID: Types.ObjectId;
+      questionID: Types.ObjectId | string;
     }
-  | { type: "variable"; variableID: Types.ObjectId };
+  | { type: "variable"; variableID: Types.ObjectId | string };
 
 type PageContainerProps = {
-  page: PagePopulated;
+  page: PageCardSnippetFragment;
   referenceObject?: ReferenceObject;
 };
 
@@ -35,7 +35,7 @@ class PageContainer extends React.Component<
     const { page, referenceObject } = this.props;
 
     // Determine which sentence to show
-    let sentence = page.currentParagraph.sentences[0];
+    let statement = page.currentParagraph.statements[0];
     if (referenceObject) {
       let referenceSentence;
       switch (referenceObject.type) {
@@ -60,15 +60,17 @@ class PageContainer extends React.Component<
         default:
           break;
       }
-      if (referenceSentence) sentence = referenceSentence;
+      if (referenceSentence) statement = referenceSentence;
     }
 
     return (
       <Card key={page._id.toString()}>
-        <Link to={`/p/${page.slug}`} style={{ margin: "0" }}>
-          <h4>{page.title}</h4>
-        </Link>
-        {SentenceService().translateSentenceToJSX(sentence)}
+        <b>
+          <Link as={RouterLink} to={`/p/${page.slug}`} style={{ margin: "0" }}>
+            {page.title}
+          </Link>
+        </b>
+        {StatementService().translateStatementToJSX(statement)}
       </Card>
     );
   }

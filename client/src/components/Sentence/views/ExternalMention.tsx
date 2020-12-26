@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { ExternalMentionStyleType } from "../../../typescript/interfaces/documents/Sentence";
+import { DisplayStyleSnippetFragment } from "../../../generated/graphql";
 
 type Props = {
-  style: ExternalMentionStyleType;
+  style: DisplayStyleSnippetFragment;
   children: React.ReactNode;
   key: string | number;
 };
@@ -19,7 +19,7 @@ const ExternalMentionTag = styled.a`
 const ExternalMention = (props: Props) => {
   return (
     <ExternalMentionTag
-      href={props.style.value.url}
+      href={props.style.value.url!}
       key={props.key}
       target="_blank"
       rel="noreferrer"

@@ -1,0 +1,5 @@
+query Pages {
+  pages {
+    ...PageCardSnippet
+  }
+}

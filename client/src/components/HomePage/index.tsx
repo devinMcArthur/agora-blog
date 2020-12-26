@@ -1,45 +1,30 @@
 import * as React from "react";
+import { Spinner } from "@chakra-ui/react";
 
 import Container from "../Common/Container";
 import PageCard from "../Common/PageCard";
 
 import { withProvider } from "../Providers";
-import PageListService from "../../services/pageListService";
 
-import { PagePopulated } from "../../typescript/interfaces/documents/Page";
 import Flex from "../Common/Flex";
+import { usePagesQuery } from "../../generated/graphql";
 
-type HomePageProps = {};
+const HomePage = () => {
+  const { data, loading } = usePagesQuery();
 
-type HomePageState = {
-  pages: PagePopulated[];
+  return (
+    <Container layout="maxi" flexDirection="column">
+      {!data && loading ? (
+        <Spinner />
+      ) : (
+        <Flex flexDirection="column">
+          {data!.pages.map((page) => (
+            <PageCard page={page} />
+          ))}
+        </Flex>
+      )}
+    </Container>
+  );
 };
-
-class HomePage extends React.Component<HomePageProps, HomePageState> {
-  state: HomePageState = {
-    pages: [],
-  };
-
-  componentDidMount() {
-    PageListService()
-      .getHomePages()
-      .then((pages) => {
-        this.setState((state) => ({
-          ...state,
-          pages,
-        }));
-      });
-  }
-
-  render() {
-    const pagesJSX = this.state.pages.map((page) => <PageCard page={page} />);
-
-    return (
-      <Container layout="maxi" flexDirection="column">
-        <Flex flexDirection="column">{pagesJSX}</Flex>
-      </Container>
-    );
-  }
-}
 
 export default withProvider(HomePage);

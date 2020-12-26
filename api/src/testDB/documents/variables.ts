@@ -77,7 +77,7 @@ const createVariables = () => {
               },
               {
                 type: "variable",
-                variableID:
+                variable:
                   _ids.variables.var_covid_19_rt_pcr_test_sensitivity._id,
               },
             ],
@@ -117,7 +117,7 @@ const createVariables = () => {
               },
               {
                 type: "variable",
-                variableID:
+                variable:
                   _ids.variables.var_covid_19_rt_pcr_test_specificity._id,
               },
             ],

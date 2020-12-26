@@ -1,13 +1,13 @@
 import React from "react";
 
-import { ParagraphPopulated } from "../../typescript/interfaces/documents/Paragraph";
+import { DisplayParagraphSnippetFragment } from "../../generated/graphql";
 
-import Sentence from "../Sentence";
+import Statement from "../Sentence";
 
-const Paragraph = (props: { paragraph: ParagraphPopulated }) => {
-  const paragraphJSX = props.paragraph.sentences.map((sentence) => (
+const Paragraph = (props: { paragraph: DisplayParagraphSnippetFragment }) => {
+  const paragraphJSX = props.paragraph.statements.map((statement) => (
     <div style={{ textIndent: "1%", lineHeight: "2", marginBottom: "1em" }}>
-      <Sentence sentence={sentence} showSources={true} />
+      <Statement statement={statement} showSources={true} />
     </div>
   ));
 

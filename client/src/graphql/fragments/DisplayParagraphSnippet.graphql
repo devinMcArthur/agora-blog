@@ -1,0 +1,5 @@
+fragment DisplayParagraphSnippet on ParagraphClass {
+  statements {
+    ...DisplayStatementSnippet
+  }
+}

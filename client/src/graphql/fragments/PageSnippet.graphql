@@ -1,0 +1,11 @@
+fragment PageSnippet on PageClass {
+  _id
+  title
+  slug
+  currentParagraph {
+    ...DisplayParagraphSnippet
+  }
+  relatedPages {
+    ...PageCardSnippet
+  }
+}

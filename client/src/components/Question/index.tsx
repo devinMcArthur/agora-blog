@@ -1,74 +1,40 @@
 import * as React from "react";
-import { RouterProps } from "react-router";
 
-import { QuestionPopulated } from "../../typescript/interfaces/documents/Question";
 import PageCard from "../Common/PageCard";
 import Container from "../Common/Container";
 import Flex from "../Common/Flex";
 import Loading from "../Common/Loading";
-import QuestionService from "../../services/questionService";
+
+import { useQuestionQuery } from "../../generated/graphql";
 
 type Props = {
   match: any;
 };
 
-type State = {
-  question: QuestionPopulated | undefined;
+const Question = (props: Props) => {
+  const { data, loading } = useQuestionQuery({
+    variables: { id: props.match.params.questionID },
+  });
+
+  let content = <Loading />;
+
+  if (data?.question && !loading) {
+    const relatedPageList = data!.question.relatedPages.map((relatedPage) => (
+      <PageCard
+        page={relatedPage}
+        referenceObject={{ type: "question", questionID: data!.question!._id }}
+      />
+    ));
+
+    content = (
+      <Flex flexDirection="column">
+        <h2>{data!.question.question}</h2>
+        <Flex>{relatedPageList}</Flex>
+      </Flex>
+    );
+  }
+
+  return <Container>{content}</Container>;
 };
-
-class Question extends React.Component<Props & RouterProps, State> {
-  state: State = {
-    question: undefined,
-  };
-
-  componentDidMount() {
-    QuestionService()
-      .getQuestionByID(this.props.match.params.questionID)
-      .then((question) => {
-        this.setState((state) => ({
-          ...state,
-          question,
-        }));
-      });
-  }
-
-  componentDidUpdate(prevProps: Props & RouterProps) {
-    if (
-      prevProps.match.params.questionID !== this.props.match.params.questionID
-    ) {
-      QuestionService()
-        .getQuestionByID(this.props.match.params.questionID)
-        .then((question) => {
-          this.setState((state) => ({
-            ...state,
-            question,
-          }));
-        });
-    }
-  }
-
-  render() {
-    const { question } = this.state;
-    let content = <Loading />;
-
-    if (question) {
-      const relatedPageList = question.relatedPages.map((relatedPage) => (
-        <PageCard
-          page={relatedPage}
-          referenceObject={{ type: "question", questionID: question._id }}
-        />
-      ));
-
-      content = (
-        <Flex flexDirection="column">
-          <h2>{question.question}</h2>
-          <Flex>{relatedPageList}</Flex>
-        </Flex>
-      );
-    }
-
-    return <Container>{content}</Container>;
-  }
-}
 
 export default Question;

@@ -8,19 +8,19 @@ import { VariableDocument, VariableModel } from "..";
 
 @ObjectType()
 export class VariableEquationClass {
-  @Field()
+  @Field({ nullable: false })
   @prop({ required: true, enum: ["operator", "number", "variable"] })
   public type!: "operator" | "number" | "variable";
 
-  @Field()
+  @Field({ nullable: true })
   @prop({ required: false, enum: ["(", ")", "+", "-", "/", "*", "^"] })
   public operator?: "(" | ")" | "+" | "-" | "/" | "*" | "^";
 
-  @Field()
+  @Field({ nullable: true })
   @prop({ required: false })
   public number?: number;
 
-  @Field(() => VariableClass)
+  @Field(() => VariableClass, { nullable: true })
   @prop({ ref: "VariableClass", required: false })
   public variable?: Ref<VariableClass>;
 }

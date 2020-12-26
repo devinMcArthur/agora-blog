@@ -1,0 +1,13 @@
+fragment VariableSnippet on VariableClass {
+  _id
+  title
+  versions {
+    finalValue
+    createdAt
+    sourceURL
+    finalValue
+  }
+  relatedPages {
+    ...PageCardSnippet
+  }
+}

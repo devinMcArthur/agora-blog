@@ -1,0 +1,21 @@
+fragment DisplayStatementSnippet on StatementClass {
+  versions {
+    stringArray {
+      string
+      styles {
+        ...DisplayStyleSnippet
+      }
+    }
+    sources {
+      urls
+      pages {
+        _id
+        slug
+      }
+    }
+    questions {
+      _id
+      question
+    }
+  }
+}

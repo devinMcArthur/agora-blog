@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { PopulatedVariableStyleType } from "../../../typescript/interfaces/documents/Sentence";
+import { DisplayStyleSnippetFragment } from "../../../generated/graphql";
 import FinalValue from "../../Variable/views/FinalValue";
 
 type Props = {
-  style: PopulatedVariableStyleType;
+  style: DisplayStyleSnippetFragment;
   key: string | number;
 };
 
@@ -22,14 +22,12 @@ const SourceLink = styled.a`
 `;
 
 const Variable = (props: Props) => {
-  const { finalValue } = props.style.value.variable.versions[
-    props.style.value.variable.versions.length - 1
-  ];
+  const { finalValue } = props.style.value.variable!;
 
   return (
     <SourceLink
-      title={props.style.value.variable.title}
-      href={`/v/${props.style.value.variable._id}`}
+      title={props.style.value.variable!.title}
+      href={`/v/${props.style.value.variable!._id}`}
     >
       <VariableTag key={props.key}>
         <i>

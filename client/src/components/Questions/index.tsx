@@ -1,45 +1,24 @@
 import React from "react";
-import QuestionService from "../../services/questionService";
-import { QuestionPopulated } from "../../typescript/interfaces/documents/Question";
+import { useQuestionsQuery } from "../../generated/graphql";
 import Container from "../Common/Container";
 import Flex from "../Common/Flex";
+import Loading from "../Common/Loading";
 import QuestionCard from "../Common/QuestionCard";
 
-type Props = {};
+const Questions = () => {
+  const { data, loading } = useQuestionsQuery();
 
-type State = {
-  questions: QuestionPopulated[];
-};
+  let content = <Loading />;
 
-class Questions extends React.Component<Props, State> {
-  state: State = {
-    questions: [],
-  };
-
-  componentDidMount() {
-    QuestionService()
-      .getRootQuestions()
-      .then((questions) => {
-        this.setState((state) => ({
-          ...state,
-          questions,
-        }));
-      });
-  }
-
-  render() {
-    const { questions } = this.state;
-
-    const questionsJSX = questions.map((question) => (
+  if (data?.questions && !loading) {
+    const questionsJSX = data.questions.map((question) => (
       <QuestionCard question={question} />
     ));
 
-    return (
-      <Container layout="maxi">
-        <Flex flexDirection="column">{questionsJSX}</Flex>
-      </Container>
-    );
+    content = <Flex flexDirection="column">{questionsJSX}</Flex>;
   }
-}
+
+  return <Container layout="maxi">{content}</Container>;
+};
 
 export default Questions;

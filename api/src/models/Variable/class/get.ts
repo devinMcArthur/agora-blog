@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import Variable, { VariableDocument, VariableModel } from "..";
+import { VariableDocument, VariableModel } from "..";
 import { VariableVersionClass } from ".";
 import GetByIDOptions from "../../../typescript/interface/getByID_Options";
 import populateOptions from "../../../utils/populateOptions";
@@ -66,11 +66,9 @@ const versionsFinalValue = (
             } else if (item.type === "operator") {
               equation += item.operator;
             } else if (item.type === "variable") {
-              const variable = await Variable.findById(item.variable, {
-                throwError: true,
-              });
+              const variable = await Variable.findById(item.variable);
               equation += await Variable.getVersionsFinalValue(
-                variable?.versions[variable.versions.length - 1]!
+                variable?.versions[variable?.versions.length - 1]!
               );
             }
           }

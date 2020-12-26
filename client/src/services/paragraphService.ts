@@ -1,50 +1,49 @@
 import { Types } from "mongoose";
-import { ParagraphPopulated } from "../typescript/interfaces/documents/Paragraph";
+import { DisplayParagraphSnippetFragment } from "../generated/graphql";
 
 export default function ParagraphService() {
-  // Returns sentence in paragraph that references a given page
+  // Returns statement in paragraph that references a given page
   const findSentenceWithPageReference = (
-    paragraph: ParagraphPopulated,
-    pageID: Types.ObjectId
+    paragraph: DisplayParagraphSnippetFragment,
+    pageID: Types.ObjectId | string
   ) => {
-    return paragraph.sentences.find((sentence) =>
-      sentence.versions[
-        sentence.versions.length - 1
+    return paragraph.statements.find((statement) =>
+      statement.versions[
+        statement.versions.length - 1
       ].stringArray.find((stringArray) =>
         stringArray.styles.find(
           (style) =>
             style.type === "mention" &&
             style.variant === "internal" &&
-            style.value.pageID.toString() === pageID.toString()
+            style.value.page!._id.toString() === pageID.toString()
         )
       )
     );
   };
 
   const findSentenceWithQuestionReference = (
-    paragraph: ParagraphPopulated,
-    questionID: Types.ObjectId
+    paragraph: DisplayParagraphSnippetFragment,
+    questionID: Types.ObjectId | string
   ) => {
-    return paragraph.sentences.find((sentence) =>
-      sentence.questionConnections.find(
-        (connection) =>
-          connection.questionID.toString() === questionID.toString()
+    return paragraph.statements.find((statement) =>
+      statement.versions[statement.versions.length - 1].questions.find(
+        (connection) => connection._id.toString() === questionID.toString()
       )
     );
   };
 
   const findSentenceWithVariableReference = (
-    paragraph: ParagraphPopulated,
-    variableID: Types.ObjectId
+    paragraph: DisplayParagraphSnippetFragment,
+    variableID: Types.ObjectId | string
   ) => {
-    return paragraph.sentences.find((sentence) =>
-      sentence.versions[
-        sentence.versions.length - 1
+    return paragraph.statements.find((statement) =>
+      statement.versions[
+        statement.versions.length - 1
       ].stringArray.find((stringArray) =>
         stringArray.styles.find(
           (style) =>
             style.type === "variable" &&
-            style.value.variableID.toString() === variableID.toString()
+            style.value.variable!._id.toString() === variableID.toString()
         )
       )
     );

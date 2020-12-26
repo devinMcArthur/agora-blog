@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { PopulatedInternalMentionStyleType } from "../../../typescript/interfaces/documents/Sentence";
+import { DisplayStyleSnippetFragment } from "../../../generated/graphql";
 
 type Props = {
-  style: PopulatedInternalMentionStyleType;
+  style: DisplayStyleSnippetFragment;
   children: React.ReactNode;
   key: string | number;
 };
@@ -19,9 +19,9 @@ const InternalMentionTag = styled.a`
 const InternalMention = (props: Props) => {
   return (
     <InternalMentionTag
-      href={`/p/${props.style.value.page.slug}`}
+      href={`/p/${props.style.value.page!.slug}`}
       key={props.key}
-      title={props.style.value.page.title}
+      title={props.style.value.page!.title}
     >
       {props.children}
     </InternalMentionTag>
