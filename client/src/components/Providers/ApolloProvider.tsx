@@ -7,7 +7,7 @@ export default function MyApolloProvider({
   children: React.ReactNode;
 }) {
   const client = new ApolloClient({
-    uri: process.env.API_URL,
+    uri: process.env.REACT_APP_API_URL,
     cache: new InMemoryCache(),
   });
 

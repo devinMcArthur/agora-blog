@@ -7,8 +7,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "gen": "set REACT_APP_API_URL=http://localhost:8080/graphql && graphql-codegen --config codegen.js",
-    "gen:prod": "graphql-codegen --config codegen.yml -r dotenv/config .env.production"
+    "gen": "graphql-codegen --config codegen.js"
   },
   "dependencies": {
     "@apollo/client": "3.3.6",
