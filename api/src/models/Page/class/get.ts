@@ -79,10 +79,10 @@ const pagesThatReference = (page: PageDocument): Promise<PageDocument[]> => {
 
       const pages: PageDocument[] = [];
 
-      pageConnections.forEach(async (connection) => {
+      for (const connection of pageConnections) {
         const page = await Page.findById(connection.referrerPage);
         if (page) pages.push(page);
-      });
+      }
 
       resolve(pages);
     } catch (e) {

@@ -85,6 +85,7 @@ const Page = (props: { match: any }) => {
   let content = <Spinner />;
   if (data && data.page) {
     const { page } = data;
+    console.log(page);
     const relatedPageList = page.relatedPages.map((relatedPage) => (
       <PageCard
         page={relatedPage}
