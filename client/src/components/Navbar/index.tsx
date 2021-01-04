@@ -1,8 +1,9 @@
 import * as React from "react";
 import styled from "styled-components";
+import {Container} from "@chakra-ui/react";
+
 import { withProvider } from "../Providers";
-import Container from "../Common/Container";
-import Flex from "../Common/Flex";
+import {Flex} from "@chakra-ui/react";
 import { RouteComponentProps } from "react-router-dom";
 
 const Heading = styled.div`
@@ -65,11 +66,9 @@ class WebadminNavbar extends React.Component<Props> {
 
     return (
       <Container
-        id="webadmin-navbar"
-        layout="maxi"
-        py="earth"
-        height="2.5em"
-        shadowType="bottomShadow"
+        py="5"
+        height="3em"
+        shadow="bottomShadow"
         marginLeft="0"
         marginRight="0"
         marginBottom="1rem"
@@ -81,14 +80,14 @@ class WebadminNavbar extends React.Component<Props> {
           width={1}
           alignItems="center"
         >
-          <Heading onClick={() => this.props.history.push("/")}>agora</Heading>
-          <Nav>
-            <NavItem
+          <Flex flexDir="row" alignItems="center" fontSize="xl" color="fontDark" fontWeight="bold" cursor="pointer" onClick={() => this.props.history.push("/")}>agora</Flex>
+          <Flex flexDir="row" justifyContent="flex-end">
+            <Flex fontSize="l" color="fontLight" cursor="pointer" marginLeft="30px"
               onClick={() => this.props.history.push("/questions")}
               active={pathname === "/questions"}
             >
               Questions
-            </NavItem>
+            </Flex>
             {/* <NavItem
               data-testid="templates-button-nav"
               onClick={() =>
@@ -98,7 +97,7 @@ class WebadminNavbar extends React.Component<Props> {
             >
               Templates
             </NavItem> */}
-          </Nav>
+          </Flex>
         </Flex>
       </Container>
     );
