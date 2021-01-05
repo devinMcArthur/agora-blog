@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from "@chakra-ui/react";
+import { Divider, Link } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { Types } from "mongoose";
 
@@ -65,11 +65,16 @@ class PageContainer extends React.Component<
 
     return (
       <Card key={page._id.toString()}>
-        <b>
-          <Link as={RouterLink} to={`/p/${page.slug}`} style={{ margin: "0" }}>
-            {page.title}
-          </Link>
-        </b>
+        <Link
+          as={RouterLink}
+          to={`/p/${page.slug}`}
+          style={{ margin: "0" }}
+          fontWeight="bold"
+          fontSize="lg"
+        >
+          {page.title}
+        </Link>
+        <Divider />
         {StatementService().translateStatementToJSX(statement)}
       </Card>
     );

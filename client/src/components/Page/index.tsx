@@ -5,11 +5,9 @@ import * as React from "react";
 
 // import { PagePopulatedFull } from "../../typescript/interfaces/documents/Page";
 import PageCard from "../Common/PageCard";
-import Container from "../Common/Container";
-import Flex from "../Common/Flex";
 import Paragraph from "../Common/Paragraph";
 import { usePageQuery } from "../../generated/graphql";
-import { Spinner } from "@chakra-ui/react";
+import { Container, Divider, Heading, Spinner, Flex } from "@chakra-ui/react";
 
 // type PageProps = {
 //   match: any;
@@ -83,9 +81,8 @@ const Page = (props: { match: any }) => {
   });
 
   let content = <Spinner />;
-  if (data && data.page) {
+  if (data?.page && !loading) {
     const { page } = data;
-    console.log(page);
     const relatedPageList = page.relatedPages.map((relatedPage) => (
       <PageCard
         page={relatedPage}
@@ -95,16 +92,22 @@ const Page = (props: { match: any }) => {
 
     content = (
       <Flex flexDirection="column">
-        <h2>{page.title}</h2>
+        <Heading as="h5">{page.title}</Heading>
+        <Divider />
         <Paragraph paragraph={page.currentParagraph} />
-        <Flex flexDirection="column" marginRight="1.5em">
+        <Divider />
+        <Flex flexDirection="column" mr="1.5em" pt={4}>
           {relatedPageList}
         </Flex>
       </Flex>
     );
   }
 
-  return <Container layout="maxi">{content}</Container>;
+  return (
+    <Container maxW="80%" p={4}>
+      {content}
+    </Container>
+  );
 };
 
 export default Page;

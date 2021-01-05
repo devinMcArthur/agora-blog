@@ -1,10 +1,9 @@
 import { extendTheme } from "@chakra-ui/react";
-import theme from "@chakra-ui/theme"
 
 import sizes from "./foundations/sizes";
 import fonts from "./foundations/fonts";
 import space from "./foundations/space";
-import styles from "./foundations/styles"
+import styles from "./foundations/styles";
 import colors from "./foundations/colors";
 import shadows from "./foundations/shadows";
 import zIndices from "./foundations/zIndices";
@@ -15,18 +14,23 @@ import breakpoints from "./foundations/breakpoints";
 import borderRadius from "./foundations/borderRadius";
 import letterSpacings from "./foundations/letterSpacings";
 
+import Card from "./components/Card";
+
 export default extendTheme({
-  // colors,
-  // breakpoints,
-  // space,
+  colors,
+  breakpoints,
+  space,
   fonts,
-  // fontSizes,
-  // fontWeights,
-  // lineHeights,
-  // letterSpacings,
-  // sizes,
-  // borderRadius,
-  // zIndices,
-  // shadows,
-  styles
+  fontSizes,
+  fontWeights,
+  lineHeights,
+  letterSpacings,
+  sizes,
+  borderRadius,
+  zIndices,
+  shadows,
+  styles,
+  components: {
+    Card,
+  },
 });

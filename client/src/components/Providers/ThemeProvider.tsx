@@ -3,8 +3,6 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 import theme from "../../theme";
 
-console.log(theme)
-
 export default function ThemeProvider({
   children,
 }: {

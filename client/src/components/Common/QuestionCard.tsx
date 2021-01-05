@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Divider, Link } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 
 import Card from "./Card";
 
@@ -17,9 +18,11 @@ class QuestionCard extends React.Component<Props, State> {
 
     return (
       <Card key={question._id.toString()}>
-        <Link to={`/q/${question._id}`} style={{ margin: "0" }}>
-          <h4>{question.question}</h4>
+        <Link as={RouterLink} to={`/q/${question._id}`} fontWeight="bold">
+          {question.question}
         </Link>
+        <Divider />
+        Answers: {question.referencedCount || 0}
       </Card>
     );
   }

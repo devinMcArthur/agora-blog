@@ -1,11 +1,10 @@
 import * as React from "react";
 
 import PageCard from "../Common/PageCard";
-import Container from "../Common/Container";
-import Flex from "../Common/Flex";
 import Loading from "../Common/Loading";
 
 import { useQuestionQuery } from "../../generated/graphql";
+import { Container, Divider, Flex, Heading } from "@chakra-ui/react";
 
 type Props = {
   match: any;
@@ -19,6 +18,7 @@ const Question = (props: Props) => {
   let content = <Loading />;
 
   if (data?.question && !loading) {
+    const { question } = data;
     const relatedPageList = data!.question.relatedPages.map((relatedPage) => (
       <PageCard
         page={relatedPage}
@@ -28,13 +28,18 @@ const Question = (props: Props) => {
 
     content = (
       <Flex flexDirection="column">
-        <h2>{data!.question.question}</h2>
-        <Flex>{relatedPageList}</Flex>
+        <Heading as="h5">{question.question}</Heading>
+        <Divider />
+        <Flex pt={4}>{relatedPageList}</Flex>
       </Flex>
     );
   }
 
-  return <Container>{content}</Container>;
+  return (
+    <Container maxW="80%" p={4}>
+      {content}
+    </Container>
+  );
 };
 
 export default Question;

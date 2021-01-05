@@ -1,105 +1,37 @@
 import * as React from "react";
-import styled from "styled-components";
-import {Container} from "@chakra-ui/react";
+import { Box, Link, Stack, Heading, Spacer } from "@chakra-ui/react";
 
 import { withProvider } from "../Providers";
-import {Flex} from "@chakra-ui/react";
-import { RouteComponentProps } from "react-router-dom";
-
-const Heading = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  font-size: ${(props) => props.theme.fontSizes.hippo};
-  font-family: "Source Serif Pro";
-  color: ${(props) => props.theme.colors.fontDark};
-  font-weight: bold;
-  cursor: pointer;
-
-  > .header-icon {
-    margin-right: 10px;
-  }
-
-  > .region-badge {
-    margin-left: 10px;
-
-    &.ca {
-      background-color: #d3200d;
-    }
-
-    &.us {
-      background-color: #3c3b6e;
-    }
-  }
-`;
-
-const Nav = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-`;
-
-interface NavItemProps {
-  active: boolean;
-}
-
-const NavItem = styled.div<NavItemProps>`
-  font-size: 14px;
-  color: ${(props) => props.theme.colors.fontLight};
-  font-weight: bold;
-  cursor: pointer;
-  margin-left: 30px;
-
-  ${(props) =>
-    props.active &&
-    `
-        color: ${props.theme.colors.fontDark};
-        border-bottom: 2px solid ${props.theme.colors.fontDark};
-    `}
-`;
+import { Flex } from "@chakra-ui/react";
+import { RouteComponentProps, Link as RouterLink } from "react-router-dom";
 
 interface Props extends RouteComponentProps {}
 
 class WebadminNavbar extends React.Component<Props> {
   render() {
-    const { pathname } = this.props.history.location;
+    // const { pathname } = this.props.history.location;
 
     return (
-      <Container
-        py="5"
-        height="3em"
-        shadow="bottomShadow"
-        marginLeft="0"
-        marginRight="0"
-        marginBottom="1rem"
-        maxWidth="none"
-      >
+      <Box shadow="bottomShadow" p={3}>
         <Flex
-          flexDirection="row"
-          justifyContent="space-between"
-          width={1}
-          alignItems="center"
+          align="center"
+          justify="space-between"
+          maxW="960px"
+          margin="0 auto"
         >
-          <Flex flexDir="row" alignItems="center" fontSize="xl" color="fontDark" fontWeight="bold" cursor="pointer" onClick={() => this.props.history.push("/")}>agora</Flex>
-          <Flex flexDir="row" justifyContent="flex-end">
-            <Flex fontSize="l" color="fontLight" cursor="pointer" marginLeft="30px"
-              onClick={() => this.props.history.push("/questions")}
-              active={pathname === "/questions"}
-            >
+          <Link as={RouterLink} to="/">
+            <Heading as="h4" fontSize="3xl" pl={4}>
+              agora
+            </Heading>
+          </Link>
+          <Spacer />
+          <Stack spacing={2} direction="row" mr={4}>
+            <Link as={RouterLink} to="/questions">
               Questions
-            </Flex>
-            {/* <NavItem
-              data-testid="templates-button-nav"
-              onClick={() =>
-                this.props.history.push("/tiamat/template-careplans")
-              }
-              active={pathname === "/tiamat/template-careplans"}
-            >
-              Templates
-            </NavItem> */}
-          </Flex>
+            </Link>
+          </Stack>
         </Flex>
-      </Container>
+      </Box>
     );
   }
 }
