@@ -2,7 +2,7 @@ import React from "react";
 
 import { DisplayParagraphSnippetFragment } from "../../generated/graphql";
 
-import Statement from "../Sentence";
+import Statement from "../Statement";
 
 const Paragraph = (props: { paragraph: DisplayParagraphSnippetFragment }) => {
   const paragraphJSX = props.paragraph.statements.map((statement) => (

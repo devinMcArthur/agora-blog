@@ -1,25 +1,15 @@
 // import { SkeletonText } from "@chakra-ui/react";
 import React from "react";
-import styled from "styled-components";
 import { useStatementQuery } from "../../../generated/graphql";
 import Statement from "..";
+import { Text } from "@chakra-ui/react";
+import Loading from "../../Common/Loading";
+import TextLink from "../../Common/TextLink";
 
 type Props = {
   statementID: string;
   key: string | number;
 };
-
-const QuoteTag = styled.span`
-  ${(props) => `border-bottom: 1px solid ${props.theme.colors.greyLight}`}
-`;
-
-const SourceLink = styled.a`
-  text-decoration-line: none;
-
-  &:visited {
-    color: blue;
-  }
-`;
 
 const QuotedStatement = (props: Props) => {
   const { data, loading } = useStatementQuery({
@@ -29,21 +19,21 @@ const QuotedStatement = (props: Props) => {
   return (
     <span>
       {!data && loading ? (
-        <div />
+        <Loading />
       ) : (
-        <QuoteTag>
+        <span style={{ borderBottom: "1px solid #E2E8F0" }}>
           <Statement statement={data?.statement!} />
-          <sup>
+          <Text as="sup">
             [
-            <SourceLink
+            <TextLink
               title={data?.statement?.page.title}
-              href={`/p/${data?.statement?.page.slug}`}
+              link={`/p/${data?.statement?.page.slug}`}
             >
               src
-            </SourceLink>
+            </TextLink>
             ]
-          </sup>
-        </QuoteTag>
+          </Text>
+        </span>
       )}
     </span>
   );

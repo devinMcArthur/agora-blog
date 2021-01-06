@@ -1,6 +1,7 @@
 import React from "react";
-import styled from "styled-components";
+
 import { DisplayStyleSnippetFragment } from "../../../generated/graphql";
+import TextLink from "../../Common/TextLink";
 
 type Props = {
   style: DisplayStyleSnippetFragment;
@@ -8,24 +9,11 @@ type Props = {
   key: string | number;
 };
 
-const ExternalMentionTag = styled.a`
-  text-decoration-line: none;
-
-  &:visited {
-    color: blue;
-  }
-`;
-
 const ExternalMention = (props: Props) => {
   return (
-    <ExternalMentionTag
-      href={props.style.value.url!}
-      key={props.key}
-      target="_blank"
-      rel="noreferrer"
-    >
+    <TextLink link={props.style.value.url!} key={props.key} isExternal={true}>
       {props.children}
-    </ExternalMentionTag>
+    </TextLink>
   );
 };
 

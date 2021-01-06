@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Divider, Link } from "@chakra-ui/react";
+import { Box, Divider, Link } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { Types } from "mongoose";
 
@@ -75,7 +75,9 @@ class PageContainer extends React.Component<
           {page.title}
         </Link>
         <Divider />
-        {StatementService().translateStatementToJSX(statement)}
+        <Box mt={2}>
+          {StatementService().translateStatementToJSX(statement)}
+        </Box>
       </Card>
     );
   }

@@ -1,6 +1,7 @@
+import { Box } from "@chakra-ui/react";
 import React from "react";
-import styled from "styled-components";
 import { DisplayStyleSnippetFragment } from "../../../generated/graphql";
+import TextLink from "../../Common/TextLink";
 import FinalValue from "../../Variable/views/FinalValue";
 
 type Props = {
@@ -8,33 +9,21 @@ type Props = {
   key: string | number;
 };
 
-const VariableTag = styled.span`
-  ${(props) => `background-color: ${props.theme.colors.greyLighter}`}
-`;
-
-const SourceLink = styled.a`
-  text-decoration-line: none;
-  color: black;
-
-  &:visited {
-    color: black;
-  }
-`;
-
 const Variable = (props: Props) => {
   const { finalValue } = props.style.value.variable!;
 
   return (
-    <SourceLink
+    <TextLink
       title={props.style.value.variable!.title}
-      href={`/v/${props.style.value.variable!._id}`}
+      link={`/v/${props.style.value.variable!._id}`}
+      key={props.key}
     >
-      <VariableTag key={props.key}>
+      <Box as="span" backgroundColor="grey">
         <i>
           <FinalValue finalValue={finalValue} />
         </i>
-      </VariableTag>
-    </SourceLink>
+      </Box>
+    </TextLink>
   );
 };
 

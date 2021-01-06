@@ -1,9 +1,9 @@
 import React from "react";
 
-import ExternalMention from "../components/Sentence/views/ExternalMention";
-import InternalMention from "../components/Sentence/views/InternalMention";
-import QuotedStatement from "../components/Sentence/views/QuotedStatement";
-import Variable from "../components/Sentence/views/Variable";
+import ExternalMention from "../components/Statement/views/ExternalMention";
+import InternalMention from "../components/Statement/views/InternalMention";
+import QuotedStatement from "../components/Statement/views/QuotedStatement";
+import Variable from "../components/Statement/views/Variable";
 
 import { DisplayStatementSnippetFragment } from "../generated/graphql";
 
