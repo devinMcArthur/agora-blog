@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Container, Flex } from "@chakra-ui/react";
+import { Center, Container, Flex, Spinner } from "@chakra-ui/react";
 
 import PageCard from "../Common/PageCard";
 
@@ -12,19 +12,18 @@ const HomePage = () => {
   const { data, loading } = usePagesQuery();
 
   let content = (
-    <Flex flexDirection="column">
-      <SkeletonCard />
-      <SkeletonCard />
-      <SkeletonCard />
-      <SkeletonCard />
-      <SkeletonCard />
-      <SkeletonCard />
-      <SkeletonCard />
+    <Flex flexDirection="column" id="pages-skeleton-flex">
+      <SkeletonCard variant="page" />
+      <SkeletonCard variant="page" />
+      <SkeletonCard variant="page" />
+      <Center pt={4}>
+        <Spinner />
+      </Center>
     </Flex>
   );
   if (data?.pages && !loading) {
     content = (
-      <Flex flexDirection="column">
+      <Flex flexDirection="column" alignContent="center" id="pages-flex">
         {data!.pages.map((page) => (
           <PageCard page={page} />
         ))}
@@ -33,7 +32,7 @@ const HomePage = () => {
   }
 
   return (
-    <Container maxW="80%" pt={4} pb={4}>
+    <Container minW="80%" pt={4} pb={4}>
       {content}
     </Container>
   );

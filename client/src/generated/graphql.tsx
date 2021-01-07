@@ -169,7 +169,7 @@ export type DisplayStatementSnippetFragment = (
       & Pick<StatementSourcesClass, 'urls'>
       & { pages: Array<(
         { __typename?: 'PageClass' }
-        & Pick<PageClass, '_id' | 'slug'>
+        & Pick<PageClass, '_id' | 'slug' | 'title'>
       )> }
     ), questions: Array<(
       { __typename?: 'QuestionClass' }
@@ -359,6 +359,7 @@ export const DisplayStatementSnippetFragmentDoc = gql`
       pages {
         _id
         slug
+        title
       }
     }
     questions {

@@ -1,12 +1,12 @@
 import * as React from "react";
 
 import PageCard from "../Common/PageCard";
-import Container from "../Common/Container";
-import Flex from "../Common/Flex";
 import Loading from "../Common/Loading";
 import FinalValue from "./views/FinalValue";
 
 import { useVariableQuery } from "../../generated/graphql";
+import { Container, Divider, Flex, Heading } from "@chakra-ui/react";
+import TextLink from "../Common/TextLink";
 
 type Props = {
   match: any;
@@ -31,22 +31,28 @@ const Variable = (props: Props) => {
 
     content = (
       <Flex flexDirection="column">
-        <h2>{variable.title}</h2>
-        <h3>
+        <Heading size="lg">{variable.title}</Heading>
+        <Divider m={2} />
+        <Heading size="md">
           Current: <FinalValue finalValue={currentVersion.finalValue} />
-        </h3>
+        </Heading>
         <i>updated: {currentVersion.createdAt}</i>
         <i>
-          <a href={currentVersion.sourceURL} target="_blank" rel="noreferrer">
+          <TextLink link={currentVersion.sourceURL} isExternal>
             source
-          </a>
+          </TextLink>
         </i>
+        <Divider m={2} />
         <Flex>{relatedPageList}</Flex>
       </Flex>
     );
   }
 
-  return <Container>{content}</Container>;
+  return (
+    <Container minW="80%" p={4}>
+      {content}
+    </Container>
+  );
 };
 
 export default Variable;

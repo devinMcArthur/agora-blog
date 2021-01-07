@@ -171,7 +171,7 @@ const what_is_the_significance_of_cycle_threshold_for_rt_pcr_tests: Question = {
 
 const what_is_the_significance_of_cycle_threshold_value: Question = {
   _id: _ids.questions.what_is_the_significance_of_cycle_threshold_value._id,
-  question: "What is the significane of Cycle Threshold value?",
+  question: "What is the significance of Cycle Threshold value?",
 };
 
 const how_is_cycle_threshold_used: Question = {

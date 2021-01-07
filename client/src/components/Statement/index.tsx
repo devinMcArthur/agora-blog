@@ -1,16 +1,8 @@
 import React from "react";
-import styled from "styled-components";
 import { DisplayStatementSnippetFragment } from "../../generated/graphql";
 
 import StatementService from "../../services/statementService";
-
-const LinkTag = styled.a`
-  text-decoration-line: none;
-
-  &:visited {
-    color: blue;
-  }
-`;
+import TextLink from "../Common/TextLink";
 
 const Statement = (props: {
   statement: DisplayStatementSnippetFragment;
@@ -32,7 +24,11 @@ const Statement = (props: {
         index++;
         return (
           <sup>
-            [<LinkTag href={`/p/${page.slug}`}>p-{index}</LinkTag>]
+            [
+            <TextLink link={`/p/${page.slug}`} title={page.title}>
+              p-{index}
+            </TextLink>
+            ]
           </sup>
         );
       });
@@ -43,9 +39,9 @@ const Statement = (props: {
         return (
           <sup>
             [
-            <LinkTag href={url} target="_blank" rel="noreferrer">
+            <TextLink link={url} isExternal title={url}>
               {index}
-            </LinkTag>
+            </TextLink>
             ]
           </sup>
         );
@@ -60,8 +56,12 @@ const Statement = (props: {
     questions = currentVersion.questions.map((question, index) => {
       if (question)
         return (
-          <sup key={index} title={question.question}>
-            [<LinkTag href={`/q/${question._id}`}>q{index + 1}</LinkTag>]
+          <sup key={index}>
+            [
+            <TextLink link={`/q/${question._id}`} title={question.question}>
+              q{index + 1}
+            </TextLink>
+            ]
           </sup>
         );
       else return null;

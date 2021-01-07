@@ -11,6 +11,7 @@ fragment DisplayStatementSnippet on StatementClass {
       pages {
         _id
         slug
+        title
       }
     }
     questions {

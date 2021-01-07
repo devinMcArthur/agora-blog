@@ -19,8 +19,8 @@ class WebadminNavbar extends React.Component<Props> {
           maxW="960px"
           margin="0 auto"
         >
-          <Link as={RouterLink} to="/">
-            <Heading as="h4" fontSize="3xl" pl={4}>
+          <Link as={RouterLink} to="/" ml={4}>
+            <Heading as="h4" fontSize="3xl">
               agora
             </Heading>
           </Link>

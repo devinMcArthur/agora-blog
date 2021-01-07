@@ -30,13 +30,13 @@ const Question = (props: Props) => {
       <Flex flexDirection="column">
         <Heading as="h5">{question.question}</Heading>
         <Divider />
-        <Flex pt={4}>{relatedPageList}</Flex>
+        <Flex pt={2}>{relatedPageList}</Flex>
       </Flex>
     );
   }
 
   return (
-    <Container maxW="80%" p={4}>
+    <Container minW="80%" p={4}>
       {content}
     </Container>
   );
