@@ -54,7 +54,7 @@ export type PageClass = {
   paragraphs: Array<ParagraphClass>;
   currentParagraph: ParagraphClass;
   relatedPages: Array<PageClass>;
-  referencedCount: PageClass;
+  referencedCount: Scalars['Float'];
 };
 
 export type ParagraphClass = {
@@ -199,7 +199,7 @@ export type DisplayStyleSnippetFragment = (
 
 export type PageCardSnippetFragment = (
   { __typename?: 'PageClass' }
-  & Pick<PageClass, '_id' | 'title' | 'slug'>
+  & Pick<PageClass, '_id' | 'title' | 'slug' | 'referencedCount'>
   & { currentParagraph: (
     { __typename?: 'ParagraphClass' }
     & DisplayParagraphSnippetFragment
@@ -381,6 +381,7 @@ export const PageCardSnippetFragmentDoc = gql`
   _id
   title
   slug
+  referencedCount
   currentParagraph {
     ...DisplayParagraphSnippet
   }

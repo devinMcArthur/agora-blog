@@ -9,16 +9,9 @@ interface Props extends RouteComponentProps {}
 
 class WebadminNavbar extends React.Component<Props> {
   render() {
-    // const { pathname } = this.props.history.location;
-
     return (
       <Box shadow="bottomShadow" p={3}>
-        <Flex
-          align="center"
-          justify="space-between"
-          maxW="960px"
-          margin="0 auto"
-        >
+        <Flex align="center" justify="space-between" minW="80%" margin="0 auto">
           <Link as={RouterLink} to="/" ml={4}>
             <Heading as="h4" fontSize="3xl">
               agora

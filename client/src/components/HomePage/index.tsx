@@ -22,9 +22,12 @@ const HomePage = () => {
     </Flex>
   );
   if (data?.pages && !loading) {
+    const pages = data.pages
+      .slice()
+      .sort((a, b) => b.referencedCount - a.referencedCount);
     content = (
       <Flex flexDirection="column" alignContent="center" id="pages-flex">
-        {data!.pages.map((page) => (
+        {pages.map((page) => (
           <PageCard page={page} />
         ))}
       </Flex>

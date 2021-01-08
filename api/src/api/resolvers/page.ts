@@ -41,7 +41,7 @@ export default class PageResolver {
     return await page.getPagesThatReference();
   }
 
-  @FieldResolver(() => PageClass)
+  @FieldResolver(() => Number)
   async referencedCount(@Root() page: PageDocument) {
     return await page.getReferencedCount();
   }
