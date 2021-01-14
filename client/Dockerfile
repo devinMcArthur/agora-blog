@@ -1,5 +1,5 @@
 # Build the client
-FROM node:12.13.0-alpine
+FROM node:lts-alpine
 
 WORKDIR /usr/app/
 

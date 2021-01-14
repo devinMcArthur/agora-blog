@@ -1,0 +1,44 @@
+apiVersion: skaffold/v2beta10
+kind: Config
+build:
+  local:
+    push: false
+  artifacts:
+    - image: agoraplatform/client
+      context: client
+      docker:
+        dockerfile: Dockerfile.dev
+      sync:
+        # Whenever these types of files are updated, inject into the pod (Mode 2)
+        # If any other files are changed, will fall back to Mode 1
+        manual:
+          - src: "**/*.js"
+            dest: .
+          - src: "**/*.ts"
+            dest: .
+          - src: "**/*.tsx"
+            dest: .
+          - src: "**/*.css"
+            dest: .
+          - src: "**/*.html"
+            dest: .
+    - image: agoraplatform/api
+      context: api
+      docker:
+        dockerfile: Dockerfile.dev
+      # Must be using nodemon
+      sync:
+        manual:
+          - src: "**/*.js"
+            dest: .
+          - src: "**/*.ts"
+            dest: .
+# Automatically apply config files, remove them when stopped
+deploy:
+  kubectl:
+    manifests:
+      - k8s/api-deployment.yaml
+      - k8s/client-deployment.yaml
+      - k8s/api-cluster-ip-service.yaml
+      - k8s/client-cluster-ip-service.yaml
+      - k8s/ingress-service.yaml
