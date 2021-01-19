@@ -1,4 +1,6 @@
 import { Types } from "mongoose";
+import { dispatch } from "nact";
+
 import { VariableDocument, VariableModel } from "..";
 import { VariableVersionClass } from ".";
 import GetByIDOptions from "../../../typescript/interface/getByID_Options";
@@ -7,9 +9,13 @@ import Page, { PageDocument } from "../../Page";
 import VariablePageConnection, {
   VariablePageConnectionDocument,
 } from "../../VariablePageConnection";
+import performCacheQuery from "../../../utils/performCacheQuery";
+import isEmpty from "../../../validation/isEmpty";
+import { cacheService } from "../../../server";
 
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,
+  fromCache: false,
 };
 const byID = (
   Variable: VariableModel,
@@ -19,7 +25,26 @@ const byID = (
   return new Promise(async (resolve, reject) => {
     try {
       options = populateOptions(options, byIDDefaultOptions);
-      const variable = await Variable.findById(id);
+
+      let variable: VariableDocument | null = null;
+      if (options.fromCache) {
+        const cachedVariable = await performCacheQuery({
+          path: ["variables"],
+          type: "GET_VARIABLE",
+          payload: { variableID: id },
+        });
+        if (!isEmpty(cachedVariable)) {
+          variable = new Variable(cachedVariable);
+        } else {
+          dispatch(cacheService, {
+            path: ["variables"],
+            type: "SET_VARIABLE",
+            payload: { variableID: id },
+          });
+        }
+      }
+
+      if (!variable) variable = await Variable.findById(id);
 
       if (!variable && options.throwError) {
         throw new Error("Variable.getByID: Unable to find variable");
@@ -32,13 +57,43 @@ const byID = (
   });
 };
 
-const finalValue = (variable: VariableDocument): Promise<number> => {
+const finalValueDefaultOptions = {
+  fromCache: false,
+};
+const finalValue = (
+  variable: VariableDocument,
+  options = finalValueDefaultOptions
+): Promise<number> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const value = await variable
-        .model("VariableClass")
-        // @ts-expect-error: TS doesn't recognize the use of '.model(ClassName)'
-        .getVersionsFinalValue(variable.versions[variable.versions.length - 1]);
+      options = populateOptions(options, finalValueDefaultOptions);
+
+      let value: number = 0;
+      if (options.fromCache) {
+        const cachedValue = await performCacheQuery({
+          path: ["variables"],
+          type: "GET_VARIABLE",
+          payload: { variableID: variable._id },
+        });
+        if (cachedValue.finalValue) {
+          value = cachedValue.finalValue;
+        } else {
+          dispatch(cacheService, {
+            path: ["variables"],
+            type: "SET_VARIABLE",
+            payload: { variableID: variable._id },
+          });
+        }
+      }
+
+      if (value === 0) {
+        value = await variable
+          .model("VariableClass")
+          // @ts-expect-error: TS doesn't recognize the use of '.model(ClassName)'
+          .getVersionsFinalValue(
+            variable.versions[variable.versions.length - 1]
+          );
+      }
 
       resolve(value);
     } catch (e) {
@@ -66,7 +121,10 @@ const versionsFinalValue = (
             } else if (item.type === "operator") {
               equation += item.operator;
             } else if (item.type === "variable") {
-              const variable = await Variable.findById(item.variable);
+              const variable = await Variable.getByID(
+                item.variable!.toString(),
+                { fromCache: true }
+              );
               equation += await Variable.getVersionsFinalValue(
                 variable?.versions[variable?.versions.length - 1]!
               );
@@ -81,22 +139,50 @@ const versionsFinalValue = (
   });
 };
 
+const pagesThatReferenceDefaultOptions = {
+  fromCache: false,
+};
 const pagesThatReference = (
-  variable: VariableDocument
+  variable: VariableDocument,
+  options = pagesThatReferenceDefaultOptions
 ): Promise<PageDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const variablePageConnections: VariablePageConnectionDocument[] = await VariablePageConnection.find(
-        {
-          variable: variable._id,
-        }
-      );
+      options = populateOptions(options, pagesThatReferenceDefaultOptions);
 
       const pages: PageDocument[] = [];
+      if (options.fromCache) {
+        const cachedVariable = await performCacheQuery({
+          path: ["variables"],
+          type: "GET_VARIABLE",
+          payload: { variableID: variable._id },
+        });
+        if (cachedVariable.relatedPages) {
+          for (let i = 0; i < cachedVariable.relatedPages.length; i++) {
+            pages[i] = new Page(cachedVariable.relatedPages[i]);
+          }
+        } else {
+          dispatch(cacheService, {
+            path: ["variables"],
+            type: "SET_VARIABLE",
+            payload: { variableID: variable._id },
+          });
+        }
+      }
 
-      for (const connection of variablePageConnections) {
-        const page = await Page.findById(connection.referrerPage);
-        if (page) pages.push(page);
+      if (pages.length === 0) {
+        const variablePageConnections: VariablePageConnectionDocument[] = await VariablePageConnection.find(
+          {
+            variable: variable._id,
+          }
+        );
+
+        for (const connection of variablePageConnections) {
+          const page = await Page.getByID(connection.referrerPage!.toString(), {
+            fromCache: true,
+          });
+          if (page) pages.push(page);
+        }
       }
 
       resolve(pages);

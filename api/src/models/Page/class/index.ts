@@ -7,6 +7,7 @@ import get from "./get";
 import GetByIDOptions from "../../../typescript/interface/getByID_Options";
 import ParagraphClass from "../../Paragraph/class";
 import { PageDocument, PageModel } from "..";
+import create from "./create";
 
 @ObjectType()
 export default class PageClass {
@@ -25,6 +26,12 @@ export default class PageClass {
   @prop({ ref: "ParagraphClass" })
   public paragraphs!: Ref<ParagraphClass>[];
 
+  // METHODS
+
+  public static async create(this: PageModel, data: any) {
+    return create.page(this, data);
+  }
+
   public static async getByID(
     this: PageModel,
     id: Types.ObjectId | string,
@@ -41,16 +48,25 @@ export default class PageClass {
     return get.bySlug(this, slug, options);
   }
 
-  public static async getList(this: PageModel) {
-    return get.list(this);
+  public static async getList(
+    this: PageModel,
+    options?: { fromCache: boolean }
+  ) {
+    return get.list(this, options);
   }
 
-  public async getPagesThatReference(this: PageDocument) {
-    return get.pagesThatReference(this);
+  public async getPagesThatReference(
+    this: PageDocument,
+    options?: { fromCache: boolean }
+  ) {
+    return get.pagesThatReference(this, options);
   }
 
-  public async getReferencedCount(this: PageDocument) {
-    return get.referencedCount(this);
+  public async getReferencedCount(
+    this: PageDocument,
+    options?: { fromCache: boolean }
+  ) {
+    return get.referencedCount(this, options);
   }
 
   public async getStatementReferences(this: PageDocument) {

@@ -1,10 +1,12 @@
 import { Arg, FieldResolver, ID, Query, Resolver, Root } from "type-graphql";
 import { Types } from "mongoose";
 
-import QuestionClass from "../../models/Question/class";
-import Question, { QuestionDocument } from "../../models/Question";
-import { PageDocument } from "../../models/Page";
-import PageClass from "../../models/Page/class";
+import QuestionClass from "../../../models/Question/class";
+import { QuestionDocument } from "../../../models/Question";
+import { PageDocument } from "../../../models/Page";
+import PageClass from "../../../models/Page/class";
+import fieldResolvers from "./fieldResolvers";
+import queries from "./queries";
 
 @Resolver(() => QuestionClass)
 export default class QuestionResolver {
@@ -13,14 +15,14 @@ export default class QuestionResolver {
    */
   @FieldResolver(() => Number)
   async referencedCount(@Root() question: QuestionDocument): Promise<number> {
-    return await question.getReferencedCount();
+    return fieldResolvers.referencedCount(question);
   }
 
   @FieldResolver(() => [PageClass])
   async relatedPages(
     @Root() question: QuestionDocument
   ): Promise<PageDocument[]> {
-    return await question.getPagesThatReference();
+    return fieldResolvers.relatedPages(question);
   }
 
   /**
@@ -31,11 +33,11 @@ export default class QuestionResolver {
   async question(
     @Arg("id", () => ID) id: Types.ObjectId
   ): Promise<QuestionDocument | null> {
-    return await Question.findById(id);
+    return queries.question(id);
   }
 
   @Query(() => [QuestionClass])
   async questions(): Promise<QuestionDocument[]> {
-    return await Question.getList();
+    return queries.questions();
   }
 }

@@ -1,10 +1,11 @@
 import { FieldResolver, Resolver, Root } from "type-graphql";
 
-import Page, { PageDocument } from "../../models/Page";
+import { PageDocument } from "../../../models/Page";
 import {
   StatementSourcesClass,
   StatementSourcesDocument,
-} from "../../models/Statement/class";
+} from "../../../models/Statement/class";
+import fieldResolvers from "./fieldResolvers";
 
 @Resolver(() => StatementSourcesClass)
 export default class StatementSourcesResolver {
@@ -12,8 +13,6 @@ export default class StatementSourcesResolver {
   async pages(
     @Root() statementSources: StatementSourcesDocument
   ): Promise<PageDocument[] | null> {
-    return await Page.find({
-      _id: { $in: statementSources.pages.map((id) => id!.toString()) },
-    });
+    return fieldResolvers.pages(statementSources);
   }
 }

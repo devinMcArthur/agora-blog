@@ -1,9 +1,11 @@
 import { Arg, FieldResolver, ID, Query, Resolver, Root } from "type-graphql";
 
-import StatementClass from "../../models/Statement/class";
-import Statement, { StatementDocument } from "../../models/Statement";
-import Page, { PageDocument } from "../../models/Page";
+import StatementClass from "../../../models/Statement/class";
+import { StatementDocument } from "../../../models/Statement";
+import { PageDocument } from "../../../models/Page";
 import { Types } from "mongoose";
+import fieldResolvers from "./fieldResolvers";
+import queries from "./queries";
 
 @Resolver(() => StatementClass)
 export default class StatementResolver {
@@ -15,7 +17,7 @@ export default class StatementResolver {
   async page(
     @Root() statement: StatementDocument
   ): Promise<PageDocument | null> {
-    return await Page.findById(statement.page);
+    return fieldResolvers.page(statement);
   }
 
   /**
@@ -26,6 +28,6 @@ export default class StatementResolver {
   async statement(
     @Arg("id", () => ID) id: Types.ObjectId
   ): Promise<StatementDocument | null> {
-    return await Statement.findById(id);
+    return queries.statement(id);
   }
 }

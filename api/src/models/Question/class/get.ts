@@ -1,4 +1,6 @@
 import { Types } from "mongoose";
+import { dispatch } from "nact";
+
 import Page, { PageDocument } from "../../Page";
 import { QuestionDocument, QuestionModel } from "..";
 import GetByIDOptions from "../../../typescript/interface/getByID_Options";
@@ -7,9 +9,13 @@ import QuestionPageConnection, {
   QuestionPageConnectionDocument,
 } from "../../QuestionPageConnection";
 import { StatementDocument } from "../../Statement";
+import isEmpty from "../../../validation/isEmpty";
+import performCacheQuery from "../../../utils/performCacheQuery";
+import { cacheService } from "../../../server";
 
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,
+  fromCache: false,
 };
 const byID = (
   Question: QuestionModel,
@@ -19,7 +25,26 @@ const byID = (
   return new Promise(async (resolve, reject) => {
     try {
       options = populateOptions(options, byIDDefaultOptions);
-      const question = await Question.findById(id);
+
+      let question: QuestionDocument | null = null;
+      if (options.fromCache) {
+        const cachedQuestion = await performCacheQuery({
+          path: ["questions"],
+          type: "GET_QUESTION",
+          payload: { questionID: id },
+        });
+        if (!isEmpty(cachedQuestion)) {
+          question = new Question(cachedQuestion);
+        } else {
+          dispatch(cacheService, {
+            path: ["questions"],
+            type: "SET_QUESTION",
+            payload: { questionID: id },
+          });
+        }
+      }
+
+      if (!question) question = await Question.findById(id);
 
       if (!question && options.throwError) {
         throw new Error("Question.getByID: Unable to find question");
@@ -32,52 +57,93 @@ const byID = (
   });
 };
 
-const list = (Question: QuestionModel): Promise<QuestionDocument[]> => {
+const listDefaultOptions = {
+  fromCache: false,
+};
+const list = (
+  Question: QuestionModel,
+  options = listDefaultOptions
+): Promise<QuestionDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const questions = await Question.find({});
+      options = populateOptions(options, listDefaultOptions);
 
-      let index = [];
-      for (const question of questions) {
-        index.push({
-          _id: question._id,
-          referencedCount: await question.getReferencedCount(),
+      let questions: QuestionDocument[] = [];
+      if (options.fromCache) {
+        const cachedQuestionIDs = await performCacheQuery({
+          path: ["question_list"],
+          type: "GET_LIST",
         });
+        if (cachedQuestionIDs.length > 0) {
+          for (let i = 0; i < cachedQuestionIDs.length; i++) {
+            const question = await Question.getByID(cachedQuestionIDs[i], {
+              fromCache: true,
+            });
+            if (question) questions[i] = question;
+          }
+        } else {
+          dispatch(cacheService, {
+            path: ["question_list"],
+            type: "SET_LIST",
+          });
+        }
       }
-      index = index.sort((a, b) => b.referencedCount - a.referencedCount);
 
-      const sortedQuestions = [];
-      for (const i of index) {
-        sortedQuestions.push(
-          questions.find(
-            (question) => question._id.toString() === i._id.toString()
-          )!
-        );
+      if (questions.length === 0) {
+        questions = await Question.find({});
       }
 
-      resolve(sortedQuestions);
+      resolve(questions);
     } catch (e) {
       reject(e);
     }
   });
 };
 
+const pagesThatReferenceDefaultOptions = {
+  fromCache: false,
+};
 const pagesThatReference = (
-  question: QuestionDocument
+  question: QuestionDocument,
+  options = pagesThatReferenceDefaultOptions
 ): Promise<PageDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const questionPageConnections: QuestionPageConnectionDocument[] = await QuestionPageConnection.find(
-        {
-          question: question._id,
+      options = populateOptions(options, pagesThatReferenceDefaultOptions);
+
+      let pages: PageDocument[] = [];
+      if (options.fromCache) {
+        const cachedQuestion = await performCacheQuery({
+          path: ["questions"],
+          type: "GET_QUESTION",
+          payload: { questionID: question._id },
+        });
+        if (cachedQuestion.relatedPages) {
+          for (let i = 0; i < cachedQuestion.relatedPages.length; i++) {
+            pages[i] = new Page(cachedQuestion.relatedPages[i]);
+          }
+        } else {
+          dispatch(cacheService, {
+            path: ["questions"],
+            type: "SET_QUESTION",
+            payload: { questionID: question._id },
+          });
         }
-      );
+      }
 
-      const pages: PageDocument[] = [];
+      if (pages.length === 0) {
+        const questionPageConnections: QuestionPageConnectionDocument[] = await QuestionPageConnection.find(
+          {
+            question: question._id,
+          }
+        );
 
-      for (const connection of questionPageConnections) {
-        const page = await Page.findById(connection.referrerPage);
-        if (page) pages.push(page);
+        for (const connection of questionPageConnections) {
+          const page = await Page.getByID(connection.referrerPage!.toString(), {
+            fromCache: true,
+          });
+          if (page) pages.push(page);
+        }
       }
 
       resolve(pages);
@@ -87,12 +153,40 @@ const pagesThatReference = (
   });
 };
 
-const referencedCount = (question: QuestionDocument): Promise<number> => {
+const referencedCountDefaultOptions = {
+  fromCache: false,
+};
+const referencedCount = (
+  question: QuestionDocument,
+  options = referencedCountDefaultOptions
+): Promise<number> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const count = await QuestionPageConnection.find({
-        question: question._id,
-      }).countDocuments();
+      options = populateOptions(options, referencedCountDefaultOptions);
+
+      let count: number = 0;
+      if (options.fromCache) {
+        const cachedQuestion = await performCacheQuery({
+          path: ["questions"],
+          type: "GET_QUESTION",
+          payload: { questionID: question._id },
+        });
+        if (cachedQuestion.referencedCount) {
+          count = cachedQuestion.referencedCount;
+        } else {
+          dispatch(cacheService, {
+            path: ["questions"],
+            type: "SET_QUESTION",
+            payload: { questionID: question._id },
+          });
+        }
+      }
+
+      if (count === 0) {
+        count = await QuestionPageConnection.find({
+          question: question._id,
+        }).countDocuments();
+      }
 
       resolve(count);
     } catch (e) {

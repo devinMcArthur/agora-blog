@@ -9,16 +9,18 @@ import {
   Root,
 } from "type-graphql";
 
-import Paragraph, { ParagraphDocument } from "../../models/Paragraph";
-import Page, { PageDocument } from "../../models/Page";
-import PageClass from "../../models/Page/class";
-import ParagraphClass from "../../models/Paragraph/class";
-import { Types } from "mongoose";
+import { ParagraphDocument } from "../../../models/Paragraph";
+import { PageDocument } from "../../../models/Page";
+import PageClass from "../../../models/Page/class";
+import ParagraphClass from "../../../models/Paragraph/class";
+
+import fieldResolver from "./fieldResolver";
+import queries from "./queries";
 
 @ArgsType()
 class GetPageArgs {
   @Field(() => ID, { nullable: true })
-  id?: Types.ObjectId;
+  id?: string;
 
   @Field({ nullable: true })
   slug?: string;
@@ -33,17 +35,17 @@ export default class PageResolver {
   async currentParagraph(
     @Root() page: PageDocument
   ): Promise<ParagraphDocument | null> {
-    return Paragraph.findById(page.paragraphs[page.paragraphs.length - 1]);
+    return fieldResolver.currentParagraph(page);
   }
 
   @FieldResolver(() => [PageClass])
   async relatedPages(@Root() page: PageDocument) {
-    return await page.getPagesThatReference();
+    return fieldResolver.relatedPages(page);
   }
 
   @FieldResolver(() => Number)
   async referencedCount(@Root() page: PageDocument) {
-    return await page.getReferencedCount();
+    return fieldResolver.referencedCount(page);
   }
 
   /**
@@ -51,18 +53,14 @@ export default class PageResolver {
    */
 
   @Query(() => PageClass, { nullable: true })
-  async page(@Args() { id, slug }: GetPageArgs): Promise<PageDocument | null> {
-    if (id) {
-      return await Page.getByID(id);
-    } else if (slug) {
-      return await Page.getBySlug(slug);
-    } else {
-      return null;
-    }
+  async page(
+    @Args() { id, slug }: GetPageArgs
+  ): Promise<PageDocument | null | undefined> {
+    return queries.page({ id, slug });
   }
 
   @Query(() => [PageClass])
   async pages(): Promise<PageDocument[]> {
-    return await Page.getList();
+    return queries.pages();
   }
 }

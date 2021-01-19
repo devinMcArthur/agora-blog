@@ -3,8 +3,9 @@ import { FieldResolver, Resolver, Root } from "type-graphql";
 import {
   StatementVersionClass,
   StatementVersionDocument,
-} from "../../models/Statement/class";
-import Question, { QuestionDocument } from "../../models/Question";
+} from "../../../models/Statement/class";
+import { QuestionDocument } from "../../../models/Question";
+import fieldResolvers from "./fieldResolvers";
 
 @Resolver(() => StatementVersionClass)
 export default class StatementVersionResolver {
@@ -12,8 +13,6 @@ export default class StatementVersionResolver {
   async questions(
     @Root() statementVersion: StatementVersionDocument
   ): Promise<QuestionDocument[] | null> {
-    return await Question.find({
-      _id: { $in: statementVersion.questions.map((id) => id!.toString()) },
-    });
+    return fieldResolvers.questions(statementVersion);
   }
 }

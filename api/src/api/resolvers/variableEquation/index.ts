@@ -3,8 +3,9 @@ import { FieldResolver, Resolver, Root } from "type-graphql";
 import VariableClass, {
   VariableEquationClass,
   VariableEquationDocument,
-} from "../../models/Variable/class";
-import Variable, { VariableDocument } from "../../models/Variable";
+} from "../../../models/Variable/class";
+import { VariableDocument } from "../../../models/Variable";
+import fieldResolvers from "./fieldResolvers";
 
 @Resolver(() => VariableEquationClass)
 export default class VariableEquationResolver {
@@ -12,6 +13,6 @@ export default class VariableEquationResolver {
   async variable(
     @Root() variableEquation: VariableEquationDocument
   ): Promise<VariableDocument | null> {
-    return await Variable.findById(variableEquation.variable);
+    return fieldResolvers.variable(variableEquation);
   }
 }

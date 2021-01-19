@@ -42,3 +42,5 @@ deploy:
       - k8s/api-cluster-ip-service.yaml
       - k8s/client-cluster-ip-service.yaml
       - k8s/ingress-service.yaml
+      # - k8s/redis-deployment.yaml
+      # - k8s/redis-cluster-ip-service.yaml

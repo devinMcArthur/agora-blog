@@ -3,8 +3,8 @@ import { FieldResolver, Resolver, Root } from "type-graphql";
 import {
   VariableVersionClass,
   VariableVersionDocument,
-} from "../../models/Variable/class";
-import Variable from "../../models/Variable";
+} from "../../../models/Variable/class";
+import fieldResolvers from "./fieldResolvers";
 
 @Resolver(() => VariableVersionClass)
 export default class VariableVersionResolver {
@@ -12,6 +12,6 @@ export default class VariableVersionResolver {
   async finalValue(
     @Root() variableVersion: VariableVersionDocument
   ): Promise<number> {
-    return await Variable.getVersionsFinalValue(variableVersion);
+    return fieldResolvers.finalValue(variableVersion);
   }
 }

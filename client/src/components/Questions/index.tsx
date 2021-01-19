@@ -19,7 +19,10 @@ const Questions = () => {
   );
 
   if (data?.questions && !loading) {
-    const questionsJSX = data.questions.map((question) => (
+    const sortedQuestions = data.questions
+      .slice()
+      .sort((a, b) => b.referencedCount - a.referencedCount);
+    const questionsJSX = sortedQuestions.map((question) => (
       <QuestionCard question={question} />
     ));
 

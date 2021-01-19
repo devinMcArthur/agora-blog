@@ -1,10 +1,12 @@
 import { Arg, FieldResolver, ID, Query, Resolver, Root } from "type-graphql";
 
-import VariableClass from "../../models/Variable/class";
-import Variable, { VariableDocument } from "../../models/Variable";
-import { PageDocument } from "../../models/Page";
-import PageClass from "../../models/Page/class";
+import VariableClass from "../../../models/Variable/class";
+import { VariableDocument } from "../../../models/Variable";
+import { PageDocument } from "../../../models/Page";
+import PageClass from "../../../models/Page/class";
 import { Types } from "mongoose";
+import fieldResolvers from "./fieldResolvers";
+import queries from "./queries";
 
 @Resolver(() => VariableClass)
 export default class VariableResolver {
@@ -13,14 +15,14 @@ export default class VariableResolver {
    */
   @FieldResolver(() => Number)
   async finalValue(@Root() variable: VariableDocument): Promise<number> {
-    return await variable.getFinalValue();
+    return fieldResolvers.finalValue(variable);
   }
 
   @FieldResolver(() => [PageClass])
   async relatedPages(
     @Root() variable: VariableDocument
   ): Promise<PageDocument[]> {
-    return await variable.getPagesThatReference();
+    return fieldResolvers.relatedPages(variable);
   }
 
   /**
@@ -31,6 +33,6 @@ export default class VariableResolver {
   async variable(
     @Arg("id", () => ID) id: Types.ObjectId
   ): Promise<VariableDocument | null> {
-    return await Variable.findById(id);
+    return queries.variable(id);
   }
 }

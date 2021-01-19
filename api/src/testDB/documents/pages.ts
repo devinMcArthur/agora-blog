@@ -102,7 +102,8 @@ const createPages = () => {
       };
 
       for (let i = 0; i < Object.values(pages).length; i++) {
-        await Object.values(pages)[i].save();
+        const page = await Page.create(Object.values(pages)[i]);
+        await page.save();
       }
 
       resolve(pages);

@@ -253,7 +253,12 @@ const createQuestions = () => {
 
       const how_does_ct_value_effect_testing_outcomes = new Question({
         _id: _ids.questions.how_does_ct_value_effect_testing_outcomes._id,
-        question: "How does Ct value effect testing outcomes",
+        question: "How does Ct value effect testing outcomes?",
+      });
+
+      const why_are_face_masks_used_for_covid_19 = new Question({
+        _id: _ids.questions.why_are_face_masks_used_for_covid_19._id,
+        question: "Why are face masks used for COVID-19?",
       });
 
       const questions = {
@@ -293,6 +298,7 @@ const createQuestions = () => {
         how_is_cycle_threshold_used,
         why_did_florida_mandate_reporting_of_cycle_threshold_value_for_rt_pcr_tests,
         how_does_ct_value_effect_testing_outcomes,
+        why_are_face_masks_used_for_covid_19,
       };
 
       // Save all questions

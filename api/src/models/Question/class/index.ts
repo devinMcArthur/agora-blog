@@ -23,16 +23,25 @@ export default class QuestionClass {
     return get.byID(this, id, options);
   }
 
-  public static async getList(this: QuestionModel) {
-    return get.list(this);
+  public static async getList(
+    this: QuestionModel,
+    options?: { fromCache: boolean }
+  ) {
+    return get.list(this, options);
   }
 
-  public async getPagesThatReference(this: QuestionDocument) {
-    return get.pagesThatReference(this);
+  public async getPagesThatReference(
+    this: QuestionDocument,
+    options?: { fromCache: boolean }
+  ) {
+    return get.pagesThatReference(this, options);
   }
 
-  public async getReferencedCount(this: QuestionDocument) {
-    return get.referencedCount(this);
+  public async getReferencedCount(
+    this: QuestionDocument,
+    options?: { fromCache: boolean }
+  ) {
+    return get.referencedCount(this, options);
   }
 
   public async getStatementReferences(this: QuestionDocument) {

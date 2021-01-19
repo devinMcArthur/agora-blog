@@ -86,7 +86,10 @@ export default class VariableClass {
     return get.versionsFinalValue(this, variableValue);
   }
 
-  public async getPagesThatReference(this: VariableDocument) {
-    return get.pagesThatReference(this);
+  public async getPagesThatReference(
+    this: VariableDocument,
+    options?: { fromCache: boolean }
+  ) {
+    return get.pagesThatReference(this, options);
   }
 }

@@ -37,7 +37,10 @@ export default class ParagraphClass {
     return get.byID(this, id, options);
   }
 
-  public async getStatements(this: ParagraphDocument) {
-    return get.statements(this);
+  public async getStatements(
+    this: ParagraphDocument,
+    options?: { fromCache: boolean }
+  ) {
+    return get.statements(this, options);
   }
 }
