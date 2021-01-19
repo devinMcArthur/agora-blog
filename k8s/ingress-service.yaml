@@ -14,14 +14,15 @@ spec:
   rules:
     - host: agora.voto
       http:
-        - path: /?(.*)
-          backend:
-            serviceName: client-cluster-ip-service
-            servicePort: 3000
-        - path: /graphql/?(.*)
-          backend:
-            serviceName: api-cluster-ip-service
-            servicePort: 8080
+        paths:
+          - path: /?(.*)
+            backend:
+              serviceName: client-cluster-ip-service
+              servicePort: 3000
+          - path: /graphql/?(.*)
+            backend:
+              serviceName: api-cluster-ip-service
+              servicePort: 8080
     # - http:
     #     paths:
     #       - path: /?(.*)
