@@ -12,13 +12,23 @@ metadata:
 # Define our Nginx routing
 spec:
   rules:
-    - http:
-        paths:
-          - path: /?(.*)
-            backend:
-              serviceName: client-cluster-ip-service
-              servicePort: 3000
-          - path: /graphql/?(.*)
-            backend:
-              serviceName: server-cluster-ip-service
-              servicePort: 5000
+    - host: agora.voto
+      http:
+        - path: /?(.*)
+          backend:
+            serviceName: client-cluster-ip-service
+            servicePort: 3000
+        - path: /graphql/?(.*)
+          backend:
+            serviceName: api-cluster-ip-service
+            servicePort: 8080
+    # - http:
+    #     paths:
+    #       - path: /?(.*)
+    #         backend:
+    #           serviceName: client-cluster-ip-service
+    #           servicePort: 3000
+    #       - path: /graphql/?(.*)
+    #         backend:
+    #           serviceName: server-cluster-ip-service
+    #           servicePort: 5000
