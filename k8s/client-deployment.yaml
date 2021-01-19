@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: client
-          image: agoraplatform/client
+          image: agoraplatform/client:$COMMIT_SHA1
           ports:
             - containerPort: 3000

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: agoraplatform/api
+          image: agoraplatform/api:$COMMIT_SHA1
           ports:
             - containerPort: 8080
           # env:
