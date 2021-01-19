@@ -14,7 +14,7 @@ jobs:
           name: Build Docker images
           command: |
             docker build -t $API_IMAGE_NAME:latest ./api
-            docker build -t $CLIENT_IMAGE_NAME: latest ./client
+            docker build -t $CLIENT_IMAGE_NAME:latest ./client
       - run:
           name: Push Docker Images
           command: |
