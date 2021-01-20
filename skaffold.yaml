@@ -3,11 +3,14 @@ kind: Config
 build:
   local:
     push: false
+  tagPolicy:
+    gitCommit: {}
   artifacts:
     - image: agoraplatform/client
       context: client
       docker:
         dockerfile: Dockerfile.dev
+        noCache: true
       sync:
         # Whenever these types of files are updated, inject into the pod (Mode 2)
         # If any other files are changed, will fall back to Mode 1
@@ -26,6 +29,7 @@ build:
       context: api
       docker:
         dockerfile: Dockerfile.dev
+        noCache: true
       # Must be using nodemon
       sync:
         manual:
@@ -37,10 +41,7 @@ build:
 deploy:
   kubectl:
     manifests:
-      - k8s/api-deployment.yaml
-      - k8s/client-deployment.yaml
-      - k8s/api-cluster-ip-service.yaml
-      - k8s/client-cluster-ip-service.yaml
-      - k8s/ingress-service.yaml
-      # - k8s/redis-deployment.yaml
-      # - k8s/redis-cluster-ip-service.yaml
+      - k8s-dev/api-deployment.yaml
+      - k8s-dev/client-deployment.yaml
+      - k8s-dev/api-cluster-ip-service.yaml
+      - k8s-dev/client-cluster-ip-service.yaml
