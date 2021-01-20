@@ -8,7 +8,7 @@ metadata:
     # Configure how our copy of Nginx behaves
     nginx.ingress.kubernetes.io/use-regex: "true"
     # Removes '/api' from request
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    # nginx.ingress.kubernetes.io/rewrite-target: /$2
 # Define our nginx routing
 spec:
   rules:
