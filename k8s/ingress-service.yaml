@@ -9,7 +9,7 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
     # Removes '/api' from request
     nginx.ingress.kubernetes.io/rewrite-target: /$1
-# Define our Nginx routing
+# Define our nginx routing
 spec:
   rules:
     - host: agora.voto
