@@ -23,6 +23,17 @@ spec:
             backend:
               serviceName: api-cluster-ip-service
               servicePort: 8080
+    - host: www.agora.voto
+      http:
+        paths:
+          - path: /?(.*)
+            backend:
+              serviceName: client-cluster-ip-service
+              servicePort: 3000
+          - path: /graphql/?(.*)
+            backend:
+              serviceName: api-cluster-ip-service
+              servicePort: 8080
     # - http:
     #     paths:
     #       - path: /?(.*)
