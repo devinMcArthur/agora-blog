@@ -12,6 +12,8 @@ export COMMIT_SHA1=$COMMIT_SHA1
 #  and overwrite the original with that one.
 envsubst <./k8s/api-deployment.yaml >./k8s/api-deployment.yaml.out
 mv ./k8s/api-deployment.yaml.out ./k8s/api-deployment.yaml
+
+export COMMIT_SHA1=$COMMIT_SHA1
 envsubst <./k8s/client-deployment.yaml >./k8s/client-deployment.yaml.out
 mv ./k8s/client-deployment.yaml.out ./k8s/client-deployment.yaml
 
