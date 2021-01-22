@@ -1,10 +1,11 @@
 import "reflect-metadata";
 import path from "path";
 import cors from "cors";
+import { start } from "nact";
+import mongoose from "mongoose";
 import * as dotenv from "dotenv";
-import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
-import { configurePersistence, dispatch, Ref, start } from "nact";
+import { ApolloServer } from "apollo-server-express";
 // import { PostgresPersistenceEngine } from "nact-persistence-postgres";
 
 import app from "./app";
@@ -17,23 +18,23 @@ if (process.env.NODE_ENV === "development" || !process.env.NODE_ENV) {
 }
 
 // Setup up mongoose
-import mongoose from "mongoose";
 import PageResolver from "./api/resolvers/page";
 import VariableResolver from "./api/resolvers/variable";
-import ParagraphResolver from "./api/resolvers/paragraph";
-import StatementValueResolver from "./api/resolvers/statementValue";
-import StatementSourcesResolver from "./api/resolvers/statementSources";
 import QuestionResolver from "./api/resolvers/question";
+import ParagraphResolver from "./api/resolvers/paragraph";
 import StatementResolver from "./api/resolvers/statement";
-import StatementVersionResolver from "./api/resolvers/statementVersion";
+import StatementValueResolver from "./api/resolvers/statementValue";
 import VariableVersionResolver from "./api/resolvers/variableVersion";
+import StatementSourcesResolver from "./api/resolvers/statementSources";
+import StatementVersionResolver from "./api/resolvers/statementVersion";
 import VariableEquationResolver from "./api/resolvers/variableEquation";
+
 import { spawn_cache_service } from "./actors/cache";
 
 // import { mainPagesListKey } from "./constants/redisKeys";
 // import Page from "./models/Page";
 
-let system, cacheService: any;
+let system, cacheService: any, apolloServer: any;
 const main = async () => {
   system = start();
   cacheService = spawn_cache_service(system);
@@ -50,7 +51,7 @@ const main = async () => {
 
   app.use(cors());
 
-  const apolloServer = new ApolloServer({
+  apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [
         PageResolver,
@@ -67,7 +68,7 @@ const main = async () => {
       ],
       validate: false,
     }),
-    context: ({ req, res }) => ({
+    context: ({ req, res }: { req: any; res: any }) => ({
       // redis,
       req,
       res,
@@ -96,4 +97,4 @@ const main = async () => {
 
 main().catch((err) => console.error(err));
 
-export { system, cacheService };
+export { system, cacheService, apolloServer };

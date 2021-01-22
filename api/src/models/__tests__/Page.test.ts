@@ -26,7 +26,7 @@ const setupDatabase = () => {
 };
 
 beforeAll(async (done) => {
-  mongoServer = await jestDB.prepareDatabase(mongoServer);
+  mongoServer = await jestDB.prepareDatabase();
 
   await setupDatabase();
 
@@ -38,4 +38,8 @@ afterAll(async (done) => {
   done();
 });
 
-describe("Page", () => {});
+describe("Page", () => {
+  test("test", async (done) => {
+    done();
+  });
+});

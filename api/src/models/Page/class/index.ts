@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { Field, ID, ObjectType } from "type-graphql";
-import { prop, Ref, ReturnModelType } from "@typegoose/typegoose";
+import { prop, Ref } from "@typegoose/typegoose";
 
 // import PageSchema from "../schema";
 import get from "./get";
