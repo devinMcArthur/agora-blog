@@ -5,7 +5,7 @@ import Page from "../Page";
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000;
 
 import seedDatabase from "../../testDB/seedDatabase";
-import jestDB from "../../testDB/jestDB";
+import { prepareDatabase, disconnectAndStopServer } from "../../testDB/jestDB";
 
 let mongoServer: any;
 
@@ -26,7 +26,7 @@ const setupDatabase = () => {
 };
 
 beforeAll(async (done) => {
-  mongoServer = await jestDB.prepareDatabase();
+  mongoServer = await prepareDatabase();
 
   await setupDatabase();
 
@@ -34,7 +34,7 @@ beforeAll(async (done) => {
 });
 
 afterAll(async (done) => {
-  await jestDB.disconnectAndStopServer(mongoServer);
+  await disconnectAndStopServer(mongoServer);
   done();
 });
 
