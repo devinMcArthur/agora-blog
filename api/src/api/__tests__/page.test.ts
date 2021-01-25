@@ -5,16 +5,27 @@ import app from "../../app";
 import { prepareDatabase, disconnectAndStopServer } from "../../testDB/jestDB";
 import seedDatabase from "../../testDB/seedDatabase";
 import { apolloServer } from "../../server";
+import { ApolloServer } from "apollo-server-express";
+import { buildSchema } from "type-graphql";
+
+import PageResolver from "../resolvers/page";
+import VariableResolver from "../resolvers/variable";
+import QuestionResolver from "../resolvers/question";
+import ParagraphResolver from "../resolvers/paragraph";
+import StatementResolver from "../resolvers/statement";
+import StatementValueResolver from "../resolvers/statementValue";
+import VariableVersionResolver from "../resolvers/variableVersion";
+import StatementSourcesResolver from "../resolvers/statementSources";
+import StatementVersionResolver from "../resolvers/statementVersion";
+import VariableEquationResolver from "../resolvers/variableEquation";
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
-const { query } = createTestClient(apolloServer);
-
-let mongoServer: any, documents: any;
+let mongoServer: any, documents: any, testClient: any;
 function setupDatabase() {
   return new Promise<void>(async (resolve, reject) => {
     try {
-      documents = await seedDatabase();
+      // documents = await seedDatabase();
 
       resolve();
     } catch (e) {
@@ -25,6 +36,32 @@ function setupDatabase() {
 
 beforeAll(async (done) => {
   mongoServer = await prepareDatabase();
+
+  const apolloServer = new ApolloServer({
+    schema: await buildSchema({
+      resolvers: [
+        PageResolver,
+        ParagraphResolver,
+        VariableResolver,
+        QuestionResolver,
+        VariableResolver,
+        StatementResolver,
+        StatementValueResolver,
+        VariableVersionResolver,
+        VariableEquationResolver,
+        StatementSourcesResolver,
+        StatementVersionResolver,
+      ],
+      validate: false,
+    }),
+    context: ({ req, res }: { req: any; res: any }) => ({
+      // redis,
+      req,
+      res,
+    }),
+  });
+
+  testClient = createTestClient(apolloServer);
 
   await setupDatabase();
 
