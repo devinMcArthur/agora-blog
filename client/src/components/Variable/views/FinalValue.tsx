@@ -9,7 +9,7 @@ const FinalValue = (
   const number = Math.round((finalValue + Number.EPSILON) * 100) / 100;
 
   return (
-    <Box {...rest}>
+    <Box as="span" {...rest}>
       {number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
     </Box>
   );
