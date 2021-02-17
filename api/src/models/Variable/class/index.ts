@@ -42,7 +42,7 @@ export class VariableVersionClass {
   @prop({ type: () => VariableEquationClass, default: [] })
   public equation!: VariableEquationClass[];
 
-  @Field()
+  @Field({ nullable: true })
   @prop({ required: false })
   public sourceURL?: string;
 

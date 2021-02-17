@@ -1,4 +1,5 @@
 import Page from "../models/Page";
+import Topic from "../models/Topic";
 import Variable from "../models/Variable";
 import Question from "../models/Question";
 import Paragraph from "../models/Paragraph";
@@ -12,6 +13,7 @@ const clearDatabase = () => {
     try {
       // if (process.env.NODE_ENV === "test") {
       await Page.deleteMany({});
+      await Topic.deleteMany({});
       await Variable.deleteMany({});
       await Question.deleteMany({});
       await Paragraph.deleteMany({});

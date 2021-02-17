@@ -274,6 +274,11 @@ const _ids = {
       _id: Types.ObjectId("5fcfdf0b83d6a50000a16ae8"),
     },
   },
+  topics: {
+    covid_id_topic: {
+      _id: Types.ObjectId("602d76c45d04d902f8e6af19"),
+    },
+  },
 };
 
 export default _ids;

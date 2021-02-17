@@ -28,6 +28,9 @@ import VariableVersionResolver from "./api/resolvers/variableVersion";
 import StatementSourcesResolver from "./api/resolvers/statementSources";
 import StatementVersionResolver from "./api/resolvers/statementVersion";
 import VariableEquationResolver from "./api/resolvers/variableEquation";
+import TopicResolver from "./api/resolvers/topic";
+import TopicRowResolver from "./api/resolvers/topicRow";
+import TopicColumnResolver from "./api/resolvers/topicColumn";
 
 import { spawn_cache_service } from "./actors/cache";
 
@@ -65,6 +68,9 @@ const main = async () => {
         VariableEquationResolver,
         StatementSourcesResolver,
         StatementVersionResolver,
+        TopicResolver,
+        TopicRowResolver,
+        TopicColumnResolver,
       ],
       validate: false,
     }),

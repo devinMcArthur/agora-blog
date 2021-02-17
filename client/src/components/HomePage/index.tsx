@@ -1,15 +1,16 @@
 import * as React from "react";
 import { Center, Container, Flex, Spinner } from "@chakra-ui/react";
 
-import PageCard from "../Common/PageCard";
-
 import { withProvider } from "../Providers";
 
-import { usePagesQuery } from "../../generated/graphql";
+import { useTopicQuery } from "../../generated/graphql";
 import SkeletonCard from "../Common/SkeletonCard";
+import Topic from "../Topic";
 
 const HomePage = () => {
-  const { data, loading } = usePagesQuery();
+  const { data, loading } = useTopicQuery({
+    variables: { id: "602d76c45d04d902f8e6af19" },
+  });
 
   let content = (
     <Flex flexDirection="column" id="pages-skeleton-flex">
@@ -21,17 +22,8 @@ const HomePage = () => {
       </Center>
     </Flex>
   );
-  if (data?.pages && !loading) {
-    const pages = data.pages
-      .slice()
-      .sort((a, b) => b.referencedCount - a.referencedCount);
-    content = (
-      <Flex flexDirection="column" alignContent="center" id="pages-flex">
-        {pages.map((page) => (
-          <PageCard page={page} />
-        ))}
-      </Flex>
-    );
+  if (data?.topic && !loading) {
+    content = <Topic topic={data.topic} />;
   }
 
   return (

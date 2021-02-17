@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from "@chakra-ui/react";
+import { ChakraStyleProps, Link } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 
 type Props = {
@@ -7,10 +7,10 @@ type Props = {
   link: string;
   title?: string;
   isExternal?: boolean;
-};
+} & ChakraStyleProps;
 
 const TextLink = (props: Props) => {
-  const { title, link, children, isExternal } = props;
+  const { title, link, children, isExternal, ...rest } = props;
 
   const linkProps: any = {
     color: "blue.600",
@@ -26,7 +26,11 @@ const TextLink = (props: Props) => {
     linkProps.title = title;
   }
 
-  return <Link {...linkProps}>{children}</Link>;
+  return (
+    <Link {...linkProps} {...rest}>
+      {children}
+    </Link>
+  );
 };
 
 export default TextLink;

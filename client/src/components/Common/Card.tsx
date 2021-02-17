@@ -1,11 +1,18 @@
 import * as React from "react";
-import { Box, Flex, useStyleConfig } from "@chakra-ui/react";
+import { Box, ChakraProps, Flex, useStyleConfig } from "@chakra-ui/react";
 
-const Card = (props: any) => {
-  const styles = useStyleConfig("Card");
+const Card = (
+  props: ChakraProps & {
+    children: React.ReactNode;
+    size?: "md";
+    variants?: "full";
+  }
+) => {
+  const { size, ...rest } = props;
+  const styles = useStyleConfig("Card", { size });
 
   return (
-    <Box sx={styles} id="card">
+    <Box sx={styles} {...rest}>
       <Flex flexDirection="column">{props.children}</Flex>
     </Box>
   );

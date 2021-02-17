@@ -37,11 +37,13 @@ const Variable = (props: Props) => {
           Current: <FinalValue finalValue={currentVersion.finalValue} />
         </Heading>
         <i>updated: {currentVersion.createdAt}</i>
-        <i>
-          <TextLink link={currentVersion.sourceURL} isExternal>
-            source
-          </TextLink>
-        </i>
+        {currentVersion.sourceURL ? (
+          <i>
+            <TextLink link={currentVersion.sourceURL} isExternal>
+              source
+            </TextLink>
+          </i>
+        ) : null}
         <Divider m={2} />
         <Flex>{relatedPageList}</Flex>
       </Flex>

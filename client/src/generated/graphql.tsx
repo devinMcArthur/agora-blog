@@ -23,6 +23,7 @@ export type Query = {
   question?: Maybe<QuestionClass>;
   questions: Array<QuestionClass>;
   statement?: Maybe<StatementClass>;
+  topic?: Maybe<Topic>;
 };
 
 
@@ -43,6 +44,11 @@ export type QueryQuestionArgs = {
 
 
 export type QueryStatementArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryTopicArgs = {
   id: Scalars['ID'];
 };
 
@@ -117,7 +123,7 @@ export type VariableVersionClass = {
   type: Scalars['String'];
   number: Scalars['Float'];
   equation: Array<VariableEquationClass>;
-  sourceURL: Scalars['String'];
+  sourceURL?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   finalValue: Scalars['Float'];
 };
@@ -143,6 +149,29 @@ export type QuestionClass = {
   question: Scalars['String'];
   referencedCount: Scalars['Float'];
   relatedPages: Array<PageClass>;
+};
+
+export type Topic = {
+  __typename?: 'Topic';
+  _id: Scalars['ID'];
+  title: Scalars['String'];
+  slug: Scalars['String'];
+  rows: Array<TopicRow>;
+};
+
+export type TopicRow = {
+  __typename?: 'TopicRow';
+  columns: Array<TopicColumn>;
+};
+
+export type TopicColumn = {
+  __typename?: 'TopicColumn';
+  type: Scalars['String'];
+  title: Scalars['String'];
+  page: PageClass;
+  pages: Array<PageClass>;
+  statement: StatementClass;
+  variables: Array<VariableClass>;
 };
 
 export type DisplayParagraphSnippetFragment = (
@@ -232,6 +261,35 @@ export type QuestionSnippetFragment = (
   )> }
 );
 
+export type TopicSnippetFragment = (
+  { __typename?: 'Topic' }
+  & Pick<Topic, '_id' | 'title' | 'slug'>
+  & { rows: Array<(
+    { __typename?: 'TopicRow' }
+    & { columns: Array<(
+      { __typename?: 'TopicColumn' }
+      & Pick<TopicColumn, 'type' | 'title'>
+      & { page: (
+        { __typename?: 'PageClass' }
+        & PageCardSnippetFragment
+      ), pages: Array<(
+        { __typename?: 'PageClass' }
+        & Pick<PageClass, 'title' | 'slug'>
+      )>, variables: Array<(
+        { __typename?: 'VariableClass' }
+        & Pick<VariableClass, '_id' | 'title' | 'finalValue'>
+      )>, statement: (
+        { __typename?: 'StatementClass' }
+        & { page: (
+          { __typename?: 'PageClass' }
+          & Pick<PageClass, 'title' | 'slug'>
+        ) }
+        & DisplayStatementSnippetFragment
+      ) }
+    )> }
+  )> }
+);
+
 export type VariableSnippetFragment = (
   { __typename?: 'VariableClass' }
   & Pick<VariableClass, '_id' | 'title'>
@@ -307,6 +365,19 @@ export type StatementQuery = (
       & Pick<PageClass, 'slug' | 'title'>
     ) }
     & DisplayStatementSnippetFragment
+  )> }
+);
+
+export type TopicQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type TopicQuery = (
+  { __typename?: 'Query' }
+  & { topic?: Maybe<(
+    { __typename?: 'Topic' }
+    & TopicSnippetFragment
   )> }
 );
 
@@ -418,6 +489,39 @@ export const QuestionSnippetFragmentDoc = gql`
   referencedCount
 }
     ${PageCardSnippetFragmentDoc}`;
+export const TopicSnippetFragmentDoc = gql`
+    fragment TopicSnippet on Topic {
+  _id
+  title
+  slug
+  rows {
+    columns {
+      type
+      title
+      page {
+        ...PageCardSnippet
+      }
+      pages {
+        title
+        slug
+      }
+      variables {
+        _id
+        title
+        finalValue
+      }
+      statement {
+        ...DisplayStatementSnippet
+        page {
+          title
+          slug
+        }
+      }
+    }
+  }
+}
+    ${PageCardSnippetFragmentDoc}
+${DisplayStatementSnippetFragmentDoc}`;
 export const VariableSnippetFragmentDoc = gql`
     fragment VariableSnippet on VariableClass {
   _id
@@ -601,6 +705,39 @@ export function useStatementLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type StatementQueryHookResult = ReturnType<typeof useStatementQuery>;
 export type StatementLazyQueryHookResult = ReturnType<typeof useStatementLazyQuery>;
 export type StatementQueryResult = Apollo.QueryResult<StatementQuery, StatementQueryVariables>;
+export const TopicDocument = gql`
+    query Topic($id: ID!) {
+  topic(id: $id) {
+    ...TopicSnippet
+  }
+}
+    ${TopicSnippetFragmentDoc}`;
+
+/**
+ * __useTopicQuery__
+ *
+ * To run a query within a React component, call `useTopicQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTopicQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTopicQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useTopicQuery(baseOptions: Apollo.QueryHookOptions<TopicQuery, TopicQueryVariables>) {
+        return Apollo.useQuery<TopicQuery, TopicQueryVariables>(TopicDocument, baseOptions);
+      }
+export function useTopicLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TopicQuery, TopicQueryVariables>) {
+          return Apollo.useLazyQuery<TopicQuery, TopicQueryVariables>(TopicDocument, baseOptions);
+        }
+export type TopicQueryHookResult = ReturnType<typeof useTopicQuery>;
+export type TopicLazyQueryHookResult = ReturnType<typeof useTopicLazyQuery>;
+export type TopicQueryResult = Apollo.QueryResult<TopicQuery, TopicQueryVariables>;
 export const VariableDocument = gql`
     query Variable($id: ID!) {
   variable(id: $id) {

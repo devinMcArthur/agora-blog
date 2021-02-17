@@ -30,6 +30,12 @@ const createVariables = () => {
             createdAt: new Date("2020-12-07"),
             sourceURL: "https://coronavirus.jhu.edu/map.html",
           },
+          {
+            type: "number",
+            number: 109678891,
+            createdAt: new Date("2021-02-17"),
+            sourceURL: "https://coronavirus.jhu.edu/map.html",
+          },
         ],
       });
 
@@ -41,6 +47,12 @@ const createVariables = () => {
             type: "number",
             number: 1539965,
             createdAt: new Date("2020-12-07"),
+            sourceURL: "https://coronavirus.jhu.edu/map.html",
+          },
+          {
+            type: "number",
+            number: 2423443,
+            createdAt: new Date("2020-02-17"),
             sourceURL: "https://coronavirus.jhu.edu/map.html",
           },
         ],
