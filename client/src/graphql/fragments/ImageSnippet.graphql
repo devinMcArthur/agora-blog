@@ -1,0 +1,7 @@
+fragment ImageSnippet on Image {
+  name
+  sourceURL
+  caption
+  buffer
+  contentType
+}

@@ -16,5 +16,8 @@ fragment DisplayStyleSnippet on StatementStyleClass {
       title
       finalValue
     }
+    image {
+      ...ImageSnippet
+    }
   }
 }

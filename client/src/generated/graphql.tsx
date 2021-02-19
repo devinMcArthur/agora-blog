@@ -107,6 +107,7 @@ export type StatementValueClass = {
   page?: Maybe<PageClass>;
   statement?: Maybe<StatementClass>;
   variable?: Maybe<VariableClass>;
+  image?: Maybe<Image>;
 };
 
 export type VariableClass = {
@@ -136,6 +137,15 @@ export type VariableEquationClass = {
   variable?: Maybe<VariableClass>;
 };
 
+
+export type Image = {
+  __typename?: 'Image';
+  name: Scalars['String'];
+  sourceURL: Scalars['String'];
+  caption: Scalars['String'];
+  buffer: Scalars['String'];
+  contentType: Scalars['String'];
+};
 
 export type StatementSourcesClass = {
   __typename?: 'StatementSourcesClass';
@@ -167,10 +177,10 @@ export type TopicRow = {
 export type TopicColumn = {
   __typename?: 'TopicColumn';
   type: Scalars['String'];
-  title: Scalars['String'];
-  page: PageClass;
+  title?: Maybe<Scalars['String']>;
+  page?: Maybe<PageClass>;
   pages: Array<PageClass>;
-  statement: StatementClass;
+  statement?: Maybe<StatementClass>;
   variables: Array<VariableClass>;
 };
 
@@ -222,8 +232,16 @@ export type DisplayStyleSnippetFragment = (
     )>, variable?: Maybe<(
       { __typename?: 'VariableClass' }
       & Pick<VariableClass, '_id' | 'title' | 'finalValue'>
+    )>, image?: Maybe<(
+      { __typename?: 'Image' }
+      & ImageSnippetFragment
     )> }
   ) }
+);
+
+export type ImageSnippetFragment = (
+  { __typename?: 'Image' }
+  & Pick<Image, 'name' | 'sourceURL' | 'caption' | 'buffer' | 'contentType'>
 );
 
 export type PageCardSnippetFragment = (
@@ -269,23 +287,23 @@ export type TopicSnippetFragment = (
     & { columns: Array<(
       { __typename?: 'TopicColumn' }
       & Pick<TopicColumn, 'type' | 'title'>
-      & { page: (
+      & { page?: Maybe<(
         { __typename?: 'PageClass' }
         & PageCardSnippetFragment
-      ), pages: Array<(
+      )>, pages: Array<(
         { __typename?: 'PageClass' }
         & Pick<PageClass, 'title' | 'slug'>
       )>, variables: Array<(
         { __typename?: 'VariableClass' }
         & Pick<VariableClass, '_id' | 'title' | 'finalValue'>
-      )>, statement: (
+      )>, statement?: Maybe<(
         { __typename?: 'StatementClass' }
         & { page: (
           { __typename?: 'PageClass' }
           & Pick<PageClass, 'title' | 'slug'>
         ) }
         & DisplayStatementSnippetFragment
-      ) }
+      )> }
     )> }
   )> }
 );
@@ -394,6 +412,15 @@ export type VariableQuery = (
   )> }
 );
 
+export const ImageSnippetFragmentDoc = gql`
+    fragment ImageSnippet on Image {
+  name
+  sourceURL
+  caption
+  buffer
+  contentType
+}
+    `;
 export const DisplayStyleSnippetFragmentDoc = gql`
     fragment DisplayStyleSnippet on StatementStyleClass {
   type
@@ -413,9 +440,12 @@ export const DisplayStyleSnippetFragmentDoc = gql`
       title
       finalValue
     }
+    image {
+      ...ImageSnippet
+    }
   }
 }
-    `;
+    ${ImageSnippetFragmentDoc}`;
 export const DisplayStatementSnippetFragmentDoc = gql`
     fragment DisplayStatementSnippet on StatementClass {
   versions {

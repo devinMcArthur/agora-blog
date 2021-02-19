@@ -23,13 +23,15 @@ function Router() {
   return (
     <BrowserRouter>
       <Analytics id="UA-185033350-1" debug>
-        <Navbar />
         <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route exact path="/p/:pageSlug" component={Page} />
-          <Route exact path="/q/:questionID" component={Question} />
-          <Route exact path="/questions" component={Questions} />
-          <Route exact path="/v/:variableID" component={Variable} />
+          <>
+            <Navbar />
+            <Route exact path="/" component={HomePage} />
+            <Route exact path="/p/:pageSlug" component={Page} />
+            <Route exact path="/q/:questionID" component={Question} />
+            <Route exact path="/questions" component={Questions} />
+            <Route exact path="/v/:variableID" component={Variable} />
+          </>
         </Switch>
       </Analytics>
     </BrowserRouter>

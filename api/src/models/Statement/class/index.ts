@@ -10,6 +10,23 @@ import QuestionClass from "../../Question/class";
 import VariableClass from "../../Variable/class";
 
 @ObjectType()
+export class Image {
+  @Field()
+  @prop({ required: true, trim: true })
+  public name!: string;
+
+  @Field()
+  @prop({ trim: true })
+  public sourceURL?: string;
+
+  @Field()
+  @prop({ trim: true })
+  public caption?: string;
+}
+
+export interface ImageDocument extends DocumentType<Image> {}
+
+@ObjectType()
 export class StatementValueClass {
   @Field({ nullable: true })
   @prop({ trim: true })
@@ -26,6 +43,10 @@ export class StatementValueClass {
   @Field(() => VariableClass, { nullable: true })
   @prop({ ref: "VariableClass", required: false })
   public variable?: Ref<VariableClass>;
+
+  @Field(() => Image, { nullable: true })
+  @prop({ type: () => Image, required: false })
+  public image?: Image;
 }
 
 export interface StatementValueDocument
@@ -34,8 +55,11 @@ export interface StatementValueDocument
 @ObjectType()
 class StatementStyleClass {
   @Field()
-  @prop({ required: true, enum: ["mention", "variable", "quote", "bold"] })
-  public type!: "mention" | "variable" | "quote" | "bold";
+  @prop({
+    required: true,
+    enum: ["mention", "variable", "quote", "bold", "image"],
+  })
+  public type!: "mention" | "variable" | "quote" | "bold" | "image";
 
   @Field({ nullable: true })
   @prop({ required: false, enum: ["internal", "external"] })
