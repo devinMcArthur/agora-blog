@@ -23,6 +23,11 @@ spec:
                 secretKeyRef:
                   name: api-secrets
                   key: mongoURI
+            - name: SPACES_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: spacesName
             - name: SPACES_REGION
               valueFrom:
                 secretKeyRef:
