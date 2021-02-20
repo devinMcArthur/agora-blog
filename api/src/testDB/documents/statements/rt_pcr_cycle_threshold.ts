@@ -93,8 +93,29 @@ const page_rt_pcr_cycle_threshold_statement_3_v1 = new Statement({
           ],
         },
         {
+          string: " RNA. ",
+          styles: [],
+        },
+        {
+          string: "",
+          styles: [
+            {
+              type: "image",
+              value: {
+                image: {
+                  name: "viral-culture-per-ct-value.jpg",
+                  sourceURL:
+                    "https://academic.oup.com/cid/advance-article/doi/10.1093/cid/ciaa1491/5912603",
+                  caption:
+                    "Percentage of positive viral cultures of severe acute respiratory syndrome coronavirus 2 polymerase chain reaction–positive nasopharyngeal samples from coronavirus disease 2019 patients, according to Ct value (plain line). The dashed curve indicates the polynomial regression curve. Abbreviations: Ct, cycle threshold; Poly., polynomial.",
+                },
+              },
+            },
+          ],
+        },
+        {
           string:
-            " RNA. Confirming that high Ct values are mostly correlated with low viral loads.",
+            "Confirming that high Ct values are mostly correlated with low viral loads.",
           styles: [],
         },
       ],

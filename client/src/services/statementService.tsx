@@ -1,5 +1,7 @@
+import { Box } from "@chakra-ui/react";
 import React from "react";
 
+import ImageDisplay from "../components/Statement/views/ImageDisplay";
 import ExternalMention from "../components/Statement/views/ExternalMention";
 import InternalMention from "../components/Statement/views/InternalMention";
 import QuotedStatement from "../components/Statement/views/QuotedStatement";
@@ -111,6 +113,19 @@ export default function StatementService() {
               );
             } else if (style.type === "variable") {
               newJSX = <Variable style={style} key={index} />;
+            } else if (style.type === "image") {
+              newJSX = (
+                <Box>
+                  <Box
+                    display="block"
+                    ml="auto"
+                    mr="auto"
+                    w={{ base: "50%", lg: "30%" }}
+                  >
+                    <ImageDisplay image={style.value.image!} />
+                  </Box>
+                </Box>
+              );
             }
 
             // Bold

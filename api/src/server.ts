@@ -9,7 +9,6 @@ import { ApolloServer } from "apollo-server-express";
 // import { PostgresPersistenceEngine } from "nact-persistence-postgres";
 
 import app from "./app";
-// import redis from "./redis";
 import seedDatabase from "./testDB/seedDatabase";
 
 // Setup environment variables
@@ -31,11 +30,9 @@ import VariableEquationResolver from "./api/resolvers/variableEquation";
 import TopicResolver from "./api/resolvers/topic";
 import TopicRowResolver from "./api/resolvers/topicRow";
 import TopicColumnResolver from "./api/resolvers/topicColumn";
+import ImageResolver from "./api/resolvers/image";
 
 import { spawn_cache_service } from "./actors/cache";
-
-// import { mainPagesListKey } from "./constants/redisKeys";
-// import Page from "./models/Page";
 
 let system, cacheService: any, apolloServer: any;
 const main = async () => {
@@ -73,11 +70,11 @@ const main = async () => {
         TopicResolver,
         TopicRowResolver,
         TopicColumnResolver,
+        ImageResolver,
       ],
       validate: false,
     }),
     context: ({ req, res }: { req: any; res: any }) => ({
-      // redis,
       req,
       res,
     }),
@@ -98,7 +95,7 @@ const main = async () => {
   //   new PostgresPersistenceEngine(
   //     `${process.env.PG_HOST}:${process.env.PG_PORT}`
   //   )
-  // )
+  //
 
   app.listen(port, () => console.log(`Server running on port ${port}`));
 };

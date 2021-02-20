@@ -17,16 +17,24 @@ spec:
           image: agoraplatform/api:$COMMIT_SHA1
           ports:
             - containerPort: 8080
-          # env:
-          #   - name: REDIS_HOST
-          #     value: redis-cluster-ip-service
-          #   - name: REDIS_PORT
-          #     value: "6379"
-          #   - name: PGHOST
-          #     value: postgres-cluster-ip-service
-          #   - name: PGPORT
-          #     value: "5432"
-          #   - name: PGDATABASE
-          #     value: postgres
-          #   - name: PGPASSWORD
-          #     value: password
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: mongoURI
+            - name: SPACES_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: spacesRegion
+            - name: SPACES_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: spacesKey
+            - name: SPACES_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: spacesSecret
