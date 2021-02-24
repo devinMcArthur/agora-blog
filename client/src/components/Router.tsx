@@ -5,10 +5,12 @@ import Analytics from "react-router-ga";
 // import ReactGA from "react-ga";
 
 import HomePage from "./HomePage";
+import Login from "./Login";
 import Navbar from "./Navbar";
 import Page from "./Page";
 import Question from "./Question";
 import Questions from "./Questions";
+import User from "./User";
 import Variable from "./Variable";
 
 // const history = createBrowserHistory();
@@ -31,6 +33,8 @@ function Router() {
             <Route exact path="/q/:questionID" component={Question} />
             <Route exact path="/questions" component={Questions} />
             <Route exact path="/v/:variableID" component={Variable} />
+            <Route exact path="/u/:username" component={User} />
+            <Route exact path="/login" component={Login} />
           </>
         </Switch>
       </Analytics>

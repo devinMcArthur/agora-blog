@@ -209,7 +209,7 @@ const page_covid_19_testing_statement_4_v1 = new Statement({
         },
       ],
       questions: [
-        _ids.questions.what_are_the_benefits_of_testing_for_covid_19._id,
+        _ids.questions.is_testing_for_covid_19_beneficial._id,
       ],
     },
   ],
@@ -308,7 +308,7 @@ const page_covid_19_testing_statement_5_v1 = new Statement({
         },
       ],
       questions: [
-        _ids.questions.what_are_the_downsides_of_testing_for_covid_19._id,
+        _ids.questions.is_testing_for_covid_19_beneficial._id,
       ],
     },
   ],

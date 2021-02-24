@@ -7,6 +7,8 @@ import { PageDocument } from "../../../models/Page";
 import PageClass from "../../../models/Page/class";
 import fieldResolvers from "./fieldResolvers";
 import queries from "./queries";
+import QuestionPageConnectionClass from "../../../models/QuestionPageConnection/class";
+import { QuestionPageConnectionDocument } from "../../../models/QuestionPageConnection";
 
 @Resolver(() => QuestionClass)
 export default class QuestionResolver {
@@ -18,11 +20,11 @@ export default class QuestionResolver {
     return fieldResolvers.referencedCount(question);
   }
 
-  @FieldResolver(() => [PageClass])
-  async relatedPages(
+  @FieldResolver(() => [QuestionPageConnectionClass])
+  async pageConnections(
     @Root() question: QuestionDocument
-  ): Promise<PageDocument[]> {
-    return fieldResolvers.relatedPages(question);
+  ): Promise<QuestionPageConnectionDocument[]> {
+    return fieldResolvers.pageConnections(question);
   }
 
   /**

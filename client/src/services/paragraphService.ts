@@ -21,14 +21,12 @@ export default function ParagraphService() {
     );
   };
 
-  const findSentenceWithQuestionReference = (
+  const findStatementByID = (
     paragraph: DisplayParagraphSnippetFragment,
-    questionID: Types.ObjectId | string
+    statementID: Types.ObjectId | string
   ) => {
     return paragraph.statements.find((statement) =>
-      statement.versions[statement.versions.length - 1].questions.find(
-        (connection) => connection._id.toString() === questionID.toString()
-      )
+      statement._id.toString() === statementID.toString()
     );
   };
 
@@ -51,7 +49,7 @@ export default function ParagraphService() {
 
   return {
     findSentenceWithPageReference,
-    findSentenceWithQuestionReference,
+    findStatementByID,
     findSentenceWithVariableReference,
   };
 }

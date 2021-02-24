@@ -1,3 +1,4 @@
+import User from "../../../models/User";
 import { PageDocument } from "../../../models/Page";
 import Paragraph from "../../../models/Paragraph";
 
@@ -16,8 +17,13 @@ const referencedCount = async (page: PageDocument) => {
   return await page.getReferencedCount({ fromCache: true });
 };
 
+const creator = async (page: PageDocument) => {
+  return await User.getByID(page.creator!.toString(), { fromCache: true });
+};
+
 export default {
   currentParagraph,
   relatedPages,
   referencedCount,
+  creator,
 };

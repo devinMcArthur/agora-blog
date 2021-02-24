@@ -27,8 +27,7 @@ export interface SeededQuestions {
   what_does_a_covid_19_test_do: QuestionDocument;
   what_tests_are_used_to_test_for_covid_19: QuestionDocument;
   what_is_the_effectiveness_of_covid_19_testing: QuestionDocument;
-  what_are_the_benefits_of_testing_for_covid_19: QuestionDocument;
-  what_are_the_downsides_of_testing_for_covid_19: QuestionDocument;
+  is_testing_for_covid_19_beneficial: QuestionDocument;
   what_is_a_covid_19_rt_pcr_test: QuestionDocument;
   what_is_the_effectiveness_of_rt_pcr_covid_19_tests: QuestionDocument;
   what_is_the_false_positive_rate_of_rt_pcr_covid_19_tests: QuestionDocument;
@@ -170,15 +169,10 @@ const createQuestions = () => {
         question: "What is the effectiveness of COVID-19 testing?",
       });
 
-      const what_are_the_benefits_of_testing_for_covid_19 = new Question({
-        _id: _ids.questions.what_are_the_benefits_of_testing_for_covid_19._id,
-        question: "What are the benefits of testing for COVID-19?",
-      });
-
-      const what_are_the_downsides_of_testing_for_covid_19 = new Question({
-        _id: _ids.questions.what_are_the_downsides_of_testing_for_covid_19._id,
-        question: "What are the downsides of testing for COVID-19?",
-      });
+      const is_testing_for_covid_19_beneficial = new Question({
+        _id: _ids.questions.is_testing_for_covid_19_beneficial._id,
+        question: "Is testing for COVID-19 beneficial?"
+      })
 
       const what_is_a_covid_19_rt_pcr_test = new Question({
         _id: _ids.questions.what_is_a_covid_19_rt_pcr_test._id,
@@ -286,8 +280,7 @@ const createQuestions = () => {
         what_does_a_covid_19_test_do,
         what_tests_are_used_to_test_for_covid_19,
         what_is_the_effectiveness_of_covid_19_testing,
-        what_are_the_benefits_of_testing_for_covid_19,
-        what_are_the_downsides_of_testing_for_covid_19,
+        is_testing_for_covid_19_beneficial,
         what_is_a_covid_19_rt_pcr_test,
         what_is_the_effectiveness_of_rt_pcr_covid_19_tests,
         what_is_the_false_positive_rate_of_rt_pcr_covid_19_tests,

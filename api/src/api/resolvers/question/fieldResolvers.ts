@@ -4,8 +4,8 @@ const referencedCount = async (question: QuestionDocument) => {
   return await question.getReferencedCount({ fromCache: true });
 };
 
-const relatedPages = async (question: QuestionDocument) => {
-  return await question.getPagesThatReference({ fromCache: true });
-};
+const pageConnections = async (question: QuestionDocument) => {
+  return await question.getPageConnections({fromCache: true})
+}
 
-export default { referencedCount, relatedPages };
+export default { referencedCount, pageConnections };

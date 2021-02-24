@@ -51,7 +51,6 @@ const createParagraphs = () => {
         statements: [
           _ids.pages.page_covid_19_transmission.paragraphs[0].statements[0],
           _ids.pages.page_covid_19_transmission.paragraphs[0].statements[1],
-          _ids.pages.page_covid_19_transmission.paragraphs[0].statements[2],
         ],
         version: 1,
         mostRecent: true,

@@ -8,6 +8,7 @@ import { spawn_page_list_service } from "./page_list";
 import { spawn_variables_service } from "./variable";
 import { spawn_question_list_service } from "./question_list";
 import { spawn_topics_service } from "./topic";
+import { spawn_users_service } from "./user";
 
 const spawn_cache_service = (system: any) =>
   spawnStateless(
@@ -36,6 +37,8 @@ const spawn_cache_service = (system: any) =>
         childActor = spawn_variables_service(ctx.self);
       } else if (path[0] === "topics") {
         childActor = spawn_topics_service(ctx.self);
+      } else if (path[0] === "users") {
+        childActor = spawn_users_service(ctx.self);
       }
 
       if (childActor) dispatch(childActor, { sender: ctx.self, ...msg });

@@ -10,6 +10,7 @@ import createPageConnections from "./documents/pageConnections";
 import createQuestionPageConnections from "./documents/questionPageConnections";
 import createVariablePageConnections from "./documents/variablePageConnections";
 import createTopics, { SeededTopics } from "./documents/topics";
+import createUsers, { SeededUsers } from "./documents/users";
 
 const seedDatabase = () => {
   return new Promise<{
@@ -18,12 +19,14 @@ const seedDatabase = () => {
     questions: SeededQuestions;
     variables: SeededVariables;
     topics: SeededTopics;
+    users: SeededUsers;
   }>(async (resolve, reject) => {
     try {
       // Clear database
       await clearDatabase();
 
       // Create primary Documents
+      const users = await createUsers();
       const pages = await createPages();
       const questions = await createQuestions();
       const variables = await createVariables();
@@ -39,6 +42,7 @@ const seedDatabase = () => {
       console.log("Database seeded");
 
       resolve({
+        users,
         pages,
         paragraphs,
         questions,

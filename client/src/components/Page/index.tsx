@@ -5,6 +5,7 @@ import Paragraph from "../Common/Paragraph";
 import { usePageQuery } from "../../generated/graphql";
 import { Container, Divider, Heading, Flex } from "@chakra-ui/react";
 import Loading from "../Common/Loading";
+import TextLink from "../Common/TextLink";
 
 const Page = (props: { match: any }) => {
   const { data, loading } = usePageQuery({
@@ -26,6 +27,11 @@ const Page = (props: { match: any }) => {
         <Heading size="lg">{page.title}</Heading>
         <Divider mb={2} />
         <Paragraph paragraph={page.currentParagraph} />
+        <Divider pb={2} />
+        By:{" "}
+        <TextLink link={`/u/${page.creator.username}`}>
+          @{page.creator.username}
+        </TextLink>
         <Divider pb={2} />
         <Flex flexDirection="column" mr="1.5em" pt={4}>
           {relatedPageList}

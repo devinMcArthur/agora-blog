@@ -16,6 +16,7 @@ import ParagraphClass from "../../../models/Paragraph/class";
 
 import fieldResolver from "./fieldResolver";
 import queries from "./queries";
+import User from "src/models/User/class";
 
 @ArgsType()
 class GetPageArgs {
@@ -46,6 +47,11 @@ export default class PageResolver {
   @FieldResolver(() => Number)
   async referencedCount(@Root() page: PageDocument) {
     return fieldResolver.referencedCount(page);
+  }
+
+  @FieldResolver()
+  async creator(@Root() page: PageDocument) {
+    return fieldResolver.creator(page);
   }
 
   /**

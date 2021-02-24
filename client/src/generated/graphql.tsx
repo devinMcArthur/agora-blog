@@ -17,6 +17,7 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  user?: Maybe<User>;
   page?: Maybe<PageClass>;
   pages: Array<PageClass>;
   variable?: Maybe<VariableClass>;
@@ -24,6 +25,12 @@ export type Query = {
   questions: Array<QuestionClass>;
   statement?: Maybe<StatementClass>;
   topic?: Maybe<Topic>;
+};
+
+
+export type QueryUserArgs = {
+  id?: Maybe<Scalars['ID']>;
+  username?: Maybe<Scalars['String']>;
 };
 
 
@@ -52,12 +59,24 @@ export type QueryTopicArgs = {
   id: Scalars['ID'];
 };
 
+export type User = {
+  __typename?: 'User';
+  _id: Scalars['ID'];
+  username: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  verified: Scalars['Boolean'];
+  createdAt: Scalars['DateTime'];
+};
+
+
 export type PageClass = {
   __typename?: 'PageClass';
   _id: Scalars['ID'];
   title: Scalars['String'];
   slug: Scalars['String'];
   paragraphs: Array<ParagraphClass>;
+  creator: User;
   currentParagraph: ParagraphClass;
   relatedPages: Array<PageClass>;
   referencedCount: Scalars['Float'];
@@ -137,7 +156,6 @@ export type VariableEquationClass = {
   variable?: Maybe<VariableClass>;
 };
 
-
 export type Image = {
   __typename?: 'Image';
   name: Scalars['String'];
@@ -158,7 +176,15 @@ export type QuestionClass = {
   _id: Scalars['ID'];
   question: Scalars['String'];
   referencedCount: Scalars['Float'];
-  relatedPages: Array<PageClass>;
+  pageConnections: Array<QuestionPageConnectionClass>;
+};
+
+export type QuestionPageConnectionClass = {
+  __typename?: 'QuestionPageConnectionClass';
+  _id: Scalars['ID'];
+  question: QuestionClass;
+  referrerPage: PageClass;
+  statement: StatementClass;
 };
 
 export type Topic = {
@@ -184,6 +210,30 @@ export type TopicColumn = {
   variables: Array<VariableClass>;
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  login?: Maybe<LoginResponse>;
+  userEdit?: Maybe<User>;
+};
+
+
+export type MutationLoginArgs = {
+  password: Scalars['String'];
+  username: Scalars['String'];
+};
+
+
+export type MutationUserEditArgs = {
+  name?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+};
+
+export type LoginResponse = {
+  __typename?: 'LoginResponse';
+  token: Scalars['String'];
+  user: User;
+};
+
 export type DisplayParagraphSnippetFragment = (
   { __typename?: 'ParagraphClass' }
   & { statements: Array<(
@@ -194,6 +244,7 @@ export type DisplayParagraphSnippetFragment = (
 
 export type DisplayStatementSnippetFragment = (
   { __typename?: 'StatementClass' }
+  & Pick<StatementClass, '_id'>
   & { versions: Array<(
     { __typename?: 'StatementVersionClass' }
     & { stringArray: Array<(
@@ -262,7 +313,10 @@ export type PageSnippetFragment = (
   ), relatedPages: Array<(
     { __typename?: 'PageClass' }
     & PageCardSnippetFragment
-  )> }
+  )>, creator: (
+    { __typename?: 'User' }
+    & Pick<User, '_id' | 'username'>
+  ) }
 );
 
 export type QuestionCardSnippetFragment = (
@@ -273,9 +327,15 @@ export type QuestionCardSnippetFragment = (
 export type QuestionSnippetFragment = (
   { __typename?: 'QuestionClass' }
   & Pick<QuestionClass, '_id' | 'question' | 'referencedCount'>
-  & { relatedPages: Array<(
-    { __typename?: 'PageClass' }
-    & PageCardSnippetFragment
+  & { pageConnections: Array<(
+    { __typename?: 'QuestionPageConnectionClass' }
+    & { referrerPage: (
+      { __typename?: 'PageClass' }
+      & PageCardSnippetFragment
+    ), statement: (
+      { __typename?: 'StatementClass' }
+      & Pick<StatementClass, '_id'>
+    ) }
   )> }
 );
 
@@ -317,6 +377,24 @@ export type VariableSnippetFragment = (
   )>, relatedPages: Array<(
     { __typename?: 'PageClass' }
     & PageCardSnippetFragment
+  )> }
+);
+
+export type LoginMutationVariables = Exact<{
+  username: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login?: Maybe<(
+    { __typename?: 'LoginResponse' }
+    & Pick<LoginResponse, 'token'>
+    & { user: (
+      { __typename?: 'User' }
+      & Pick<User, '_id' | 'username'>
+    ) }
   )> }
 );
 
@@ -399,6 +477,20 @@ export type TopicQuery = (
   )> }
 );
 
+export type UserQueryVariables = Exact<{
+  id?: Maybe<Scalars['ID']>;
+  username?: Maybe<Scalars['String']>;
+}>;
+
+
+export type UserQuery = (
+  { __typename?: 'Query' }
+  & { user?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, '_id' | 'username'>
+  )> }
+);
+
 export type VariableQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -448,6 +540,7 @@ export const DisplayStyleSnippetFragmentDoc = gql`
     ${ImageSnippetFragmentDoc}`;
 export const DisplayStatementSnippetFragmentDoc = gql`
     fragment DisplayStatementSnippet on StatementClass {
+  _id
   versions {
     stringArray {
       string
@@ -499,6 +592,10 @@ export const PageSnippetFragmentDoc = gql`
   relatedPages {
     ...PageCardSnippet
   }
+  creator {
+    _id
+    username
+  }
 }
     ${DisplayParagraphSnippetFragmentDoc}
 ${PageCardSnippetFragmentDoc}`;
@@ -513,8 +610,13 @@ export const QuestionSnippetFragmentDoc = gql`
     fragment QuestionSnippet on QuestionClass {
   _id
   question
-  relatedPages {
-    ...PageCardSnippet
+  pageConnections {
+    referrerPage {
+      ...PageCardSnippet
+    }
+    statement {
+      _id
+    }
   }
   referencedCount
 }
@@ -567,6 +669,43 @@ export const VariableSnippetFragmentDoc = gql`
   }
 }
     ${PageCardSnippetFragmentDoc}`;
+export const LoginDocument = gql`
+    mutation Login($username: String!, $password: String!) {
+  login(username: $username, password: $password) {
+    token
+    user {
+      _id
+      username
+    }
+  }
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      username: // value for 'username'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const PageDocument = gql`
     query Page($slug: String, $id: ID) {
   page(slug: $slug, id: $id) {
@@ -768,6 +907,41 @@ export function useTopicLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Topi
 export type TopicQueryHookResult = ReturnType<typeof useTopicQuery>;
 export type TopicLazyQueryHookResult = ReturnType<typeof useTopicLazyQuery>;
 export type TopicQueryResult = Apollo.QueryResult<TopicQuery, TopicQueryVariables>;
+export const UserDocument = gql`
+    query User($id: ID, $username: String) {
+  user(id: $id, username: $username) {
+    _id
+    username
+  }
+}
+    `;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions?: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, baseOptions);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, baseOptions);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const VariableDocument = gql`
     query Variable($id: ID!) {
   variable(id: $id) {

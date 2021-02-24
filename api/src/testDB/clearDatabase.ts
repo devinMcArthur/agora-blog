@@ -1,3 +1,4 @@
+import User from "../models/User";
 import Page from "../models/Page";
 import Topic from "../models/Topic";
 import Variable from "../models/Variable";
@@ -12,6 +13,7 @@ const clearDatabase = () => {
   return new Promise<void>(async (resolve, reject) => {
     try {
       // if (process.env.NODE_ENV === "test") {
+      await User.deleteMany({});
       await Page.deleteMany({});
       await Topic.deleteMany({});
       await Variable.deleteMany({});

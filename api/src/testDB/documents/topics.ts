@@ -29,7 +29,7 @@ const createTopics = () => {
                 variables: [
                   _ids.variables.var_global_cases_covid_19._id,
                   _ids.variables.var_global_deaths_covid_19._id,
-                  _ids.variables.var_covid_19_rt_pcr_test_false_negative_rate
+                  _ids.variables.var_covid_19_rt_pcr_test_false_positive_rate
                     ._id,
                 ],
               },

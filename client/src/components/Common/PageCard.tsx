@@ -14,11 +14,8 @@ type ReferenceObject =
       type: "page";
       pageID: Types.ObjectId | string;
     }
-  | {
-      type: "question";
-      questionID: Types.ObjectId | string;
-    }
-  | { type: "variable"; variableID: Types.ObjectId | string };
+  | { type: "variable"; variableID: Types.ObjectId | string }
+  | {type: "statement", statementID: Types.ObjectId | string}
 
 type PageContainerProps = {
   page: PageCardSnippetFragment;
@@ -45,10 +42,10 @@ class PageContainer extends React.Component<
             referenceObject.pageID
           );
           break;
-        case "question":
-          referenceSentence = ParagraphService().findSentenceWithQuestionReference(
+        case "statement":
+          referenceSentence = ParagraphService().findStatementByID(
             page.currentParagraph,
-            referenceObject.questionID
+            referenceObject.statementID
           );
           break;
         case "variable":

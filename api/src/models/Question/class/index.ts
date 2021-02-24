@@ -30,13 +30,6 @@ export default class QuestionClass {
     return get.list(this, options);
   }
 
-  public async getPagesThatReference(
-    this: QuestionDocument,
-    options?: { fromCache: boolean }
-  ) {
-    return get.pagesThatReference(this, options);
-  }
-
   public async getReferencedCount(
     this: QuestionDocument,
     options?: { fromCache: boolean }
@@ -46,5 +39,9 @@ export default class QuestionClass {
 
   public async getStatementReferences(this: QuestionDocument) {
     return get.statementReferences(this);
+  }
+
+  public async getPageConnections(this: QuestionDocument, options?: {fromCache: boolean}) {
+    return get.pageConnections(this);
   }
 }

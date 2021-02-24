@@ -237,11 +237,8 @@ const _ids = {
     what_is_the_effectiveness_of_covid_19_testing: {
       _id: Types.ObjectId("5fce6a6acf98ce0000e11739"),
     },
-    what_are_the_benefits_of_testing_for_covid_19: {
+    is_testing_for_covid_19_beneficial: {
       _id: Types.ObjectId("5fce6a84cf98ce0000e1173a"),
-    },
-    what_are_the_downsides_of_testing_for_covid_19: {
-      _id: Types.ObjectId("5fce6aa5cf98ce0000e1173b"),
     },
     what_is_a_covid_19_rt_pcr_test: {
       _id: Types.ObjectId("5fce6c17cf98ce0000e11741"),
@@ -277,6 +274,11 @@ const _ids = {
   topics: {
     covid_id_topic: {
       _id: Types.ObjectId("602d76c45d04d902f8e6af19"),
+    },
+  },
+  users: {
+    dev: {
+      _id: Types.ObjectId("603479c629d7b200dda505a0"),
     },
   },
 };

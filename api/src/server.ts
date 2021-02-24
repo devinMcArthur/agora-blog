@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 import { buildSchema } from "type-graphql";
 import { ApolloServer } from "apollo-server-express";
+import decode from "jwt-decode";
 // import { PostgresPersistenceEngine } from "nact-persistence-postgres";
 
 import app from "./app";
@@ -17,6 +18,7 @@ if (process.env.NODE_ENV === "development" || !process.env.NODE_ENV) {
 }
 
 // Setup up mongoose
+import UserResolver from "./api/resolvers/user";
 import PageResolver from "./api/resolvers/page";
 import VariableResolver from "./api/resolvers/variable";
 import QuestionResolver from "./api/resolvers/question";
@@ -31,16 +33,19 @@ import TopicResolver from "./api/resolvers/topic";
 import TopicRowResolver from "./api/resolvers/topicRow";
 import TopicColumnResolver from "./api/resolvers/topicColumn";
 import ImageResolver from "./api/resolvers/image";
+import QuestionPageConnectionResolver from "./api/resolvers/questionPageConnection";
 
 import { spawn_cache_service } from "./actors/cache";
+import authChecker from "./api/utils/authChecker";
+import { Request } from "express";
+import User from "./models/User";
+import AuthContext from "./typescript/interface/authContext";
 
 let system, cacheService: any, apolloServer: any;
 const main = async () => {
   system = start();
   cacheService = spawn_cache_service(system);
 
-  console.log(process.env.NODE_ENV);
-  console.log(process.env.MONGO_URI);
   await mongoose.connect(process.env.MONGO_URI!, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -56,6 +61,7 @@ const main = async () => {
   apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [
+        UserResolver,
         PageResolver,
         ParagraphResolver,
         VariableResolver,
@@ -71,13 +77,21 @@ const main = async () => {
         TopicRowResolver,
         TopicColumnResolver,
         ImageResolver,
+        QuestionPageConnectionResolver,
       ],
-      validate: false,
+      authChecker,
     }),
-    context: ({ req, res }: { req: any; res: any }) => ({
-      req,
-      res,
-    }),
+    context: async ({ req }: { req: Request }) => {
+      const token = req.headers.authorization;
+
+      let user;
+      if (token) {
+        const decoded: AuthContext = decode(token);
+        user = await User.getByID(decoded.user.id);
+      }
+
+      return { user };
+    },
   });
 
   apolloServer.applyMiddleware({

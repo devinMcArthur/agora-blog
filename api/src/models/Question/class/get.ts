@@ -100,59 +100,6 @@ const list = (
   });
 };
 
-const pagesThatReferenceDefaultOptions = {
-  fromCache: false,
-};
-const pagesThatReference = (
-  question: QuestionDocument,
-  options = pagesThatReferenceDefaultOptions
-): Promise<PageDocument[]> => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      options = populateOptions(options, pagesThatReferenceDefaultOptions);
-
-      let pages: PageDocument[] = [];
-      if (options.fromCache) {
-        const cachedQuestion = await performCacheQuery({
-          path: ["questions"],
-          type: "GET_QUESTION",
-          payload: { questionID: question._id },
-        });
-        if (cachedQuestion.relatedPages) {
-          for (let i = 0; i < cachedQuestion.relatedPages.length; i++) {
-            pages[i] = new Page(cachedQuestion.relatedPages[i]);
-          }
-        } else {
-          dispatch(cacheService, {
-            path: ["questions"],
-            type: "SET_QUESTION",
-            payload: { questionID: question._id },
-          });
-        }
-      }
-
-      if (pages.length === 0) {
-        const questionPageConnections: QuestionPageConnectionDocument[] = await QuestionPageConnection.find(
-          {
-            question: question._id,
-          }
-        );
-
-        for (const connection of questionPageConnections) {
-          const page = await Page.getByID(connection.referrerPage!.toString(), {
-            fromCache: true,
-          });
-          if (page) pages.push(page);
-        }
-      }
-
-      resolve(pages);
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
 const referencedCountDefaultOptions = {
   fromCache: false,
 };
@@ -211,10 +158,58 @@ const statementReferences = (
   });
 };
 
+const pageConnectionsDefaultOptions = {
+  fromCache: false,
+}
+const pageConnections = (
+  question: QuestionDocument,
+  options = pageConnectionsDefaultOptions
+) => {
+  return new Promise<QuestionPageConnectionDocument[]>(async (resolve, reject) => {
+    try {
+      options = populateOptions(options, pageConnectionsDefaultOptions)
+
+      let questionPageConnections: QuestionPageConnectionDocument[] = [];
+      if (options.fromCache) {
+        const cachedQuestion = await performCacheQuery({
+          path: ["questions"],
+          type: "GET_QUESTION",
+          payload: {questionID: question._id}
+        });
+        if (cachedQuestion.pageConnections) {
+          for (let i = 0; i < cachedQuestion.pageConnections.length; i++) {
+            questionPageConnections[i] = new QuestionPageConnection(cachedQuestion.pageConnections[i]);
+          }
+        } else {
+          dispatch(cacheService, {
+            path: ["questions"],
+            type: "SET_QUESTION",
+            payload: {questionID: question._id}
+          })
+        }
+      }
+
+      if (questionPageConnections.length === 0) {
+        questionPageConnections = await QuestionPageConnection.find(
+          {
+            question: question._id,
+          }
+        );
+      }
+
+
+      resolve(questionPageConnections);
+    } catch (e) {
+      reject(e);
+    }
+  })
+  
+}
+
 export default {
   byID,
   list,
-  pagesThatReference,
   referencedCount,
   statementReferences,
+  pageConnections
 };

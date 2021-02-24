@@ -1,8 +1,13 @@
 fragment QuestionSnippet on QuestionClass {
   _id
   question
-  relatedPages {
-    ...PageCardSnippet
+  pageConnections {
+    referrerPage {
+      ...PageCardSnippet
+    }
+    statement {
+      _id
+    }
   }
   referencedCount
 }

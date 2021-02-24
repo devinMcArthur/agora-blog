@@ -8,4 +8,8 @@ fragment PageSnippet on PageClass {
   relatedPages {
     ...PageCardSnippet
   }
+  creator {
+    _id
+    username
+  }
 }

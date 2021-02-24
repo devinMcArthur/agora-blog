@@ -52,14 +52,14 @@ const spawn_question_service = (parent: any, questionID: Types.ObjectId) =>
           );
           const question = JSON.parse(JSON.stringify(questionDocument));
 
-          const relatedPages = await questionDocument?.getPagesThatReference({
+          const pageConnections = await questionDocument?.getPageConnections({
             fromCache: false,
           });
           const referencedCount = await questionDocument?.getReferencedCount({
             fromCache: false,
           });
 
-          nextState = { ...question, relatedPages, referencedCount };
+          nextState = { ...question, pageConnections, referencedCount };
 
           dispatch(msg.sender, {
             type: CacheProtocolTypes.SUCCESS,

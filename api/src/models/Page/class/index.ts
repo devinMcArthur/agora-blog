@@ -8,6 +8,7 @@ import GetByIDOptions from "../../../typescript/interface/getByID_Options";
 import ParagraphClass from "../../Paragraph/class";
 import { PageDocument, PageModel } from "..";
 import create from "./create";
+import User from "../../User/class";
 
 @ObjectType()
 export default class PageClass {
@@ -25,6 +26,10 @@ export default class PageClass {
   @Field(() => [ParagraphClass])
   @prop({ ref: "ParagraphClass" })
   public paragraphs!: Ref<ParagraphClass>[];
+
+  @Field(() => User)
+  @prop({ ref: () => User, required: true })
+  public creator!: Ref<User>;
 
   // METHODS
 

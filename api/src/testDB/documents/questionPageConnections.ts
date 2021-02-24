@@ -41,7 +41,8 @@ const createQuestionPageConnections = () => {
             (connection) =>
               connection.question!.toString() === object.question!.toString() &&
               connection.referrerPage!.toString() ===
-                object.referrerPage!.toString()
+                object.referrerPage!.toString() && 
+              connection.statement!.toString() === object.statement!.toString()
           )
         ) {
           // Found a duplicate
