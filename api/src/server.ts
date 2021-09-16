@@ -39,8 +39,6 @@ const main = async () => {
   system = start();
   cacheService = spawn_cache_service(system);
 
-  console.log(process.env.NODE_ENV);
-  console.log(process.env.MONGO_URI);
   await mongoose.connect(process.env.MONGO_URI!, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -84,11 +82,6 @@ const main = async () => {
     app,
     cors: false,
   });
-
-  // await redis.del(mainPagesListKey);
-  // const pages = await Page.getList();
-  // const pageStrings = pages.map((page) => JSON.stringify(page));
-  // await redis.lpush(mainPagesListKey, ...pageStrings);
 
   // Initialize actor system
   // configurePersistence(

@@ -7,6 +7,7 @@ import Analytics from "react-router-ga";
 import HomePage from "./HomePage";
 import Navbar from "./Navbar";
 import Page from "./Page";
+import Playground from "./Playground";
 import Question from "./Question";
 import Questions from "./Questions";
 import Variable from "./Variable";
@@ -31,6 +32,7 @@ function Router() {
             <Route exact path="/q/:questionID" component={Question} />
             <Route exact path="/questions" component={Questions} />
             <Route exact path="/v/:variableID" component={Variable} />
+            <Route exact path="/playground" component={Playground} />
           </>
         </Switch>
       </Analytics>

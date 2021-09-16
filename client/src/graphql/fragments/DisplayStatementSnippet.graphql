@@ -1,10 +1,8 @@
 fragment DisplayStatementSnippet on StatementClass {
+  _id
   versions {
     stringArray {
-      string
-      styles {
-        ...DisplayStyleSnippet
-      }
+      ...FullStringArraySnippet
     }
     sources {
       urls

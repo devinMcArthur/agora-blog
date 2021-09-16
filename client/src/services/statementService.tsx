@@ -86,6 +86,7 @@ export default function StatementService() {
       statement.versions[statement.versions.length - 1].stringArray;
     if (currentStringArray) {
       jsx = currentStringArray.map((object, index) => {
+        const contentString = object.string;
         let newJSX = <span key={index}>{object.string}</span>;
         let placedMention = false;
         if (object.styles) {
@@ -94,13 +95,13 @@ export default function StatementService() {
               if (style.variant === "external") {
                 newJSX = (
                   <ExternalMention key={index} style={style}>
-                    {newJSX}
+                    {contentString}
                   </ExternalMention>
                 );
               } else if (style.variant === "internal") {
                 newJSX = (
                   <InternalMention key={index} style={style}>
-                    {newJSX}
+                    {contentString}
                   </InternalMention>
                 );
               }
@@ -115,26 +116,28 @@ export default function StatementService() {
               newJSX = <Variable style={style} key={index} />;
             } else if (style.type === "image") {
               newJSX = (
-                <Box>
-                  <Box
-                    display="block"
-                    ml="auto"
-                    mr="auto"
-                    w={{ base: "50%", lg: "30%" }}
-                  >
-                    <ImageDisplay image={style.value.image!} />
-                  </Box>
+                <Box
+                  display="block"
+                  ml="auto"
+                  mr="auto"
+                  w={{ base: "50%", lg: "30%" }}
+                >
+                  <ImageDisplay image={style.value.image!} />
                 </Box>
               );
             }
 
             // Bold
             if (style.type === "bold") {
-              newJSX = <strong>{newJSX}</strong>;
+              newJSX = <strong>{contentString}</strong>;
             }
           });
         }
-        return newJSX;
+        return (
+          <span id={index.toString()} className="parent-input">
+            {newJSX}
+          </span>
+        );
       });
     }
     return <span>{jsx}</span>;

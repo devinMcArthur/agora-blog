@@ -194,15 +194,12 @@ export type DisplayParagraphSnippetFragment = (
 
 export type DisplayStatementSnippetFragment = (
   { __typename?: 'StatementClass' }
+  & Pick<StatementClass, '_id'>
   & { versions: Array<(
     { __typename?: 'StatementVersionClass' }
     & { stringArray: Array<(
       { __typename?: 'StringArrayClass' }
-      & Pick<StringArrayClass, 'string'>
-      & { styles: Array<(
-        { __typename?: 'StatementStyleClass' }
-        & DisplayStyleSnippetFragment
-      )> }
+      & FullStringArraySnippetFragment
     )>, sources: (
       { __typename?: 'StatementSourcesClass' }
       & Pick<StatementSourcesClass, 'urls'>
@@ -237,6 +234,15 @@ export type DisplayStyleSnippetFragment = (
       & ImageSnippetFragment
     )> }
   ) }
+);
+
+export type FullStringArraySnippetFragment = (
+  { __typename?: 'StringArrayClass' }
+  & Pick<StringArrayClass, 'string'>
+  & { styles: Array<(
+    { __typename?: 'StatementStyleClass' }
+    & DisplayStyleSnippetFragment
+  )> }
 );
 
 export type ImageSnippetFragment = (
@@ -446,14 +452,20 @@ export const DisplayStyleSnippetFragmentDoc = gql`
   }
 }
     ${ImageSnippetFragmentDoc}`;
+export const FullStringArraySnippetFragmentDoc = gql`
+    fragment FullStringArraySnippet on StringArrayClass {
+  string
+  styles {
+    ...DisplayStyleSnippet
+  }
+}
+    ${DisplayStyleSnippetFragmentDoc}`;
 export const DisplayStatementSnippetFragmentDoc = gql`
     fragment DisplayStatementSnippet on StatementClass {
+  _id
   versions {
     stringArray {
-      string
-      styles {
-        ...DisplayStyleSnippet
-      }
+      ...FullStringArraySnippet
     }
     sources {
       urls
@@ -469,7 +481,7 @@ export const DisplayStatementSnippetFragmentDoc = gql`
     }
   }
 }
-    ${DisplayStyleSnippetFragmentDoc}`;
+    ${FullStringArraySnippetFragmentDoc}`;
 export const DisplayParagraphSnippetFragmentDoc = gql`
     fragment DisplayParagraphSnippet on ParagraphClass {
   statements {
