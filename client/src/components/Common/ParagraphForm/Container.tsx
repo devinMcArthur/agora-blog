@@ -2,21 +2,17 @@ import { Heading } from "@chakra-ui/layout";
 import React from "react";
 import { useParagraphForm } from "../../../contexts/ParagraphForm";
 import Loading from "../Loading";
-import StatementForm from "./StatementForm";
+import SlateTest from "./SlateTest";
 
 const Container = () => {
   const {
-    state: { statements },
+    state: { paragraph },
   } = useParagraphForm();
 
-  if (statements === undefined) return <Loading />;
-  if (statements === null) return <Heading>Unable to find this page</Heading>;
+  if (paragraph === null) return <Heading>Unable to find this page</Heading>;
+  if (paragraph) return <SlateTest />;
 
-  const statementForms = statements.map((statement) => (
-    <StatementForm statement={statement} />
-  ));
-
-  return <div>{statementForms}</div>;
+  return <Loading />;
 };
 
 export default Container;

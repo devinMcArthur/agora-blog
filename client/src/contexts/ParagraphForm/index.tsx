@@ -1,14 +1,33 @@
 import React from "react";
+import { BaseEditor, Descendant } from "slate";
+import { HistoryEditor } from "slate-history";
+import { ReactEditor } from "slate-react";
 import { useImmerReducer } from "use-immer";
 import {
-  DisplayStatementSnippetFragment,
-  FullStringArraySnippetFragment,
+  DisplayParagraphSnippetFragment,
   usePageQuery,
 } from "../../generated/graphql";
-import { getParentSpanFromSelection } from "./utils";
+import { SlateLeaf, SlateStatementElement } from "../../models/slate";
+import { convertParagraphToSlate } from "./utils";
 
 /**
  * ----- Type Initialization -----
+ */
+
+/**
+ * Slate Types
+ */
+
+declare module "slate" {
+  interface CustomTypes {
+    Editor: BaseEditor & ReactEditor & HistoryEditor;
+    Element: SlateStatementElement;
+    Text: SlateLeaf;
+  }
+}
+
+/**
+ * Context Types
  */
 
 interface IParagraphFormProvider {
@@ -17,26 +36,28 @@ interface IParagraphFormProvider {
 }
 
 interface IState {
-  statements: DisplayStatementSnippetFragment[] | null | undefined;
+  paragraph: DisplayParagraphSnippetFragment | null | undefined;
+  slateParagraph: Descendant[] | null | undefined;
 }
 
 interface IParagraphFormContext {
   state: IState;
 
-  handleStatementChange: (statementId: string, element: HTMLElement) => void;
+  updateSlateParagraph: (slateParagraph: Descendant[]) => void;
 }
 
 type IAction =
   | {
       type: "initialize";
-      payload: { statements: DisplayStatementSnippetFragment[] };
+      payload: {
+        paragraph: DisplayParagraphSnippetFragment;
+        slateParagraph: Descendant[];
+      };
     }
   | {
-      type: "update-statement-string";
+      type: "update-slate-paragraph";
       payload: {
-        statementId: string;
-        stringArrayIndex: number;
-        newString: string;
+        slateParagraph: Descendant[];
       };
     };
 
@@ -45,7 +66,8 @@ type IAction =
  */
 
 const initialState: IState = {
-  statements: undefined,
+  paragraph: undefined,
+  slateParagraph: undefined,
 };
 
 const ParagraphFormContext = React.createContext<
@@ -57,40 +79,19 @@ const ParagraphFormContext = React.createContext<
  */
 
 const ParagraphFormReducer = (draft: IState, action: IAction): IState => {
-  const updateStatementStringArray = (
-    statementId: string,
-    stringArrayIndex: number,
-    newStringArray: Partial<FullStringArraySnippetFragment>
-  ) => {
-    if (draft.statements) {
-      const statement = draft.statements.find(
-        (statement) => statement._id === statementId
-      );
-
-      if (statement) {
-        statement.versions[0].stringArray[stringArrayIndex] = {
-          ...statement.versions[0].stringArray[stringArrayIndex],
-          ...newStringArray,
-        };
-      } else console.warn("Unable to find statement with that Id");
-    } else console.warn("No statements in state");
-  };
-
   switch (action.type) {
     case "initialize": {
       return {
         ...draft,
-        statements: action.payload.statements,
+        paragraph: action.payload.paragraph,
+        slateParagraph: action.payload.slateParagraph,
       };
     }
-    case "update-statement-string": {
-      updateStatementStringArray(
-        action.payload.statementId,
-        action.payload.stringArrayIndex,
-        { string: action.payload.newString }
-      );
-
-      return draft;
+    case "update-slate-paragraph": {
+      return {
+        ...draft,
+        slateParagraph: action.payload.slateParagraph,
+      };
     }
   }
 };
@@ -105,8 +106,6 @@ const ParagraphFormProvider = ({
 }: IParagraphFormProvider) => {
   const [state, dispatch] = useImmerReducer(ParagraphFormReducer, initialState);
 
-  console.log("statements", state.statements);
-
   /**
    * ----- GraphQL Calls -----
    */
@@ -119,66 +118,13 @@ const ParagraphFormProvider = ({
    * ----- Functions ------
    */
 
-  const handleStatementChange: IParagraphFormContext["handleStatementChange"] =
-    (statementId, element) => {
-      const selectionParent = getSelectionParent();
-
-      if (selectionParent && selectionParent.id) {
-        const selection = document.getSelection();
-
-        if (
-          selection &&
-          selection.anchorNode &&
-          selection.anchorOffset &&
-          selection.focusNode &&
-          selection.focusOffset
-        ) {
-          const range = document.createRange();
-          const anchorNode = selection.anchorNode,
-            anchorOffset = Number(selection.anchorOffset),
-            focusNode = selection.focusNode,
-            focusOffset = Number(selection.focusOffset);
-          range.setStart(anchorNode, anchorOffset);
-          range.setEnd(focusNode, focusOffset);
-
-          console.log("range1", range);
-          console.log("anchorOffest", { anchorOffset });
-
-          updateStringArrayString(
-            statementId,
-            Number(selectionParent.id),
-            selectionParent.innerText
-          );
-
-          console.log("range2", range);
-
-          selection.removeAllRanges();
-          selection.addRange(range);
-        }
-      } else console.warn("Unable to find statement id from element");
-    };
-
-  const updateStringArrayString = (
-    statementId: string,
-    stringArrayIndex: number,
-    string: string
-  ) => {
+  const updateSlateParagraph = (slateParagraph: Descendant[]) => {
     dispatch({
-      type: "update-statement-string",
+      type: "update-slate-paragraph",
       payload: {
-        newString: string,
-        statementId,
-        stringArrayIndex,
+        slateParagraph,
       },
     });
-  };
-
-  const getSelectionParent = () => {
-    const selection = document.getSelection();
-
-    console.log("selection", selection);
-
-    return getParentSpanFromSelection(selection);
   };
 
   /**
@@ -189,18 +135,18 @@ const ParagraphFormProvider = ({
     if (!pageLoading && pageData?.page?.currentParagraph) {
       dispatch({
         type: "initialize",
-        payload: { statements: pageData.page.currentParagraph.statements },
+        payload: {
+          paragraph: pageData.page.currentParagraph,
+          slateParagraph: convertParagraphToSlate(
+            pageData.page.currentParagraph
+          ),
+        },
       });
     }
   }, [pageData, pageLoading, dispatch]);
 
-  // document.onselectionchange = () => {
-  //   const parentNode = getSelectionParent();
-  //   console.log("parent", parentNode?.innerText);
-  // };
-
   return (
-    <ParagraphFormContext.Provider value={{ state, handleStatementChange }}>
+    <ParagraphFormContext.Provider value={{ state, updateSlateParagraph }}>
       {children}
     </ParagraphFormContext.Provider>
   );
