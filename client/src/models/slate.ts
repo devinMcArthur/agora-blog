@@ -2,7 +2,10 @@ export type SlateLeaf = {
   text: string;
   bold?: boolean;
   italic?: boolean;
-  internalMentionPageId?: string;
+  internalMentionPage?: {
+    id: string;
+    title: string;
+  };
   externalMentionUrl?: string;
   variableId?: string;
   quoteStatementId?: string;
@@ -11,7 +14,7 @@ export type SlateLeaf = {
 export enum SlateMarks {
   bold = "bold",
   italic = "italic",
-  internalMentionPageId = "internalMentionPageId",
+  internalMentionPage = "internalMentionPage",
   externalMentionUrl = "externalMentionUrl",
   variableId = "variableId",
   quoteStatementId = "quoteStatementId",

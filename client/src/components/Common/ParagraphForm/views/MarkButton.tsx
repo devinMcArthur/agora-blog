@@ -2,7 +2,11 @@ import React from "react";
 
 import { Button } from "@chakra-ui/button";
 import { Editor } from "slate";
-import { SlateMarks, SlateStyleTypes } from "../../../../models/slate";
+import {
+  SlateLeaf,
+  SlateMarks,
+  SlateStyleTypes,
+} from "../../../../models/slate";
 import { CustomEditor } from "../utils";
 
 import { FaBold, FaLink, FaItalic } from "react-icons/fa";
@@ -12,7 +16,7 @@ import { Box } from "@chakra-ui/react";
 interface IMarkButton {
   editor: Editor;
   type: SlateStyleTypes;
-  toggleLinkForm?: () => void;
+  toggleLinkForm?: (marks?: Omit<SlateLeaf, "text"> | null) => void;
 }
 
 const MarkButton: React.FC<IMarkButton> = ({
@@ -41,16 +45,12 @@ const MarkButton: React.FC<IMarkButton> = ({
       case SlateStyleTypes.link: {
         const isActive =
           CustomEditor.isMarkActive(editor, SlateMarks.externalMentionUrl) ||
-          CustomEditor.isMarkActive(editor, SlateMarks.internalMentionPageId);
+          CustomEditor.isMarkActive(editor, SlateMarks.internalMentionPage);
 
         return {
           label: isActive ? <FaLink /> : <FiLink />,
           onClick: () => {
-            if (isActive) {
-              CustomEditor.removeLink(editor);
-            } else {
-              if (toggleLinkForm) toggleLinkForm();
-            }
+            if (toggleLinkForm) toggleLinkForm(CustomEditor.getMarks(editor));
           },
         };
       }

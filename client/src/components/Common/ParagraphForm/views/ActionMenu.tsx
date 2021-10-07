@@ -3,10 +3,21 @@ import React from "react";
 import { css, cx } from "@emotion/css";
 import MarkButton from "./MarkButton";
 import { Editor, Range, Transforms } from "slate";
-import { SlateStyleTypes } from "../../../../models/slate";
+import {
+  SlateLeaf,
+  SlateMarks,
+  SlateStyleTypes,
+} from "../../../../models/slate";
 import LinkForm from "./LinkForm";
 import { useParagraphForm } from "../../../../contexts/ParagraphForm";
 import { CustomEditor } from "../utils";
+import isValidUrl from "../../../../utils/isValidUrl";
+import { Box, Divider } from "@chakra-ui/layout";
+import { useOutsideClick } from "@chakra-ui/hooks";
+
+enum ShowForm {
+  Link = "Link",
+}
 
 interface IActionMenu {
   editor: Editor;
@@ -18,39 +29,78 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
 
   const ref = React.useRef<HTMLDivElement | null>(null);
 
-  const [linkForm, setLinkForm] = React.useState(false);
+  const [form, setForm] = React.useState<ShowForm>();
+
+  const [linkFormError, setLinkFormError] = React.useState(false);
+  const [linkFormDefault, setLinkFormDefault] = React.useState("");
 
   /**
    * ------ Functions ------
    */
 
-  const toggleLinkForm = () => {
-    if (linkForm) {
+  const toggleLinkForm = (marks?: Omit<SlateLeaf, "text"> | null) => {
+    if (form === ShowForm.Link) {
       // Toggling link form off
       if (savedSelection?.slateSelection) {
         Transforms.select(editor, savedSelection.slateSelection);
         restoreDomSelection();
         clearSelection();
       }
+      setLinkFormDefault("");
+      setForm(undefined);
     } else {
       // Toggling link form on
       saveSelection(Object.assign({}, editor.selection));
+
+      if (marks?.externalMentionUrl) {
+        setLinkFormDefault(marks.externalMentionUrl);
+      } else if (marks?.internalMentionPage) {
+        setLinkFormDefault(marks.internalMentionPage.title);
+      }
+
+      setForm(ShowForm.Link);
     }
-    setLinkForm(!linkForm);
   };
 
-  const linkSubmit = (value: string) => {
+  const externalLinkSubmit = (value: string) => {
     /**
      * Toggle must be first to allow selection to be reinstated so mark is added
      * in correct location
      */
-    toggleLinkForm();
-    CustomEditor.toggleExternalUrl(editor, value);
+
+    if (isValidUrl(value)) {
+      toggleLinkForm();
+      CustomEditor.setExternalUrl(editor, value);
+    } else {
+      setLinkFormError(true);
+    }
   };
+
+  const internalLinkSubmit = (page: { id: string; title: string }) => {
+    toggleLinkForm();
+    CustomEditor.setInternal(editor, page);
+  };
+
+  /**
+   * ----- Variables -----
+   */
+
+  const linkMarkActive = React.useMemo(() => {
+    return (
+      CustomEditor.isMarkActive(editor, SlateMarks.externalMentionUrl) ||
+      CustomEditor.isMarkActive(editor, SlateMarks.internalMentionPage)
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor, form]);
 
   /**
    * ----- Use-effects and other logic -----
    */
+
+  useOutsideClick({
+    ref: ref,
+    handler: () => clearSelection(),
+  });
 
   React.useEffect(() => {
     const el = ref.current;
@@ -65,7 +115,7 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
         Range.isCollapsed(selection) ||
         Editor.string(editor, selection) === "")
     ) {
-      if (linkForm) toggleLinkForm();
+      if (!!form) toggleLinkForm();
       el.removeAttribute("style");
       return;
     }
@@ -75,7 +125,7 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
     // Clear savedSelection if another section is made outside of linkForm
     if (
       savedSelection &&
-      linkForm &&
+      !!form &&
       selection?.anchor.offset !==
         savedSelection.slateSelection?.anchor.offset &&
       selection?.focus.offset !== savedSelection.slateSelection?.focus.offset &&
@@ -115,23 +165,44 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
           background-color: #222;
           border-radius: 4px;
           transition: opacity 0.75s;
+          width: auto;
           & > * {
             display: inline-block;
           }
           & > * + * {
             margin-left: 15px;
+            margin-right: 15px;
           }
         `
       )}
     >
-      <MarkButton editor={editor} type={SlateStyleTypes.bold} />
-      <MarkButton editor={editor} type={SlateStyleTypes.italic} />
-      <MarkButton
-        editor={editor}
-        type={SlateStyleTypes.link}
-        toggleLinkForm={toggleLinkForm}
-      />
-      <LinkForm active={linkForm} handleSubmit={linkSubmit} />
+      <Box display="flex" flexDir="column">
+        <Box display="flex" flexDir="row">
+          <MarkButton editor={editor} type={SlateStyleTypes.bold} />
+          <MarkButton editor={editor} type={SlateStyleTypes.italic} />
+          <MarkButton
+            editor={editor}
+            type={SlateStyleTypes.link}
+            toggleLinkForm={toggleLinkForm}
+          />
+        </Box>
+
+        {form && (
+          <>
+            <Divider marginTop={1} marginBottom={1} color="white" />
+            {form === ShowForm.Link && (
+              <LinkForm
+                handleSubmit={externalLinkSubmit}
+                pageSelect={internalLinkSubmit}
+                isInvalid={linkFormError}
+                defaultValue={linkFormDefault}
+                markActive={linkMarkActive}
+                removeMark={() => CustomEditor.removeLink(editor)}
+              />
+            )}
+          </>
+        )}
+      </Box>
     </div>
   );
 };

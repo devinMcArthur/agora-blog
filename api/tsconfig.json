@@ -35,7 +35,8 @@
       "@actors/*": ["actors/*"],
       "@typescript/*": ["typescript/*"],
       "@utils/*": ["utils/*"],
-      "@validation/*": ["validation/*"]
+      "@validation/*": ["validation/*"],
+      "@api/*": ["api/*"]
     }
   },
   "exclude": ["node_modules"],

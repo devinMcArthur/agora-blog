@@ -14,4 +14,8 @@ const pages = async () => {
   return await Page.getList({ fromCache: true });
 };
 
-export default { page, pages };
+const searchPages = async (searchString: string) => {
+  return Page.search(searchString);
+};
+
+export default { page, pages, searchPages };

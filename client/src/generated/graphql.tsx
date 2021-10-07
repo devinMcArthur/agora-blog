@@ -19,17 +19,22 @@ export type Query = {
   __typename?: 'Query';
   page?: Maybe<PageClass>;
   pages: Array<PageClass>;
+  searchPages: Array<PageClass>;
   variable?: Maybe<VariableClass>;
   question?: Maybe<QuestionClass>;
   questions: Array<QuestionClass>;
   statement?: Maybe<StatementClass>;
-  topic?: Maybe<Topic>;
 };
 
 
 export type QueryPageArgs = {
   id?: Maybe<Scalars['ID']>;
   slug?: Maybe<Scalars['String']>;
+};
+
+
+export type QuerySearchPagesArgs = {
+  searchString: Scalars['String'];
 };
 
 
@@ -44,11 +49,6 @@ export type QueryQuestionArgs = {
 
 
 export type QueryStatementArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type QueryTopicArgs = {
   id: Scalars['ID'];
 };
 
@@ -161,29 +161,6 @@ export type QuestionClass = {
   relatedPages: Array<PageClass>;
 };
 
-export type Topic = {
-  __typename?: 'Topic';
-  _id: Scalars['ID'];
-  title: Scalars['String'];
-  slug: Scalars['String'];
-  rows: Array<TopicRow>;
-};
-
-export type TopicRow = {
-  __typename?: 'TopicRow';
-  columns: Array<TopicColumn>;
-};
-
-export type TopicColumn = {
-  __typename?: 'TopicColumn';
-  type: Scalars['String'];
-  title?: Maybe<Scalars['String']>;
-  page?: Maybe<PageClass>;
-  pages: Array<PageClass>;
-  statement?: Maybe<StatementClass>;
-  variables: Array<VariableClass>;
-};
-
 export type DisplayParagraphSnippetFragment = (
   { __typename?: 'ParagraphClass' }
   & { statements: Array<(
@@ -250,6 +227,11 @@ export type ImageSnippetFragment = (
   & Pick<Image, 'name' | 'sourceURL' | 'caption' | 'buffer' | 'contentType'>
 );
 
+export type LinkFormPageSnippetFragment = (
+  { __typename?: 'PageClass' }
+  & Pick<PageClass, '_id' | 'title'>
+);
+
 export type PageCardSnippetFragment = (
   { __typename?: 'PageClass' }
   & Pick<PageClass, '_id' | 'title' | 'slug' | 'referencedCount'>
@@ -285,35 +267,6 @@ export type QuestionSnippetFragment = (
   )> }
 );
 
-export type TopicSnippetFragment = (
-  { __typename?: 'Topic' }
-  & Pick<Topic, '_id' | 'title' | 'slug'>
-  & { rows: Array<(
-    { __typename?: 'TopicRow' }
-    & { columns: Array<(
-      { __typename?: 'TopicColumn' }
-      & Pick<TopicColumn, 'type' | 'title'>
-      & { page?: Maybe<(
-        { __typename?: 'PageClass' }
-        & PageCardSnippetFragment
-      )>, pages: Array<(
-        { __typename?: 'PageClass' }
-        & Pick<PageClass, 'title' | 'slug'>
-      )>, variables: Array<(
-        { __typename?: 'VariableClass' }
-        & Pick<VariableClass, '_id' | 'title' | 'finalValue'>
-      )>, statement?: Maybe<(
-        { __typename?: 'StatementClass' }
-        & { page: (
-          { __typename?: 'PageClass' }
-          & Pick<PageClass, 'title' | 'slug'>
-        ) }
-        & DisplayStatementSnippetFragment
-      )> }
-    )> }
-  )> }
-);
-
 export type VariableSnippetFragment = (
   { __typename?: 'VariableClass' }
   & Pick<VariableClass, '_id' | 'title'>
@@ -323,6 +276,19 @@ export type VariableSnippetFragment = (
   )>, relatedPages: Array<(
     { __typename?: 'PageClass' }
     & PageCardSnippetFragment
+  )> }
+);
+
+export type LinkFormPageSearchQueryVariables = Exact<{
+  searchString: Scalars['String'];
+}>;
+
+
+export type LinkFormPageSearchQuery = (
+  { __typename?: 'Query' }
+  & { searchPages: Array<(
+    { __typename?: 'PageClass' }
+    & LinkFormPageSnippetFragment
   )> }
 );
 
@@ -392,19 +358,6 @@ export type StatementQuery = (
   )> }
 );
 
-export type TopicQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-
-export type TopicQuery = (
-  { __typename?: 'Query' }
-  & { topic?: Maybe<(
-    { __typename?: 'Topic' }
-    & TopicSnippetFragment
-  )> }
-);
-
 export type VariableQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -418,6 +371,12 @@ export type VariableQuery = (
   )> }
 );
 
+export const LinkFormPageSnippetFragmentDoc = gql`
+    fragment LinkFormPageSnippet on PageClass {
+  _id
+  title
+}
+    `;
 export const ImageSnippetFragmentDoc = gql`
     fragment ImageSnippet on Image {
   name
@@ -531,39 +490,6 @@ export const QuestionSnippetFragmentDoc = gql`
   referencedCount
 }
     ${PageCardSnippetFragmentDoc}`;
-export const TopicSnippetFragmentDoc = gql`
-    fragment TopicSnippet on Topic {
-  _id
-  title
-  slug
-  rows {
-    columns {
-      type
-      title
-      page {
-        ...PageCardSnippet
-      }
-      pages {
-        title
-        slug
-      }
-      variables {
-        _id
-        title
-        finalValue
-      }
-      statement {
-        ...DisplayStatementSnippet
-        page {
-          title
-          slug
-        }
-      }
-    }
-  }
-}
-    ${PageCardSnippetFragmentDoc}
-${DisplayStatementSnippetFragmentDoc}`;
 export const VariableSnippetFragmentDoc = gql`
     fragment VariableSnippet on VariableClass {
   _id
@@ -579,6 +505,39 @@ export const VariableSnippetFragmentDoc = gql`
   }
 }
     ${PageCardSnippetFragmentDoc}`;
+export const LinkFormPageSearchDocument = gql`
+    query LinkFormPageSearch($searchString: String!) {
+  searchPages(searchString: $searchString) {
+    ...LinkFormPageSnippet
+  }
+}
+    ${LinkFormPageSnippetFragmentDoc}`;
+
+/**
+ * __useLinkFormPageSearchQuery__
+ *
+ * To run a query within a React component, call `useLinkFormPageSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLinkFormPageSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLinkFormPageSearchQuery({
+ *   variables: {
+ *      searchString: // value for 'searchString'
+ *   },
+ * });
+ */
+export function useLinkFormPageSearchQuery(baseOptions: Apollo.QueryHookOptions<LinkFormPageSearchQuery, LinkFormPageSearchQueryVariables>) {
+        return Apollo.useQuery<LinkFormPageSearchQuery, LinkFormPageSearchQueryVariables>(LinkFormPageSearchDocument, baseOptions);
+      }
+export function useLinkFormPageSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LinkFormPageSearchQuery, LinkFormPageSearchQueryVariables>) {
+          return Apollo.useLazyQuery<LinkFormPageSearchQuery, LinkFormPageSearchQueryVariables>(LinkFormPageSearchDocument, baseOptions);
+        }
+export type LinkFormPageSearchQueryHookResult = ReturnType<typeof useLinkFormPageSearchQuery>;
+export type LinkFormPageSearchLazyQueryHookResult = ReturnType<typeof useLinkFormPageSearchLazyQuery>;
+export type LinkFormPageSearchQueryResult = Apollo.QueryResult<LinkFormPageSearchQuery, LinkFormPageSearchQueryVariables>;
 export const PageDocument = gql`
     query Page($slug: String, $id: ID) {
   page(slug: $slug, id: $id) {
@@ -747,39 +706,6 @@ export function useStatementLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type StatementQueryHookResult = ReturnType<typeof useStatementQuery>;
 export type StatementLazyQueryHookResult = ReturnType<typeof useStatementLazyQuery>;
 export type StatementQueryResult = Apollo.QueryResult<StatementQuery, StatementQueryVariables>;
-export const TopicDocument = gql`
-    query Topic($id: ID!) {
-  topic(id: $id) {
-    ...TopicSnippet
-  }
-}
-    ${TopicSnippetFragmentDoc}`;
-
-/**
- * __useTopicQuery__
- *
- * To run a query within a React component, call `useTopicQuery` and pass it any options that fit your needs.
- * When your component renders, `useTopicQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useTopicQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useTopicQuery(baseOptions: Apollo.QueryHookOptions<TopicQuery, TopicQueryVariables>) {
-        return Apollo.useQuery<TopicQuery, TopicQueryVariables>(TopicDocument, baseOptions);
-      }
-export function useTopicLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TopicQuery, TopicQueryVariables>) {
-          return Apollo.useLazyQuery<TopicQuery, TopicQueryVariables>(TopicDocument, baseOptions);
-        }
-export type TopicQueryHookResult = ReturnType<typeof useTopicQuery>;
-export type TopicLazyQueryHookResult = ReturnType<typeof useTopicLazyQuery>;
-export type TopicQueryResult = Apollo.QueryResult<TopicQuery, TopicQueryVariables>;
 export const VariableDocument = gql`
     query Variable($id: ID!) {
   variable(id: $id) {

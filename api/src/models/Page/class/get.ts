@@ -159,7 +159,36 @@ const search = (
 ): Promise<PageDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const pages = await Page.find({ $text: { $search: searchString } });
+      /**
+       * Partial Search
+       */
+      const partialSearch = async () => {
+        const escapeRegex = (text: string) => {
+          return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+        };
+
+        return Page.find({
+          title: new RegExp(escapeRegex(searchString), "gi"),
+        });
+      };
+
+      /**
+       * Full Search
+       */
+      const fullSearch = async () => {
+        return Page.find({
+          $text: { $search: searchString, $caseSensitive: false },
+        });
+      };
+
+      /**
+       * Final Combination
+       */
+
+      let pages: PageDocument[] = await fullSearch();
+      if (pages.length < 1) {
+        pages = await partialSearch();
+      }
 
       resolve(pages);
     } catch (e) {

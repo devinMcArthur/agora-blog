@@ -1,7 +1,12 @@
 import { Arg, FieldResolver, ID, Query, Resolver, Root } from "type-graphql";
 import { Types } from "mongoose";
 
-import { StatementClass, StatementDocument, PageDocument } from "@models";
+import {
+  StatementClass,
+  StatementDocument,
+  PageDocument,
+  PageClass,
+} from "@models";
 
 import fieldResolvers from "./fieldResolvers";
 import queries from "./queries";
@@ -12,7 +17,7 @@ export default class StatementResolver {
    * Field Resolvers
    */
 
-  @FieldResolver()
+  @FieldResolver(() => PageClass)
   async page(
     @Root() statement: StatementDocument
   ): Promise<PageDocument | null> {

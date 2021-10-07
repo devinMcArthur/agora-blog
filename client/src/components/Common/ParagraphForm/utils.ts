@@ -8,6 +8,9 @@ export const CustomEditor = {
     if (!marks) return false;
     return !!marks[mark];
   },
+  getMarks: (editor: Editor) => {
+    return Editor.marks(editor);
+  },
   toggleBold: (editor: Editor) => {
     const isActive = CustomEditor.isMarkActive(editor, SlateMarks.bold);
 
@@ -17,37 +20,40 @@ export const CustomEditor = {
       Editor.addMark(editor, SlateMarks.bold, true);
     }
   },
-  toggleExternalUrl: (editor: Editor, url?: string) => {
+  setExternalUrl: (editor: Editor, url?: string) => {
     // Remove internal mention if necessary
     const isInternalActive = CustomEditor.isMarkActive(
       editor,
-      SlateMarks.internalMentionPageId
+      SlateMarks.internalMentionPage
     );
     if (isInternalActive)
-      Editor.removeMark(editor, SlateMarks.internalMentionPageId);
+      Editor.removeMark(editor, SlateMarks.internalMentionPage);
 
-    // Handle external link
-    const isActive = CustomEditor.isMarkActive(
+    if (url) {
+      Editor.addMark(editor, SlateMarks.externalMentionUrl, url);
+    }
+  },
+  setInternal: (editor: Editor, value?: { id: string; title: string }) => {
+    // Remove external mention if necessary
+    const isExternalActive = CustomEditor.isMarkActive(
       editor,
       SlateMarks.externalMentionUrl
     );
-
-    if (isActive) {
-      console.log("removeMark");
+    if (isExternalActive)
       Editor.removeMark(editor, SlateMarks.externalMentionUrl);
-    } else {
-      console.log("addMark", url);
-      Editor.addMark(editor, SlateMarks.externalMentionUrl, url);
+
+    if (value) {
+      Editor.addMark(editor, SlateMarks.internalMentionPage, value);
     }
   },
   removeLink: (editor: Editor) => {
     console.log("removeLink");
     const internalActive = CustomEditor.isMarkActive(
       editor,
-      SlateMarks.internalMentionPageId
+      SlateMarks.internalMentionPage
     );
     if (internalActive)
-      Editor.removeMark(editor, SlateMarks.internalMentionPageId);
+      Editor.removeMark(editor, SlateMarks.internalMentionPage);
 
     const externalActive = CustomEditor.isMarkActive(
       editor,

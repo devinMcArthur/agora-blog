@@ -5,20 +5,22 @@ import {
   PageDocument,
   ParagraphDocument,
   StatementDocument,
+  PageClass,
+  StatementClass,
 } from "@models";
 
 import fieldResolvers from "./fieldResolvers";
 
 @Resolver(() => ParagraphClass)
 export default class ParagraphResolver {
-  @FieldResolver()
+  @FieldResolver(() => PageClass)
   async page(
     @Root() paragraph: ParagraphDocument
   ): Promise<PageDocument | null> {
     return fieldResolvers.page(paragraph);
   }
 
-  @FieldResolver()
+  @FieldResolver(() => [StatementClass])
   async statements(
     @Root() paragraph: ParagraphDocument
   ): Promise<StatementDocument[]> {

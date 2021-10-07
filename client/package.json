@@ -30,6 +30,7 @@
     "react-router-dom": "5.2.0",
     "react-router-ga": "1.2.3",
     "react-scripts": "4.0.1",
+    "react-select": "^5.1.0",
     "slate": "^0.66.1",
     "slate-history": "^0.66.0",
     "slate-react": "^0.66.1",

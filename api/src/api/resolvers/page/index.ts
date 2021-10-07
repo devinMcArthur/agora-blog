@@ -1,4 +1,5 @@
 import {
+  Arg,
   Args,
   ArgsType,
   Field,
@@ -64,5 +65,10 @@ export default class PageResolver {
   @Query(() => [PageClass])
   async pages(): Promise<PageDocument[]> {
     return queries.pages();
+  }
+
+  @Query(() => [PageClass])
+  async searchPages(@Arg("searchString") searchString: string) {
+    return queries.searchPages(searchString);
   }
 }

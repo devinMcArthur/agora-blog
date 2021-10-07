@@ -45,7 +45,11 @@ export const convertStringArrayToSlate = (
       style.variant === "internal" &&
       style.value.page
     ) {
-      leaf[SlateMarks.internalMentionPageId] = style.value.page._id;
+      console.log("internal", style.value);
+      leaf[SlateMarks.internalMentionPage] = {
+        id: style.value.page._id,
+        title: style.value.page.title,
+      };
     }
 
     if (

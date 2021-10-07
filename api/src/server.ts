@@ -15,20 +15,8 @@ if (process.env.NODE_ENV === "development" || !process.env.NODE_ENV) {
   dotenv.config({ path: path.join(__dirname, "..", ".env.development") });
 }
 
-// Setup up mongoose
-import PageResolver from "./api/resolvers/page";
-import VariableResolver from "./api/resolvers/variable";
-import QuestionResolver from "./api/resolvers/question";
-import ParagraphResolver from "./api/resolvers/paragraph";
-import StatementResolver from "./api/resolvers/statement";
-import StatementValueResolver from "./api/resolvers/statementValue";
-import VariableVersionResolver from "./api/resolvers/variableVersion";
-import StatementSourcesResolver from "./api/resolvers/statementSources";
-import StatementVersionResolver from "./api/resolvers/statementVersion";
-import VariableEquationResolver from "./api/resolvers/variableEquation";
-import ImageResolver from "./api/resolvers/image";
-
 import { spawn_cache_service } from "./actors/cache";
+import createApp from "./app";
 
 let system, cacheService: any, apolloServer: any;
 const main = async () => {
@@ -47,43 +35,7 @@ const main = async () => {
 
   let port = process.env.PORT || 8080;
 
-  app.use(cors());
-
-  apolloServer = new ApolloServer({
-    schema: await buildSchema({
-      resolvers: [
-        PageResolver,
-        ParagraphResolver,
-        VariableResolver,
-        QuestionResolver,
-        VariableResolver,
-        StatementResolver,
-        StatementValueResolver,
-        VariableVersionResolver,
-        VariableEquationResolver,
-        StatementSourcesResolver,
-        StatementVersionResolver,
-        ImageResolver,
-      ],
-      validate: false,
-    }),
-    context: ({ req, res }: { req: any; res: any }) => ({
-      req,
-      res,
-    }),
-  });
-
-  apolloServer.applyMiddleware({
-    app,
-    cors: false,
-  });
-
-  // Initialize actor system
-  // configurePersistence(
-  //   new PostgresPersistenceEngine(
-  //     `${process.env.PG_HOST}:${process.env.PG_PORT}`
-  //   )
-  //
+  const app = await createApp();
 
   app.listen(port, () => console.log(`Server running on port ${port}`));
 };

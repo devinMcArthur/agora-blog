@@ -71,7 +71,7 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
     children = <span style={{ color: "purple" }}>{children}</span>;
   }
 
-  if (leaf.internalMentionPageId) {
+  if (leaf.internalMentionPage) {
     children = <span style={{ color: "blue" }}>{children}</span>;
   }
 

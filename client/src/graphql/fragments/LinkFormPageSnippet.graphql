@@ -1,0 +1,4 @@
+fragment LinkFormPageSnippet on PageClass {
+  _id
+  title
+}
