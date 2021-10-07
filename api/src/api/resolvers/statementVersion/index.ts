@@ -3,8 +3,9 @@ import { FieldResolver, Resolver, Root } from "type-graphql";
 import {
   StatementVersionClass,
   StatementVersionDocument,
-} from "../../../models/Statement/class";
-import { QuestionDocument } from "../../../models/Question";
+  QuestionDocument,
+} from "@models";
+
 import fieldResolvers from "./fieldResolvers";
 
 @Resolver(() => StatementVersionClass)

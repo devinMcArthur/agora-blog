@@ -1,5 +1,6 @@
 import { dispatch, spawn } from "nact";
-import Page from "../../models/Page";
+
+import { Page } from "@models";
 
 export const ProtocolTypes = {
   GET_LIST: "GET_LIST",

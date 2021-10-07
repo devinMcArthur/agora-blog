@@ -1,10 +1,12 @@
 import { FieldResolver, Resolver, Root } from "type-graphql";
 
-import VariableClass, {
+import {
+  VariableClass,
   VariableEquationClass,
   VariableEquationDocument,
-} from "../../../models/Variable/class";
-import { VariableDocument } from "../../../models/Variable";
+  VariableDocument,
+} from "@models";
+
 import fieldResolvers from "./fieldResolvers";
 
 @Resolver(() => VariableEquationClass)

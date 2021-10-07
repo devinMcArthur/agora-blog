@@ -1,5 +1,4 @@
-import Question, { QuestionDocument } from "../../../models/Question";
-import { StatementVersionDocument } from "../../../models/Statement/class";
+import { Question, QuestionDocument, StatementVersionDocument } from "@models";
 
 const questions = async (statementVersion: StatementVersionDocument) => {
   const questions: QuestionDocument[] = [];

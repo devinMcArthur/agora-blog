@@ -1,5 +1,4 @@
-import Page, { PageDocument } from "../../../models/Page";
-import { StatementSourcesDocument } from "../../../models/Statement/class";
+import { Page, PageDocument, StatementSourcesDocument } from "@models";
 
 const pages = async (statementSources: StatementSourcesDocument) => {
   const pages: PageDocument[] = [];

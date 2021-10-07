@@ -1,14 +1,19 @@
 import { Types } from "mongoose";
 import { dispatch } from "nact";
-import { StatementDocument } from "../../../models/Statement";
-import { cacheService } from "../../../server";
-import performCacheQuery from "../../../utils/performCacheQuery";
-import isEmpty from "../../../validation/isEmpty";
-import { ParagraphDocument, ParagraphModel } from "..";
-import GetByIDOptions from "../../../typescript/interface/getByID_Options";
-import populateOptions from "../../../utils/populateOptions";
 
-import Statement from "../../Statement";
+import {
+  Statement,
+  StatementDocument,
+  ParagraphDocument,
+  ParagraphModel,
+} from "@models";
+
+import performCacheQuery from "@utils/performCacheQuery";
+import isEmpty from "@validation/isEmpty";
+import GetByIDOptions from "@typescript/interface/getByID_Options";
+import populateOptions from "@utils/populateOptions";
+
+import { cacheService } from "../../../server";
 
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,

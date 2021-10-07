@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { dispatch, spawn, spawnStateless } from "nact";
-import Statement from "../../models/Statement";
+
+import { Statement } from "@models";
 
 const spawn_statements_service = (cacheActor: any) =>
   spawnStateless(

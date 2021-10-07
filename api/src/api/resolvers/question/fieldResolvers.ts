@@ -1,4 +1,4 @@
-import { QuestionDocument } from "src/models/Question";
+import { QuestionDocument } from "@models";
 
 const referencedCount = async (question: QuestionDocument) => {
   return await question.getReferencedCount({ fromCache: true });

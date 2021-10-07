@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { dispatch, spawn, spawnStateless } from "nact";
-import Paragraph from "../../models/Paragraph";
+
+import { Paragraph } from "@models";
 
 const spawn_paragraphs_service = (cacheActor: any) =>
   spawnStateless(

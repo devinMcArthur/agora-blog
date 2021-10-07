@@ -1,9 +1,7 @@
 import { FieldResolver, Resolver, Root } from "type-graphql";
 
-import {
-  VariableVersionClass,
-  VariableVersionDocument,
-} from "../../../models/Variable/class";
+import { VariableVersionClass, VariableVersionDocument } from "@models";
+
 import fieldResolvers from "./fieldResolvers";
 
 @Resolver(() => VariableVersionClass)

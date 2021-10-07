@@ -1,10 +1,11 @@
 import { FieldResolver, Resolver, Root } from "type-graphql";
 
-import { PageDocument } from "../../../models/Page";
 import {
+  PageDocument,
   StatementSourcesClass,
   StatementSourcesDocument,
-} from "../../../models/Statement/class";
+} from "@models";
+
 import fieldResolvers from "./fieldResolvers";
 
 @Resolver(() => StatementSourcesClass)

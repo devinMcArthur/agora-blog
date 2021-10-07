@@ -1,10 +1,13 @@
 import { Arg, FieldResolver, ID, Query, Resolver, Root } from "type-graphql";
 import { Types } from "mongoose";
 
-import QuestionClass from "../../../models/Question/class";
-import { QuestionDocument } from "../../../models/Question";
-import { PageDocument } from "../../../models/Page";
-import PageClass from "../../../models/Page/class";
+import {
+  QuestionClass,
+  QuestionDocument,
+  PageDocument,
+  PageClass,
+} from "@models";
+
 import fieldResolvers from "./fieldResolvers";
 import queries from "./queries";
 

@@ -11,7 +11,7 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "commonjs",
-    "lib": ["dom", "ES6", "ES2017", "ESNext.AsyncIterable"],
+    "lib": ["ES6", "ES2017", "ESNext.AsyncIterable"],
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -25,11 +25,19 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "typeRoots": ["./node_modules/@types"],
-    "baseUrl": ".",
+    "types": ["jest", "node"],
+    "baseUrl": "src",
     "paths": {
-      "src/*": ["src/*"]
+      "@models": ["./models"],
+      "@testing/*": ["testing/*"],
+      "@constants/*": ["constants/*"],
+      "@config/*": ["config/*"],
+      "@actors/*": ["actors/*"],
+      "@typescript/*": ["typescript/*"],
+      "@utils/*": ["utils/*"],
+      "@validation/*": ["validation/*"]
     }
   },
   "exclude": ["node_modules"],
-  "include": ["./src/**/*.ts", "./src/package-declarations.d.ts"]
+  "include": ["./**/*.ts", "./*.d.ts"]
 }

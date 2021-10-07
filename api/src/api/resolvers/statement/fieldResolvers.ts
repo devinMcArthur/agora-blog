@@ -1,5 +1,4 @@
-import Page from "../../../models/Page";
-import { StatementDocument } from "../../../models/Statement";
+import { Page, StatementDocument } from "@models";
 
 const page = async (statement: StatementDocument) => {
   return await Page.getByID(statement.page!.toString(), { fromCache: true });

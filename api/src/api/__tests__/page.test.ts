@@ -2,8 +2,8 @@ import request from "supertest";
 import { createTestClient } from "apollo-server-testing";
 
 import app from "../../app";
-import { prepareDatabase, disconnectAndStopServer } from "../../testDB/jestDB";
-import seedDatabase from "../../testDB/seedDatabase";
+import { prepareDatabase, disconnectAndStopServer } from "../../testing/jestDB";
+import seedDatabase from "../../testing/seedDatabase";
 import { apolloServer } from "../../server";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";

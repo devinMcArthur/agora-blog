@@ -1,72 +1,14 @@
 import { Types } from "mongoose";
+import { ObjectType } from "type-graphql";
 
-import { Field, ID, ObjectType } from "type-graphql";
-import { DocumentType, prop, Ref } from "@typegoose/typegoose";
-import GetByIDOptions from "../../../typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getByID_Options";
+import { VariableDocument, VariableModel, VariableVersionClass } from "@models";
+
+import { VariableSchema } from "../schema";
 import get from "./get";
-import { VariableDocument, VariableModel } from "..";
 
 @ObjectType()
-export class VariableEquationClass {
-  @Field({ nullable: false })
-  @prop({ required: true, enum: ["operator", "number", "variable"] })
-  public type!: "operator" | "number" | "variable";
-
-  @Field({ nullable: true })
-  @prop({ required: false, enum: ["(", ")", "+", "-", "/", "*", "^"] })
-  public operator?: "(" | ")" | "+" | "-" | "/" | "*" | "^";
-
-  @Field({ nullable: true })
-  @prop({ required: false })
-  public number?: number;
-
-  @Field(() => VariableClass, { nullable: true })
-  @prop({ ref: "VariableClass", required: false })
-  public variable?: Ref<VariableClass>;
-}
-
-export interface VariableEquationDocument
-  extends DocumentType<VariableEquationClass> {}
-
-@ObjectType()
-export class VariableVersionClass {
-  @Field()
-  @prop({ required: true, enum: ["number", "equation"] })
-  public type!: "number" | "equation";
-
-  @Field()
-  @prop({ required: false })
-  public number?: number;
-
-  @Field(() => [VariableEquationClass])
-  @prop({ type: () => VariableEquationClass, default: [] })
-  public equation!: VariableEquationClass[];
-
-  @Field({ nullable: true })
-  @prop({ required: false })
-  public sourceURL?: string;
-
-  @Field()
-  @prop({ default: new Date(), required: true })
-  public createdAt!: Date;
-}
-
-export interface VariableVersionDocument
-  extends DocumentType<VariableVersionClass> {}
-
-@ObjectType()
-export default class VariableClass {
-  @Field(() => ID, { nullable: false })
-  public _id!: Types.ObjectId;
-
-  @Field()
-  @prop({ required: true, trim: true })
-  public title!: string;
-
-  @Field(() => [VariableVersionClass])
-  @prop({ type: () => VariableVersionClass, default: [] })
-  public versions!: VariableVersionClass[];
-
+export class VariableClass extends VariableSchema {
   public static async getByID(
     this: VariableModel,
     id: Types.ObjectId | string,

@@ -1,5 +1,6 @@
-import { Image, ImageDocument } from "../../../models/Statement/class";
 import { FieldResolver, Resolver, Root } from "type-graphql";
+
+import { Image, ImageDocument } from "@models";
 import fieldResolvers from "./fieldResolvers";
 
 @Resolver(() => Image)

@@ -1,7 +1,8 @@
 import { Types } from "mongoose";
 import { dispatch, spawn, spawnStateless } from "nact";
-import isEmpty from "../../validation/isEmpty";
-import Page from "../../models/Page";
+
+import { Page } from "@models";
+
 import { cacheService } from "../../server";
 
 const spawn_pages_service = (cacheActor: any) =>

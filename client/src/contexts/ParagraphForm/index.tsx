@@ -1,5 +1,5 @@
 import React from "react";
-import { BaseEditor, Descendant } from "slate";
+import { BaseEditor, BaseSelection, Descendant } from "slate";
 import { HistoryEditor } from "slate-history";
 import { ReactEditor } from "slate-react";
 import { useImmerReducer } from "use-immer";
@@ -42,8 +42,12 @@ interface IState {
 
 interface IParagraphFormContext {
   state: IState;
+  savedSelection?: { slateSelection: BaseSelection; domRange: Range };
 
   updateSlateParagraph: (slateParagraph: Descendant[]) => void;
+  saveSelection: (selection: BaseSelection) => void;
+  clearSelection: () => void;
+  restoreDomSelection: () => void;
 }
 
 type IAction =
@@ -105,6 +109,8 @@ const ParagraphFormProvider = ({
   pageId,
 }: IParagraphFormProvider) => {
   const [state, dispatch] = useImmerReducer(ParagraphFormReducer, initialState);
+  const [savedSelection, setSavedSelection] =
+    React.useState<IParagraphFormContext["savedSelection"]>();
 
   /**
    * ----- GraphQL Calls -----
@@ -127,6 +133,30 @@ const ParagraphFormProvider = ({
     });
   };
 
+  const saveSelection: IParagraphFormContext["saveSelection"] = (selection) => {
+    const sel = window.getSelection();
+    if (sel && sel.getRangeAt(0) && sel?.rangeCount) {
+      setSavedSelection({
+        slateSelection: selection,
+        domRange: sel.getRangeAt(0),
+      });
+    } else throw new Error("Unable to save dom selection");
+  };
+
+  const restoreDomSelection: IParagraphFormContext["restoreDomSelection"] =
+    () => {
+      if (savedSelection?.domRange) {
+        if (window.getSelection()) {
+          var sel = window.getSelection();
+          sel?.removeAllRanges();
+          sel?.addRange(savedSelection.domRange);
+        }
+      }
+    };
+
+  const clearSelection: IParagraphFormContext["clearSelection"] = () =>
+    setSavedSelection(undefined);
+
   /**
    * ----- Use-effects and other logic -----
    */
@@ -146,7 +176,16 @@ const ParagraphFormProvider = ({
   }, [pageData, pageLoading, dispatch]);
 
   return (
-    <ParagraphFormContext.Provider value={{ state, updateSlateParagraph }}>
+    <ParagraphFormContext.Provider
+      value={{
+        state,
+        savedSelection,
+        updateSlateParagraph,
+        saveSelection,
+        clearSelection,
+        restoreDomSelection,
+      }}
+    >
       {children}
     </ParagraphFormContext.Provider>
   );

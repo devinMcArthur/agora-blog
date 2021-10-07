@@ -1,5 +1,5 @@
-import { getFile } from "../../../utils/digitalOceanSpaces";
-import { ImageDocument } from "../../../models/Statement/class";
+import { getFile } from "@utils/digitalOceanSpaces";
+import { ImageDocument } from "@models";
 
 const buffer = async (image: ImageDocument): Promise<string | null> => {
   return Buffer.from((await getFile(image.name))!.Body!).toString("base64");

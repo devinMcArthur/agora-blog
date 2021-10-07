@@ -1,16 +1,20 @@
 import { Types } from "mongoose";
 import { dispatch } from "nact";
 
-import { VariableDocument, VariableModel } from "..";
-import { VariableVersionClass } from ".";
-import GetByIDOptions from "../../../typescript/interface/getByID_Options";
-import populateOptions from "../../../utils/populateOptions";
-import Page, { PageDocument } from "../../Page";
-import VariablePageConnection, {
+import {
+  VariableDocument,
+  VariableModel,
+  VariableVersionClass,
+  Page,
+  PageDocument,
+  VariablePageConnection,
   VariablePageConnectionDocument,
-} from "../../VariablePageConnection";
-import performCacheQuery from "../../../utils/performCacheQuery";
-import isEmpty from "../../../validation/isEmpty";
+} from "@models";
+import GetByIDOptions from "@typescript/interface/getByID_Options";
+import populateOptions from "@utils/populateOptions";
+import performCacheQuery from "@utils/performCacheQuery";
+import isEmpty from "@validation/isEmpty";
+
 import { cacheService } from "../../../server";
 
 const byIDDefaultOptions: GetByIDOptions = {
@@ -171,11 +175,10 @@ const pagesThatReference = (
       }
 
       if (pages.length === 0) {
-        const variablePageConnections: VariablePageConnectionDocument[] = await VariablePageConnection.find(
-          {
+        const variablePageConnections: VariablePageConnectionDocument[] =
+          await VariablePageConnection.find({
             variable: variable._id,
-          }
-        );
+          });
 
         for (const connection of variablePageConnections) {
           const page = await Page.getByID(connection.referrerPage!.toString(), {

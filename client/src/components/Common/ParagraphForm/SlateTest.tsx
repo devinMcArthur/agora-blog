@@ -1,6 +1,7 @@
-import { Button } from "@chakra-ui/button";
 import React from "react";
-import { createEditor, Editor } from "slate";
+
+import { Box } from "@chakra-ui/layout";
+import { createEditor } from "slate";
 import { withHistory } from "slate-history";
 import {
   Editable,
@@ -11,6 +12,7 @@ import {
 } from "slate-react";
 import { useParagraphForm } from "../../../contexts/ParagraphForm";
 import QuotedStatement from "../../Statement/views/QuotedStatement";
+import ActionMenu from "./views/ActionMenu";
 
 const SlateTest: React.FC = () => {
   const {
@@ -38,31 +40,15 @@ const SlateTest: React.FC = () => {
       value={slateParagraph!}
       onChange={updateSlateParagraph}
     >
-      <div>
-        <Button
-          onClick={(event) => {
-            event.preventDefault();
-            CustomEditor.toggleBold(editor);
-          }}
-          margin={1}
-        >
-          Bold
-        </Button>
-        <Button
-          onClick={(event) => {
-            event.preventDefault();
-            CustomEditor.toggleItalic(editor);
-          }}
-          margin={1}
-        >
-          Italic
-        </Button>
-      </div>
+      <ActionMenu editor={editor} />
       <Editable
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         spellCheck
         autoFocus
+        onKeyDown={(event) => {
+          if (event.key === "Enter") event.preventDefault();
+        }}
       />
     </Slate>
   );
@@ -82,7 +68,7 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   }
 
   if (leaf.externalMentionUrl) {
-    children = <span style={{ color: "blue" }}>{children}</span>;
+    children = <span style={{ color: "purple" }}>{children}</span>;
   }
 
   if (leaf.internalMentionPageId) {
@@ -91,9 +77,9 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
 
   if (leaf.quoteStatementId) {
     children = (
-      <div contentEditable={false}>
+      <Box contentEditable={false} cursor="default">
         <QuotedStatement statementID={leaf.quoteStatementId} key={1} />
-      </div>
+      </Box>
     );
   }
 
@@ -102,41 +88,6 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
   }
 
   return <span {...attributes}>{children}</span>;
-};
-
-const CustomEditor = {
-  isMarkActive: (
-    editor: Editor,
-    mark:
-      | "bold"
-      | "italic"
-      | "internalMentionPageId"
-      | "externalMentionUrl"
-      | "variableId"
-      | "quoteStatementId"
-  ) => {
-    const marks = Editor.marks(editor);
-    if (!marks) return false;
-    return marks[mark] === true;
-  },
-  toggleBold: (editor: Editor) => {
-    const isActive = CustomEditor.isMarkActive(editor, "bold");
-
-    if (isActive) {
-      Editor.removeMark(editor, "bold");
-    } else {
-      Editor.addMark(editor, "bold", true);
-    }
-  },
-  toggleItalic: (editor: Editor) => {
-    const isActive = CustomEditor.isMarkActive(editor, "italic");
-
-    if (isActive) {
-      Editor.removeMark(editor, "italic");
-    } else {
-      Editor.addMark(editor, "italic", true);
-    }
-  },
 };
 
 export default SlateTest;

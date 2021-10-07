@@ -9,10 +9,12 @@ import {
   Root,
 } from "type-graphql";
 
-import { ParagraphDocument } from "../../../models/Paragraph";
-import { PageDocument } from "../../../models/Page";
-import PageClass from "../../../models/Page/class";
-import ParagraphClass from "../../../models/Paragraph/class";
+import {
+  ParagraphDocument,
+  PageDocument,
+  PageClass,
+  ParagraphClass,
+} from "@models";
 
 import fieldResolver from "./fieldResolver";
 import queries from "./queries";

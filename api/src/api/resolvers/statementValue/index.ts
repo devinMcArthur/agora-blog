@@ -1,12 +1,13 @@
 import { FieldResolver, Resolver, Root } from "type-graphql";
 
-import { StatementDocument } from "../../../models/Statement";
-import { PageDocument } from "../../../models/Page";
 import {
+  StatementDocument,
+  PageDocument,
   StatementValueClass,
   StatementValueDocument,
-} from "../../../models/Statement/class";
-import { VariableDocument } from "../../../models/Variable";
+  VariableDocument,
+} from "@models";
+
 import fieldResolvers from "./fieldResolvers";
 
 @Resolver(() => StatementValueClass)

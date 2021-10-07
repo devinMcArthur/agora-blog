@@ -1,20 +1,14 @@
 import { Types } from "mongoose";
+import { ObjectType } from "type-graphql";
 
-import { Field, ID, ObjectType } from "type-graphql";
-import { prop } from "@typegoose/typegoose";
-import GetByIDOptions from "src/typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getByID_Options";
+import { QuestionDocument, QuestionModel } from "@models";
+
+import { QuestionSchema } from "../schema";
 import get from "./get";
-import { QuestionDocument, QuestionModel } from "..";
 
 @ObjectType()
-export default class QuestionClass {
-  @Field(() => ID, { nullable: false })
-  public _id!: Types.ObjectId;
-
-  @Field()
-  @prop({ required: true, trim: true })
-  public question!: string;
-
+export class QuestionClass extends QuestionSchema {
   public static async getByID(
     this: QuestionModel,
     id: Types.ObjectId | string,

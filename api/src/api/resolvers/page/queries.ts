@@ -1,4 +1,4 @@
-import Page from "../../../models/Page";
+import { Page } from "@models";
 
 const page = async ({ id, slug }: { id?: string; slug?: string }) => {
   if (id) {

@@ -1,16 +1,21 @@
 import { Types } from "mongoose";
 import { dispatch } from "nact";
 
-import Page, { PageDocument } from "../../Page";
-import { QuestionDocument, QuestionModel } from "..";
-import GetByIDOptions from "../../../typescript/interface/getByID_Options";
-import populateOptions from "../../../utils/populateOptions";
-import QuestionPageConnection, {
+import {
+  Page,
+  PageDocument,
+  QuestionDocument,
+  QuestionModel,
+  QuestionPageConnection,
   QuestionPageConnectionDocument,
-} from "../../QuestionPageConnection";
-import { StatementDocument } from "../../Statement";
-import isEmpty from "../../../validation/isEmpty";
-import performCacheQuery from "../../../utils/performCacheQuery";
+  Statement,
+  StatementDocument,
+} from "@models";
+import GetByIDOptions from "@typescript/interface/getByID_Options";
+import populateOptions from "@utils/populateOptions";
+import isEmpty from "@validation/isEmpty";
+import performCacheQuery from "@utils/performCacheQuery";
+
 import { cacheService } from "../../../server";
 
 const byIDDefaultOptions: GetByIDOptions = {
@@ -132,11 +137,10 @@ const pagesThatReference = (
       }
 
       if (pages.length === 0) {
-        const questionPageConnections: QuestionPageConnectionDocument[] = await QuestionPageConnection.find(
-          {
+        const questionPageConnections: QuestionPageConnectionDocument[] =
+          await QuestionPageConnection.find({
             question: question._id,
-          }
-        );
+          });
 
         for (const connection of questionPageConnections) {
           const page = await Page.getByID(connection.referrerPage!.toString(), {
@@ -200,7 +204,7 @@ const statementReferences = (
 ): Promise<StatementDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const statements = await question.model("StatementClass").find({
+      const statements = await Statement.find({
         questions: question._id,
       });
 

@@ -1,7 +1,4 @@
-import Statement from "../../../models/Statement";
-import Variable from "../../../models/Variable";
-import Page from "../../../models/Page";
-import { StatementValueDocument } from "../../../models/Statement/class";
+import {Statement, Variable, Page, StatementValueDocument} from "@models"
 
 const page = async (statementValue: StatementValueDocument) => {
   if (statementValue.page)

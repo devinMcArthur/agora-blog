@@ -1,36 +1,26 @@
 import { Types } from "mongoose";
-import { Field, ID, ObjectType } from "type-graphql";
-import { prop, Ref } from "@typegoose/typegoose";
+import { ObjectType } from "type-graphql";
 
-// import PageSchema from "../schema";
+import GetByIDOptions from "@typescript/interface/getByID_Options";
+import { PageDocument, PageModel } from "@models";
+
 import get from "./get";
-import GetByIDOptions from "../../../typescript/interface/getByID_Options";
-import ParagraphClass from "../../Paragraph/class";
-import { PageDocument, PageModel } from "..";
 import create from "./create";
+import { PageSchema } from "../schema";
 
 @ObjectType()
-export default class PageClass {
-  @Field(() => ID, { nullable: false })
-  public _id!: Types.ObjectId;
-
-  @Field()
-  @prop({ required: true, trim: true })
-  public title!: string;
-
-  @Field()
-  @prop({ required: true, trim: true })
-  public slug!: string;
-
-  @Field(() => [ParagraphClass])
-  @prop({ ref: "ParagraphClass" })
-  public paragraphs!: Ref<ParagraphClass>[];
-
-  // METHODS
+export class PageClass extends PageSchema {
+  /**
+   * CREATE
+   */
 
   public static async create(this: PageModel, data: any) {
     return create.page(this, data);
   }
+
+  /**
+   * GET
+   */
 
   public static async getByID(
     this: PageModel,
@@ -71,5 +61,9 @@ export default class PageClass {
 
   public async getStatementReferences(this: PageDocument) {
     return get.statementReferences(this);
+  }
+
+  public static async search(this: PageModel, searchString: string) {
+    return get.search(this, searchString);
   }
 }

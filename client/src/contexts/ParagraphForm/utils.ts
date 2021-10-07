@@ -4,7 +4,11 @@ import {
   DisplayStatementSnippetFragment,
   FullStringArraySnippetFragment,
 } from "../../generated/graphql";
-import { SlateLeaf, SlateStatementElement } from "../../models/slate";
+import {
+  SlateLeaf,
+  SlateMarks,
+  SlateStatementElement,
+} from "../../models/slate";
 
 export const convertParagraphToSlate = (
   paragraph: DisplayParagraphSnippetFragment
@@ -33,7 +37,7 @@ export const convertStringArrayToSlate = (
 
   stringArray.styles.forEach((style) => {
     if (style.type === "bold") {
-      leaf.bold = true;
+      leaf[SlateMarks.bold] = true;
     }
 
     if (
@@ -41,7 +45,7 @@ export const convertStringArrayToSlate = (
       style.variant === "internal" &&
       style.value.page
     ) {
-      leaf.internalMentionPageId = style.value.page._id;
+      leaf[SlateMarks.internalMentionPageId] = style.value.page._id;
     }
 
     if (
@@ -49,16 +53,16 @@ export const convertStringArrayToSlate = (
       style.variant === "external" &&
       style.value.url
     ) {
-      leaf.externalMentionUrl = style.value.url;
+      leaf[SlateMarks.externalMentionUrl] = style.value.url;
     }
 
     if (style.type === "quote" && style.value.statement) {
-      leaf.quoteStatementId = style.value.statement._id;
+      leaf[SlateMarks.quoteStatementId] = style.value.statement._id;
       leaf.text = "quote";
     }
 
     if (style.type === "variable" && style.value.variable) {
-      leaf.variableId = style.value.variable._id;
+      leaf[SlateMarks.variableId] = style.value.variable._id;
       leaf.text = style.value.variable.finalValue.toString();
     }
   });

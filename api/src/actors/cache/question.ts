@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { dispatch, spawn, spawnStateless } from "nact";
-import Question from "../../models/Question";
+
+import { Question } from "@models";
 
 const spawn_questions_service = (cacheActor: any) =>
   spawnStateless(

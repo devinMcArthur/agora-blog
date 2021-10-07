@@ -1,16 +1,21 @@
 import { Types } from "mongoose";
-
-import Page, { PageModel } from "..";
-import GetByIDOptions from "../../../typescript/interface/getByID_Options";
-import populateOptions from "../../../utils/populateOptions";
-
-import { PageDocument } from "..";
-import PageConnection, { PageConnectionDocument } from "../../PageConnection";
-import Statement, { StatementDocument } from "../../Statement";
-import performCacheQuery from "../../../utils/performCacheQuery";
 import { dispatch } from "nact";
+
+import {
+  Page,
+  PageModel,
+  PageDocument,
+  PageConnection,
+  PageConnectionDocument,
+  Statement,
+  StatementDocument,
+} from "@models";
+import GetByIDOptions from "@typescript/interface/getByID_Options";
+import populateOptions from "@utils/populateOptions";
+import isEmpty from "@validation/isEmpty";
+import performCacheQuery from "@utils/performCacheQuery";
+
 import { cacheService } from "../../../server";
-import isEmpty from "../../../validation/isEmpty";
 
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,
@@ -148,6 +153,21 @@ const list = (
   });
 };
 
+const search = (
+  Page: PageModel,
+  searchString: string
+): Promise<PageDocument[]> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const pages = await Page.find({ $text: { $search: searchString } });
+
+      resolve(pages);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 const pagesThatReferenceDefaultOptions = {
   fromCache: false,
 };
@@ -180,11 +200,10 @@ const pagesThatReference = (
       }
 
       if (pages.length === 0) {
-        const pageConnections: PageConnectionDocument[] = await PageConnection.find(
-          {
+        const pageConnections: PageConnectionDocument[] =
+          await PageConnection.find({
             referencedPage: page._id,
-          }
-        );
+          });
 
         for (const connection of pageConnections) {
           const page = await Page.getByID(connection.referrerPage!.toString(), {
@@ -266,6 +285,7 @@ export default {
   list,
   byID,
   bySlug,
+  search,
   pagesThatReference,
   referencedCount,
   statementReferences,

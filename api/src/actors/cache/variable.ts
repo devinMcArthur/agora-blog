@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { dispatch, spawn, spawnStateless } from "nact";
 
-import Variable from "../../models/Variable";
+import { Variable } from "@models";
 
 const spawn_variables_service = (cacheActor: any) =>
   spawnStateless(

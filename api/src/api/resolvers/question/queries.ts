@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
-import Question from "../../../models/Question";
+
+import { Question } from "@models";
 
 const question = async (id: Types.ObjectId) => {
   return await Question.getByID(id, { fromCache: true });

@@ -6,10 +6,9 @@ import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 import { buildSchema } from "type-graphql";
 import { ApolloServer } from "apollo-server-express";
-// import { PostgresPersistenceEngine } from "nact-persistence-postgres";
 
 import app from "./app";
-import seedDatabase from "./testDB/seedDatabase";
+import seedDatabase from "./testing/seedDatabase";
 
 // Setup environment variables
 if (process.env.NODE_ENV === "development" || !process.env.NODE_ENV) {
@@ -27,9 +26,6 @@ import VariableVersionResolver from "./api/resolvers/variableVersion";
 import StatementSourcesResolver from "./api/resolvers/statementSources";
 import StatementVersionResolver from "./api/resolvers/statementVersion";
 import VariableEquationResolver from "./api/resolvers/variableEquation";
-import TopicResolver from "./api/resolvers/topic";
-import TopicRowResolver from "./api/resolvers/topicRow";
-import TopicColumnResolver from "./api/resolvers/topicColumn";
 import ImageResolver from "./api/resolvers/image";
 
 import { spawn_cache_service } from "./actors/cache";
@@ -39,13 +35,15 @@ const main = async () => {
   system = start();
   cacheService = spawn_cache_service(system);
 
-  await mongoose.connect(process.env.MONGO_URI!, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-  console.log("MongoDB Connected");
-  console.log("Database seeding...");
-  await seedDatabase();
+  if (process.env.NODE_ENV !== "test") {
+    await mongoose.connect(process.env.MONGO_URI!, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("MongoDB Connected");
+    console.log("Database seeding...");
+    await seedDatabase();
+  }
 
   let port = process.env.PORT || 8080;
 
@@ -65,9 +63,6 @@ const main = async () => {
         VariableEquationResolver,
         StatementSourcesResolver,
         StatementVersionResolver,
-        TopicResolver,
-        TopicRowResolver,
-        TopicColumnResolver,
         ImageResolver,
       ],
       validate: false,

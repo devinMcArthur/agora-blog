@@ -1,4 +1,4 @@
-import { VariableDocument } from "src/models/Variable";
+import { VariableDocument } from "@models";
 
 const finalValue = async (variable: VariableDocument) => {
   return await variable.getFinalValue();

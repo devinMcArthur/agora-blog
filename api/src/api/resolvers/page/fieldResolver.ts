@@ -1,5 +1,4 @@
-import { PageDocument } from "../../../models/Page";
-import Paragraph from "../../../models/Paragraph";
+import { PageDocument, Paragraph } from "@models";
 
 const currentParagraph = async (page: PageDocument) => {
   return await Paragraph.getByID(

@@ -1,9 +1,11 @@
 import { FieldResolver, Resolver, Root } from "type-graphql";
 
-import ParagraphClass from "../../../models/Paragraph/class";
-import { PageDocument } from "../../../models/Page";
-import { ParagraphDocument } from "../../../models/Paragraph";
-import { StatementDocument } from "../../../models/Statement";
+import {
+  ParagraphClass,
+  PageDocument,
+  ParagraphDocument,
+  StatementDocument,
+} from "@models";
 
 import fieldResolvers from "./fieldResolvers";
 
