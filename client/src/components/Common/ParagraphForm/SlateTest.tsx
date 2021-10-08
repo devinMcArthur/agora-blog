@@ -54,8 +54,27 @@ const SlateTest: React.FC = () => {
   );
 };
 
-const Element = ({ attributes, children }: RenderElementProps) => {
-  return <p {...attributes}>{children}</p>;
+const Element = ({ attributes, children, element }: RenderElementProps) => {
+  switch (element.type) {
+    case "variable": {
+      return (
+        <Box
+          as="span"
+          contentEditable={false}
+          backgroundColor="gray.100"
+          fontWeight="bold"
+          padding={1}
+          border="1px solid black"
+          borderRadius={3}
+        >
+          {children}
+        </Box>
+      );
+    }
+    default: {
+      return <p {...attributes}>{children}</p>;
+    }
+  }
 };
 
 const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
@@ -81,10 +100,6 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
         <QuotedStatement statementID={leaf.quoteStatementId} key={1} />
       </Box>
     );
-  }
-
-  if (leaf.variableId) {
-    children = <div contentEditable={false}>{children}</div>;
   }
 
   return <span {...attributes}>{children}</span>;

@@ -7,7 +7,7 @@ import {
   DisplayParagraphSnippetFragment,
   usePageQuery,
 } from "../../generated/graphql";
-import { SlateLeaf, SlateStatementElement } from "../../models/slate";
+import { StyledText, CustomElements } from "../../models/slate";
 import { convertParagraphToSlate } from "./utils";
 
 /**
@@ -21,8 +21,8 @@ import { convertParagraphToSlate } from "./utils";
 declare module "slate" {
   interface CustomTypes {
     Editor: BaseEditor & ReactEditor & HistoryEditor;
-    Element: SlateStatementElement;
-    Text: SlateLeaf;
+    Element: CustomElements;
+    Text: StyledText;
   }
 }
 
@@ -125,6 +125,7 @@ const ParagraphFormProvider = ({
    */
 
   const updateSlateParagraph = (slateParagraph: Descendant[]) => {
+    console.log("slateParagraph", slateParagraph);
     dispatch({
       type: "update-slate-paragraph",
       payload: {

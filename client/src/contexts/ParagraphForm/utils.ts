@@ -4,11 +4,7 @@ import {
   DisplayStatementSnippetFragment,
   FullStringArraySnippetFragment,
 } from "../../generated/graphql";
-import {
-  SlateLeaf,
-  SlateMarks,
-  SlateStatementElement,
-} from "../../models/slate";
+import { SlateMarks, CustomElements } from "../../models/slate";
 
 export const convertParagraphToSlate = (
   paragraph: DisplayParagraphSnippetFragment
@@ -20,8 +16,9 @@ export const convertParagraphToSlate = (
 
 export const convertStatementToSlate = (
   statement: DisplayStatementSnippetFragment
-): SlateStatementElement => {
+): CustomElements => {
   return {
+    type: "paragraph",
     children: statement.versions[0].stringArray.map((stringArray) =>
       convertStringArrayToSlate(stringArray)
     ),
@@ -30,12 +27,28 @@ export const convertStatementToSlate = (
 
 export const convertStringArrayToSlate = (
   stringArray: FullStringArraySnippetFragment
-): SlateLeaf => {
-  const leaf: SlateLeaf = {
+): Descendant => {
+  const styles = stringArray.styles.map((style) => style.type);
+
+  if (styles.includes("variable")) {
+    const style = stringArray.styles.find((style) => style.type === "variable");
+    return {
+      type: "variable",
+      id: style?.value.variable?._id!,
+      title: style?.value.variable?.title!,
+      finalValue: style?.value.variable?.finalValue!,
+      children: [{ text: style?.value.variable?.finalValue.toString()! }],
+    };
+  }
+
+  const leaf: Descendant = {
     text: stringArray.string || "",
   };
 
   stringArray.styles.forEach((style) => {
+    if (style.type === "variable" && style.value.variable) {
+    }
+
     if (style.type === "bold") {
       leaf[SlateMarks.bold] = true;
     }
@@ -45,7 +58,6 @@ export const convertStringArrayToSlate = (
       style.variant === "internal" &&
       style.value.page
     ) {
-      console.log("internal", style.value);
       leaf[SlateMarks.internalMentionPage] = {
         id: style.value.page._id,
         title: style.value.page.title,
@@ -63,11 +75,6 @@ export const convertStringArrayToSlate = (
     if (style.type === "quote" && style.value.statement) {
       leaf[SlateMarks.quoteStatementId] = style.value.statement._id;
       leaf.text = "quote";
-    }
-
-    if (style.type === "variable" && style.value.variable) {
-      leaf[SlateMarks.variableId] = style.value.variable._id;
-      leaf.text = style.value.variable.finalValue.toString();
     }
   });
 

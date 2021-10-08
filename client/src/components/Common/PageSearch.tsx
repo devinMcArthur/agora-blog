@@ -1,5 +1,4 @@
 import { InputProps } from "@chakra-ui/input";
-import { Box, Stack } from "@chakra-ui/layout";
 import React from "react";
 import { FiSearch } from "react-icons/fi";
 import {
@@ -9,7 +8,7 @@ import {
 import TextDropdown from "./TextDropdown";
 
 interface IPageSearch extends InputProps {
-  pageSelected: (selected: { value: string; label: string }) => void;
+  pageSelected: (page: { id: string; title: string }) => void;
   handleSubmit?: (string: string) => void;
   dropdownId?: string;
 }
@@ -65,23 +64,9 @@ const PageSearch: React.FC<IPageSearch> = ({
 
   React.useEffect(() => {
     if (!loading && data) {
-      console.log(data.searchPages);
       setFoundPages(data.searchPages);
     }
   }, [loading, data]);
-
-  let dropdownBox;
-  if (foundPages && foundPages.length > 0) {
-    dropdownBox = (
-      <datalist>
-        <Stack>
-          {foundPages.map((page) => (
-            <Box>{page.title}</Box>
-          ))}
-        </Stack>
-      </datalist>
-    );
-  }
 
   return (
     <form
@@ -97,13 +82,12 @@ const PageSearch: React.FC<IPageSearch> = ({
         options={pageOptions}
         onOptionSelection={(value) => {
           setSearchString(value.label);
-          pageSelected(value);
+          pageSelected({ id: value.value, title: value.label });
           setFoundPages([]);
         }}
         containerId={dropdownId}
         {...props}
       />
-      {dropdownBox}
     </form>
   );
 };

@@ -6,4 +6,8 @@ const variable = async (id: Types.ObjectId) => {
   return await Variable.getByID(id, { fromCache: true });
 };
 
-export default { variable };
+const searchVariables = async (searchString: string) => {
+  return Variable.search(searchString);
+};
+
+export default { variable, searchVariables };

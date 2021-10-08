@@ -3,26 +3,28 @@ import React from "react";
 import { Button } from "@chakra-ui/button";
 import { Editor } from "slate";
 import {
-  SlateLeaf,
+  StyledText,
   SlateMarks,
   SlateStyleTypes,
 } from "../../../../models/slate";
 import { CustomEditor } from "../utils";
 
 import { FaBold, FaLink, FaItalic } from "react-icons/fa";
-import { FiBold, FiLink, FiItalic } from "react-icons/fi";
+import { FiBold, FiLink, FiItalic, FiAnchor } from "react-icons/fi";
 import { Box } from "@chakra-ui/react";
 
 interface IMarkButton {
   editor: Editor;
   type: SlateStyleTypes;
-  toggleLinkForm?: (marks?: Omit<SlateLeaf, "text"> | null) => void;
+  toggleLinkForm?: (marks?: Omit<StyledText, "text"> | null) => void;
+  toggleVariableForm?: () => void;
 }
 
 const MarkButton: React.FC<IMarkButton> = ({
   editor,
   type,
   toggleLinkForm,
+  toggleVariableForm,
 }) => {
   const getButtonParameters = (
     type: SlateStyleTypes
@@ -51,6 +53,14 @@ const MarkButton: React.FC<IMarkButton> = ({
           label: isActive ? <FaLink /> : <FiLink />,
           onClick: () => {
             if (toggleLinkForm) toggleLinkForm(CustomEditor.getMarks(editor));
+          },
+        };
+      }
+      case SlateStyleTypes.variable: {
+        return {
+          label: <FiAnchor />,
+          onClick: () => {
+            if (toggleVariableForm) toggleVariableForm();
           },
         };
       }

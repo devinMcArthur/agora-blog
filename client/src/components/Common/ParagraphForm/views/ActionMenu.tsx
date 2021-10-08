@@ -4,7 +4,7 @@ import { css, cx } from "@emotion/css";
 import MarkButton from "./MarkButton";
 import { Editor, Range, Transforms } from "slate";
 import {
-  SlateLeaf,
+  StyledText,
   SlateMarks,
   SlateStyleTypes,
 } from "../../../../models/slate";
@@ -14,9 +14,11 @@ import { CustomEditor } from "../utils";
 import isValidUrl from "../../../../utils/isValidUrl";
 import { Box, Divider } from "@chakra-ui/layout";
 import { useOutsideClick } from "@chakra-ui/hooks";
+import VariableForm from "./VariableForm";
 
 enum ShowForm {
   Link = "Link",
+  Variable = "Variable",
 }
 
 interface IActionMenu {
@@ -33,12 +35,13 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
 
   const [linkFormError, setLinkFormError] = React.useState(false);
   const [linkFormDefault, setLinkFormDefault] = React.useState("");
+  const [variableFormDefault, setVariableFormDefault] = React.useState("");
 
   /**
    * ------ Functions ------
    */
 
-  const toggleLinkForm = (marks?: Omit<SlateLeaf, "text"> | null) => {
+  const toggleLinkForm = (marks?: Omit<StyledText, "text"> | null) => {
     if (form === ShowForm.Link) {
       // Toggling link form off
       if (savedSelection?.slateSelection) {
@@ -62,6 +65,25 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
     }
   };
 
+  const toggleVariableForm = () => {
+    if (form === ShowForm.Variable) {
+      // Toggling variable form off
+      if (savedSelection?.slateSelection) {
+        Transforms.select(editor, savedSelection.slateSelection);
+        restoreDomSelection();
+        clearSelection();
+      }
+
+      setVariableFormDefault("");
+      setForm(undefined);
+    } else {
+      // Toggling variable form on
+      saveSelection(Object.assign({}, editor.selection));
+
+      setForm(ShowForm.Variable);
+    }
+  };
+
   const externalLinkSubmit = (value: string) => {
     /**
      * Toggle must be first to allow selection to be reinstated so mark is added
@@ -79,6 +101,15 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
   const internalLinkSubmit = (page: { id: string; title: string }) => {
     toggleLinkForm();
     CustomEditor.setInternal(editor, page);
+  };
+
+  const variableSubmit = (variable: {
+    id: string;
+    title: string;
+    finalValue: number;
+  }) => {
+    toggleVariableForm();
+    CustomEditor.setVariable(editor, variable);
   };
 
   /**
@@ -121,19 +152,6 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
     }
 
     const domSelection = window.getSelection();
-
-    // Clear savedSelection if another section is made outside of linkForm
-    if (
-      savedSelection &&
-      !!form &&
-      selection?.anchor.offset !==
-        savedSelection.slateSelection?.anchor.offset &&
-      selection?.focus.offset !== savedSelection.slateSelection?.focus.offset &&
-      domSelection &&
-      domSelection.anchorNode?.parentElement?.id !== "link-form"
-    ) {
-      clearSelection();
-    }
 
     // Set menu position if possible
     if (domSelection || savedSelection?.domRange) {
@@ -185,6 +203,11 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
             type={SlateStyleTypes.link}
             toggleLinkForm={toggleLinkForm}
           />
+          <MarkButton
+            editor={editor}
+            type={SlateStyleTypes.variable}
+            toggleVariableForm={toggleVariableForm}
+          />
         </Box>
 
         {form && (
@@ -198,6 +221,12 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
                 defaultValue={linkFormDefault}
                 markActive={linkMarkActive}
                 removeMark={() => CustomEditor.removeLink(editor)}
+              />
+            )}
+            {form === ShowForm.Variable && (
+              <VariableForm
+                variableSelect={variableSubmit}
+                defaultValue={variableFormDefault}
               />
             )}
           </>

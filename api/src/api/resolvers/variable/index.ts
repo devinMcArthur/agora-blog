@@ -38,4 +38,9 @@ export default class VariableResolver {
   ): Promise<VariableDocument | null> {
     return queries.variable(id);
   }
+
+  @Query(() => [VariableClass])
+  async searchVariables(@Arg("searchString") searchString: string) {
+    return queries.searchVariables(searchString);
+  }
 }

@@ -1,4 +1,4 @@
-import { Editor } from "slate";
+import { Editor, Transforms } from "slate";
 import { SlateMarks } from "../../../models/slate";
 
 export const CustomEditor = {
@@ -47,7 +47,6 @@ export const CustomEditor = {
     }
   },
   removeLink: (editor: Editor) => {
-    console.log("removeLink");
     const internalActive = CustomEditor.isMarkActive(
       editor,
       SlateMarks.internalMentionPage
@@ -61,6 +60,20 @@ export const CustomEditor = {
     );
     if (externalActive)
       Editor.removeMark(editor, SlateMarks.externalMentionUrl);
+  },
+  setVariable: (
+    editor: Editor,
+    variable: { id: string; title: string; finalValue: number }
+  ) => {
+    const { id, title, finalValue } = variable;
+    Transforms.insertNodes(editor, {
+      type: "variable",
+      id,
+      title,
+      finalValue,
+      children: [{ text: finalValue.toString() }],
+    });
+    Transforms.move(editor);
   },
   toggleItalic: (editor: Editor) => {
     const isActive = CustomEditor.isMarkActive(editor, SlateMarks.italic);

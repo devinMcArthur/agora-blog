@@ -195,9 +195,51 @@ const pagesThatReference = (
   });
 };
 
+const search = (Variable: VariableModel, searchString: string) => {
+  return new Promise<VariableDocument[]>(async (resolve, reject) => {
+    try {
+      /**
+       * Partial Search
+       */
+      const partialSearch = async () => {
+        const escapeRegex = (text: string) => {
+          return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+        };
+
+        return Variable.find({
+          title: new RegExp(escapeRegex(searchString), "gi"),
+        });
+      };
+
+      /**
+       * Full Search
+       */
+      const fullSearch = async () => {
+        return Variable.find({
+          $text: { $search: searchString, $caseSensitive: false },
+        });
+      };
+
+      /**
+       * Final Combination
+       */
+
+      let variables: VariableDocument[] = await fullSearch();
+      if (variables.length < 1) {
+        variables = await partialSearch();
+      }
+
+      resolve(variables);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 export default {
   byID,
   finalValue,
   versionsFinalValue,
   pagesThatReference,
+  search,
 };

@@ -35,7 +35,7 @@ afterAll(async (done) => {
   done();
 });
 
-describe("Page Schema", () => {
+describe("Page Resolver", () => {
   describe("QUERIES", () => {
     describe("searchPages", () => {
       const searchPagesQuery = `

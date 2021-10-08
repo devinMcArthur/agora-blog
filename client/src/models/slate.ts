@@ -1,22 +1,10 @@
-export type SlateLeaf = {
-  text: string;
-  bold?: boolean;
-  italic?: boolean;
-  internalMentionPage?: {
-    id: string;
-    title: string;
-  };
-  externalMentionUrl?: string;
-  variableId?: string;
-  quoteStatementId?: string;
-};
+import { Descendant } from "slate";
 
 export enum SlateMarks {
   bold = "bold",
   italic = "italic",
   internalMentionPage = "internalMentionPage",
   externalMentionUrl = "externalMentionUrl",
-  variableId = "variableId",
   quoteStatementId = "quoteStatementId",
 }
 
@@ -28,4 +16,29 @@ export enum SlateStyleTypes {
   quote = "quote",
 }
 
-export type SlateStatementElement = { children: SlateLeaf[] };
+export type StyledText = {
+  text: string;
+  bold?: boolean;
+  italic?: boolean;
+  internalMentionPage?: {
+    id: string;
+    title: string;
+  };
+  externalMentionUrl?: string;
+  quoteStatementId?: string;
+};
+
+export type ParagraphElement = {
+  type: "paragraph";
+  children: Descendant[];
+};
+
+export type VariableElement = {
+  type: "variable";
+  id: string;
+  title: string;
+  finalValue: number;
+  children: StyledText[];
+};
+
+export type CustomElements = VariableElement | ParagraphElement;

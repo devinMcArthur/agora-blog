@@ -3,13 +3,16 @@ import { Box, Stack } from "@chakra-ui/layout";
 import React from "react";
 import TextField, { ITextField } from "./TextField";
 
-interface ITextDropdown extends ITextField {
-  options?: { value: string; label: string }[];
-  onOptionSelection: (choice: { value: string; label: string }) => void;
+interface ITextDropdown<T> extends ITextField {
+  options?: { value: string; label: string; extraData?: T }[];
+  onOptionSelection: (
+    choice: { value: string; label: string },
+    extraData?: T
+  ) => void;
   containerId?: string;
 }
 
-const TextDropdown: React.FC<ITextDropdown> = ({
+const TextDropdown: React.FC<ITextDropdown<any>> = ({
   options,
   onOptionSelection,
   containerId,
@@ -43,7 +46,7 @@ const TextDropdown: React.FC<ITextDropdown> = ({
         backgroundColor="white"
         width="100%"
       >
-        {options.map((option) => (
+        {options.map((option, index) => (
           <Box
             as="span"
             cursor="pointer"
@@ -52,8 +55,9 @@ const TextDropdown: React.FC<ITextDropdown> = ({
             paddingLeft="1rem"
             onClick={() => {
               setDropdown(false);
-              onOptionSelection(option);
+              onOptionSelection(option, option.extraData);
             }}
+            key={index}
           >
             {option.label}
           </Box>

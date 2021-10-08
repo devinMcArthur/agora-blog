@@ -21,6 +21,7 @@ export type Query = {
   pages: Array<PageClass>;
   searchPages: Array<PageClass>;
   variable?: Maybe<VariableClass>;
+  searchVariables: Array<VariableClass>;
   question?: Maybe<QuestionClass>;
   questions: Array<QuestionClass>;
   statement?: Maybe<StatementClass>;
@@ -40,6 +41,11 @@ export type QuerySearchPagesArgs = {
 
 export type QueryVariableArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QuerySearchVariablesArgs = {
+  searchString: Scalars['String'];
 };
 
 
@@ -267,6 +273,11 @@ export type QuestionSnippetFragment = (
   )> }
 );
 
+export type VariableSearchSnippetFragment = (
+  { __typename?: 'VariableClass' }
+  & Pick<VariableClass, '_id' | 'title' | 'finalValue'>
+);
+
 export type VariableSnippetFragment = (
   { __typename?: 'VariableClass' }
   & Pick<VariableClass, '_id' | 'title'>
@@ -338,6 +349,19 @@ export type QuestionsQuery = (
   & { questions: Array<(
     { __typename?: 'QuestionClass' }
     & QuestionCardSnippetFragment
+  )> }
+);
+
+export type SearchVariablesQueryVariables = Exact<{
+  searchString: Scalars['String'];
+}>;
+
+
+export type SearchVariablesQuery = (
+  { __typename?: 'Query' }
+  & { searchVariables: Array<(
+    { __typename?: 'VariableClass' }
+    & VariableSearchSnippetFragment
   )> }
 );
 
@@ -490,6 +514,13 @@ export const QuestionSnippetFragmentDoc = gql`
   referencedCount
 }
     ${PageCardSnippetFragmentDoc}`;
+export const VariableSearchSnippetFragmentDoc = gql`
+    fragment VariableSearchSnippet on VariableClass {
+  _id
+  title
+  finalValue
+}
+    `;
 export const VariableSnippetFragmentDoc = gql`
     fragment VariableSnippet on VariableClass {
   _id
@@ -669,6 +700,39 @@ export function useQuestionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type QuestionsQueryHookResult = ReturnType<typeof useQuestionsQuery>;
 export type QuestionsLazyQueryHookResult = ReturnType<typeof useQuestionsLazyQuery>;
 export type QuestionsQueryResult = Apollo.QueryResult<QuestionsQuery, QuestionsQueryVariables>;
+export const SearchVariablesDocument = gql`
+    query SearchVariables($searchString: String!) {
+  searchVariables(searchString: $searchString) {
+    ...VariableSearchSnippet
+  }
+}
+    ${VariableSearchSnippetFragmentDoc}`;
+
+/**
+ * __useSearchVariablesQuery__
+ *
+ * To run a query within a React component, call `useSearchVariablesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchVariablesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchVariablesQuery({
+ *   variables: {
+ *      searchString: // value for 'searchString'
+ *   },
+ * });
+ */
+export function useSearchVariablesQuery(baseOptions: Apollo.QueryHookOptions<SearchVariablesQuery, SearchVariablesQueryVariables>) {
+        return Apollo.useQuery<SearchVariablesQuery, SearchVariablesQueryVariables>(SearchVariablesDocument, baseOptions);
+      }
+export function useSearchVariablesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchVariablesQuery, SearchVariablesQueryVariables>) {
+          return Apollo.useLazyQuery<SearchVariablesQuery, SearchVariablesQueryVariables>(SearchVariablesDocument, baseOptions);
+        }
+export type SearchVariablesQueryHookResult = ReturnType<typeof useSearchVariablesQuery>;
+export type SearchVariablesLazyQueryHookResult = ReturnType<typeof useSearchVariablesLazyQuery>;
+export type SearchVariablesQueryResult = Apollo.QueryResult<SearchVariablesQuery, SearchVariablesQueryVariables>;
 export const StatementDocument = gql`
     query Statement($id: ID!) {
   statement(id: $id) {

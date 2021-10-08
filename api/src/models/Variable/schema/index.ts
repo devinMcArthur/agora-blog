@@ -1,10 +1,11 @@
 import { VariableVersionClass } from "@models";
-import { prop } from "@typegoose/typegoose";
+import { index, prop } from "@typegoose/typegoose";
 import { Types } from "mongoose";
 import { Field, ID, ObjectType } from "type-graphql";
 
 export * from "./subDocuments";
 
+@index({ title: "text" })
 @ObjectType()
 export class VariableSchema {
   @Field(() => ID, { nullable: false })

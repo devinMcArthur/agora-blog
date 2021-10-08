@@ -24,11 +24,8 @@ const LinkForm: React.FC<ILinkForm> = ({
   return (
     <Box display="flex" flexDirection="row">
       <PageSearch
-        pageSelected={({ value, label }) =>
-          pageSelect({ id: value, title: label })
-        }
+        pageSelected={pageSelect}
         handleSubmit={handleSubmit}
-        dropdownId="link-form"
         backgroundColor="white"
         placeholder="enter url or page"
         isInvalid={isInvalid}
