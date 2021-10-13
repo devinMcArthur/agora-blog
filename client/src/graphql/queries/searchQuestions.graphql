@@ -1,0 +1,5 @@
+query SearchQuestions($searchString: String!) {
+  searchQuestions(searchString: $searchString) {
+    ...QuestionSearchSnippet
+  }
+}

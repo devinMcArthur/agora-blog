@@ -1,0 +1,4 @@
+fragment QuestionSearchSnippet on QuestionClass {
+  _id
+  question
+}
