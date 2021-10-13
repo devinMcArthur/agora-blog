@@ -24,6 +24,7 @@ export type Query = {
   searchVariables: Array<VariableClass>;
   question?: Maybe<QuestionClass>;
   questions: Array<QuestionClass>;
+  searchQuestions: Array<QuestionClass>;
   statement?: Maybe<StatementClass>;
 };
 
@@ -51,6 +52,11 @@ export type QuerySearchVariablesArgs = {
 
 export type QueryQuestionArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QuerySearchQuestionsArgs = {
+  searchString: Scalars['String'];
 };
 
 
@@ -264,6 +270,11 @@ export type QuestionCardSnippetFragment = (
   & Pick<QuestionClass, '_id' | 'question' | 'referencedCount'>
 );
 
+export type QuestionSearchSnippetFragment = (
+  { __typename?: 'QuestionClass' }
+  & Pick<QuestionClass, '_id' | 'question'>
+);
+
 export type QuestionSnippetFragment = (
   { __typename?: 'QuestionClass' }
   & Pick<QuestionClass, '_id' | 'question' | 'referencedCount'>
@@ -349,6 +360,19 @@ export type QuestionsQuery = (
   & { questions: Array<(
     { __typename?: 'QuestionClass' }
     & QuestionCardSnippetFragment
+  )> }
+);
+
+export type SearchQuestionsQueryVariables = Exact<{
+  searchString: Scalars['String'];
+}>;
+
+
+export type SearchQuestionsQuery = (
+  { __typename?: 'Query' }
+  & { searchQuestions: Array<(
+    { __typename?: 'QuestionClass' }
+    & QuestionSearchSnippetFragment
   )> }
 );
 
@@ -502,6 +526,12 @@ export const QuestionCardSnippetFragmentDoc = gql`
   _id
   question
   referencedCount
+}
+    `;
+export const QuestionSearchSnippetFragmentDoc = gql`
+    fragment QuestionSearchSnippet on QuestionClass {
+  _id
+  question
 }
     `;
 export const QuestionSnippetFragmentDoc = gql`
@@ -700,6 +730,39 @@ export function useQuestionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type QuestionsQueryHookResult = ReturnType<typeof useQuestionsQuery>;
 export type QuestionsLazyQueryHookResult = ReturnType<typeof useQuestionsLazyQuery>;
 export type QuestionsQueryResult = Apollo.QueryResult<QuestionsQuery, QuestionsQueryVariables>;
+export const SearchQuestionsDocument = gql`
+    query SearchQuestions($searchString: String!) {
+  searchQuestions(searchString: $searchString) {
+    ...QuestionSearchSnippet
+  }
+}
+    ${QuestionSearchSnippetFragmentDoc}`;
+
+/**
+ * __useSearchQuestionsQuery__
+ *
+ * To run a query within a React component, call `useSearchQuestionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchQuestionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchQuestionsQuery({
+ *   variables: {
+ *      searchString: // value for 'searchString'
+ *   },
+ * });
+ */
+export function useSearchQuestionsQuery(baseOptions: Apollo.QueryHookOptions<SearchQuestionsQuery, SearchQuestionsQueryVariables>) {
+        return Apollo.useQuery<SearchQuestionsQuery, SearchQuestionsQueryVariables>(SearchQuestionsDocument, baseOptions);
+      }
+export function useSearchQuestionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchQuestionsQuery, SearchQuestionsQueryVariables>) {
+          return Apollo.useLazyQuery<SearchQuestionsQuery, SearchQuestionsQueryVariables>(SearchQuestionsDocument, baseOptions);
+        }
+export type SearchQuestionsQueryHookResult = ReturnType<typeof useSearchQuestionsQuery>;
+export type SearchQuestionsLazyQueryHookResult = ReturnType<typeof useSearchQuestionsLazyQuery>;
+export type SearchQuestionsQueryResult = Apollo.QueryResult<SearchQuestionsQuery, SearchQuestionsQueryVariables>;
 export const SearchVariablesDocument = gql`
     query SearchVariables($searchString: String!) {
   searchVariables(searchString: $searchString) {

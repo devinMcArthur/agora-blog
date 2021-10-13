@@ -113,7 +113,7 @@ export default function StatementService() {
                 />
               );
             } else if (style.type === "variable") {
-              newJSX = <Variable style={style} key={index} />;
+              newJSX = <Variable style={style} />;
             } else if (style.type === "image") {
               newJSX = (
                 <Box
@@ -134,7 +134,7 @@ export default function StatementService() {
           });
         }
         return (
-          <span id={index.toString()} className="parent-input">
+          <span key={index} id={index.toString()} className="parent-input">
             {newJSX}
           </span>
         );

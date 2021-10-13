@@ -1,7 +1,8 @@
-import { prop } from "@typegoose/typegoose";
+import { prop, index } from "@typegoose/typegoose";
 import { Types } from "mongoose";
 import { Field, ID, ObjectType } from "type-graphql";
 
+@index({ question: "text" })
 @ObjectType()
 export class QuestionSchema {
   @Field(() => ID, { nullable: false })

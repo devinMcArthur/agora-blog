@@ -215,10 +215,52 @@ const statementReferences = (
   });
 };
 
+const search = (Question: QuestionModel, searchString: string) => {
+  return new Promise<QuestionDocument[]>(async (resolve, reject) => {
+    try {
+      /**
+       * Partial Search
+       */
+      const partialSearch = async () => {
+        const escapeRegex = (text: string) => {
+          return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+        };
+
+        return Question.find({
+          question: new RegExp(escapeRegex(searchString), "gi"),
+        });
+      };
+
+      /**
+       * Full Search
+       */
+      const fullSearch = async () => {
+        return Question.find({
+          $text: { $search: searchString, $caseSensitive: false },
+        });
+      };
+
+      /**
+       * Final Combination
+       */
+
+      let questions: QuestionDocument[] = await fullSearch();
+      if (questions.length < 1) {
+        questions = await partialSearch();
+      }
+
+      resolve(questions);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 export default {
   byID,
   list,
   pagesThatReference,
   referencedCount,
   statementReferences,
+  search,
 };

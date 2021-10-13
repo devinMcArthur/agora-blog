@@ -4,24 +4,54 @@ import {
   DisplayStatementSnippetFragment,
   FullStringArraySnippetFragment,
 } from "../../generated/graphql";
-import { SlateMarks, CustomElements } from "../../models/slate";
+import {
+  SlateMarks,
+  CustomElements,
+  QuoteElementType,
+} from "../../models/slate";
 
 export const convertParagraphToSlate = (
   paragraph: DisplayParagraphSnippetFragment
 ): Descendant[] => {
-  return paragraph.statements.map((statement) =>
-    convertStatementToSlate(statement)
+  return paragraph.statements.map((statement, index) =>
+    convertStatementToSlate(statement, index)
   );
 };
 
 export const convertStatementToSlate = (
-  statement: DisplayStatementSnippetFragment
+  statement: DisplayStatementSnippetFragment,
+  index: number
 ): CustomElements => {
+  console.log("statement", statement);
+
+  const children = statement.versions[0].stringArray.map((stringArray) =>
+    convertStringArrayToSlate(stringArray)
+  );
+
+  /**
+   * Add surrounding text if quote is alone in paragraph so user
+   * can move caret to quote
+   */
+  if (
+    children.length === 1 &&
+    (children[0] as QuoteElementType).type === "quote"
+  ) {
+    children.push({ text: "" });
+    children.unshift({ text: "" });
+  }
+
   return {
-    type: "paragraph",
-    children: statement.versions[0].stringArray.map((stringArray) =>
-      convertStringArrayToSlate(stringArray)
-    ),
+    type: "statement",
+    statementId: statement._id,
+    index,
+    questions: statement.versions[0].questions.map((question) => {
+      return {
+        _id: question._id,
+        question: question.question,
+      };
+    }),
+    newQuestions: [],
+    children,
   };
 };
 
@@ -30,6 +60,7 @@ export const convertStringArrayToSlate = (
 ): Descendant => {
   const styles = stringArray.styles.map((style) => style.type);
 
+  // Variable Element
   if (styles.includes("variable")) {
     const style = stringArray.styles.find((style) => style.type === "variable");
     return {
@@ -38,6 +69,16 @@ export const convertStringArrayToSlate = (
       title: style?.value.variable?.title!,
       finalValue: style?.value.variable?.finalValue!,
       children: [{ text: style?.value.variable?.finalValue.toString()! }],
+    };
+  }
+
+  // Quote Element
+  if (styles.includes("quote")) {
+    const style = stringArray.styles.find((style) => style.type === "quote");
+    return {
+      type: "quote",
+      statementId: style?.value.statement?._id!,
+      children: [{ text: "" }],
     };
   }
 
@@ -70,11 +111,6 @@ export const convertStringArrayToSlate = (
       style.value.url
     ) {
       leaf[SlateMarks.externalMentionUrl] = style.value.url;
-    }
-
-    if (style.type === "quote" && style.value.statement) {
-      leaf[SlateMarks.quoteStatementId] = style.value.statement._id;
-      leaf.text = "quote";
     }
   });
 

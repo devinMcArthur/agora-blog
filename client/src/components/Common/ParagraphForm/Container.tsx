@@ -2,15 +2,18 @@ import { Heading } from "@chakra-ui/layout";
 import React from "react";
 import { useParagraphForm } from "../../../contexts/ParagraphForm";
 import Loading from "../Loading";
-import SlateTest from "./SlateTest";
+import RichText from "../RichText";
 
 const Container = () => {
   const {
-    state: { paragraph },
+    state: { slateParagraph },
+    updateSlateParagraph,
   } = useParagraphForm();
 
-  if (paragraph === null) return <Heading>Unable to find this page</Heading>;
-  if (paragraph) return <SlateTest />;
+  if (slateParagraph === null)
+    return <Heading>Unable to find this page</Heading>;
+  if (slateParagraph)
+    return <RichText value={slateParagraph} onChange={updateSlateParagraph} />;
 
   return <Loading />;
 };

@@ -1,5 +1,6 @@
 import { Box, ChakraStyleProps } from "@chakra-ui/react";
 import React from "react";
+import numberFormat from "../../../utils/numberFormat";
 
 const FinalValue = (
   props: { finalValue: number | string } & ChakraStyleProps
@@ -10,7 +11,7 @@ const FinalValue = (
 
   return (
     <Box as="span" {...rest}>
-      {number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+      {numberFormat(number)}
     </Box>
   );
 };

@@ -43,4 +43,9 @@ export default class QuestionResolver {
   async questions(): Promise<QuestionDocument[]> {
     return queries.questions();
   }
+
+  @Query(() => [QuestionClass])
+  async searchQuestions(@Arg("searchString") searchString: string) {
+    return queries.searchQuestions(searchString);
+  }
 }

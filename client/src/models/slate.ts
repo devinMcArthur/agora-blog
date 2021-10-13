@@ -5,7 +5,6 @@ export enum SlateMarks {
   italic = "italic",
   internalMentionPage = "internalMentionPage",
   externalMentionUrl = "externalMentionUrl",
-  quoteStatementId = "quoteStatementId",
 }
 
 export enum SlateStyleTypes {
@@ -25,15 +24,23 @@ export type StyledText = {
     title: string;
   };
   externalMentionUrl?: string;
-  quoteStatementId?: string;
 };
 
-export type ParagraphElement = {
-  type: "paragraph";
+export interface ISlateQuestion {
+  _id: string;
+  question: string;
+}
+
+export type StatementElementType = {
+  type: "statement";
+  statementId: string;
+  index: number;
+  questions: ISlateQuestion[];
+  newQuestions: { question: string }[];
   children: Descendant[];
 };
 
-export type VariableElement = {
+export type VariableElementType = {
   type: "variable";
   id: string;
   title: string;
@@ -41,4 +48,13 @@ export type VariableElement = {
   children: StyledText[];
 };
 
-export type CustomElements = VariableElement | ParagraphElement;
+export type QuoteElementType = {
+  type: "quote";
+  statementId: string;
+  children: StyledText[];
+};
+
+export type CustomElements =
+  | VariableElementType
+  | StatementElementType
+  | QuoteElementType;

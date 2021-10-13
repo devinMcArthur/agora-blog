@@ -7,7 +7,11 @@ import {
   DisplayParagraphSnippetFragment,
   usePageQuery,
 } from "../../generated/graphql";
-import { StyledText, CustomElements } from "../../models/slate";
+import {
+  StyledText,
+  CustomElements,
+  StatementElementType,
+} from "../../models/slate";
 import { convertParagraphToSlate } from "./utils";
 
 /**
@@ -37,6 +41,7 @@ interface IParagraphFormProvider {
 
 interface IState {
   paragraph: DisplayParagraphSnippetFragment | null | undefined;
+  previousSlateParagraph: Descendant[] | null | undefined;
   slateParagraph: Descendant[] | null | undefined;
 }
 
@@ -44,6 +49,7 @@ interface IParagraphFormContext {
   state: IState;
   savedSelection?: { slateSelection: BaseSelection; domRange: Range };
 
+  updateSlateStatement: (slateStatement: Descendant, index: number) => void;
   updateSlateParagraph: (slateParagraph: Descendant[]) => void;
   saveSelection: (selection: BaseSelection) => void;
   clearSelection: () => void;
@@ -63,6 +69,13 @@ type IAction =
       payload: {
         slateParagraph: Descendant[];
       };
+    }
+  | {
+      type: "update-slate-statement";
+      payload: {
+        slateStatement: Descendant;
+        index: number;
+      };
     };
 
 /**
@@ -72,6 +85,7 @@ type IAction =
 const initialState: IState = {
   paragraph: undefined,
   slateParagraph: undefined,
+  previousSlateParagraph: undefined,
 };
 
 const ParagraphFormContext = React.createContext<
@@ -89,13 +103,64 @@ const ParagraphFormReducer = (draft: IState, action: IAction): IState => {
         ...draft,
         paragraph: action.payload.paragraph,
         slateParagraph: action.payload.slateParagraph,
+        previousSlateParagraph: action.payload.slateParagraph,
       };
     }
     case "update-slate-paragraph": {
+      const slateParagraph: Descendant[] = JSON.parse(
+        JSON.stringify(action.payload.slateParagraph)
+      );
+      console.log("slateParagraph", slateParagraph);
+      const previousSlateParagraph = draft.previousSlateParagraph;
+
+      // A statement has been added or removed
+      if (
+        previousSlateParagraph &&
+        previousSlateParagraph?.length !== slateParagraph.length
+      ) {
+        // Ensure all children of paragraph of statements
+        for (let i = 0; i < slateParagraph.length; i++) {
+          if (
+            !(slateParagraph[i] as CustomElements).type ||
+            (slateParagraph[i] as CustomElements).type !== "statement"
+          )
+            return draft;
+        }
+
+        // Create a map of all statement Ids
+        const statementIds = slateParagraph.map(
+          (statement) => (statement as StatementElementType).statementId
+        );
+
+        // Ensure any duplicate statement Ids are marked as NEW
+        const seenIds: string[] = [];
+        for (let i = 0; i < statementIds.length; i++) {
+          console.log("seenIds", seenIds);
+          console.log("id", statementIds[i]);
+          if (seenIds.includes(statementIds[i]))
+            (slateParagraph[i] as StatementElementType).statementId = "NEW";
+
+          // Add to seenIds array after
+          if (statementIds[i] !== "NEW") seenIds.push(statementIds[i]);
+
+          (slateParagraph[i] as StatementElementType).index = i;
+        }
+
+        console.log("mutatedSlateParagraph", slateParagraph);
+      }
+
       return {
         ...draft,
-        slateParagraph: action.payload.slateParagraph,
+        slateParagraph,
+        previousSlateParagraph: draft.slateParagraph,
       };
+    }
+    case "update-slate-statement": {
+      const { slateStatement, index } = action.payload;
+      if (draft.slateParagraph && !!draft.slateParagraph[index]) {
+        draft.slateParagraph[index] = slateStatement;
+      }
+      return draft;
     }
   }
 };
@@ -125,11 +190,23 @@ const ParagraphFormProvider = ({
    */
 
   const updateSlateParagraph = (slateParagraph: Descendant[]) => {
-    console.log("slateParagraph", slateParagraph);
     dispatch({
       type: "update-slate-paragraph",
       payload: {
         slateParagraph,
+      },
+    });
+  };
+
+  const updateSlateStatement: IParagraphFormContext["updateSlateStatement"] = (
+    slateStatement,
+    index
+  ) => {
+    dispatch({
+      type: "update-slate-statement",
+      payload: {
+        slateStatement,
+        index,
       },
     });
   };
@@ -182,6 +259,7 @@ const ParagraphFormProvider = ({
         state,
         savedSelection,
         updateSlateParagraph,
+        updateSlateStatement,
         saveSelection,
         clearSelection,
         restoreDomSelection,

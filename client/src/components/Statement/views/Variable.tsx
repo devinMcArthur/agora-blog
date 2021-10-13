@@ -6,7 +6,7 @@ import FinalValue from "../../Variable/views/FinalValue";
 
 type Props = {
   style: DisplayStyleSnippetFragment;
-  key: string | number;
+  key?: string | number;
 };
 
 const Variable = (props: Props) => {

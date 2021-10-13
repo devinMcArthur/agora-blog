@@ -9,6 +9,10 @@ import get from "./get";
 
 @ObjectType()
 export class QuestionClass extends QuestionSchema {
+  /**
+   * GET
+   */
+
   public static async getByID(
     this: QuestionModel,
     id: Types.ObjectId | string,
@@ -40,5 +44,9 @@ export class QuestionClass extends QuestionSchema {
 
   public async getStatementReferences(this: QuestionDocument) {
     return get.statementReferences(this);
+  }
+
+  public static async search(this: QuestionModel, searchString: string) {
+    return get.search(this, searchString);
   }
 }

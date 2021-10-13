@@ -2,18 +2,18 @@
 import React from "react";
 import { useStatementQuery } from "../../../generated/graphql";
 import Statement from "..";
-import { Text } from "@chakra-ui/react";
+import { Text, Box, BoxProps } from "@chakra-ui/react";
 import Loading from "../../Common/Loading";
 import TextLink from "../../Common/TextLink";
 
-type Props = {
+interface IQuotedStatement extends BoxProps {
   statementID: string;
-  key: string | number;
-};
+  key?: string | number;
+}
 
-const QuotedStatement = (props: Props) => {
+const QuotedStatement = ({ statementID, key, ...props }: IQuotedStatement) => {
   const { data, loading } = useStatementQuery({
-    variables: { id: props.statementID },
+    variables: { id: statementID },
   });
 
   return (
@@ -21,7 +21,7 @@ const QuotedStatement = (props: Props) => {
       {!data && loading ? (
         <Loading />
       ) : (
-        <span style={{ borderBottom: "1px solid #E2E8F0" }}>
+        <Box as="span" borderBottom="1px solid #E2E8F0" {...props}>
           <Statement statement={data?.statement!} />
           <Text as="sup">
             [
@@ -33,7 +33,7 @@ const QuotedStatement = (props: Props) => {
             </TextLink>
             ]
           </Text>
-        </span>
+        </Box>
       )}
     </span>
   );

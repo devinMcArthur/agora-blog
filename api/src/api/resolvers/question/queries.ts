@@ -10,7 +10,12 @@ const questions = async () => {
   return await Question.getList({ fromCache: true });
 };
 
+const searchQuestions = async (searchString: string) => {
+  return Question.search(searchString);
+};
+
 export default {
   question,
   questions,
+  searchQuestions,
 };
