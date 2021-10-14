@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { FilterQuery, QueryFindOptions, Types } from "mongoose";
 import { dispatch } from "nact";
 
 import {
@@ -199,14 +199,60 @@ const referencedCount = (
   });
 };
 
+export interface IStatementReferencesOptions {
+  avoidPage?: Types.ObjectId | string;
+  limit?: number;
+  page?: number;
+}
+
 const statementReferences = (
-  question: QuestionDocument
+  question: QuestionDocument,
+  options?: IStatementReferencesOptions
 ): Promise<StatementDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const statements = await Statement.find({
-        questions: question._id,
-      });
+      /**
+       * Instantiate query
+       */
+      const query: FilterQuery<QuestionPageConnectionDocument> = {
+        question: question._id,
+      };
+
+      if (options?.avoidPage) {
+        query.referrerPage = { $ne: options.avoidPage };
+      }
+
+      /**
+       * Instantiate query options
+       */
+      const queryOptions: QueryFindOptions = {};
+      if (!!options?.limit) {
+        queryOptions.limit = options.limit;
+
+        if (options.page) queryOptions.skip = options.page * options.limit;
+      }
+
+      /**
+       * Query
+       */
+
+      const questionPageConnections = await QuestionPageConnection.find(
+        query,
+        {},
+        queryOptions
+      );
+
+      const statements: StatementDocument[] = [];
+
+      for (let i = 0; i < questionPageConnections.length; i++) {
+        const statement = await Statement.getByID(
+          questionPageConnections[i].statement!.toString(),
+          {
+            current: true,
+          }
+        );
+        if (statement) statements.push(statement);
+      }
 
       resolve(statements);
     } catch (e) {

@@ -86,7 +86,6 @@ export default function StatementService() {
       statement.versions[statement.versions.length - 1].stringArray;
     if (currentStringArray) {
       jsx = currentStringArray.map((object, index) => {
-        const contentString = object.string;
         let newJSX = <span key={index}>{object.string}</span>;
         let placedMention = false;
         if (object.styles) {
@@ -95,13 +94,13 @@ export default function StatementService() {
               if (style.variant === "external") {
                 newJSX = (
                   <ExternalMention key={index} style={style}>
-                    {contentString}
+                    {newJSX}
                   </ExternalMention>
                 );
               } else if (style.variant === "internal") {
                 newJSX = (
                   <InternalMention key={index} style={style}>
-                    {contentString}
+                    {newJSX}
                   </InternalMention>
                 );
               }
@@ -129,7 +128,12 @@ export default function StatementService() {
 
             // Bold
             if (style.type === "bold") {
-              newJSX = <strong>{contentString}</strong>;
+              newJSX = <strong>{newJSX}</strong>;
+            }
+
+            // Italic
+            if (style.type === "italic") {
+              newJSX = <i>{newJSX}</i>;
             }
           });
         }

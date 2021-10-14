@@ -2,4 +2,7 @@ fragment DisplayParagraphSnippet on ParagraphClass {
   statements {
     ...DisplayStatementSnippet
   }
+  page {
+    _id
+  }
 }

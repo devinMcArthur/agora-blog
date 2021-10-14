@@ -3,7 +3,6 @@ import {
   Divider,
   Flex,
   Icon,
-  Image,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -17,15 +16,17 @@ import React, { useState } from "react";
 import { ImageSnippetFragment } from "../../../generated/graphql";
 import TextLink from "../../Common/TextLink";
 
-type Props = {
+interface IImageDisplay {
   image: ImageSnippetFragment;
-};
+  canExpand?: boolean;
+}
 
-const ImageDisplay = (props: Props) => {
-  const { image } = props;
+const ImageDisplay = ({ image, canExpand = true }: IImageDisplay) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const src = `data:${image.contentType};base64,${image.buffer}`;
+  const src = React.useMemo(() => {
+    return `data:${image.contentType};base64,${image.buffer}`;
+  }, [image]);
 
   const [modalSize, setModalSize] = useState<"xl" | "full">("xl");
   const toggleFullScreen = () => {
@@ -46,62 +47,74 @@ const ImageDisplay = (props: Props) => {
   return (
     <>
       <Flex flexDir="column" align="center" backgroundColor="gray.200" p={2}>
-        <Image
+        <img
           src={src}
           alt={image.name}
-          onClick={onOpen}
-          _hover={{ cursor: "pointer" }}
+          onClick={() => {
+            if (canExpand) onOpen();
+          }}
+          style={{
+            cursor: "pointer",
+          }}
         />
-        <Text align="center" fontSize="xs" noOfLines={2}>
+        <Text
+          align="center"
+          fontSize="xs"
+          noOfLines={canExpand ? 2 : undefined}
+        >
           {image.caption}
         </Text>
       </Flex>
 
-      <Modal
-        onClose={onClose}
-        isOpen={isOpen}
-        isCentered
-        size={modalSize}
-        autoFocus={false}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <Box
-            display="flex"
-            position="absolute"
-            top="0.5rem"
-            right="2.75rem"
-            w="32px"
-            h="32px"
-            justifyContent="center"
-            alignItems="center"
-            onClick={() => toggleFullScreen()}
-            _hover={{ cursor: "pointer" }}
-          >
-            {fullScreenIconJSX}
-          </Box>
-          <ModalCloseButton />
-          <ModalBody padding={3} mt={8}>
-            <Image
-              src={src}
-              alt={image.name}
-              onClick={() => {
-                if (image.sourceURL) window.open(image.sourceURL);
-                return null;
-              }}
+      {canExpand && (
+        <Modal
+          onClose={onClose}
+          isOpen={isOpen}
+          isCentered
+          size={modalSize}
+          autoFocus={false}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <Box
+              display="flex"
+              position="absolute"
+              top="0.5rem"
+              right="2.75rem"
+              w="32px"
+              h="32px"
+              justifyContent="center"
+              alignItems="center"
+              onClick={() => toggleFullScreen()}
               _hover={{ cursor: "pointer" }}
-            />
-            <Divider m={3} />
-            <Text align="center">{image.caption}</Text>
-            <Divider m={3} />
-            {image.sourceURL ? (
-              <TextLink link={image.sourceURL} isExternal>
-                {image.sourceURL}
-              </TextLink>
-            ) : null}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+            >
+              {fullScreenIconJSX}
+            </Box>
+            <ModalCloseButton />
+            <ModalBody padding={3} mt={8}>
+              <img
+                src={src}
+                alt={image.name}
+                onClick={() => {
+                  if (image.sourceURL) window.open(image.sourceURL);
+                  return null;
+                }}
+                style={{
+                  cursor: "pointer",
+                }}
+              />
+              <Divider m={3} />
+              <Text align="center">{image.caption}</Text>
+              <Divider m={3} />
+              {image.sourceURL ? (
+                <TextLink link={image.sourceURL} isExternal>
+                  {image.sourceURL}
+                </TextLink>
+              ) : null}
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
     </>
   );
 };

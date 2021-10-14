@@ -14,11 +14,11 @@ export class Image {
   @prop({ required: true, trim: true })
   public name!: string;
 
-  @Field()
+  @Field({ nullable: true })
   @prop({ trim: true })
   public sourceURL?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @prop({ trim: true })
   public caption?: string;
 }
@@ -56,9 +56,9 @@ class StatementStyleClass {
   @Field()
   @prop({
     required: true,
-    enum: ["mention", "variable", "quote", "bold", "image"],
+    enum: ["mention", "variable", "quote", "bold", "image", "italic"],
   })
-  public type!: "mention" | "variable" | "quote" | "bold" | "image";
+  public type!: "mention" | "variable" | "quote" | "bold" | "image" | "italic";
 
   @Field({ nullable: true })
   @prop({ required: false, enum: ["internal", "external"] })

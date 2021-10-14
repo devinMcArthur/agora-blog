@@ -6,9 +6,11 @@ import VariableElement from "./VariableElement";
 import QuoteElement from "./QuoteElement";
 import StatementElement from "./StatementElement";
 import { StatementElementType } from "../../../../models/slate";
+import ImageElement from "./ImageElement";
 
 interface IElement extends RenderElementProps {
   editor: Editor;
+  pageId?: string;
 }
 
 const Element = (props: IElement) => {
@@ -25,8 +27,12 @@ const Element = (props: IElement) => {
           {...props}
           editor={props.editor}
           element={props.element as StatementElementType}
+          pageId={props.pageId}
         />
       );
+    }
+    case "image": {
+      return <ImageElement {...props} />;
     }
   }
 };

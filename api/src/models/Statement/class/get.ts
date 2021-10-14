@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { FilterQuery, Types } from "mongoose";
 import { dispatch } from "nact";
 
 import GetByIDOptions from "@typescript/interface/getByID_Options";
@@ -9,14 +9,18 @@ import { StatementDocument, StatementModel } from "@models";
 
 import { cacheService } from "../../../server";
 
-const byIDDefaultOptions: GetByIDOptions = {
+export interface IStatementByIdOptions extends GetByIDOptions {
+  current?: boolean;
+}
+const byIDDefaultOptions: IStatementByIdOptions = {
   throwError: false,
   fromCache: false,
+  current: false,
 };
 const byID = (
   Statement: StatementModel,
   id: Types.ObjectId | string,
-  options: GetByIDOptions = byIDDefaultOptions
+  options: IStatementByIdOptions = byIDDefaultOptions
 ): Promise<StatementDocument | null> => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -40,7 +44,12 @@ const byID = (
         }
       }
 
-      if (!statement) statement = await Statement.findById(id);
+      const query: FilterQuery<StatementDocument> = { _id: id };
+      if (options.current) {
+        query.current = true;
+      }
+
+      if (!statement) statement = await Statement.findOne(query);
 
       if (!statement && options.throwError) {
         throw new Error("Statement.getByID: Unable to find statement");

@@ -1,4 +1,12 @@
-import { Arg, FieldResolver, ID, Query, Resolver, Root } from "type-graphql";
+import {
+  Arg,
+  Args,
+  FieldResolver,
+  ID,
+  Query,
+  Resolver,
+  Root,
+} from "type-graphql";
 import { Types } from "mongoose";
 
 import {
@@ -9,7 +17,7 @@ import {
 } from "@models";
 
 import fieldResolvers from "./fieldResolvers";
-import queries from "./queries";
+import queries, { StatementsFromQuestionOptions } from "./queries";
 
 @Resolver(() => StatementClass)
 export default class StatementResolver {
@@ -33,5 +41,13 @@ export default class StatementResolver {
     @Arg("id", () => ID) id: Types.ObjectId
   ): Promise<StatementDocument | null> {
     return queries.statement(id);
+  }
+
+  @Query(() => [StatementClass])
+  async statementsFromQuestion(
+    @Arg("questionId", () => ID) questionId: Types.ObjectId,
+    @Arg("options", { nullable: true }) options?: StatementsFromQuestionOptions
+  ) {
+    return queries.statementsFromQuestion(questionId, options);
   }
 }

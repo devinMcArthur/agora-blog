@@ -54,7 +54,18 @@ export type QuoteElementType = {
   children: StyledText[];
 };
 
+export type ImageElementType = {
+  type: "image";
+  name: string;
+  sourceURL?: string | null;
+  caption?: string | null;
+  buffer: string;
+  contentType: string;
+  children: StyledText[];
+};
+
 export type CustomElements =
   | VariableElementType
   | StatementElementType
-  | QuoteElementType;
+  | QuoteElementType
+  | ImageElementType;

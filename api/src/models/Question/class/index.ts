@@ -5,7 +5,7 @@ import GetByIDOptions from "@typescript/interface/getByID_Options";
 import { QuestionDocument, QuestionModel } from "@models";
 
 import { QuestionSchema } from "../schema";
-import get from "./get";
+import get, { IStatementReferencesOptions } from "./get";
 
 @ObjectType()
 export class QuestionClass extends QuestionSchema {
@@ -42,8 +42,11 @@ export class QuestionClass extends QuestionSchema {
     return get.referencedCount(this, options);
   }
 
-  public async getStatementReferences(this: QuestionDocument) {
-    return get.statementReferences(this);
+  public async getStatementReferences(
+    this: QuestionDocument,
+    options?: IStatementReferencesOptions
+  ) {
+    return get.statementReferences(this, options);
   }
 
   public static async search(this: QuestionModel, searchString: string) {

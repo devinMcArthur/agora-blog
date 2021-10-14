@@ -12,7 +12,10 @@ import {
   CustomElements,
   StatementElementType,
 } from "../../models/slate";
-import { convertParagraphToSlate } from "./utils";
+import {
+  convertParagraphToSlate,
+  convertSlateParagraphToParagraph,
+} from "./utils";
 
 /**
  * ----- Type Initialization -----
@@ -40,6 +43,7 @@ interface IParagraphFormProvider {
 }
 
 interface IState {
+  originalParagraph: DisplayParagraphSnippetFragment | null | undefined;
   paragraph: DisplayParagraphSnippetFragment | null | undefined;
   previousSlateParagraph: Descendant[] | null | undefined;
   slateParagraph: Descendant[] | null | undefined;
@@ -76,6 +80,12 @@ type IAction =
         slateStatement: Descendant;
         index: number;
       };
+    }
+  | {
+      type: "update-paragraph";
+      payload: {
+        paragraph: DisplayParagraphSnippetFragment;
+      };
     };
 
 /**
@@ -83,6 +93,7 @@ type IAction =
  */
 
 const initialState: IState = {
+  originalParagraph: undefined,
   paragraph: undefined,
   slateParagraph: undefined,
   previousSlateParagraph: undefined,
@@ -101,6 +112,7 @@ const ParagraphFormReducer = (draft: IState, action: IAction): IState => {
     case "initialize": {
       return {
         ...draft,
+        originalParagraph: action.payload.paragraph,
         paragraph: action.payload.paragraph,
         slateParagraph: action.payload.slateParagraph,
         previousSlateParagraph: action.payload.slateParagraph,
@@ -110,7 +122,7 @@ const ParagraphFormReducer = (draft: IState, action: IAction): IState => {
       const slateParagraph: Descendant[] = JSON.parse(
         JSON.stringify(action.payload.slateParagraph)
       );
-      console.log("slateParagraph", slateParagraph);
+      console.log("updateSlateParagraph", slateParagraph);
       const previousSlateParagraph = draft.previousSlateParagraph;
 
       // A statement has been added or removed
@@ -151,7 +163,12 @@ const ParagraphFormReducer = (draft: IState, action: IAction): IState => {
 
       return {
         ...draft,
-        slateParagraph,
+        slateParagraph: slateParagraph.map((statement, index) => {
+          return {
+            ...statement,
+            index,
+          };
+        }),
         previousSlateParagraph: draft.slateParagraph,
       };
     }
@@ -161,6 +178,12 @@ const ParagraphFormReducer = (draft: IState, action: IAction): IState => {
         draft.slateParagraph[index] = slateStatement;
       }
       return draft;
+    }
+    case "update-paragraph": {
+      return {
+        ...draft,
+        paragraph: action.payload.paragraph,
+      };
     }
   }
 };
@@ -252,6 +275,20 @@ const ParagraphFormProvider = ({
       });
     }
   }, [pageData, pageLoading, dispatch]);
+
+  React.useEffect(() => {
+    if (state.slateParagraph && state.originalParagraph)
+      dispatch({
+        type: "update-paragraph",
+        payload: {
+          paragraph: convertSlateParagraphToParagraph(
+            state.slateParagraph,
+            state.originalParagraph
+          ),
+        },
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.slateParagraph]);
 
   return (
     <ParagraphFormContext.Provider

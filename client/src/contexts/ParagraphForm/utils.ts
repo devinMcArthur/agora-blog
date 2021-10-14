@@ -2,13 +2,18 @@ import { Descendant } from "slate";
 import {
   DisplayParagraphSnippetFragment,
   DisplayStatementSnippetFragment,
+  DisplayStyleSnippetFragment,
   FullStringArraySnippetFragment,
 } from "../../generated/graphql";
 import {
   SlateMarks,
   CustomElements,
   QuoteElementType,
+  StatementElementType,
+  StyledText,
+  VariableElementType,
 } from "../../models/slate";
+import replaceSpaces from "../../utils/replacesSpaces";
 
 export const convertParagraphToSlate = (
   paragraph: DisplayParagraphSnippetFragment
@@ -82,6 +87,20 @@ export const convertStringArrayToSlate = (
     };
   }
 
+  // Image Element
+  if (styles.includes("image")) {
+    const style = stringArray.styles.find((style) => style.type === "image");
+    return {
+      type: "image",
+      buffer: style!.value.image!.buffer,
+      contentType: style!.value.image!.contentType,
+      name: style!.value.image!.name,
+      sourceURL: style!.value.image!.sourceURL,
+      caption: style!.value.image!.caption,
+      children: [{ text: "" }],
+    };
+  }
+
   const leaf: Descendant = {
     text: stringArray.string || "",
   };
@@ -115,4 +134,114 @@ export const convertStringArrayToSlate = (
   });
 
   return leaf;
+};
+
+export const convertSlateParagraphToParagraph = (
+  slateParagraph: Descendant[],
+  originalParagraph: DisplayParagraphSnippetFragment
+): DisplayParagraphSnippetFragment => {
+  const statements: DisplayParagraphSnippetFragment["statements"] = [];
+
+  for (const i in slateParagraph) {
+    if (Object.prototype.hasOwnProperty.call(slateParagraph, i)) {
+      const element: StatementElementType = slateParagraph[
+        i
+      ] as StatementElementType;
+
+      const stringArray: FullStringArraySnippetFragment[] =
+        element.children.map((child) => {
+          const styles: DisplayStyleSnippetFragment[] = [];
+          let text = "";
+
+          // Child is StyledText
+          if ((child as StyledText).text) {
+            const item: StyledText = child as StyledText;
+            text = item.text;
+
+            if (item.bold) styles.push({ type: "bold", value: {} });
+
+            if (item.italic) styles.push({ type: "italic", value: {} });
+
+            if (item.externalMentionUrl)
+              styles.push({
+                type: "mention",
+                variant: "external",
+                value: { url: item.externalMentionUrl },
+              });
+
+            if (item.internalMentionPage)
+              styles.push({
+                type: "mention",
+                variant: "internal",
+                value: {
+                  page: {
+                    _id: item.internalMentionPage.id,
+                    title: item.internalMentionPage.title,
+                    slug: replaceSpaces(item.internalMentionPage.title),
+                  },
+                },
+              });
+          }
+
+          // Child is variable
+          if ((child as CustomElements).type === "variable") {
+            const item: VariableElementType = child as VariableElementType;
+
+            styles.push({
+              type: "variable",
+              value: {
+                variable: {
+                  _id: item.id,
+                  finalValue: item.finalValue,
+                  title: item.title,
+                },
+              },
+            });
+
+            text = item.children[0].text;
+          }
+
+          // Child is quote
+          if ((child as CustomElements).type === "quote") {
+            const item: QuoteElementType = child as QuoteElementType;
+
+            styles.push({
+              type: "quote",
+              value: { statement: { _id: item.statementId } },
+            });
+          }
+
+          return {
+            string: text,
+            styles,
+          };
+        });
+
+      const statement: DisplayStatementSnippetFragment = {
+        _id: element.statementId,
+        versions: [
+          {
+            questions: element.questions.map((question) => {
+              return {
+                _id: question._id,
+                question: question.question,
+              };
+            }),
+            sources: { pages: [], urls: [] },
+            stringArray,
+          },
+        ],
+      };
+
+      statements.push(statement);
+    }
+  }
+
+  const paragraph: DisplayParagraphSnippetFragment = {
+    page: originalParagraph.page,
+    __typename: originalParagraph.__typename,
+    statements,
+  };
+
+  return paragraph;
 };

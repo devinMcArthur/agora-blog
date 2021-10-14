@@ -26,6 +26,7 @@ export type Query = {
   questions: Array<QuestionClass>;
   searchQuestions: Array<QuestionClass>;
   statement?: Maybe<StatementClass>;
+  statementsFromQuestion: Array<StatementClass>;
 };
 
 
@@ -62,6 +63,12 @@ export type QuerySearchQuestionsArgs = {
 
 export type QueryStatementArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryStatementsFromQuestionArgs = {
+  options?: Maybe<StatementsFromQuestionOptions>;
+  questionId: Scalars['ID'];
 };
 
 export type PageClass = {
@@ -153,8 +160,8 @@ export type VariableEquationClass = {
 export type Image = {
   __typename?: 'Image';
   name: Scalars['String'];
-  sourceURL: Scalars['String'];
-  caption: Scalars['String'];
+  sourceURL?: Maybe<Scalars['String']>;
+  caption?: Maybe<Scalars['String']>;
   buffer: Scalars['String'];
   contentType: Scalars['String'];
 };
@@ -173,12 +180,21 @@ export type QuestionClass = {
   relatedPages: Array<PageClass>;
 };
 
+export type StatementsFromQuestionOptions = {
+  limit?: Maybe<Scalars['Float']>;
+  page?: Maybe<Scalars['Float']>;
+  avoidPage?: Maybe<Scalars['ID']>;
+};
+
 export type DisplayParagraphSnippetFragment = (
   { __typename?: 'ParagraphClass' }
   & { statements: Array<(
     { __typename?: 'StatementClass' }
     & DisplayStatementSnippetFragment
-  )> }
+  )>, page: (
+    { __typename?: 'PageClass' }
+    & Pick<PageClass, '_id'>
+  ) }
 );
 
 export type DisplayStatementSnippetFragment = (
@@ -406,6 +422,24 @@ export type StatementQuery = (
   )> }
 );
 
+export type StatementsFromQuestionQueryVariables = Exact<{
+  questionId: Scalars['ID'];
+  options?: Maybe<StatementsFromQuestionOptions>;
+}>;
+
+
+export type StatementsFromQuestionQuery = (
+  { __typename?: 'Query' }
+  & { statementsFromQuestion: Array<(
+    { __typename?: 'StatementClass' }
+    & { page: (
+      { __typename?: 'PageClass' }
+      & Pick<PageClass, 'title'>
+    ) }
+    & DisplayStatementSnippetFragment
+  )> }
+);
+
 export type VariableQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -493,6 +527,9 @@ export const DisplayParagraphSnippetFragmentDoc = gql`
     fragment DisplayParagraphSnippet on ParagraphClass {
   statements {
     ...DisplayStatementSnippet
+  }
+  page {
+    _id
   }
 }
     ${DisplayStatementSnippetFragmentDoc}`;
@@ -833,6 +870,43 @@ export function useStatementLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type StatementQueryHookResult = ReturnType<typeof useStatementQuery>;
 export type StatementLazyQueryHookResult = ReturnType<typeof useStatementLazyQuery>;
 export type StatementQueryResult = Apollo.QueryResult<StatementQuery, StatementQueryVariables>;
+export const StatementsFromQuestionDocument = gql`
+    query StatementsFromQuestion($questionId: ID!, $options: StatementsFromQuestionOptions) {
+  statementsFromQuestion(questionId: $questionId, options: $options) {
+    ...DisplayStatementSnippet
+    page {
+      title
+    }
+  }
+}
+    ${DisplayStatementSnippetFragmentDoc}`;
+
+/**
+ * __useStatementsFromQuestionQuery__
+ *
+ * To run a query within a React component, call `useStatementsFromQuestionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStatementsFromQuestionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStatementsFromQuestionQuery({
+ *   variables: {
+ *      questionId: // value for 'questionId'
+ *      options: // value for 'options'
+ *   },
+ * });
+ */
+export function useStatementsFromQuestionQuery(baseOptions: Apollo.QueryHookOptions<StatementsFromQuestionQuery, StatementsFromQuestionQueryVariables>) {
+        return Apollo.useQuery<StatementsFromQuestionQuery, StatementsFromQuestionQueryVariables>(StatementsFromQuestionDocument, baseOptions);
+      }
+export function useStatementsFromQuestionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StatementsFromQuestionQuery, StatementsFromQuestionQueryVariables>) {
+          return Apollo.useLazyQuery<StatementsFromQuestionQuery, StatementsFromQuestionQueryVariables>(StatementsFromQuestionDocument, baseOptions);
+        }
+export type StatementsFromQuestionQueryHookResult = ReturnType<typeof useStatementsFromQuestionQuery>;
+export type StatementsFromQuestionLazyQueryHookResult = ReturnType<typeof useStatementsFromQuestionLazyQuery>;
+export type StatementsFromQuestionQueryResult = Apollo.QueryResult<StatementsFromQuestionQuery, StatementsFromQuestionQueryVariables>;
 export const VariableDocument = gql`
     query Variable($id: ID!) {
   variable(id: $id) {

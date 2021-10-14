@@ -28,8 +28,12 @@ interface IActionMenu {
 }
 
 const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
-  const { savedSelection, saveSelection, clearSelection, restoreDomSelection } =
-    useParagraphForm();
+  const {
+    savedSelection,
+    saveSelection,
+    clearSelection: clearSel,
+    restoreDomSelection,
+  } = useParagraphForm();
 
   const ref = React.useRef<HTMLDivElement | null>(null);
 
@@ -38,10 +42,33 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
   const [linkFormError, setLinkFormError] = React.useState(false);
   const [linkFormDefault, setLinkFormDefault] = React.useState("");
   const [variableFormDefault, setVariableFormDefault] = React.useState("");
+  const [savedStyles, setSavedStyles] =
+    React.useState<{ top: string; left: string }>();
 
   /**
    * ------ Functions ------
    */
+
+  const clearSelection = React.useCallback(() => {
+    clearSel();
+    setSavedStyles(undefined);
+  }, [clearSel]);
+
+  const saveSelectionCopy = React.useCallback(() => {
+    saveSelection(JSON.parse(JSON.stringify(editor.selection)));
+
+    const el = ref.current;
+    let range = window.getSelection()?.getRangeAt(0);
+    if (range && el) {
+      const rect = range.getBoundingClientRect();
+      setSavedStyles({
+        top: `${rect.top + window.pageYOffset - el.offsetHeight}px`,
+        left: `${
+          rect.left + window.pageXOffset - el.offsetWidth / 2 + rect.width / 2
+        }px`,
+      });
+    } else console.warn("Unable to find range");
+  }, [editor.selection, saveSelection]);
 
   const toggleLinkForm = React.useCallback(
     (marks?: Omit<StyledText, "text"> | null) => {
@@ -56,7 +83,7 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
         setForm(undefined);
       } else {
         // Toggling link form on
-        saveSelection(Object.assign({}, editor.selection));
+        saveSelectionCopy();
 
         if (marks?.externalMentionUrl) {
           setLinkFormDefault(marks.externalMentionUrl);
@@ -72,7 +99,7 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
       editor,
       form,
       restoreDomSelection,
-      saveSelection,
+      saveSelectionCopy,
       savedSelection?.slateSelection,
     ]
   );
@@ -90,7 +117,7 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
       setForm(undefined);
     } else {
       // Toggling variable form on
-      saveSelection(Object.assign({}, editor.selection));
+      saveSelectionCopy();
 
       setForm(ShowForm.Variable);
     }
@@ -107,7 +134,7 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
       setForm(undefined);
     } else {
       // Toggling quote form on
-      saveSelection(Object.assign({}, editor.selection));
+      saveSelectionCopy();
 
       setForm(ShowForm.Quote);
     }
@@ -167,6 +194,8 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
     handler: () => clearSelection(),
   });
 
+  console.log("savedSelection", savedSelection);
+
   React.useEffect(() => {
     const el = ref.current;
     const { selection } = editor;
@@ -180,6 +209,7 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
         Range.isCollapsed(selection) ||
         Editor.string(editor, selection) === "")
     ) {
+      console.log("turnoff");
       if (!!form) toggleLinkForm();
       el.removeAttribute("style");
       return;
@@ -188,10 +218,15 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
     const domSelection = window.getSelection();
 
     // Set menu position if possible
-    if (domSelection || savedSelection?.domRange) {
+    if (savedStyles) {
+      el.style.opacity = "1";
+      el.style.top = savedStyles.top;
+      el.style.left = savedStyles.left;
+    } else if (domSelection || savedSelection?.domRange) {
       let range = domSelection?.getRangeAt(0);
       if (savedSelection?.domRange) range = savedSelection.domRange;
       if (range) {
+        console.log("render", savedSelection?.domRange);
         const rect = range.getBoundingClientRect();
         el.style.opacity = "1";
         el.style.top = `${rect.top + window.pageYOffset - el.offsetHeight}px`;

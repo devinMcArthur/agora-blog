@@ -38,5 +38,34 @@ describe("Question Class", () => {
         });
       });
     });
+
+    describe.only("getStatementReferences", () => {
+      describe("success", () => {
+        test("should get a statement", async () => {
+          const statements =
+            await documents.questions.what_is_covid_19.getStatementReferences();
+
+          expect(statements.length).toBe(1);
+        });
+
+        test("should not get any statements if page is avoided", async () => {
+          const statements =
+            await documents.questions.what_is_covid_19.getStatementReferences({
+              avoidPage: documents.pages.page_covid_2019._id,
+            });
+
+          expect(statements.length).toBe(0);
+        });
+
+        test.skip("should paginate return", async () => {
+          const statements =
+            await documents.questions.what_is_covid_19.getStatementReferences({
+              limit: 0,
+            });
+
+          expect(statements.length).toBe(0);
+        });
+      });
+    });
   });
 });

@@ -1,9 +1,26 @@
 import { Types } from "mongoose";
 
-import { Statement } from "@models";
+import { Question, Statement } from "@models";
+import { Field, ID, InputType } from "type-graphql";
+import { PaginationOptions } from "@api/types";
+
+@InputType()
+export class StatementsFromQuestionOptions extends PaginationOptions {
+  @Field(() => ID, { nullable: true })
+  public avoidPage?: Types.ObjectId;
+}
 
 const statement = async (id: Types.ObjectId) => {
   return await Statement.getByID(id, { fromCache: true });
 };
 
-export default { statement };
+const statementsFromQuestion = async (
+  questionId: Types.ObjectId,
+  options?: StatementsFromQuestionOptions
+) => {
+  const question = await Question.getByID(questionId);
+  if (question) return question.getStatementReferences(options);
+  else return [];
+};
+
+export default { statement, statementsFromQuestion };

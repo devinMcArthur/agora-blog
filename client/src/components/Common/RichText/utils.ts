@@ -1,4 +1,4 @@
-import { Editor, Path, Transforms } from "slate";
+import { Editor, Transforms } from "slate";
 import {
   ISlateQuestion,
   SlateMarks,
@@ -79,12 +79,19 @@ export const CustomEditor = {
     });
     Transforms.move(editor);
   },
-  setQuote: (editor: Editor, statementId: string) => {
-    Transforms.insertNodes(editor, {
-      type: "quote",
-      statementId,
-      children: [{ text: "" }],
-    });
+  setQuote: (editor: Editor, statementId: string, nodeIndex?: number) => {
+    const options: any = {};
+    if (nodeIndex !== undefined) options.at = [nodeIndex, 0];
+
+    Transforms.insertNodes(
+      editor,
+      {
+        type: "quote",
+        statementId,
+        children: [{ text: "" }],
+      },
+      { ...options }
+    );
     Transforms.move(editor);
   },
   toggleItalic: (editor: Editor) => {
@@ -96,15 +103,27 @@ export const CustomEditor = {
       Editor.addMark(editor, SlateMarks.italic, true);
     }
   },
-  removeStatement: (editor: Editor, index: number | null) => {
-    if (index) {
-      const currentLocation = [editor.selection?.focus.path[0]!];
-      Transforms.removeNodes(editor, {
-        at: currentLocation,
-        mode: "highest",
-        match: (_, path) => Path.equals(path, currentLocation),
-      });
-    } else console.warn("No statement index was provided");
+  removeStatement: (editor: Editor, nodeIndex: number) => {
+    Transforms.removeNodes(editor, {
+      at: [nodeIndex],
+    });
+  },
+  moveStatement: (
+    editor: Editor,
+    nodeIndex: number,
+    direction: "up" | "down"
+  ) => {
+    let toIndex = 0;
+    if (direction === "up") {
+      toIndex = nodeIndex + 1;
+    } else {
+      if (nodeIndex !== 0) toIndex = nodeIndex - 1;
+    }
+
+    Transforms.moveNodes(editor, {
+      at: [nodeIndex],
+      to: [toIndex],
+    });
   },
   addQuestion: (
     editor: Editor,
