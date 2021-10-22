@@ -9,7 +9,10 @@ interface IQuoteForm {
 const QuoteForm: React.FC<IQuoteForm> = ({ quoteSubmit }) => {
   return (
     <Box backgroundColor="white" borderRadius={2} padding={2} w="inherit">
-      <QuoteSearch statementSelect={(id) => quoteSubmit(id)} />
+      <QuoteSearch
+        placeholder="Search for a page"
+        statementSelect={(id) => quoteSubmit(id)}
+      />
     </Box>
   );
 };

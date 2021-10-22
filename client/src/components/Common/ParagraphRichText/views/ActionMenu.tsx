@@ -2,7 +2,7 @@ import React from "react";
 
 import { css, cx } from "@emotion/css";
 import MarkButton from "./MarkButton";
-import { Editor, Range, Transforms } from "slate";
+import { Editor, Range as SlateRange, Transforms } from "slate";
 import {
   StyledText,
   SlateMarks,
@@ -42,8 +42,12 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
   const [linkFormError, setLinkFormError] = React.useState(false);
   const [linkFormDefault, setLinkFormDefault] = React.useState("");
   const [variableFormDefault, setVariableFormDefault] = React.useState("");
-  const [savedStyles, setSavedStyles] =
-    React.useState<{ top: string; left: string }>();
+  const [savedRange, setSavedRange] = React.useState<{
+    anchorId: string;
+    anchorOffset: number;
+    focusId: string;
+    focusOffset: number;
+  }>();
 
   /**
    * ------ Functions ------
@@ -51,22 +55,35 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
 
   const clearSelection = React.useCallback(() => {
     clearSel();
-    setSavedStyles(undefined);
+    setSavedRange(undefined);
   }, [clearSel]);
 
   const saveSelectionCopy = React.useCallback(() => {
-    saveSelection(JSON.parse(JSON.stringify(editor.selection)));
+    saveSelection(editor.selection);
 
-    const el = ref.current;
-    let range = window.getSelection()?.getRangeAt(0);
-    if (range && el) {
-      const rect = range.getBoundingClientRect();
-      setSavedStyles({
-        top: `${rect.top + window.pageYOffset - el.offsetHeight}px`,
-        left: `${
-          rect.left + window.pageXOffset - el.offsetWidth / 2 + rect.width / 2
-        }px`,
-      });
+    const selection = window.getSelection();
+    if (selection && selection.anchorNode && selection.focusNode) {
+      const getParentSpanId = (node: Node): string | null => {
+        if (!node.parentElement) return null;
+        if (node.parentElement.localName === "document") return null;
+        if (node.parentElement.className === "leaf")
+          return node.parentElement.id;
+        return getParentSpanId(node.parentNode as Node);
+      };
+
+      console.log("range", selection.getRangeAt(0));
+      const range = selection.getRangeAt(0);
+
+      const anchorParentSpanId = getParentSpanId(selection.anchorNode);
+      const focusParentSpanId = getParentSpanId(selection.focusNode);
+      if (anchorParentSpanId && focusParentSpanId) {
+        setSavedRange({
+          anchorId: anchorParentSpanId,
+          anchorOffset: range.startOffset,
+          focusId: focusParentSpanId,
+          focusOffset: range.endOffset,
+        });
+      }
     } else console.warn("Unable to find range");
   }, [editor.selection, saveSelection]);
 
@@ -206,7 +223,7 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
     if (
       !savedSelection &&
       (!selection ||
-        Range.isCollapsed(selection) ||
+        SlateRange.isCollapsed(selection) ||
         Editor.string(editor, selection) === "")
     ) {
       console.log("turnoff");
@@ -218,16 +235,17 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
     const domSelection = window.getSelection();
 
     // Set menu position if possible
-    if (savedStyles) {
-      el.style.opacity = "1";
-      el.style.top = savedStyles.top;
-      el.style.left = savedStyles.left;
-    } else if (domSelection || savedSelection?.domRange) {
+    if (domSelection || savedSelection?.domRange) {
       let range = domSelection?.getRangeAt(0);
-      if (savedSelection?.domRange) range = savedSelection.domRange;
+
+      if (savedSelection?.domRange) {
+        console.log("USING SAVED RANGE");
+        range = savedSelection.domRange;
+      }
       if (range) {
-        console.log("render", savedSelection?.domRange);
+        console.log("render", range);
         const rect = range.getBoundingClientRect();
+
         el.style.opacity = "1";
         el.style.top = `${rect.top + window.pageYOffset - el.offsetHeight}px`;
         el.style.left = `${
@@ -265,21 +283,21 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
     >
       <Box display="flex" flexDir="column">
         <Box display="flex" flexDir="row">
-          <MarkButton editor={editor} type={SlateStyleTypes.bold} />
-          <MarkButton editor={editor} type={SlateStyleTypes.italic} />
+          <MarkButton editor={editor} styleType={SlateStyleTypes.bold} />
+          <MarkButton editor={editor} styleType={SlateStyleTypes.italic} />
           <MarkButton
             editor={editor}
-            type={SlateStyleTypes.link}
+            styleType={SlateStyleTypes.link}
             toggleLinkForm={toggleLinkForm}
           />
           <MarkButton
             editor={editor}
-            type={SlateStyleTypes.variable}
+            styleType={SlateStyleTypes.variable}
             toggleVariableForm={toggleVariableForm}
           />
           <MarkButton
             editor={editor}
-            type={SlateStyleTypes.quote}
+            styleType={SlateStyleTypes.quote}
             toggleQuoteForm={toggleQuoteForm}
           />
         </Box>

@@ -18,13 +18,27 @@ import TextLink from "../../Common/TextLink";
 
 interface IImageDisplay {
   image: ImageSnippetFragment;
+  showCaption?: boolean;
   canExpand?: boolean;
 }
 
-const ImageDisplay = ({ image, canExpand = true }: IImageDisplay) => {
+const ImageDisplay: React.FC<IImageDisplay> = ({
+  image,
+  canExpand = true,
+  showCaption = true,
+  children,
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const src = React.useMemo(() => {
+    if (
+      image.buffer.charAt(0) === "d" &&
+      image.buffer.charAt(1) === "a" &&
+      image.buffer.charAt(2) === "t" &&
+      image.buffer.charAt(3) === "a"
+    ) {
+      return image.buffer;
+    }
     return `data:${image.contentType};base64,${image.buffer}`;
   }, [image]);
 
@@ -57,13 +71,16 @@ const ImageDisplay = ({ image, canExpand = true }: IImageDisplay) => {
             cursor: "pointer",
           }}
         />
-        <Text
-          align="center"
-          fontSize="xs"
-          noOfLines={canExpand ? 2 : undefined}
-        >
-          {image.caption}
-        </Text>
+        {showCaption && (
+          <Text
+            align="center"
+            fontSize="xs"
+            noOfLines={canExpand ? 2 : undefined}
+          >
+            {image.caption}
+          </Text>
+        )}
+        {children}
       </Flex>
 
       {canExpand && (

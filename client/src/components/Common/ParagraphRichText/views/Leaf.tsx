@@ -2,6 +2,8 @@ import React from "react";
 import { RenderLeafProps } from "slate-react";
 
 const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
+  const id = Math.floor(Math.random() * 100000).toString();
+
   if (leaf.bold) {
     children = <strong>{children}</strong>;
   }
@@ -18,7 +20,15 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
     children = <span style={{ color: "blue" }}>{children}</span>;
   }
 
-  return <span {...attributes}>{children}</span>;
+  if (leaf.highlight) {
+    children = <span style={{ backgroundColor: "lightblue" }}>{children}</span>;
+  }
+
+  return (
+    <span {...attributes} className="leaf" id={id}>
+      {children}
+    </span>
+  );
 };
 
 export default Leaf;

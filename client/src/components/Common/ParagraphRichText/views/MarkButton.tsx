@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button } from "@chakra-ui/button";
+import { Button, ButtonProps } from "@chakra-ui/button";
 import { Editor } from "slate";
 import {
   StyledText,
@@ -10,31 +10,44 @@ import {
 import { CustomEditor } from "../utils";
 
 import { FaBold, FaLink, FaItalic } from "react-icons/fa";
-import { FiBold, FiLink, FiItalic, FiAnchor, FiEdit3 } from "react-icons/fi";
-import { Box } from "@chakra-ui/react";
+import {
+  FiBold,
+  FiLink,
+  FiItalic,
+  FiAnchor,
+  FiEdit3,
+  FiCamera,
+} from "react-icons/fi";
+import { Tooltip } from "@chakra-ui/react";
 
-interface IMarkButton {
+interface IMarkButton extends Omit<ButtonProps, "styleType"> {
   editor: Editor;
-  type: SlateStyleTypes;
+  styleType: SlateStyleTypes;
+  requireSelection?: boolean;
   toggleLinkForm?: (marks?: Omit<StyledText, "text"> | null) => void;
   toggleVariableForm?: () => void;
   toggleQuoteForm?: () => void;
+  toggleImageForm?: () => void;
 }
 
 const MarkButton: React.FC<IMarkButton> = ({
   editor,
-  type,
+  styleType: type,
+  requireSelection,
   toggleLinkForm,
   toggleVariableForm,
   toggleQuoteForm,
+  toggleImageForm,
+  ...props
 }) => {
   const getButtonParameters = (
     type: SlateStyleTypes
-  ): { label: React.ReactNode; onClick: () => void } => {
+  ): { label: React.ReactNode; onClick: () => void; tooltip: string } => {
     switch (type) {
       case SlateStyleTypes.bold: {
         const isActive = CustomEditor.isMarkActive(editor, SlateMarks.bold);
         return {
+          tooltip: "Bold",
           label: isActive ? <FaBold /> : <FiBold />,
           onClick: () => CustomEditor.toggleBold(editor),
         };
@@ -42,6 +55,7 @@ const MarkButton: React.FC<IMarkButton> = ({
       case SlateStyleTypes.italic: {
         const isActive = CustomEditor.isMarkActive(editor, SlateMarks.italic);
         return {
+          tooltip: "Italic",
           label: isActive ? <FaItalic /> : <FiItalic />,
           onClick: () => CustomEditor.toggleItalic(editor),
         };
@@ -52,6 +66,7 @@ const MarkButton: React.FC<IMarkButton> = ({
           CustomEditor.isMarkActive(editor, SlateMarks.internalMentionPage);
 
         return {
+          tooltip: "Link",
           label: isActive ? <FaLink /> : <FiLink />,
           onClick: () => {
             if (toggleLinkForm) toggleLinkForm(CustomEditor.getMarks(editor));
@@ -60,6 +75,7 @@ const MarkButton: React.FC<IMarkButton> = ({
       }
       case SlateStyleTypes.variable: {
         return {
+          tooltip: "Variable",
           label: <FiAnchor />,
           onClick: () => {
             if (toggleVariableForm) toggleVariableForm();
@@ -68,35 +84,48 @@ const MarkButton: React.FC<IMarkButton> = ({
       }
       case SlateStyleTypes.quote: {
         return {
+          tooltip: "Quote",
           label: <FiEdit3 />,
           onClick: () => {
             if (toggleQuoteForm) toggleQuoteForm();
           },
         };
       }
+      case SlateStyleTypes.image: {
+        return {
+          tooltip: "Image",
+          label: <FiCamera />,
+          onClick: () => {
+            if (toggleImageForm) toggleImageForm();
+          },
+        };
+      }
       default: {
         return {
           label: "invalid",
+          tooltip: "invalid",
           onClick: () => null,
         };
       }
     }
   };
 
-  const { label, onClick } = getButtonParameters(type);
+  const { label, tooltip, onClick } = getButtonParameters(type);
 
   return (
-    <Box>
+    <Tooltip label={tooltip}>
       <Button
         onClick={(event) => {
           event.preventDefault();
           onClick();
         }}
         margin={1}
+        isDisabled={requireSelection && !editor.selection}
+        {...props}
       >
         {label}
       </Button>
-    </Box>
+    </Tooltip>
   );
 };
 

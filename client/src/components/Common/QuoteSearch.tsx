@@ -1,15 +1,16 @@
 import { Button } from "@chakra-ui/button";
+import { InputProps } from "@chakra-ui/input";
 import { Box } from "@chakra-ui/layout";
 import React from "react";
 import { PageSnippetFragment, usePageLazyQuery } from "../../generated/graphql";
 import Statement from "../Statement";
 import PageSearch from "./PageSearch";
 
-interface IQuoteSearch {
+interface IQuoteSearch extends InputProps {
   statementSelect: (statementId: string) => void;
 }
 
-const QuoteSearch: React.FC<IQuoteSearch> = ({ statementSelect }) => {
+const QuoteSearch: React.FC<IQuoteSearch> = ({ statementSelect, ...props }) => {
   const [pageId, setPageId] = React.useState<string>();
   const [fetchedPage, setFetchedPage] = React.useState<PageSnippetFragment>();
 
@@ -54,7 +55,7 @@ const QuoteSearch: React.FC<IQuoteSearch> = ({ statementSelect }) => {
 
   return (
     <Box>
-      <PageSearch pageSelected={(page) => setPageId(page.id)} />
+      <PageSearch pageSelected={(page) => setPageId(page.id)} {...props} />
       {fetchedPage && (
         <Box margin={1} padding={1}>
           <Box display="flex" justifyContent="flex-end">

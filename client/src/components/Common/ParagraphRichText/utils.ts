@@ -1,5 +1,6 @@
-import { Editor, Transforms } from "slate";
+import { BaseSelection, Editor, Transforms } from "slate";
 import {
+  ImageElementType,
   ISlateQuestion,
   SlateMarks,
   StatementElementType,
@@ -164,5 +165,33 @@ export const CustomEditor = {
       element.newQuestions.splice(index, 1);
       Transforms.setNodes(editor, element, { at: [nodeIndex] });
     }
+  },
+  updateImage: (
+    editor: Editor,
+    imageElement: ImageElementType,
+    selection: BaseSelection
+  ) => {
+    if (selection) {
+      console.log("imageElement", imageElement);
+      console.log("selection", selection);
+      Transforms.setNodes(editor, imageElement, {
+        at: [selection.anchor.path[0], selection.anchor.path[1]],
+      });
+    }
+  },
+  addImage: (
+    editor: Editor,
+    buffer: string,
+    contentType: string,
+    fileName: string
+  ) => {
+    console.log("buffer", buffer);
+    Transforms.insertNodes(editor, {
+      type: "image",
+      contentType,
+      buffer,
+      children: [{ text: "" }],
+      name: fileName,
+    });
   },
 };

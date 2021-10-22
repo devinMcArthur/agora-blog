@@ -34,6 +34,9 @@ const Element = (props: IElement) => {
     case "image": {
       return <ImageElement {...props} />;
     }
+    default: {
+      return <span {...props.attributes}>{props.children}</span>;
+    }
   }
 };
 

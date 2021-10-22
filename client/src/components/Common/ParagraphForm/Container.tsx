@@ -1,23 +1,16 @@
-import { Heading } from "@chakra-ui/layout";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs";
 import React from "react";
 import { useParagraphForm } from "../../../contexts/ParagraphForm";
 import Loading from "../Loading";
 import Paragraph from "../Paragraph";
-import RichText from "../RichText";
+import ParagraphRichText from "../ParagraphRichText";
 
-interface IContainer {
-  pageId: string;
-}
-
-const Container = ({ pageId }: IContainer) => {
+const Container = () => {
   const {
     state: { slateParagraph, paragraph },
-    updateSlateParagraph,
   } = useParagraphForm();
 
-  if (slateParagraph === null)
-    return <Heading>Unable to find this page</Heading>;
+  if (slateParagraph === null) return <div>Unable to find page</div>;
   if (slateParagraph && paragraph)
     return (
       <Tabs>
@@ -27,11 +20,7 @@ const Container = ({ pageId }: IContainer) => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <RichText
-              value={slateParagraph}
-              onChange={updateSlateParagraph}
-              pageId={pageId}
-            />
+            <ParagraphRichText />
           </TabPanel>
           <TabPanel>
             <Paragraph paragraph={paragraph} />

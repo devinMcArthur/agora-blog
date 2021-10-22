@@ -13,6 +13,7 @@ export enum SlateStyleTypes {
   link = "link",
   variable = "variable",
   quote = "quote",
+  image = "image",
 }
 
 export type StyledText = {
@@ -24,6 +25,7 @@ export type StyledText = {
     title: string;
   };
   externalMentionUrl?: string;
+  highlight?: boolean;
 };
 
 export interface ISlateQuestion {
@@ -37,6 +39,11 @@ export type StatementElementType = {
   index: number;
   questions: ISlateQuestion[];
   newQuestions: { question: string }[];
+  children: Descendant[];
+};
+
+export type StatementElementContentType = {
+  type: "statement-content";
   children: Descendant[];
 };
 
@@ -67,5 +74,6 @@ export type ImageElementType = {
 export type CustomElements =
   | VariableElementType
   | StatementElementType
+  | StatementElementContentType
   | QuoteElementType
   | ImageElementType;

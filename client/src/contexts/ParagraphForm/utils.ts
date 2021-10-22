@@ -12,6 +12,7 @@ import {
   StatementElementType,
   StyledText,
   VariableElementType,
+  ImageElementType,
 } from "../../models/slate";
 import replaceSpaces from "../../utils/replacesSpaces";
 
@@ -208,6 +209,19 @@ export const convertSlateParagraphToParagraph = (
             styles.push({
               type: "quote",
               value: { statement: { _id: item.statementId } },
+            });
+          }
+
+          if ((child as CustomElements).type === "image") {
+            const item: ImageElementType = child as ImageElementType;
+
+            styles.push({
+              type: "image",
+              value: {
+                image: {
+                  ...item,
+                },
+              },
             });
           }
 

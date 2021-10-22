@@ -1,15 +1,13 @@
 import React from "react";
-import { BaseEditor, BaseSelection, Descendant } from "slate";
-import { HistoryEditor } from "slate-history";
-import { ReactEditor } from "slate-react";
+import { BaseSelection, Descendant } from "slate";
 import { useImmerReducer } from "use-immer";
 import {
   DisplayParagraphSnippetFragment,
   usePageQuery,
 } from "../../generated/graphql";
 import {
-  StyledText,
   CustomElements,
+  StatementElementContentType,
   StatementElementType,
 } from "../../models/slate";
 import {
@@ -20,18 +18,6 @@ import {
 /**
  * ----- Type Initialization -----
  */
-
-/**
- * Slate Types
- */
-
-declare module "slate" {
-  interface CustomTypes {
-    Editor: BaseEditor & ReactEditor & HistoryEditor;
-    Element: CustomElements;
-    Text: StyledText;
-  }
-}
 
 /**
  * Context Types
@@ -49,15 +35,16 @@ interface IState {
   slateParagraph: Descendant[] | null | undefined;
 }
 
-interface IParagraphFormContext {
+export interface IParagraphFormContext {
   state: IState;
   savedSelection?: { slateSelection: BaseSelection; domRange: Range };
 
-  updateSlateStatement: (slateStatement: Descendant, index: number) => void;
+  updateSlateStatement: (value: Descendant[], index: number) => void;
   updateSlateParagraph: (slateParagraph: Descendant[]) => void;
   saveSelection: (selection: BaseSelection) => void;
   clearSelection: () => void;
   restoreDomSelection: () => void;
+  submitForm: () => void;
 }
 
 type IAction =
@@ -77,7 +64,7 @@ type IAction =
   | {
       type: "update-slate-statement";
       payload: {
-        slateStatement: Descendant;
+        value: Descendant[];
         index: number;
       };
     }
@@ -122,7 +109,6 @@ const ParagraphFormReducer = (draft: IState, action: IAction): IState => {
       const slateParagraph: Descendant[] = JSON.parse(
         JSON.stringify(action.payload.slateParagraph)
       );
-      console.log("updateSlateParagraph", slateParagraph);
       const previousSlateParagraph = draft.previousSlateParagraph;
 
       // A statement has been added or removed
@@ -147,18 +133,17 @@ const ParagraphFormReducer = (draft: IState, action: IAction): IState => {
         // Ensure any duplicate statement Ids are marked as NEW
         const seenIds: string[] = [];
         for (let i = 0; i < statementIds.length; i++) {
-          console.log("seenIds", seenIds);
-          console.log("id", statementIds[i]);
-          if (seenIds.includes(statementIds[i]))
+          if (seenIds.includes(statementIds[i])) {
             (slateParagraph[i] as StatementElementType).statementId = "NEW";
+            (slateParagraph[i] as StatementElementType).newQuestions = [];
+            (slateParagraph[i] as StatementElementType).questions = [];
+          }
 
           // Add to seenIds array after
           if (statementIds[i] !== "NEW") seenIds.push(statementIds[i]);
 
           (slateParagraph[i] as StatementElementType).index = i;
         }
-
-        console.log("mutatedSlateParagraph", slateParagraph);
       }
 
       return {
@@ -173,9 +158,11 @@ const ParagraphFormReducer = (draft: IState, action: IAction): IState => {
       };
     }
     case "update-slate-statement": {
-      const { slateStatement, index } = action.payload;
+      const { value, index } = action.payload;
       if (draft.slateParagraph && !!draft.slateParagraph[index]) {
-        draft.slateParagraph[index] = slateStatement;
+        (draft.slateParagraph[index] as StatementElementType).children = (
+          value[0] as StatementElementContentType
+        ).children;
       }
       return draft;
     }
@@ -222,13 +209,13 @@ const ParagraphFormProvider = ({
   };
 
   const updateSlateStatement: IParagraphFormContext["updateSlateStatement"] = (
-    slateStatement,
+    value,
     index
   ) => {
     dispatch({
       type: "update-slate-statement",
       payload: {
-        slateStatement,
+        value,
         index,
       },
     });
@@ -257,6 +244,8 @@ const ParagraphFormProvider = ({
 
   const clearSelection: IParagraphFormContext["clearSelection"] = () =>
     setSavedSelection(undefined);
+
+  const submitForm: IParagraphFormContext["submitForm"] = () => {};
 
   /**
    * ----- Use-effects and other logic -----
@@ -300,6 +289,7 @@ const ParagraphFormProvider = ({
         saveSelection,
         clearSelection,
         restoreDomSelection,
+        submitForm,
       }}
     >
       {children}
