@@ -35,6 +35,7 @@ const page_covid_19_symptoms_statement_1_v1 = new Statement({
       questions: [_ids.questions.what_are_the_common_symptoms_of_covid_19._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_symptoms_statement_2_v1 = new Statement({
@@ -85,6 +86,7 @@ const page_covid_19_symptoms_statement_2_v1 = new Statement({
       questions: [_ids.questions.why_is_covid_19_dangerous._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_symptoms_statement_3_v1 = new Statement({
@@ -104,6 +106,7 @@ const page_covid_19_symptoms_statement_3_v1 = new Statement({
       questions: [_ids.questions.what_is_long_covid._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const statements = [

@@ -20,7 +20,7 @@ export const convertParagraphToSlate = (
   paragraph: DisplayParagraphSnippetFragment
 ): Descendant[] => {
   return paragraph.statements.map((statement, index) =>
-    convertStatementToSlate(statement, index)
+    convertStatementToSlate(statement.statement, index)
   );
 };
 
@@ -241,13 +241,15 @@ export const convertSlateParagraphToParagraph = (
                 question: question.question,
               };
             }),
-            sources: { pages: [], urls: [] },
             stringArray,
           },
         ],
       };
 
-      statements.push(statement);
+      statements.push({
+        statement,
+        versionIndex: 0,
+      });
     }
   }
 
@@ -255,6 +257,7 @@ export const convertSlateParagraphToParagraph = (
     page: originalParagraph.page,
     __typename: originalParagraph.__typename,
     statements,
+    editProposals: [],
   };
 
   return paragraph;

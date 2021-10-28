@@ -1,58 +1,27 @@
 import React from "react";
 import { DisplayStatementSnippetFragment } from "../../generated/graphql";
 
-import StatementService from "../../services/statementService";
+import StringArray from "../Common/StringArray";
 import TextLink from "../Common/TextLink";
 
-const Statement = (props: {
+interface IStatement {
   statement: DisplayStatementSnippetFragment;
-  showSources?: boolean;
-}) => {
-  const { statement } = props;
+  versionIndex?: number;
+}
 
-  const currentVersion = statement.versions[statement.versions.length - 1];
+const Statement = ({ statement, versionIndex }: IStatement) => {
+  const statementVersion = React.useMemo(() => {
+    if (versionIndex !== undefined) return versionIndex;
+    else return statement.versions.length - 1;
+  }, [versionIndex, statement]);
 
-  // Default show sources to true
-  let { showSources } = props;
-  if (showSources !== false) showSources = true;
+  const currentVersion = React.useMemo(
+    () => statement.versions[statementVersion],
+    [statement, statementVersion]
+  );
 
-  let sourcePages, sourceURLs, questions;
-  if (currentVersion.sources && showSources) {
-    let index = 1;
-    if (currentVersion.sources.pages) {
-      sourcePages = currentVersion.sources.pages.map((page) => {
-        index++;
-        return (
-          <sup>
-            [
-            <TextLink link={`/p/${page.slug}`} title={page.title}>
-              p-{index}
-            </TextLink>
-            ]
-          </sup>
-        );
-      });
-    }
-    if (currentVersion.sources.urls) {
-      sourceURLs = currentVersion.sources.urls.map((url) => {
-        index++;
-        return (
-          <sup>
-            [
-            <TextLink link={url} isExternal title={url}>
-              {index}
-            </TextLink>
-            ]
-          </sup>
-        );
-      });
-    }
-  }
-  if (
-    currentVersion.questions &&
-    currentVersion.questions.length > 0 &&
-    showSources
-  ) {
+  let questions;
+  if (currentVersion.questions && currentVersion.questions.length > 0) {
     questions = currentVersion.questions.map((question, index) => {
       if (question)
         return (
@@ -70,9 +39,9 @@ const Statement = (props: {
 
   return (
     <span>
-      {StatementService().translateStatementToJSX(props.statement)}
-      {sourcePages}
-      {sourceURLs}
+      <StringArray
+        stringArray={statement.versions[statementVersion].stringArray}
+      />
       {questions}
     </span>
   );

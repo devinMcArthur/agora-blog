@@ -4,14 +4,6 @@ fragment DisplayStatementSnippet on StatementClass {
     stringArray {
       ...FullStringArraySnippet
     }
-    sources {
-      urls
-      pages {
-        _id
-        slug
-        title
-      }
-    }
     questions {
       _id
       question

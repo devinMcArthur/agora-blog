@@ -3,11 +3,11 @@ import { Types } from "mongoose";
 import { Question } from "@models";
 
 const question = async (id: Types.ObjectId) => {
-  return await Question.getByID(id, { fromCache: true });
+  return await Question.getById(id);
 };
 
 const questions = async () => {
-  return await Question.getList({ fromCache: true });
+  return await Question.getList();
 };
 
 const searchQuestions = async (searchString: string) => {

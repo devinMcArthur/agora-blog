@@ -21,7 +21,7 @@ const QuotedStatement = ({ statementID, key, ...props }: IQuotedStatement) => {
       {!data && loading ? (
         <Loading />
       ) : (
-        <Box as="span" borderBottom="1px solid #E2E8F0" {...props}>
+        <Box as="span" {...props}>
           "
           <Statement statement={data?.statement!} />
           <Text as="sup">

@@ -9,7 +9,11 @@ import get from "./get";
 
 @ObjectType()
 export class ParagraphClass extends ParagraphSchema {
-  public static async getByID(
+  /**
+   * ----- Get -----
+   */
+
+  public static async getById(
     this: ParagraphModel,
     id: Types.ObjectId | string,
     options: GetByIDOptions = {}
@@ -17,10 +21,11 @@ export class ParagraphClass extends ParagraphSchema {
     return get.byID(this, id, options);
   }
 
-  public async getStatements(
-    this: ParagraphDocument,
-    options?: { fromCache: boolean }
-  ) {
-    return get.statements(this, options);
+  public async getStatements(this: ParagraphDocument) {
+    return get.statements(this);
+  }
+
+  public async getEditProposals(this: ParagraphDocument) {
+    return get.editProposals(this);
   }
 }

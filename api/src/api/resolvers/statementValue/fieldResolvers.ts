@@ -1,26 +1,20 @@
-import {Statement, Variable, Page, StatementValueDocument} from "@models"
+import { Statement, Variable, Page, StatementValueDocument } from "@models";
 
 const page = async (statementValue: StatementValueDocument) => {
   if (statementValue.page)
-    return await Page.getByID(statementValue.page.toString(), {
-      fromCache: true,
-    });
+    return await Page.getByID(statementValue.page.toString());
   return null;
 };
 
 const statement = async (statementValue: StatementValueDocument) => {
   if (statementValue.statement)
-    return await Statement.getByID(statementValue.statement.toString(), {
-      fromCache: true,
-    });
+    return await Statement.getById(statementValue.statement.toString());
   return null;
 };
 
 const variable = async (statementValue: StatementValueDocument) => {
   if (statementValue.variable)
-    return await Variable.getByID(statementValue.variable.toString(), {
-      fromCache: true,
-    });
+    return await Variable.getByID(statementValue.variable.toString());
   return null;
 };
 

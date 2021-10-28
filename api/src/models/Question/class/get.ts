@@ -1,5 +1,4 @@
 import { FilterQuery, QueryFindOptions, Types } from "mongoose";
-import { dispatch } from "nact";
 
 import {
   Page,
@@ -13,16 +12,11 @@ import {
 } from "@models";
 import GetByIDOptions from "@typescript/interface/getByID_Options";
 import populateOptions from "@utils/populateOptions";
-import isEmpty from "@validation/isEmpty";
-import performCacheQuery from "@utils/performCacheQuery";
-
-import { cacheService } from "../../../server";
 
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,
-  fromCache: false,
 };
-const byID = (
+const byId = (
   Question: QuestionModel,
   id: Types.ObjectId | string,
   options: GetByIDOptions = byIDDefaultOptions
@@ -31,25 +25,7 @@ const byID = (
     try {
       options = populateOptions(options, byIDDefaultOptions);
 
-      let question: QuestionDocument | null = null;
-      if (options.fromCache) {
-        const cachedQuestion = await performCacheQuery({
-          path: ["questions"],
-          type: "GET_QUESTION",
-          payload: { questionID: id },
-        });
-        if (!isEmpty(cachedQuestion)) {
-          question = new Question(cachedQuestion);
-        } else {
-          dispatch(cacheService, {
-            path: ["questions"],
-            type: "SET_QUESTION",
-            payload: { questionID: id },
-          });
-        }
-      }
-
-      if (!question) question = await Question.findById(id);
+      const question = await Question.findById(id);
 
       if (!question && options.throwError) {
         throw new Error("Question.getByID: Unable to find question");
@@ -62,41 +38,10 @@ const byID = (
   });
 };
 
-const listDefaultOptions = {
-  fromCache: false,
-};
-const list = (
-  Question: QuestionModel,
-  options = listDefaultOptions
-): Promise<QuestionDocument[]> => {
+const list = (Question: QuestionModel): Promise<QuestionDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      options = populateOptions(options, listDefaultOptions);
-
-      let questions: QuestionDocument[] = [];
-      if (options.fromCache) {
-        const cachedQuestionIDs = await performCacheQuery({
-          path: ["question_list"],
-          type: "GET_LIST",
-        });
-        if (cachedQuestionIDs.length > 0) {
-          for (let i = 0; i < cachedQuestionIDs.length; i++) {
-            const question = await Question.getByID(cachedQuestionIDs[i], {
-              fromCache: true,
-            });
-            if (question) questions[i] = question;
-          }
-        } else {
-          dispatch(cacheService, {
-            path: ["question_list"],
-            type: "SET_LIST",
-          });
-        }
-      }
-
-      if (questions.length === 0) {
-        questions = await Question.find({});
-      }
+      const questions = await Question.find({});
 
       resolve(questions);
     } catch (e) {
@@ -105,49 +50,21 @@ const list = (
   });
 };
 
-const pagesThatReferenceDefaultOptions = {
-  fromCache: false,
-};
 const pagesThatReference = (
-  question: QuestionDocument,
-  options = pagesThatReferenceDefaultOptions
+  question: QuestionDocument
 ): Promise<PageDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      options = populateOptions(options, pagesThatReferenceDefaultOptions);
-
       let pages: PageDocument[] = [];
-      if (options.fromCache) {
-        const cachedQuestion = await performCacheQuery({
-          path: ["questions"],
-          type: "GET_QUESTION",
-          payload: { questionID: question._id },
+
+      const questionPageConnections: QuestionPageConnectionDocument[] =
+        await QuestionPageConnection.find({
+          question: question._id,
         });
-        if (cachedQuestion.relatedPages) {
-          for (let i = 0; i < cachedQuestion.relatedPages.length; i++) {
-            pages[i] = new Page(cachedQuestion.relatedPages[i]);
-          }
-        } else {
-          dispatch(cacheService, {
-            path: ["questions"],
-            type: "SET_QUESTION",
-            payload: { questionID: question._id },
-          });
-        }
-      }
 
-      if (pages.length === 0) {
-        const questionPageConnections: QuestionPageConnectionDocument[] =
-          await QuestionPageConnection.find({
-            question: question._id,
-          });
-
-        for (const connection of questionPageConnections) {
-          const page = await Page.getByID(connection.referrerPage!.toString(), {
-            fromCache: true,
-          });
-          if (page) pages.push(page);
-        }
+      for (const connection of questionPageConnections) {
+        const page = await Page.getByID(connection.referrerPage!.toString());
+        if (page) pages.push(page);
       }
 
       resolve(pages);
@@ -157,40 +74,12 @@ const pagesThatReference = (
   });
 };
 
-const referencedCountDefaultOptions = {
-  fromCache: false,
-};
-const referencedCount = (
-  question: QuestionDocument,
-  options = referencedCountDefaultOptions
-): Promise<number> => {
+const referencedCount = (question: QuestionDocument): Promise<number> => {
   return new Promise(async (resolve, reject) => {
     try {
-      options = populateOptions(options, referencedCountDefaultOptions);
-
-      let count: number = 0;
-      if (options.fromCache) {
-        const cachedQuestion = await performCacheQuery({
-          path: ["questions"],
-          type: "GET_QUESTION",
-          payload: { questionID: question._id },
-        });
-        if (cachedQuestion.referencedCount) {
-          count = cachedQuestion.referencedCount;
-        } else {
-          dispatch(cacheService, {
-            path: ["questions"],
-            type: "SET_QUESTION",
-            payload: { questionID: question._id },
-          });
-        }
-      }
-
-      if (count === 0) {
-        count = await QuestionPageConnection.find({
-          question: question._id,
-        }).countDocuments();
-      }
+      const count = await QuestionPageConnection.find({
+        question: question._id,
+      }).countDocuments();
 
       resolve(count);
     } catch (e) {
@@ -245,7 +134,7 @@ const statementReferences = (
       const statements: StatementDocument[] = [];
 
       for (let i = 0; i < questionPageConnections.length; i++) {
-        const statement = await Statement.getByID(
+        const statement = await Statement.getById(
           questionPageConnections[i].statement!.toString(),
           {
             current: true,
@@ -303,7 +192,7 @@ const search = (Question: QuestionModel, searchString: string) => {
 };
 
 export default {
-  byID,
+  byId,
   list,
   pagesThatReference,
   referencedCount,

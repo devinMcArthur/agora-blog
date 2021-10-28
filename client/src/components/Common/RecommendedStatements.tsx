@@ -9,10 +9,10 @@ import Statement from "../Statement";
 import Loading from "./Loading";
 import { Heading } from "@chakra-ui/react";
 
-interface IRecommendedStatements {
+export interface IRecommendedStatements {
   questionId: string;
   avoidedPage?: string;
-  selectedStatement: (statementId: string) => void;
+  selectedStatement: (statementId: string, pageSlug: string) => void;
 }
 
 const RecommendedStatements = ({
@@ -57,7 +57,7 @@ const RecommendedStatements = ({
         backgroundColor="white"
         borderRadius={4}
         cursor="pointer"
-        onClick={() => selectedStatement(statement._id)}
+        onClick={() => selectedStatement(statement._id, statement.page.slug)}
       >
         <Heading size="sm">{statement.page.title}</Heading>
         <Statement statement={statement} />
@@ -66,7 +66,17 @@ const RecommendedStatements = ({
   } else if (data?.statementsFromQuestion.length === 0) {
     content = (
       <Center>
-        <Text fontWeight="bold">No recommendations found</Text>
+        <Text
+          fontWeight="bold"
+          p={1}
+          m={1}
+          backgroundColor="white"
+          borderRadius={4}
+          w="100%"
+          textAlign="center"
+        >
+          No statements found
+        </Text>
       </Center>
     );
   }

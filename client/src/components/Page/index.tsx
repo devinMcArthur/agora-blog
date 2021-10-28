@@ -4,35 +4,93 @@ import PageCard from "../Common/PageCard";
 import Paragraph from "../Common/Paragraph";
 import { usePageQuery } from "../../generated/graphql";
 import { Container, Divider, Heading, Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/layout";
 import Loading from "../Common/Loading";
+import { useParams } from "react-router";
+import { PageMatchParams } from "../../models/pageParams";
+import { Tabs, TabList, Tab, TabPanel, TabPanels } from "@chakra-ui/tabs";
+import ParagraphEditProposal from "../Common/ParagraphEditProposal";
+import EditProposalPreview from "../Common/EditProposalPreview";
+import { useDrawer } from "../../contexts/Drawer";
 
-const Page = (props: { match: any }) => {
+const Page = () => {
+  const { pageSlug } = useParams<PageMatchParams>();
+
   const { data, loading } = usePageQuery({
-    variables: { slug: props.match.params.pageSlug },
+    variables: { slug: pageSlug },
   });
 
-  let content = <Loading />;
-  if (data?.page && !loading) {
-    const { page } = data;
-    const relatedPageList = page.relatedPages.map((relatedPage) => (
-      <PageCard
-        page={relatedPage}
-        referenceObject={{ type: "page", pageID: page._id }}
-      />
-    ));
+  const { setCurrentPage, clearState } = useDrawer();
 
-    content = (
-      <Flex flexDirection="column">
-        <Heading size="lg">{page.title}</Heading>
-        <Divider mb={2} />
-        <Paragraph paragraph={page.currentParagraph} />
-        <Divider pb={2} />
-        <Flex flexDirection="column" mr="1.5em" pt={4}>
-          {relatedPageList}
+  const [selectedEditProposalId, setSelectedEditProposalId] =
+    React.useState<string>();
+
+  React.useEffect(() => {
+    if (data?.page) setCurrentPage(data.page._id);
+
+    return () => {
+      clearState();
+    };
+  }, [clearState, data?.page, setCurrentPage]);
+
+  const content = React.useMemo(() => {
+    if (data?.page && !loading) {
+      const { page } = data;
+      const relatedPageList = page.relatedPages.map((relatedPage) => (
+        <PageCard
+          page={relatedPage}
+          referenceObject={{ type: "page", pageID: page._id }}
+        />
+      ));
+
+      const editProposals = page.currentParagraph.editProposals.map(
+        (editProposal) => (
+          <ParagraphEditProposal
+            editProposalSelected={editProposal._id === selectedEditProposalId}
+            editProposalPreviewSelection={(proposal) =>
+              setSelectedEditProposalId(proposal)
+            }
+            paragraphEditProposalId={editProposal._id}
+          />
+        )
+      );
+
+      return (
+        <Flex flexDirection="column">
+          <Heading size="lg">{page.title}</Heading>
+          <Divider mb={2} />
+          <Box my={3}>
+            {selectedEditProposalId ? (
+              <EditProposalPreview editProposalId={selectedEditProposalId} />
+            ) : (
+              <Paragraph paragraph={page.currentParagraph} />
+            )}
+          </Box>
+
+          <Tabs variant="line">
+            <TabList>
+              <Tab>Related</Tab>
+              <Tab>Edits</Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <Flex flexDirection="column" mr="1.5em" pt={4} width="100%">
+                  {relatedPageList}
+                </Flex>
+              </TabPanel>
+              <TabPanel>
+                <Flex flexDir="column" mr="1.5em" pt={4}>
+                  {editProposals}
+                </Flex>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </Flex>
-      </Flex>
-    );
-  }
+      );
+    } else {
+      return <Loading />;
+    }
+  }, [data, loading, selectedEditProposalId]);
 
   return (
     <Container minW="80%" p={4}>

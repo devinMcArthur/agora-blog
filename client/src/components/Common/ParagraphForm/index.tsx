@@ -9,7 +9,7 @@ interface IParagraphForm {
 const ParagraphForm: React.FC<IParagraphForm> = ({ pageId }) => {
   return (
     <ParagraphFormProvider pageId={pageId}>
-      <Container pageId={pageId} />
+      <Container />
     </ParagraphFormProvider>
   );
 };

@@ -1,23 +1,19 @@
 import { Types } from "mongoose";
-import { dispatch } from "nact";
 
 import {
   Statement,
   StatementDocument,
   ParagraphDocument,
   ParagraphModel,
+  ParagraphEditProposalDocument,
+  ParagraphEditProposal,
 } from "@models";
 
-import performCacheQuery from "@utils/performCacheQuery";
-import isEmpty from "@validation/isEmpty";
 import GetByIDOptions from "@typescript/interface/getByID_Options";
 import populateOptions from "@utils/populateOptions";
 
-import { cacheService } from "../../../server";
-
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,
-  fromCache: false,
 };
 const byID = (
   Paragraph: ParagraphModel,
@@ -28,25 +24,7 @@ const byID = (
     try {
       options = populateOptions(options, byIDDefaultOptions);
 
-      let paragraph: ParagraphDocument | null = null;
-      if (options.fromCache) {
-        const cachedParagraph = await performCacheQuery({
-          path: ["paragraphs"],
-          type: "GET_PARAGRAPH",
-          payload: { paragraphID: id },
-        });
-        if (!isEmpty(cachedParagraph)) {
-          paragraph = new Paragraph(cachedParagraph);
-        } else {
-          dispatch(cacheService, {
-            path: ["paragraphs"],
-            type: "SET_PARAGRAPH",
-            payload: { paragraphID: id },
-          });
-        }
-      }
-
-      if (!paragraph) paragraph = await Paragraph.findById(id);
+      const paragraph = await Paragraph.findById(id);
 
       if (!paragraph && options.throwError) {
         throw new Error("Paragraph.getByID: Unable to find paragraph");
@@ -59,46 +37,41 @@ const byID = (
   });
 };
 
-const statementsDefaultOptions = {
-  fromCache: false,
-};
 const statements = (
-  paragraph: ParagraphDocument,
-  options = byIDDefaultOptions
+  paragraph: ParagraphDocument
 ): Promise<StatementDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      options = populateOptions(options, statementsDefaultOptions);
+      const statements: StatementDocument[] = await Statement.find({
+        _id: {
+          $in: paragraph.statements.map((id) => id!.toString()),
+        },
+      });
 
-      if (options.fromCache) {
-        // Retrieve from cache
-        const statements: StatementDocument[] = [];
-        for (let i in paragraph.statements) {
-          const statement = await Statement.getByID(
-            paragraph.statements[i]!.toString(),
-            { fromCache: true }
-          );
-          if (statement) statements[i] = statement;
-        }
-
-        resolve(statements);
-      } else {
-        // Retrieve directly from DB
-        const statements: StatementDocument[] = await Statement.find({
-          _id: {
-            $in: paragraph.statements.map((id) => id!.toString()),
-          },
-        });
-
-        resolve(statements);
-      }
+      resolve(statements);
     } catch (e) {
       reject(e);
     }
   });
 };
 
+const editProposals = (paragraph: ParagraphDocument) => {
+  return new Promise<ParagraphEditProposalDocument[]>(
+    async (resolve, reject) => {
+      try {
+        const paragraphEditProposals =
+          await ParagraphEditProposal.getByParagraph(paragraph);
+
+        resolve(paragraphEditProposals);
+      } catch (e) {
+        reject(e);
+      }
+    }
+  );
+};
+
 export default {
   byID,
   statements,
+  editProposals,
 };

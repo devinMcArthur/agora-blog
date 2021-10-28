@@ -1,11 +1,13 @@
 export * from "./Page";
 export * from "./PageConnection";
 export * from "./Paragraph";
+export * from "./ParagraphEditProposal";
 export * from "./Question";
 export * from "./QuestionPageConnection";
 export * from "./Statement";
 export * from "./Variable";
 export * from "./VariablePageConnection";
+export * from "./User";
 
 import {
   getModelForClass,
@@ -57,6 +59,25 @@ export interface ParagraphModel
 export const Paragraph = getModelForClass(ParagraphClass, {
   schemaOptions: { collection: "paragraphs" },
 });
+
+/**
+ * ----- Paragraph Edit Proposal -----
+ */
+
+import { ParagraphEditProposalClass } from "./ParagraphEditProposal/class";
+
+export interface ParagraphEditProposalDocument
+  extends DocumentType<ParagraphEditProposalClass> {}
+
+export interface ParagraphEditProposalModel
+  extends ReturnModelType<typeof ParagraphEditProposalClass> {}
+
+export const ParagraphEditProposal = getModelForClass(
+  ParagraphEditProposalClass,
+  {
+    schemaOptions: { collection: "paragraphEditProposals" },
+  }
+);
 
 /**
  * ----- Question -----
@@ -138,3 +159,17 @@ export const VariablePageConnection = getModelForClass(
     schemaOptions: { collection: "variablePageConnections" },
   }
 );
+
+/**
+ * ----- User -----
+ */
+
+import { UserClass } from "./User/class";
+
+export interface UserDocument extends DocumentType<UserClass> {}
+
+export interface UserModel extends ReturnModelType<typeof UserClass> {}
+
+export const User = getModelForClass(UserClass, {
+  schemaOptions: { collection: "users" },
+});

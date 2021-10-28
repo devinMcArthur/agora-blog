@@ -29,7 +29,10 @@ const createPages = () => {
         _id: _ids.pages.page_covid_2019._id,
         title: "Coronavirus Disease 2019 (COVID-19)",
         slug: "Coronavirus_Disease_2019_(COVID-19)",
-        paragraphs: [_ids.pages.page_covid_2019.paragraphs[0]._id],
+        paragraphs: [
+          _ids.pages.page_covid_2019.paragraphs[0]._id,
+          _ids.pages.page_covid_2019.paragraphs[1]._id,
+        ],
       });
 
       const page_covid_19_transmission = new Page({

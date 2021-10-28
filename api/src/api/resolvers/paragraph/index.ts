@@ -7,6 +7,7 @@ import {
   StatementDocument,
   PageClass,
   StatementClass,
+  ParagraphEditProposalClass,
 } from "@models";
 
 import fieldResolvers from "./fieldResolvers";
@@ -20,10 +21,8 @@ export default class ParagraphResolver {
     return fieldResolvers.page(paragraph);
   }
 
-  @FieldResolver(() => [StatementClass])
-  async statements(
-    @Root() paragraph: ParagraphDocument
-  ): Promise<StatementDocument[]> {
-    return fieldResolvers.statements(paragraph);
+  @FieldResolver(() => [ParagraphEditProposalClass])
+  async editProposals(@Root() paragraph: ParagraphDocument) {
+    return paragraph.getEditProposals();
   }
 }

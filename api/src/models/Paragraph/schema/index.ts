@@ -1,8 +1,11 @@
 import { Types } from "mongoose";
 import { Field, ID, ObjectType } from "type-graphql";
 
-import { PageClass, StatementClass } from "@models";
+import { PageClass, ParagraphEditProposalClass } from "@models";
 import { prop, Ref } from "@typegoose/typegoose";
+import { ParagraphStatementClass } from "./subDocuments";
+
+export * from "./subDocuments";
 
 @ObjectType()
 export class ParagraphSchema {
@@ -13,9 +16,9 @@ export class ParagraphSchema {
   @prop({ ref: () => PageClass, required: true })
   public page!: Ref<PageClass>;
 
-  @Field(() => [StatementClass])
-  @prop({ ref: () => StatementClass })
-  public statements!: Ref<StatementClass>[];
+  @Field(() => [ParagraphStatementClass])
+  @prop({ type: () => ParagraphStatementClass, default: [] })
+  public statements!: ParagraphStatementClass[];
 
   @Field()
   @prop({ required: true, type: Number })
@@ -24,4 +27,8 @@ export class ParagraphSchema {
   @Field()
   @prop({ type: Boolean, required: true, default: true })
   public mostRecent!: boolean;
+
+  @Field(() => ParagraphEditProposalClass, { nullable: true })
+  @prop({ ref: () => ParagraphEditProposalClass, required: false })
+  public sourceEditProposal?: ParagraphEditProposalClass;
 }

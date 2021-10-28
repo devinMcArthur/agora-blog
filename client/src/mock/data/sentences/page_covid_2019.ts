@@ -53,14 +53,6 @@ const page_covid_2019_sentence_2_v1: Sentence = {
       ],
     },
   ],
-  sources: {
-    urls: [
-      {
-        url:
-          "https://www.who.int/docs/default-source/coronaviruse/situation-reports/20200423-sitrep-94-covid-19.pdf#:~:text=The%20first%20human%20cases%20of,%2C%20in%20December%202019.",
-      },
-    ],
-  },
   questionConnections: [
     {
       questionID: _ids.questions.where_was_the_first_case_of_covid_19._id,

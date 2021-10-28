@@ -5,7 +5,7 @@ const finalValue = async (variable: VariableDocument) => {
 };
 
 const relatedPages = async (variable: VariableDocument) => {
-  return await variable.getPagesThatReference({ fromCache: true });
+  return await variable.getPagesThatReference();
 };
 
 export default { finalValue, relatedPages };

@@ -37,6 +37,45 @@ afterAll(async (done) => {
 
 describe("Page Resolver", () => {
   describe("QUERIES", () => {
+    describe("page", () => {
+      const pageQuery = `
+        query PageQuery($id: ID, $slug: String) {
+          page(id: $id, slug: $slug) {
+            currentParagraph {
+              statements {
+                versionIndex
+                statement {
+                  current
+                }
+              }
+            }
+          }
+        }
+      `;
+
+      describe("success", () => {
+        test("should successfully fetch page, its paragraph, and the paragraphs statements", async () => {
+          const res = await request(app)
+            .post("/graphql")
+            .send({
+              query: pageQuery,
+              variables: {
+                id: documents.pages.page_covid_19_deaths._id,
+              },
+            });
+
+          expect(res.status).toBe(200);
+
+          expect(
+            res.body.data.page.currentParagraph.statements[0].versionIndex
+          ).toBe(0);
+          expect(
+            res.body.data.page.currentParagraph.statements[0].statement.current
+          ).toBeTruthy();
+        });
+      });
+    });
+
     describe("searchPages", () => {
       const searchPagesQuery = `
         query SearchPages($searchString: String!) {

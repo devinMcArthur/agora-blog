@@ -56,13 +56,6 @@ const page_covid_19_transmission_sentence_2_v1: Sentence = {
       ],
     },
   ],
-  sources: {
-    urls: [
-      {
-        url: "https://onlinelibrary.wiley.com/doi/full/10.1111/irv.12743",
-      },
-    ],
-  },
   questionConnections: [
     {
       questionID:
@@ -87,13 +80,6 @@ const page_covid_19_transmission_sentence_3_v1: Sentence = {
       ],
     },
   ],
-  sources: {
-    urls: [
-      {
-        url: "https://www.nature.com/articles/d41586-020-03141-3",
-      },
-    ],
-  },
   questionConnections: [
     {
       questionID:

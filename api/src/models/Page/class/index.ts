@@ -38,25 +38,16 @@ export class PageClass extends PageSchema {
     return get.bySlug(this, slug, options);
   }
 
-  public static async getList(
-    this: PageModel,
-    options?: { fromCache: boolean }
-  ) {
-    return get.list(this, options);
+  public static async getList(this: PageModel) {
+    return get.list(this);
   }
 
-  public async getPagesThatReference(
-    this: PageDocument,
-    options?: { fromCache: boolean }
-  ) {
-    return get.pagesThatReference(this, options);
+  public async getPagesThatReference(this: PageDocument) {
+    return get.pagesThatReference(this);
   }
 
-  public async getReferencedCount(
-    this: PageDocument,
-    options?: { fromCache: boolean }
-  ) {
-    return get.referencedCount(this, options);
+  public async getReferencedCount(this: PageDocument) {
+    return get.referencedCount(this);
   }
 
   public async getStatementReferences(this: PageDocument) {

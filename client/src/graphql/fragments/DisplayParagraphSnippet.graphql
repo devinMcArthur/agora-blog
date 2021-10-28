@@ -1,8 +1,11 @@
 fragment DisplayParagraphSnippet on ParagraphClass {
   statements {
-    ...DisplayStatementSnippet
+    ...FullParagraphStatementSnippet
   }
   page {
+    _id
+  }
+  editProposals {
     _id
   }
 }

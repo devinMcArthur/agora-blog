@@ -51,6 +51,7 @@ const page_covid_19_pandemic_statement_1_v1 = new Statement({
       questions: [_ids.questions.what_is_the_covid_19_pandemic._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const statements = [page_covid_19_pandemic_statement_1_v1];

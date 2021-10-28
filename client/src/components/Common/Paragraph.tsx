@@ -1,30 +1,70 @@
-import { Box, Text } from "@chakra-ui/react";
 import React from "react";
 
+import { Box } from "@chakra-ui/layout";
+
 import { DisplayParagraphSnippetFragment } from "../../generated/graphql";
-
 import Statement from "../Statement";
+import { useDrawer } from "../../contexts/Drawer";
 
-const Paragraph = (props: { paragraph: DisplayParagraphSnippetFragment }) => {
-  const paragraphJSX = props.paragraph.statements.map((statement) => {
-    return (
-      <Box>
-        {statement.versions[statement.versions.length - 1].questions[0] ? (
-          <Text as="i" fontSize="sm" borderBottom="1px solid lightgrey">
-            {
-              statement.versions[statement.versions.length - 1].questions[0]
-                .question
-            }
-          </Text>
-        ) : null}
-        <div style={{ textIndent: "1%", lineHeight: "2", marginBottom: "1em" }}>
-          <Statement statement={statement} showSources={true} />
-        </div>
-      </Box>
-    );
-  });
+interface IParagraph {
+  paragraph: DisplayParagraphSnippetFragment;
+}
 
-  return <div>{paragraphJSX}</div>;
+const Paragraph = ({ paragraph }: IParagraph) => {
+  const {
+    state: { paragraphStatement },
+    setCurrentPage,
+    setParagraphStatement,
+    clearParagraphStatement,
+  } = useDrawer();
+
+  React.useEffect(() => {
+    setCurrentPage(paragraph.page._id);
+
+    return () => clearParagraphStatement();
+  }, [clearParagraphStatement, paragraph.page._id, setCurrentPage]);
+
+  const paragraphJSX = React.useMemo(() => {
+    return paragraph.statements.map((statement) => {
+      const selected =
+        paragraphStatement?.statement._id === statement.statement._id;
+
+      return (
+        <Box
+          display="flex"
+          flexDir="row"
+          my={2}
+          backgroundColor={selected ? "gray.200" : "gray.100"}
+          borderRadius="0 1em 1em 0"
+          cursor="pointer"
+          onClick={() =>
+            selected
+              ? clearParagraphStatement()
+              : setParagraphStatement(statement)
+          }
+        >
+          <Box flexShrink={0} width="5px" backgroundColor="gray.600" mr={4} />
+          <Box my={2}>
+            <Statement
+              statement={statement.statement}
+              versionIndex={statement.versionIndex}
+            />
+          </Box>
+        </Box>
+      );
+    });
+  }, [
+    paragraph.statements,
+    paragraphStatement?.statement._id,
+    setParagraphStatement,
+    clearParagraphStatement,
+  ]);
+
+  return (
+    <Box fisplay="flex" flexDir="column">
+      {paragraphJSX}
+    </Box>
+  );
 };
 
 export default Paragraph;

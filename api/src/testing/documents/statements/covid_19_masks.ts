@@ -51,6 +51,7 @@ const page_covid_19_masks_statement_1_v1 = new Statement({
       questions: [_ids.questions.why_are_face_masks_used_for_covid_19._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_masks_statement_2_v1 = new Statement({
@@ -87,6 +88,7 @@ const page_covid_19_masks_statement_2_v1 = new Statement({
       questions: [_ids.questions.are_masks_effective_against_covid_19._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_masks_statement_3_v1 = new Statement({
@@ -123,6 +125,7 @@ const page_covid_19_masks_statement_3_v1 = new Statement({
       questions: [_ids.questions.should_masks_be_used_to_prevent_covid_19._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_masks_statement_4_v1 = new Statement({
@@ -144,6 +147,7 @@ const page_covid_19_masks_statement_4_v1 = new Statement({
       ],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_masks_statement_5_v1 = new Statement({
@@ -163,6 +167,7 @@ const page_covid_19_masks_statement_5_v1 = new Statement({
       questions: [_ids.questions.why_do_people_want_mask_mandates._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_masks_statement_6_v1 = new Statement({
@@ -182,6 +187,7 @@ const page_covid_19_masks_statement_6_v1 = new Statement({
       questions: [_ids.questions.why_are_people_against_wearing_masks._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const statements = [

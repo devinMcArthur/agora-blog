@@ -13,6 +13,8 @@ export type Scalars = {
   Float: number;
   /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
   DateTime: any;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 export type Query = {
@@ -27,6 +29,7 @@ export type Query = {
   searchQuestions: Array<QuestionClass>;
   statement?: Maybe<StatementClass>;
   statementsFromQuestion: Array<StatementClass>;
+  paragraphEditProposal: ParagraphEditProposalClass;
 };
 
 
@@ -71,6 +74,11 @@ export type QueryStatementsFromQuestionArgs = {
   questionId: Scalars['ID'];
 };
 
+
+export type QueryParagraphEditProposalArgs = {
+  id: Scalars['String'];
+};
+
 export type PageClass = {
   __typename?: 'PageClass';
   _id: Scalars['ID'];
@@ -86,9 +94,17 @@ export type ParagraphClass = {
   __typename?: 'ParagraphClass';
   _id: Scalars['ID'];
   page: PageClass;
-  statements: Array<StatementClass>;
+  statements: Array<ParagraphStatementClass>;
   version: Scalars['Float'];
   mostRecent: Scalars['Boolean'];
+  sourceEditProposal?: Maybe<ParagraphEditProposalClass>;
+  editProposals: Array<ParagraphEditProposalClass>;
+};
+
+export type ParagraphStatementClass = {
+  __typename?: 'ParagraphStatementClass';
+  versionIndex: Scalars['Float'];
+  statement: StatementClass;
 };
 
 export type StatementClass = {
@@ -97,12 +113,12 @@ export type StatementClass = {
   page: PageClass;
   versions: Array<StatementVersionClass>;
   current: Scalars['Boolean'];
+  originalAuthor: UserClass;
 };
 
 export type StatementVersionClass = {
   __typename?: 'StatementVersionClass';
   stringArray: Array<StringArrayClass>;
-  sources: StatementSourcesClass;
   questions: Array<QuestionClass>;
   createdAt: Scalars['DateTime'];
 };
@@ -166,12 +182,6 @@ export type Image = {
   contentType: Scalars['String'];
 };
 
-export type StatementSourcesClass = {
-  __typename?: 'StatementSourcesClass';
-  pages: Array<PageClass>;
-  urls: Array<Scalars['String']>;
-};
-
 export type QuestionClass = {
   __typename?: 'QuestionClass';
   _id: Scalars['ID'];
@@ -180,21 +190,115 @@ export type QuestionClass = {
   relatedPages: Array<PageClass>;
 };
 
+export type UserClass = {
+  __typename?: 'UserClass';
+  _id?: Maybe<Scalars['ID']>;
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  middleName?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
+  password: Scalars['String'];
+  verified: Scalars['Boolean'];
+  admin: Scalars['Boolean'];
+};
+
+export type ParagraphEditProposalClass = {
+  __typename?: 'ParagraphEditProposalClass';
+  _id: Scalars['ID'];
+  paragraph: ParagraphClass;
+  author: UserClass;
+  description: Scalars['String'];
+  statements: Array<ParagraphEditProposalStatementClass>;
+  createdAt: Scalars['DateTime'];
+};
+
+export type ParagraphEditProposalStatementClass = {
+  __typename?: 'ParagraphEditProposalStatementClass';
+  _id: Scalars['ID'];
+  changeType: Scalars['String'];
+  statement?: Maybe<StatementClass>;
+  stringArray: Array<StringArrayClass>;
+  questions: Array<QuestionClass>;
+  newQuestions: Array<Scalars['String']>;
+};
+
 export type StatementsFromQuestionOptions = {
   limit?: Maybe<Scalars['Float']>;
   page?: Maybe<Scalars['Float']>;
   avoidPage?: Maybe<Scalars['ID']>;
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  login: Scalars['String'];
+  createParagraphEditProposal: ParagraphEditProposalClass;
+};
+
+
+export type MutationLoginArgs = {
+  password: Scalars['String'];
+  email: Scalars['String'];
+};
+
+
+export type MutationCreateParagraphEditProposalArgs = {
+  data: ParagraphEditProposalData;
+};
+
+export type ParagraphEditProposalData = {
+  paragraph: Scalars['String'];
+  description: Scalars['String'];
+  statements: Array<ParagraphEditProposalStatementData>;
+};
+
+export type ParagraphEditProposalStatementData = {
+  changeType: Scalars['String'];
+  statement?: Maybe<Scalars['String']>;
+  statementVersionIndex?: Maybe<Scalars['Float']>;
+  questions?: Maybe<Array<Scalars['String']>>;
+  newQuestions?: Maybe<Array<Scalars['String']>>;
+  stringArray?: Maybe<Array<StringArrayData>>;
+};
+
+export type StringArrayData = {
+  string?: Maybe<Scalars['String']>;
+  styles: Array<StringArrayStyleData>;
+};
+
+export type StringArrayStyleData = {
+  type: Scalars['String'];
+  variant?: Maybe<Scalars['String']>;
+  value?: Maybe<StyleValueData>;
+};
+
+export type StyleValueData = {
+  url?: Maybe<Scalars['String']>;
+  page?: Maybe<Scalars['String']>;
+  statement?: Maybe<Scalars['String']>;
+  variable?: Maybe<Scalars['String']>;
+  image?: Maybe<StyleValueImageData>;
+};
+
+export type StyleValueImageData = {
+  name: Scalars['String'];
+  sourceUrl?: Maybe<Scalars['String']>;
+  caption?: Maybe<Scalars['String']>;
+  data: Scalars['Upload'];
+};
+
+
 export type DisplayParagraphSnippetFragment = (
   { __typename?: 'ParagraphClass' }
   & { statements: Array<(
-    { __typename?: 'StatementClass' }
-    & DisplayStatementSnippetFragment
+    { __typename?: 'ParagraphStatementClass' }
+    & FullParagraphStatementSnippetFragment
   )>, page: (
     { __typename?: 'PageClass' }
     & Pick<PageClass, '_id'>
-  ) }
+  ), editProposals: Array<(
+    { __typename?: 'ParagraphEditProposalClass' }
+    & Pick<ParagraphEditProposalClass, '_id'>
+  )> }
 );
 
 export type DisplayStatementSnippetFragment = (
@@ -205,14 +309,7 @@ export type DisplayStatementSnippetFragment = (
     & { stringArray: Array<(
       { __typename?: 'StringArrayClass' }
       & FullStringArraySnippetFragment
-    )>, sources: (
-      { __typename?: 'StatementSourcesClass' }
-      & Pick<StatementSourcesClass, 'urls'>
-      & { pages: Array<(
-        { __typename?: 'PageClass' }
-        & Pick<PageClass, '_id' | 'slug' | 'title'>
-      )> }
-    ), questions: Array<(
+    )>, questions: Array<(
       { __typename?: 'QuestionClass' }
       & Pick<QuestionClass, '_id' | 'question'>
     )> }
@@ -238,6 +335,24 @@ export type DisplayStyleSnippetFragment = (
       { __typename?: 'Image' }
       & ImageSnippetFragment
     )> }
+  ) }
+);
+
+export type FullParagraphEditProposalSnippetFragment = (
+  { __typename?: 'ParagraphEditProposalClass' }
+  & { statements: Array<(
+    { __typename?: 'ParagraphEditProposalStatementClass' }
+    & ParagraphEditProposalStatementSnippetFragment
+  )> }
+  & PreviewParagraphEditProposalSnippetFragment
+);
+
+export type FullParagraphStatementSnippetFragment = (
+  { __typename?: 'ParagraphStatementClass' }
+  & Pick<ParagraphStatementClass, 'versionIndex'>
+  & { statement: (
+    { __typename?: 'StatementClass' }
+    & DisplayStatementSnippetFragment
   ) }
 );
 
@@ -281,6 +396,30 @@ export type PageSnippetFragment = (
   )> }
 );
 
+export type ParagraphEditProposalStatementSnippetFragment = (
+  { __typename?: 'ParagraphEditProposalStatementClass' }
+  & Pick<ParagraphEditProposalStatementClass, '_id' | 'changeType' | 'newQuestions'>
+  & { statement?: Maybe<(
+    { __typename?: 'StatementClass' }
+    & DisplayStatementSnippetFragment
+  )>, stringArray: Array<(
+    { __typename?: 'StringArrayClass' }
+    & FullStringArraySnippetFragment
+  )>, questions: Array<(
+    { __typename?: 'QuestionClass' }
+    & Pick<QuestionClass, '_id' | 'question'>
+  )> }
+);
+
+export type PreviewParagraphEditProposalSnippetFragment = (
+  { __typename?: 'ParagraphEditProposalClass' }
+  & Pick<ParagraphEditProposalClass, '_id' | 'description' | 'createdAt'>
+  & { author: (
+    { __typename?: 'UserClass' }
+    & Pick<UserClass, '_id' | 'firstName' | 'lastName'>
+  ) }
+);
+
 export type QuestionCardSnippetFragment = (
   { __typename?: 'QuestionClass' }
   & Pick<QuestionClass, '_id' | 'question' | 'referencedCount'>
@@ -315,6 +454,32 @@ export type VariableSnippetFragment = (
     { __typename?: 'PageClass' }
     & PageCardSnippetFragment
   )> }
+);
+
+export type CreateParagraphEditProposalMutationVariables = Exact<{
+  data: ParagraphEditProposalData;
+}>;
+
+
+export type CreateParagraphEditProposalMutation = (
+  { __typename?: 'Mutation' }
+  & { createParagraphEditProposal: (
+    { __typename?: 'ParagraphEditProposalClass' }
+    & FullParagraphEditProposalSnippetFragment
+  ) }
+);
+
+export type FullParagraphEditProposalQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type FullParagraphEditProposalQuery = (
+  { __typename?: 'Query' }
+  & { paragraphEditProposal: (
+    { __typename?: 'ParagraphEditProposalClass' }
+    & FullParagraphEditProposalSnippetFragment
+  ) }
 );
 
 export type LinkFormPageSearchQueryVariables = Exact<{
@@ -353,6 +518,19 @@ export type PagesQuery = (
     { __typename?: 'PageClass' }
     & PageCardSnippetFragment
   )> }
+);
+
+export type PreviewParagraphEditProposalQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type PreviewParagraphEditProposalQuery = (
+  { __typename?: 'Query' }
+  & { paragraphEditProposal: (
+    { __typename?: 'ParagraphEditProposalClass' }
+    & PreviewParagraphEditProposalSnippetFragment
+  ) }
 );
 
 export type QuestionQueryVariables = Exact<{
@@ -434,7 +612,7 @@ export type StatementsFromQuestionQuery = (
     { __typename?: 'StatementClass' }
     & { page: (
       { __typename?: 'PageClass' }
-      & Pick<PageClass, 'title'>
+      & Pick<PageClass, 'title' | 'slug' | '_id'>
     ) }
     & DisplayStatementSnippetFragment
   )> }
@@ -453,10 +631,16 @@ export type VariableQuery = (
   )> }
 );
 
-export const LinkFormPageSnippetFragmentDoc = gql`
-    fragment LinkFormPageSnippet on PageClass {
+export const PreviewParagraphEditProposalSnippetFragmentDoc = gql`
+    fragment PreviewParagraphEditProposalSnippet on ParagraphEditProposalClass {
   _id
-  title
+  author {
+    _id
+    firstName
+    lastName
+  }
+  description
+  createdAt
 }
     `;
 export const ImageSnippetFragmentDoc = gql`
@@ -508,14 +692,6 @@ export const DisplayStatementSnippetFragmentDoc = gql`
     stringArray {
       ...FullStringArraySnippet
     }
-    sources {
-      urls
-      pages {
-        _id
-        slug
-        title
-      }
-    }
     questions {
       _id
       question
@@ -523,16 +699,60 @@ export const DisplayStatementSnippetFragmentDoc = gql`
   }
 }
     ${FullStringArraySnippetFragmentDoc}`;
+export const ParagraphEditProposalStatementSnippetFragmentDoc = gql`
+    fragment ParagraphEditProposalStatementSnippet on ParagraphEditProposalStatementClass {
+  _id
+  changeType
+  statement {
+    ...DisplayStatementSnippet
+  }
+  stringArray {
+    ...FullStringArraySnippet
+  }
+  questions {
+    _id
+    question
+  }
+  newQuestions
+}
+    ${DisplayStatementSnippetFragmentDoc}
+${FullStringArraySnippetFragmentDoc}`;
+export const FullParagraphEditProposalSnippetFragmentDoc = gql`
+    fragment FullParagraphEditProposalSnippet on ParagraphEditProposalClass {
+  ...PreviewParagraphEditProposalSnippet
+  statements {
+    ...ParagraphEditProposalStatementSnippet
+  }
+}
+    ${PreviewParagraphEditProposalSnippetFragmentDoc}
+${ParagraphEditProposalStatementSnippetFragmentDoc}`;
+export const LinkFormPageSnippetFragmentDoc = gql`
+    fragment LinkFormPageSnippet on PageClass {
+  _id
+  title
+}
+    `;
+export const FullParagraphStatementSnippetFragmentDoc = gql`
+    fragment FullParagraphStatementSnippet on ParagraphStatementClass {
+  versionIndex
+  statement {
+    ...DisplayStatementSnippet
+  }
+}
+    ${DisplayStatementSnippetFragmentDoc}`;
 export const DisplayParagraphSnippetFragmentDoc = gql`
     fragment DisplayParagraphSnippet on ParagraphClass {
   statements {
-    ...DisplayStatementSnippet
+    ...FullParagraphStatementSnippet
   }
   page {
     _id
   }
+  editProposals {
+    _id
+  }
 }
-    ${DisplayStatementSnippetFragmentDoc}`;
+    ${FullParagraphStatementSnippetFragmentDoc}`;
 export const PageCardSnippetFragmentDoc = gql`
     fragment PageCardSnippet on PageClass {
   _id
@@ -603,6 +823,71 @@ export const VariableSnippetFragmentDoc = gql`
   }
 }
     ${PageCardSnippetFragmentDoc}`;
+export const CreateParagraphEditProposalDocument = gql`
+    mutation CreateParagraphEditProposal($data: ParagraphEditProposalData!) {
+  createParagraphEditProposal(data: $data) {
+    ...FullParagraphEditProposalSnippet
+  }
+}
+    ${FullParagraphEditProposalSnippetFragmentDoc}`;
+export type CreateParagraphEditProposalMutationFn = Apollo.MutationFunction<CreateParagraphEditProposalMutation, CreateParagraphEditProposalMutationVariables>;
+
+/**
+ * __useCreateParagraphEditProposalMutation__
+ *
+ * To run a mutation, you first call `useCreateParagraphEditProposalMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateParagraphEditProposalMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createParagraphEditProposalMutation, { data, loading, error }] = useCreateParagraphEditProposalMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateParagraphEditProposalMutation(baseOptions?: Apollo.MutationHookOptions<CreateParagraphEditProposalMutation, CreateParagraphEditProposalMutationVariables>) {
+        return Apollo.useMutation<CreateParagraphEditProposalMutation, CreateParagraphEditProposalMutationVariables>(CreateParagraphEditProposalDocument, baseOptions);
+      }
+export type CreateParagraphEditProposalMutationHookResult = ReturnType<typeof useCreateParagraphEditProposalMutation>;
+export type CreateParagraphEditProposalMutationResult = Apollo.MutationResult<CreateParagraphEditProposalMutation>;
+export type CreateParagraphEditProposalMutationOptions = Apollo.BaseMutationOptions<CreateParagraphEditProposalMutation, CreateParagraphEditProposalMutationVariables>;
+export const FullParagraphEditProposalDocument = gql`
+    query FullParagraphEditProposal($id: String!) {
+  paragraphEditProposal(id: $id) {
+    ...FullParagraphEditProposalSnippet
+  }
+}
+    ${FullParagraphEditProposalSnippetFragmentDoc}`;
+
+/**
+ * __useFullParagraphEditProposalQuery__
+ *
+ * To run a query within a React component, call `useFullParagraphEditProposalQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFullParagraphEditProposalQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFullParagraphEditProposalQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFullParagraphEditProposalQuery(baseOptions: Apollo.QueryHookOptions<FullParagraphEditProposalQuery, FullParagraphEditProposalQueryVariables>) {
+        return Apollo.useQuery<FullParagraphEditProposalQuery, FullParagraphEditProposalQueryVariables>(FullParagraphEditProposalDocument, baseOptions);
+      }
+export function useFullParagraphEditProposalLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FullParagraphEditProposalQuery, FullParagraphEditProposalQueryVariables>) {
+          return Apollo.useLazyQuery<FullParagraphEditProposalQuery, FullParagraphEditProposalQueryVariables>(FullParagraphEditProposalDocument, baseOptions);
+        }
+export type FullParagraphEditProposalQueryHookResult = ReturnType<typeof useFullParagraphEditProposalQuery>;
+export type FullParagraphEditProposalLazyQueryHookResult = ReturnType<typeof useFullParagraphEditProposalLazyQuery>;
+export type FullParagraphEditProposalQueryResult = Apollo.QueryResult<FullParagraphEditProposalQuery, FullParagraphEditProposalQueryVariables>;
 export const LinkFormPageSearchDocument = gql`
     query LinkFormPageSearch($searchString: String!) {
   searchPages(searchString: $searchString) {
@@ -702,6 +987,39 @@ export function usePagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Page
 export type PagesQueryHookResult = ReturnType<typeof usePagesQuery>;
 export type PagesLazyQueryHookResult = ReturnType<typeof usePagesLazyQuery>;
 export type PagesQueryResult = Apollo.QueryResult<PagesQuery, PagesQueryVariables>;
+export const PreviewParagraphEditProposalDocument = gql`
+    query PreviewParagraphEditProposal($id: String!) {
+  paragraphEditProposal(id: $id) {
+    ...PreviewParagraphEditProposalSnippet
+  }
+}
+    ${PreviewParagraphEditProposalSnippetFragmentDoc}`;
+
+/**
+ * __usePreviewParagraphEditProposalQuery__
+ *
+ * To run a query within a React component, call `usePreviewParagraphEditProposalQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePreviewParagraphEditProposalQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePreviewParagraphEditProposalQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePreviewParagraphEditProposalQuery(baseOptions: Apollo.QueryHookOptions<PreviewParagraphEditProposalQuery, PreviewParagraphEditProposalQueryVariables>) {
+        return Apollo.useQuery<PreviewParagraphEditProposalQuery, PreviewParagraphEditProposalQueryVariables>(PreviewParagraphEditProposalDocument, baseOptions);
+      }
+export function usePreviewParagraphEditProposalLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewParagraphEditProposalQuery, PreviewParagraphEditProposalQueryVariables>) {
+          return Apollo.useLazyQuery<PreviewParagraphEditProposalQuery, PreviewParagraphEditProposalQueryVariables>(PreviewParagraphEditProposalDocument, baseOptions);
+        }
+export type PreviewParagraphEditProposalQueryHookResult = ReturnType<typeof usePreviewParagraphEditProposalQuery>;
+export type PreviewParagraphEditProposalLazyQueryHookResult = ReturnType<typeof usePreviewParagraphEditProposalLazyQuery>;
+export type PreviewParagraphEditProposalQueryResult = Apollo.QueryResult<PreviewParagraphEditProposalQuery, PreviewParagraphEditProposalQueryVariables>;
 export const QuestionDocument = gql`
     query Question($id: ID!) {
   question(id: $id) {
@@ -876,6 +1194,8 @@ export const StatementsFromQuestionDocument = gql`
     ...DisplayStatementSnippet
     page {
       title
+      slug
+      _id
     }
   }
 }

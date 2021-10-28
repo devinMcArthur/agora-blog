@@ -8,11 +8,11 @@ import { StatementSchema } from "../schema";
 
 @ObjectType()
 export class StatementClass extends StatementSchema {
-  public static async getByID(
+  public static async getById(
     this: StatementModel,
     id: Types.ObjectId | string,
     options?: IStatementByIdOptions
   ) {
-    return get.byID(this, id, options);
+    return get.byId(this, id, options);
   }
 }

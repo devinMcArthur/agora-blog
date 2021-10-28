@@ -48,6 +48,7 @@ const page_sars_cov_2_statement_1_v1 = new Statement({
       questions: [_ids.questions.what_is_sars_cov_2._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_sars_cov_2_statement_2_v1 = new Statement({
@@ -82,6 +83,7 @@ const page_sars_cov_2_statement_2_v1 = new Statement({
       questions: [_ids.questions.what_is_sars_cov_2._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_sars_cov_2_statement_3_v1 = new Statement({
@@ -116,6 +118,7 @@ const page_sars_cov_2_statement_3_v1 = new Statement({
       questions: [_ids.questions.how_is_sars_cov_2_related_to_sars_cov_1._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_sars_cov_2_statement_4_v1 = new Statement({
@@ -152,6 +155,7 @@ const page_sars_cov_2_statement_4_v1 = new Statement({
       ],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const statements = [

@@ -1,5 +1,4 @@
 import { Types } from "mongoose";
-import { dispatch } from "nact";
 
 import {
   VariableDocument,
@@ -9,17 +8,13 @@ import {
   PageDocument,
   VariablePageConnection,
   VariablePageConnectionDocument,
+  Variable,
 } from "@models";
 import GetByIDOptions from "@typescript/interface/getByID_Options";
 import populateOptions from "@utils/populateOptions";
-import performCacheQuery from "@utils/performCacheQuery";
-import isEmpty from "@validation/isEmpty";
-
-import { cacheService } from "../../../server";
 
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,
-  fromCache: false,
 };
 const byID = (
   Variable: VariableModel,
@@ -30,25 +25,7 @@ const byID = (
     try {
       options = populateOptions(options, byIDDefaultOptions);
 
-      let variable: VariableDocument | null = null;
-      if (options.fromCache) {
-        const cachedVariable = await performCacheQuery({
-          path: ["variables"],
-          type: "GET_VARIABLE",
-          payload: { variableID: id },
-        });
-        if (!isEmpty(cachedVariable)) {
-          variable = new Variable(cachedVariable);
-        } else {
-          dispatch(cacheService, {
-            path: ["variables"],
-            type: "SET_VARIABLE",
-            payload: { variableID: id },
-          });
-        }
-      }
-
-      if (!variable) variable = await Variable.findById(id);
+      const variable = await Variable.findById(id);
 
       if (!variable && options.throwError) {
         throw new Error("Variable.getByID: Unable to find variable");
@@ -61,43 +38,12 @@ const byID = (
   });
 };
 
-const finalValueDefaultOptions = {
-  fromCache: false,
-};
-const finalValue = (
-  variable: VariableDocument,
-  options = finalValueDefaultOptions
-): Promise<number> => {
+const finalValue = (variable: VariableDocument): Promise<number> => {
   return new Promise(async (resolve, reject) => {
     try {
-      options = populateOptions(options, finalValueDefaultOptions);
-
-      let value: number = 0;
-      if (options.fromCache) {
-        const cachedValue = await performCacheQuery({
-          path: ["variables"],
-          type: "GET_VARIABLE",
-          payload: { variableID: variable._id },
-        });
-        if (cachedValue.finalValue) {
-          value = cachedValue.finalValue;
-        } else {
-          dispatch(cacheService, {
-            path: ["variables"],
-            type: "SET_VARIABLE",
-            payload: { variableID: variable._id },
-          });
-        }
-      }
-
-      if (value === 0) {
-        value = await variable
-          .model("VariableClass")
-          // @ts-expect-error: TS doesn't recognize the use of '.model(ClassName)'
-          .getVersionsFinalValue(
-            variable.versions[variable.versions.length - 1]
-          );
-      }
+      const value = await Variable.getVersionsFinalValue(
+        variable.versions[variable.versions.length - 1]
+      );
 
       resolve(value);
     } catch (e) {
@@ -126,8 +72,7 @@ const versionsFinalValue = (
               equation += item.operator;
             } else if (item.type === "variable") {
               const variable = await Variable.getByID(
-                item.variable!.toString(),
-                { fromCache: true }
+                item.variable!.toString()
               );
               equation += await Variable.getVersionsFinalValue(
                 variable?.versions[variable?.versions.length - 1]!
@@ -143,36 +88,12 @@ const versionsFinalValue = (
   });
 };
 
-const pagesThatReferenceDefaultOptions = {
-  fromCache: false,
-};
 const pagesThatReference = (
-  variable: VariableDocument,
-  options = pagesThatReferenceDefaultOptions
+  variable: VariableDocument
 ): Promise<PageDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      options = populateOptions(options, pagesThatReferenceDefaultOptions);
-
       const pages: PageDocument[] = [];
-      if (options.fromCache) {
-        const cachedVariable = await performCacheQuery({
-          path: ["variables"],
-          type: "GET_VARIABLE",
-          payload: { variableID: variable._id },
-        });
-        if (cachedVariable.relatedPages) {
-          for (let i = 0; i < cachedVariable.relatedPages.length; i++) {
-            pages[i] = new Page(cachedVariable.relatedPages[i]);
-          }
-        } else {
-          dispatch(cacheService, {
-            path: ["variables"],
-            type: "SET_VARIABLE",
-            payload: { variableID: variable._id },
-          });
-        }
-      }
 
       if (pages.length === 0) {
         const variablePageConnections: VariablePageConnectionDocument[] =
@@ -181,9 +102,7 @@ const pagesThatReference = (
           });
 
         for (const connection of variablePageConnections) {
-          const page = await Page.getByID(connection.referrerPage!.toString(), {
-            fromCache: true,
-          });
+          const page = await Page.getByID(connection.referrerPage!.toString());
           if (page) pages.push(page);
         }
       }

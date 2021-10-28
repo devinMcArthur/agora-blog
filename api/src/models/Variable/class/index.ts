@@ -28,11 +28,8 @@ export class VariableClass extends VariableSchema {
     return get.versionsFinalValue(this, variableValue);
   }
 
-  public async getPagesThatReference(
-    this: VariableDocument,
-    options?: { fromCache: boolean }
-  ) {
-    return get.pagesThatReference(this, options);
+  public async getPagesThatReference(this: VariableDocument) {
+    return get.pagesThatReference(this);
   }
 
   public static async search(this: VariableModel, searchString: string) {

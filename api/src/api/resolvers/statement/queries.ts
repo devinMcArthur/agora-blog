@@ -11,14 +11,14 @@ export class StatementsFromQuestionOptions extends PaginationOptions {
 }
 
 const statement = async (id: Types.ObjectId) => {
-  return await Statement.getByID(id, { fromCache: true });
+  return await Statement.getById(id);
 };
 
 const statementsFromQuestion = async (
   questionId: Types.ObjectId,
   options?: StatementsFromQuestionOptions
 ) => {
-  const question = await Question.getByID(questionId);
+  const question = await Question.getById(questionId);
   if (question) return question.getStatementReferences(options);
   else return [];
 };

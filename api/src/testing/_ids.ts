@@ -32,6 +32,16 @@ const _ids = {
             Types.ObjectId("5fcc15c016b3060000894df0"),
           ],
         },
+        {
+          _id: Types.ObjectId("5eca84b5d24f0800006b777f"),
+          statements: [
+            Types.ObjectId("5fca84bcd24f0800006b7780"),
+            Types.ObjectId("5fca84ddd24f0800006b7781"),
+            Types.ObjectId("5fca84e4d24f0800006b7782"),
+            Types.ObjectId("5fca84ebd24f0800006b7783"),
+            Types.ObjectId("5fcc15c016b3060000894df0"),
+          ],
+        },
       ],
     },
     page_covid_19_symptoms: {
@@ -267,16 +277,28 @@ const _ids = {
     how_is_cycle_threshold_used: {
       _id: Types.ObjectId("5fce6d95cf98ce0000e1174d"),
     },
-    why_did_florida_mandate_reporting_of_cycle_threshold_value_for_rt_pcr_tests: {
-      _id: Types.ObjectId("5fce6dbacf98ce0000e1174e"),
-    },
+    why_did_florida_mandate_reporting_of_cycle_threshold_value_for_rt_pcr_tests:
+      {
+        _id: Types.ObjectId("5fce6dbacf98ce0000e1174e"),
+      },
     how_does_ct_value_effect_testing_outcomes: {
       _id: Types.ObjectId("5fcfdf0b83d6a50000a16ae8"),
     },
   },
-  topics: {
-    covid_id_topic: {
-      _id: Types.ObjectId("602d76c45d04d902f8e6af19"),
+  users: {
+    dev: {
+      _id: Types.ObjectId("5fca8581d24f0800000b78de"),
+    },
+    nonVerified: {
+      _id: Types.ObjectId("5fca8581d24f0800000b78dd"),
+    },
+  },
+  paragraphEditProposals: {
+    page_covid_19_paragraph_v1_proposal_1: {
+      _id: Types.ObjectId("5eca8581d24f0800000b78de"),
+    },
+    page_covid_19_paragraph_v2_proposal_1: {
+      _id: Types.ObjectId("5eca8581d24f0800000b78dd"),
     },
   },
 };

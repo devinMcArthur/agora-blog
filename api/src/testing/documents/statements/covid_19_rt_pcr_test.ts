@@ -35,6 +35,7 @@ const page_covid_19_rt_pcr_test_statement_1_v1 = new Statement({
       questions: [_ids.questions.what_is_a_covid_19_rt_pcr_test._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_rt_pcr_test_statement_2_v1 = new Statement({
@@ -106,13 +107,9 @@ const page_covid_19_rt_pcr_test_statement_2_v1 = new Statement({
         _ids.questions.what_is_the_false_negative_rate_of_rt_pcr_covid_19_tests
           ._id,
       ],
-      sources: {
-        urls: [
-          "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013705/full",
-        ],
-      },
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_rt_pcr_test_statement_3_v1 = new Statement({
@@ -151,11 +148,9 @@ const page_covid_19_rt_pcr_test_statement_3_v1 = new Statement({
         _ids.questions.how_does_cycle_threshold_ct_affect_rt_pcr_test_accuracy
           ._id,
       ],
-      sources: {
-        urls: ["https://academic.oup.com/cid/article/71/16/2252/5841456"],
-      },
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const statements = [

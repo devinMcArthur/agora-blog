@@ -35,6 +35,7 @@ const page_covid_2019_statement_1_v1 = new Statement({
       questions: [_ids.questions.what_is_covid_19._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_2019_statement_2_v1 = new Statement({
@@ -51,14 +52,37 @@ const page_covid_2019_statement_2_v1 = new Statement({
           styles: [],
         },
       ],
-      sources: {
-        urls: [
-          "https://www.who.int/docs/default-source/coronaviruse/situation-reports/20200423-sitrep-94-covid-19.pdf#:~:text=The%20first%20human%20cases%20of,%2C%20in%20December%202019.",
-        ],
-      },
+      questions: [_ids.questions.where_was_the_first_case_of_covid_19._id],
+    },
+    {
+      createdAt: new Date("2021-10-26"),
+      stringArray: [
+        {
+          string:
+            "The first case of this was reported by officians in Wuhan, China in December 2019, although it is ",
+          styles: [],
+        },
+        {
+          string: "now suspected",
+          styles: [
+            {
+              type: "mention",
+              variant: "external",
+              value: {
+                url: "https://www.livescience.com/first-case-coronavirus-found.html",
+              },
+            },
+          ],
+        },
+        {
+          string: " that the first case dates back to November 17th, 2019.",
+          styles: [],
+        },
+      ],
       questions: [_ids.questions.where_was_the_first_case_of_covid_19._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_2019_statement_3_v1 = new Statement({
@@ -85,6 +109,7 @@ const page_covid_2019_statement_3_v1 = new Statement({
       questions: [],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_2019_statement_4_v1 = new Statement({
@@ -112,6 +137,7 @@ const page_covid_2019_statement_4_v1 = new Statement({
       questions: [],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_2019_statement_5_v1 = new Statement({
@@ -138,6 +164,7 @@ const page_covid_2019_statement_5_v1 = new Statement({
       questions: [],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const statements = [

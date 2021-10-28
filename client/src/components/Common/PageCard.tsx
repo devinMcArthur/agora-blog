@@ -35,7 +35,7 @@ class PageContainer extends React.Component<
     const { page, referenceObject } = this.props;
 
     // Determine which sentence to show
-    let statement = page.currentParagraph.statements[0];
+    let statement = page.currentParagraph.statements[0].statement;
     if (referenceObject) {
       let referenceSentence;
       switch (referenceObject.type) {
@@ -46,21 +46,23 @@ class PageContainer extends React.Component<
           );
           break;
         case "question":
-          referenceSentence = ParagraphService().findSentenceWithQuestionReference(
-            page.currentParagraph,
-            referenceObject.questionID
-          );
+          referenceSentence =
+            ParagraphService().findSentenceWithQuestionReference(
+              page.currentParagraph,
+              referenceObject.questionID
+            );
           break;
         case "variable":
-          referenceSentence = ParagraphService().findSentenceWithVariableReference(
-            page.currentParagraph,
-            referenceObject.variableID
-          );
+          referenceSentence =
+            ParagraphService().findSentenceWithVariableReference(
+              page.currentParagraph,
+              referenceObject.variableID
+            );
           break;
         default:
           break;
       }
-      if (referenceSentence) statement = referenceSentence;
+      if (referenceSentence) statement = referenceSentence.statement;
     }
 
     return (

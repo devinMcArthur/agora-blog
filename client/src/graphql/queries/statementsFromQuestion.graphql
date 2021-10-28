@@ -6,6 +6,8 @@ query StatementsFromQuestion(
     ...DisplayStatementSnippet
     page {
       title
+      slug
+      _id
     }
   }
 }

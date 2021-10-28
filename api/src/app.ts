@@ -4,20 +4,26 @@ import { graphqlUploadExpress } from "graphql-upload";
 import { buildTypeDefsAndResolvers } from "type-graphql";
 import { makeExecutableSchema } from "graphql-tools";
 import { ApolloServer } from "apollo-server-express";
+import jwt from "jsonwebtoken";
 
 import { IContext } from "@typescript/graphql";
 
+import UserResolver from "@api/resolvers/user";
 import PageResolver from "@api/resolvers/page";
+import ImageResolver from "@api/resolvers/image";
 import VariableResolver from "@api/resolvers/variable";
 import QuestionResolver from "@api/resolvers/question";
 import ParagraphResolver from "@api/resolvers/paragraph";
 import StatementResolver from "@api/resolvers/statement";
 import StatementValueResolver from "@api/resolvers/statementValue";
 import VariableVersionResolver from "@api/resolvers/variableVersion";
-import StatementSourcesResolver from "@api/resolvers/statementSources";
 import StatementVersionResolver from "@api/resolvers/statementVersion";
 import VariableEquationResolver from "@api/resolvers/variableEquation";
-import ImageResolver from "@api/resolvers/image";
+import ParagraphStatementResolver from "@api/resolvers/paragraphStatement";
+import ParagraphEditProposalResolver from "@api/resolvers/paragraphEditProposal";
+import ParagraphEditProposalStatementResolver from "@api/resolvers/paragraphEditProposalStatement";
+import { User, UserDocument } from "@models";
+import authChecker from "@utils/authChecker";
 
 const createApp = async () => {
   const app = express();
@@ -26,7 +32,9 @@ const createApp = async () => {
 
   const { typeDefs, resolvers } = await buildTypeDefsAndResolvers({
     resolvers: [
+      UserResolver,
       PageResolver,
+      ImageResolver,
       ParagraphResolver,
       VariableResolver,
       QuestionResolver,
@@ -35,10 +43,12 @@ const createApp = async () => {
       StatementValueResolver,
       VariableVersionResolver,
       VariableEquationResolver,
-      StatementSourcesResolver,
       StatementVersionResolver,
-      ImageResolver,
+      ParagraphStatementResolver,
+      ParagraphEditProposalResolver,
+      ParagraphEditProposalStatementResolver,
     ],
+    authChecker,
   });
 
   const schema = makeExecutableSchema({
@@ -49,17 +59,18 @@ const createApp = async () => {
   const apolloServer = new ApolloServer({
     schema,
     context: async ({ req, res }: IContext) => {
-      // const token = req.headers.authorization;
+      const token = req.headers.authorization;
 
-      // let user: UserDocument | null = null;
+      let user: UserDocument | null = null;
 
-      // if (token) {
-      //   const decoded: any = decode(token);
+      if (token) {
+        const decoded: any = jwt.decode(token);
 
-      //   user = await User.getById(decoded?.userId);
-      // }
+        user = await User.getById(decoded?.userId);
+      }
 
       return {
+        user,
         req,
         res,
       };

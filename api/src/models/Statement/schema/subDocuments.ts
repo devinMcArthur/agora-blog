@@ -7,6 +7,7 @@ import {
   StatementClass,
   VariableClass,
 } from "@models";
+import { StyleTypes } from "@typescript/models/Statement";
 
 @ObjectType()
 export class Image {
@@ -56,9 +57,9 @@ class StatementStyleClass {
   @Field()
   @prop({
     required: true,
-    enum: ["mention", "variable", "quote", "bold", "image", "italic"],
+    enum: StyleTypes,
   })
-  public type!: "mention" | "variable" | "quote" | "bold" | "image" | "italic";
+  public type!: StyleTypes;
 
   @Field({ nullable: true })
   @prop({ required: false, enum: ["internal", "external"] })
@@ -70,7 +71,7 @@ class StatementStyleClass {
 }
 
 @ObjectType()
-class StringArrayClass {
+export class StringArrayClass {
   @Field({ nullable: true })
   @prop({ required: false, trim: false })
   public string?: string;
@@ -81,35 +82,17 @@ class StringArrayClass {
 }
 
 @ObjectType()
-export class StatementSourcesClass {
-  @Field(() => [PageClass])
-  @prop({ ref: () => PageClass, default: [] })
-  public pages!: Ref<PageClass>[];
-
-  @Field(() => [String])
-  @prop({ type: String, default: [] })
-  public urls!: string[];
-}
-
-export interface StatementSourcesDocument
-  extends DocumentType<StatementSourcesClass> {}
-
-@ObjectType()
 export class StatementVersionClass {
   @Field(() => [StringArrayClass])
   @prop({ type: () => StringArrayClass, default: [] })
   public stringArray!: StringArrayClass[];
 
-  @Field(() => StatementSourcesClass)
-  @prop({ type: () => StatementSourcesClass, default: {} })
-  public sources!: StatementSourcesClass;
-
   @Field(() => [QuestionClass])
   @prop({ ref: () => QuestionClass, default: [] })
   public questions!: Ref<QuestionClass>[];
 
-  @Field()
-  @prop({ default: new Date(), required: true })
+  @Field({ nullable: false })
+  @prop({ default: Date.now, required: true, immutable: true })
   public createdAt!: Date;
 }
 

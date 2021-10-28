@@ -3,6 +3,8 @@ import * as React from "react";
 import Provider from "./components/Providers";
 import Router from "./components/Router";
 
+import "./App.css";
+
 function App() {
   return (
     <Provider>

@@ -36,11 +36,9 @@ const page_rt_pcr_cycle_threshold_statement_1_v1 = new Statement({
         _ids.questions
           .what_is_the_significance_of_cycle_threshold_for_rt_pcr_tests._id,
       ],
-      sources: {
-        urls: ["https://academic.oup.com/cid/article/71/16/2252/5841456"],
-      },
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_rt_pcr_cycle_threshold_statement_2_v1 = new Statement({
@@ -60,11 +58,9 @@ const page_rt_pcr_cycle_threshold_statement_2_v1 = new Statement({
       questions: [
         _ids.questions.what_is_the_significance_of_cycle_threshold_value._id,
       ],
-      sources: {
-        urls: ["https://academic.oup.com/cid/article/71/16/2252/5841456"],
-      },
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_rt_pcr_cycle_threshold_statement_3_v1 = new Statement({
@@ -120,13 +116,9 @@ const page_rt_pcr_cycle_threshold_statement_3_v1 = new Statement({
         },
       ],
       questions: [_ids.questions.how_does_ct_value_effect_testing_outcomes._id],
-      sources: {
-        urls: [
-          "https://academic.oup.com/cid/advance-article/doi/10.1093/cid/ciaa1491/5912603",
-        ],
-      },
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_rt_pcr_cycle_threshold_statement_4_v1 = new Statement({
@@ -166,13 +158,9 @@ const page_rt_pcr_cycle_threshold_statement_4_v1 = new Statement({
           .why_did_florida_mandate_reporting_of_cycle_threshold_value_for_rt_pcr_tests
           ._id,
       ],
-      sources: {
-        urls: [
-          "https://www.flhealthsource.gov/files/Laboratory-Reporting-CT-Values-12032020.pdf",
-        ],
-      },
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const statements = [

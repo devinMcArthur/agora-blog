@@ -47,6 +47,7 @@ const page_covid_19_testing_statement_1_v1 = new Statement({
       questions: [_ids.questions.what_does_a_covid_19_test_do._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_testing_statement_2_v1 = new Statement({
@@ -111,6 +112,7 @@ const page_covid_19_testing_statement_2_v1 = new Statement({
       questions: [_ids.questions.what_tests_are_used_to_test_for_covid_19._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_testing_statement_3_v1 = new Statement({
@@ -160,6 +162,7 @@ const page_covid_19_testing_statement_3_v1 = new Statement({
       ],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_testing_statement_4_v1 = new Statement({
@@ -213,6 +216,7 @@ const page_covid_19_testing_statement_4_v1 = new Statement({
       ],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_testing_statement_5_v1 = new Statement({
@@ -312,6 +316,7 @@ const page_covid_19_testing_statement_5_v1 = new Statement({
       ],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const statements = [

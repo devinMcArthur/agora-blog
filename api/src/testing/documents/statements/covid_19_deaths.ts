@@ -36,6 +36,7 @@ const page_covid_19_deaths_statement_1_v1 = new Statement({
       questions: [_ids.questions.what_counts_as_a_covid_19_death._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_deaths_statement_2_v1 = new Statement({
@@ -69,6 +70,7 @@ const page_covid_19_deaths_statement_2_v1 = new Statement({
       questions: [_ids.questions.how_many_covid_19_deaths_have_there_been._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_deaths_statement_3_v1 = new Statement({
@@ -88,6 +90,7 @@ const page_covid_19_deaths_statement_3_v1 = new Statement({
       questions: [_ids.questions.who_is_most_likely_to_die_from_covid_19._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const statements = [

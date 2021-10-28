@@ -41,13 +41,6 @@ const page_rt_pcr_cycle_threshold_sentence_1_v1: Sentence = {
           .what_is_the_significance_of_cycle_threshold_for_rt_pcr_tests._id,
     },
   ],
-  sources: {
-    urls: [
-      {
-        url: "https://academic.oup.com/cid/article/71/16/2252/5841456",
-      },
-    ],
-  },
 };
 
 const page_rt_pcr_cycle_threshold_sentence_2_v1: Sentence = {
@@ -72,13 +65,6 @@ const page_rt_pcr_cycle_threshold_sentence_2_v1: Sentence = {
         _ids.questions.what_is_the_significance_of_cycle_threshold_value._id,
     },
   ],
-  sources: {
-    urls: [
-      {
-        url: "https://academic.oup.com/cid/article/71/16/2252/5841456",
-      },
-    ],
-  },
 };
 
 const page_rt_pcr_cycle_threshold_sentence_3_v1: Sentence = {
@@ -119,14 +105,6 @@ const page_rt_pcr_cycle_threshold_sentence_3_v1: Sentence = {
       questionID: _ids.questions.how_does_ct_value_effect_testing_outcomes._id,
     },
   ],
-  sources: {
-    urls: [
-      {
-        url:
-          "https://academic.oup.com/cid/advance-article/doi/10.1093/cid/ciaa1491/5912603",
-      },
-    ],
-  },
 };
 
 const page_rt_pcr_cycle_threshold_sentence_4_v1: Sentence = {
@@ -173,14 +151,6 @@ const page_rt_pcr_cycle_threshold_sentence_4_v1: Sentence = {
           ._id,
     },
   ],
-  sources: {
-    urls: [
-      {
-        url:
-          "https://www.flhealthsource.gov/files/Laboratory-Reporting-CT-Values-12032020.pdf",
-      },
-    ],
-  },
 };
 
 const sentences = [

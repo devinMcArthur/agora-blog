@@ -8,8 +8,8 @@ export default function ParagraphService() {
     pageID: Types.ObjectId | string
   ) => {
     return paragraph.statements.find((statement) =>
-      statement.versions[
-        statement.versions.length - 1
+      statement.statement.versions[
+        statement.statement.versions.length - 1
       ].stringArray.find((stringArray) =>
         stringArray.styles.find(
           (style) =>
@@ -26,7 +26,9 @@ export default function ParagraphService() {
     questionID: Types.ObjectId | string
   ) => {
     return paragraph.statements.find((statement) =>
-      statement.versions[statement.versions.length - 1].questions.find(
+      statement.statement.versions[
+        statement.statement.versions.length - 1
+      ].questions.find(
         (connection) => connection._id.toString() === questionID.toString()
       )
     );
@@ -37,8 +39,8 @@ export default function ParagraphService() {
     variableID: Types.ObjectId | string
   ) => {
     return paragraph.statements.find((statement) =>
-      statement.versions[
-        statement.versions.length - 1
+      statement.statement.versions[
+        statement.statement.versions.length - 1
       ].stringArray.find((stringArray) =>
         stringArray.styles.find(
           (style) =>

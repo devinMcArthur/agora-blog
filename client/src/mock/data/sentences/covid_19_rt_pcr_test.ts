@@ -119,14 +119,6 @@ const page_covid_19_rt_pcr_test_sentence_2_v1: Sentence = {
           ._id,
     },
   ],
-  sources: {
-    urls: [
-      {
-        url:
-          "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013705/full",
-      },
-    ],
-  },
 };
 
 const page_covid_19_rt_pcr_test_sentence_3_v1: Sentence = {
@@ -173,13 +165,6 @@ const page_covid_19_rt_pcr_test_sentence_3_v1: Sentence = {
           ._id,
     },
   ],
-  sources: {
-    urls: [
-      {
-        url: "https://academic.oup.com/cid/article/71/16/2252/5841456",
-      },
-    ],
-  },
 };
 
 const sentences = [

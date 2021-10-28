@@ -30,10 +30,10 @@ const QuoteSearch: React.FC<IQuoteSearch> = ({ statementSelect, ...props }) => {
         _hover={{ boxShadow: "0 0 3px gray" }}
         onClick={() => {
           setFetchedPage(undefined);
-          statementSelect(statement._id);
+          statementSelect(statement.statement._id);
         }}
       >
-        <Statement statement={statement} />
+        <Statement statement={statement.statement} />
       </Box>
     ));
   }, [fetchedPage, statementSelect]);

@@ -36,6 +36,7 @@ const page_covid_19_transmission_statement_1_v1 = new Statement({
       questions: [_ids.questions.how_is_sars_cov_2_transmitted._id],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_transmission_statement_2_v1 = new Statement({
@@ -52,14 +53,12 @@ const page_covid_19_transmission_statement_2_v1 = new Statement({
           styles: [],
         },
       ],
-      sources: {
-        urls: ["https://onlinelibrary.wiley.com/doi/full/10.1111/irv.12743"],
-      },
       questions: [
         _ids.questions.does_sars_cov_2_spread_from_asymptomatic_cases._id,
       ],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const page_covid_19_transmission_statement_3_v1 = new Statement({
@@ -76,15 +75,13 @@ const page_covid_19_transmission_statement_3_v1 = new Statement({
           styles: [],
         },
       ],
-      sources: {
-        urls: ["https://www.nature.com/articles/d41586-020-03141-3"],
-      },
       questions: [
         _ids.questions
           .are_asymptomatic_cases_of_covid_19_a_large_contributer_to_spread._id,
       ],
     },
   ],
+  originalAuthor: _ids.users.dev._id,
 });
 
 const statements = [

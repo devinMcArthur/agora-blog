@@ -1,4 +1,4 @@
-import { PageClass, StatementVersionClass } from "@models";
+import { PageClass, StatementVersionClass, UserClass } from "@models";
 import { prop, Ref } from "@typegoose/typegoose";
 import { Types } from "mongoose";
 import { Field, ID, ObjectType } from "type-graphql";
@@ -21,4 +21,8 @@ export class StatementSchema {
   @Field()
   @prop({ default: true, required: true })
   public current!: boolean;
+
+  @Field(() => UserClass)
+  @prop({ ref: () => UserClass, required: true })
+  public originalAuthor!: UserClass;
 }
