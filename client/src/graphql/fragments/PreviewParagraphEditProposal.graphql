@@ -1,0 +1,10 @@
+fragment PreviewParagraphEditProposalSnippet on ParagraphEditProposalClass {
+  _id
+  author {
+    _id
+    firstName
+    lastName
+  }
+  description
+  createdAt
+}

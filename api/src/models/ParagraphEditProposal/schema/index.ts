@@ -1,0 +1,33 @@
+import { ParagraphClass, UserClass } from "@models";
+import { prop, Ref } from "@typegoose/typegoose";
+import { Types } from "mongoose";
+import { Field, ID, ObjectType } from "type-graphql";
+import { ParagraphEditProposalStatementClass } from "./subDocuments";
+
+export * from "./subDocuments";
+
+@ObjectType()
+export class ParagraphEditProposalSchema {
+  @Field(() => ID, { nullable: false })
+  public _id!: Types.ObjectId;
+
+  @Field(() => ParagraphClass, { nullable: false })
+  @prop({ ref: () => ParagraphClass, required: true })
+  public paragraph!: Ref<ParagraphClass>;
+
+  @Field(() => UserClass, { nullable: false })
+  @prop({ ref: () => UserClass, required: true })
+  public author!: Ref<UserClass>;
+
+  @Field({ nullable: false })
+  @prop({ required: true })
+  public description!: string;
+
+  @Field(() => [ParagraphEditProposalStatementClass], { nullable: false })
+  @prop({ type: () => ParagraphEditProposalStatementClass, required: true })
+  public statements!: ParagraphEditProposalStatementClass[];
+
+  @Field({ nullable: false })
+  @prop({ required: true, default: Date.now })
+  public createdAt!: Date;
+}

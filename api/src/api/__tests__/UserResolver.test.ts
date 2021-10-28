@@ -1,0 +1,72 @@
+import request from "supertest";
+import jwt from "jsonwebtoken";
+
+import { prepareDatabase, disconnectAndStopServer } from "@testing/jestDB";
+import seedDatabase, { SeededDatabase } from "@testing/seedDatabase";
+
+import createApp from "../../app";
+
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
+
+let mongoServer: any, documents: SeededDatabase, app: any;
+function setupDatabase() {
+  return new Promise<void>(async (resolve, reject) => {
+    try {
+      documents = await seedDatabase();
+
+      resolve();
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
+beforeAll(async (done) => {
+  mongoServer = await prepareDatabase();
+
+  app = await createApp();
+
+  await setupDatabase();
+
+  done();
+});
+
+afterAll(async (done) => {
+  await disconnectAndStopServer(mongoServer);
+  done();
+});
+
+describe("User Resolver", () => {
+  describe("MUTATIONS", () => {
+    describe("login", () => {
+      const login = `
+        mutation Login($email: String!, $password: String!) {
+          login(email: $email, password: $password) 
+        }
+      `;
+
+      describe("success", () => {
+        test("should successfully search pages", async () => {
+          const res = await request(app)
+            .post("/graphql")
+            .send({
+              query: login,
+              variables: {
+                email: documents.users.dev.email,
+                password: "password",
+              },
+            });
+
+          expect(res.status).toBe(200);
+
+          expect(res.body.data.login).toBeDefined();
+
+          const decoded: any = jwt.decode(res.body.data.login);
+          expect(decoded).toBeDefined();
+
+          expect(decoded!.userId).toBe(documents.users.dev._id.toString());
+        });
+      });
+    });
+  });
+});

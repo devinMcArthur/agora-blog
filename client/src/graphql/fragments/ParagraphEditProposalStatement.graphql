@@ -1,0 +1,15 @@
+fragment ParagraphEditProposalStatementSnippet on ParagraphEditProposalStatementClass {
+  _id
+  changeType
+  statement {
+    ...DisplayStatementSnippet
+  }
+  stringArray {
+    ...FullStringArraySnippet
+  }
+  questions {
+    _id
+    question
+  }
+  newQuestions
+}

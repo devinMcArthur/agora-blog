@@ -1,0 +1,5 @@
+query PreviewParagraphEditProposal($id: String!) {
+  paragraphEditProposal(id: $id) {
+    ...PreviewParagraphEditProposalSnippet
+  }
+}
