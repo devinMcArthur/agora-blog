@@ -37,7 +37,7 @@ const TextField = React.forwardRef<HTMLInputElement, ITextField>(
     ref
   ) => {
     return (
-      <FormControl isInvalid={!!errorMessage}>
+      <FormControl isInvalid={!!errorMessage} my={2}>
         {label && <FormLabel>{label}</FormLabel>}
         <InputGroup>
           {inputLeftElement && <InputLeftElement children={inputLeftElement} />}

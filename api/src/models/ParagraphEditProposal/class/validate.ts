@@ -5,6 +5,7 @@ import {
   StatementClass,
   User,
 } from "@models";
+import statements from "@testing/documents/statements/covid_19_deaths";
 import { EditProposalChangeTypes } from "@typescript/models/ParagraphEditProposal";
 import validateNewQuestionArray from "@validation/validateNewQuestionArray";
 import validateQuestionArray from "@validation/validateQuestionArray";
@@ -20,6 +21,10 @@ const document = (paragraphEditProposal: ParagraphEditProposalDocument) => {
       );
       if (!paragraph) throw new Error("must provide a valid paragraph");
 
+      // ensure paragraph is mostRecent
+      if (!paragraph.mostRecent)
+        throw new Error("can only add edit proposals to current paragraphs");
+
       // ensure author is valid
       const author = await User.getById(
         paragraphEditProposal.author!.toString()
@@ -32,19 +37,57 @@ const document = (paragraphEditProposal: ParagraphEditProposalDocument) => {
 
       // validate each statement items
       if (
-        !paragraphEditProposal.statements ||
-        paragraphEditProposal.statements.length < 1
+        !paragraphEditProposal.statementItems ||
+        paragraphEditProposal.statementItems.length < 1
       )
         throw new Error("must provide the new array of statements");
 
-      const seenIds: StatementClass[] = [];
-      for (let i = 0; i < paragraphEditProposal.statements.length; i++) {
-        const statement = paragraphEditProposal.statements[i];
+      const originalParagraphStatements = paragraph.statements.map(
+        (paragraphStatement) => paragraphStatement.statement!.toString()
+      );
+      const allChangeTypes = paragraphEditProposal.statementItems.map(
+        (item) => item.changeType
+      );
+
+      // ensure there are edits
+      if (
+        // check for order changes
+        JSON.stringify(originalParagraphStatements) ===
+          JSON.stringify(
+            paragraphEditProposal.statementItems.map((item) =>
+              item.paragraphStatement?.statement?.toString()
+            )
+          ) &&
+        // check for changes
+        !allChangeTypes.includes(EditProposalChangeTypes.ADD) &&
+        !allChangeTypes.includes(EditProposalChangeTypes.EDIT) &&
+        !allChangeTypes.includes(EditProposalChangeTypes.REMOVE)
+      )
+        throw new Error("this proposal contains no edits");
+
+      const seenIds: string[] = [];
+      for (let i = 0; i < paragraphEditProposal.statementItems.length; i++) {
+        const statement = paragraphEditProposal.statementItems[i];
 
         try {
           // Ensure all statement references are unique
-          if (statement.statement && seenIds.includes(statement.statement))
-            throw new Error("duplicate statement reference");
+          if (statement.paragraphStatement?.statement) {
+            if (
+              seenIds.includes(
+                statement.paragraphStatement.statement.toString()
+              )
+            )
+              throw new Error("duplicate statement reference");
+
+            if (
+              !originalParagraphStatements.includes(
+                statement.paragraphStatement.statement.toString()
+              )
+            )
+              throw new Error("statement does not belong to this paragraph");
+
+            seenIds.push(statement.paragraphStatement.statement.toString());
+          }
 
           // validation if updating an existing statement
           if (
@@ -53,14 +96,24 @@ const document = (paragraphEditProposal: ParagraphEditProposalDocument) => {
             statement.changeType === "NONE"
           ) {
             // Ensure statement Id is provided and valid if necessary
-            if (!statement.statement)
+            if (
+              !statement.paragraphStatement ||
+              !statement.paragraphStatement.statement
+            )
               throw new Error(`must provide a statement Id`);
 
             const fetchedStatement = await Statement.getById(
-              statement.statement.toString()
+              statement.paragraphStatement.statement.toString()
             );
             if (!fetchedStatement)
               throw new Error(`must provide a valid statement Id`);
+
+            if (
+              !fetchedStatement.versions[
+                statement.paragraphStatement.versionIndex
+              ]
+            )
+              throw new Error(`must provide a valid version index`);
           }
 
           // Validate stringArray if necessary
@@ -91,8 +144,16 @@ const document = (paragraphEditProposal: ParagraphEditProposalDocument) => {
             throw new Error(`${e.message}`);
           }
         } catch (e: any) {
-          reject(new Error(`statements[${i}] - ${e.message}`));
+          throw new Error(`statements[${i}] - ${e.message}`);
         }
+      }
+
+      // ensure all existing statements exist in proposal
+      for (let i = 0; i < originalParagraphStatements.length; i++) {
+        if (!seenIds.includes(originalParagraphStatements[i]))
+          throw new Error(
+            "must provide a statement item for each existing statement in the paragraph"
+          );
       }
 
       await paragraphEditProposal.validate();

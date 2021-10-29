@@ -25,7 +25,7 @@ export class ParagraphEditProposalSchema {
 
   @Field(() => [ParagraphEditProposalStatementClass], { nullable: false })
   @prop({ type: () => ParagraphEditProposalStatementClass, required: true })
-  public statements!: ParagraphEditProposalStatementClass[];
+  public statementItems!: ParagraphEditProposalStatementClass[];
 
   @Field({ nullable: false })
   @prop({ required: true, default: Date.now })

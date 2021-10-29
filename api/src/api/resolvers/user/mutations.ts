@@ -1,9 +1,19 @@
 import { User } from "@models";
+import { Field, InputType } from "type-graphql";
 
-const login = (email: string, password: string) => {
+@InputType()
+export class LoginData {
+  @Field({ nullable: false })
+  public email!: string;
+
+  @Field({ nullable: false })
+  public password!: string;
+}
+
+const login = (data: LoginData) => {
   return new Promise<string>(async (resolve, reject) => {
     try {
-      const token = await User.login(email, password);
+      const token = await User.login(data.email, data.password);
 
       resolve(token);
     } catch (e) {

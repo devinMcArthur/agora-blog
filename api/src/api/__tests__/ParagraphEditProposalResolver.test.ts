@@ -56,10 +56,12 @@ describe("Paragraph Edit Proposal Resolver", () => {
               version
             }
             description
-            statements {
+            statementItems {
               changeType
-              statement {
-                current
+              paragraphStatement {
+                statement {
+                  current
+                }
               }
               stringArray {
                 string
@@ -96,16 +98,17 @@ describe("Paragraph Edit Proposal Resolver", () => {
             documents.users.dev.firstName
           );
           expect(paragraphEditProposal.paragraph.version).toBe(
-            documents.paragraphs.page_covid_2019_paragraph_v1.version
+            documents.paragraphs.page_covid_2019_paragraph_v2.version
           );
 
           expect(
-            paragraphEditProposal.statements[0].stringArray[1].styles[0].value
-              .page.title
+            paragraphEditProposal.statementItems[0].stringArray[1].styles[0]
+              .value.page.title
           ).toBe(documents.pages.page_sars_cov_2.title);
-          expect(paragraphEditProposal.statements[0].statement.current).toBe(
-            true
-          );
+          expect(
+            paragraphEditProposal.statementItems[0].paragraphStatement.statement
+              .current
+          ).toBe(true);
         });
       });
     });
@@ -119,10 +122,12 @@ describe("Paragraph Edit Proposal Resolver", () => {
             author {
               _id
             }
-            statements {
+            statementItems {
               changeType
-              statement {
-                _id
+              paragraphStatement {
+                statement {
+                  _id
+                }
               }
             }
           }
@@ -136,12 +141,15 @@ describe("Paragraph Edit Proposal Resolver", () => {
           // @ts-expect-error
           const data: IParagraphEditProposalBuildData = {
             description: "Test edit proposal",
-            paragraph: documents.paragraphs.page_covid_2019_paragraph_v1._id,
-            statements: [
+            paragraph: documents.paragraphs.page_covid_2019_paragraph_v2._id,
+            statementItems: [
               {
                 changeType: EditProposalChangeTypes.EDIT,
-                statement:
-                  documents.paragraphs.page_covid_2019_paragraph_v1.statements[0].statement!.toString(),
+                paragraphStatement: {
+                  statement:
+                    documents.paragraphs.page_covid_2019_paragraph_v2.statements[0].statement!.toString(),
+                  versionIndex: 0,
+                },
                 questions: [documents.questions.what_is_covid_19._id],
                 newQuestions: ["What causes the disease COVID-19?"],
                 stringArray: [
@@ -170,18 +178,27 @@ describe("Paragraph Edit Proposal Resolver", () => {
               },
               {
                 changeType: EditProposalChangeTypes.NONE,
-                statement:
-                  documents.paragraphs.page_covid_2019_paragraph_v1.statements[2].statement!.toString(),
+                paragraphStatement: {
+                  statement:
+                    documents.paragraphs.page_covid_2019_paragraph_v2.statements[2].statement!.toString(),
+                  versionIndex: 0,
+                },
               },
               {
                 changeType: EditProposalChangeTypes.NONE,
-                statement:
-                  documents.paragraphs.page_covid_2019_paragraph_v1.statements[1].statement!.toString(),
+                paragraphStatement: {
+                  statement:
+                    documents.paragraphs.page_covid_2019_paragraph_v2.statements[1].statement!.toString(),
+                  versionIndex: 0,
+                },
               },
               {
                 changeType: EditProposalChangeTypes.REMOVE,
-                statement:
-                  documents.paragraphs.page_covid_2019_paragraph_v1.statements[3].statement!.toString(),
+                paragraphStatement: {
+                  statement:
+                    documents.paragraphs.page_covid_2019_paragraph_v2.statements[3].statement!.toString(),
+                  versionIndex: 0,
+                },
               },
               {
                 changeType: EditProposalChangeTypes.ADD,
@@ -196,8 +213,11 @@ describe("Paragraph Edit Proposal Resolver", () => {
               },
               {
                 changeType: EditProposalChangeTypes.NONE,
-                statement:
-                  documents.paragraphs.page_covid_2019_paragraph_v1.statements[4].statement!.toString(),
+                paragraphStatement: {
+                  statement:
+                    documents.paragraphs.page_covid_2019_paragraph_v2.statements[4].statement!.toString(),
+                  versionIndex: 0,
+                },
               },
             ],
           };
@@ -217,8 +237,8 @@ describe("Paragraph Edit Proposal Resolver", () => {
           expect(res.body.data.createParagraphEditProposal).toBeDefined();
 
           expect(
-            res.body.data.createParagraphEditProposal.statements.length
-          ).toBe(data.statements.length);
+            res.body.data.createParagraphEditProposal.statementItems.length
+          ).toBe(data.statementItems.length);
         });
       });
     });

@@ -6,12 +6,21 @@ import { StringArrayData } from "../statement/mutations";
 import resolverHelper from "@utils/resolverHelpers";
 
 @InputType()
+export class ParagraphStatementData {
+  @Field({ nullable: false })
+  public statement!: string;
+
+  @Field({ nullable: false })
+  public versionIndex!: number;
+}
+
+@InputType()
 class ParagraphEditProposalStatementData {
   @Field({ nullable: false })
   public changeType!: EditProposalChangeTypes;
 
-  @Field({ nullable: true })
-  public statement?: string;
+  @Field(() => ParagraphStatementData, { nullable: true })
+  public paragraphStatement?: ParagraphStatementData;
 
   @Field({ nullable: true })
   public statementVersionIndex?: number;
@@ -35,7 +44,7 @@ export class ParagraphEditProposalData {
   public description!: string;
 
   @Field(() => [ParagraphEditProposalStatementData], { nullable: false })
-  public statements!: ParagraphEditProposalStatementData[];
+  public statementItems!: ParagraphEditProposalStatementData[];
 }
 
 const createParagraphEditProposal = (

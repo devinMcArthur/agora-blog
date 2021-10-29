@@ -13,6 +13,7 @@ import Page from "./Page";
 import Playground from "./Playground";
 import Question from "./Question";
 import Questions from "./Questions";
+import User from "./User";
 import Variable from "./Variable";
 
 // const history = createBrowserHistory();
@@ -35,6 +36,7 @@ function Router() {
             <Route exact path="/q/:questionID" component={Question} />
             <Route exact path="/questions" component={Questions} />
             <Route exact path="/v/:variableID" component={Variable} />
+            <Route exact path="/u/:userId" component={User} />
             <Route exact path="/playground" component={Playground} />
           </Switch>
           <DrawerContainer />

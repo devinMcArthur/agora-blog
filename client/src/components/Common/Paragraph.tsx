@@ -13,16 +13,9 @@ interface IParagraph {
 const Paragraph = ({ paragraph }: IParagraph) => {
   const {
     state: { paragraphStatement },
-    setCurrentPage,
     setParagraphStatement,
     clearParagraphStatement,
   } = useDrawer();
-
-  React.useEffect(() => {
-    setCurrentPage(paragraph.page._id);
-
-    return () => clearParagraphStatement();
-  }, [clearParagraphStatement, paragraph.page._id, setCurrentPage]);
 
   const paragraphJSX = React.useMemo(() => {
     return paragraph.statements.map((statement) => {

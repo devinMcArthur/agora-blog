@@ -5,6 +5,7 @@ import { prepareDatabase, disconnectAndStopServer } from "@testing/jestDB";
 import seedDatabase, { SeededDatabase } from "@testing/seedDatabase";
 
 import createApp from "../../app";
+import jestLogin from "@testing/jestLogin";
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
@@ -37,11 +38,42 @@ afterAll(async (done) => {
 });
 
 describe("User Resolver", () => {
+  describe("QUERIES", () => {
+    describe("currentUser", () => {
+      const currentUser = `
+        query CurrentUser {
+          currentUser {
+            firstName
+          }
+        }
+      `;
+
+      describe("success", () => {
+        test("should successfully return logged in user", async () => {
+          const token = await jestLogin(app, documents.users.dev.email);
+
+          const res = await request(app)
+            .post("/graphql")
+            .send({
+              query: currentUser,
+            })
+            .set("Authorization", token);
+
+          expect(res.status).toBe(200);
+
+          expect(res.body.data.currentUser.firstName).toBe(
+            documents.users.dev.firstName
+          );
+        });
+      });
+    });
+  });
+
   describe("MUTATIONS", () => {
     describe("login", () => {
       const login = `
-        mutation Login($email: String!, $password: String!) {
-          login(email: $email, password: $password) 
+        mutation Login($data: LoginData!) {
+          login(data: $data) 
         }
       `;
 
@@ -52,8 +84,10 @@ describe("User Resolver", () => {
             .send({
               query: login,
               variables: {
-                email: documents.users.dev.email,
-                password: "password",
+                data: {
+                  email: documents.users.dev.email,
+                  password: "password",
+                },
               },
             });
 

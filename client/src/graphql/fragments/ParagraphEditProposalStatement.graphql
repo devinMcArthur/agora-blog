@@ -1,8 +1,8 @@
 fragment ParagraphEditProposalStatementSnippet on ParagraphEditProposalStatementClass {
   _id
   changeType
-  statement {
-    ...DisplayStatementSnippet
+  paragraphStatement {
+    ...FullParagraphStatementSnippet
   }
   stringArray {
     ...FullStringArraySnippet

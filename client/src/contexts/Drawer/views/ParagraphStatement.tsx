@@ -8,10 +8,13 @@ import Statement from "../../../components/Statement";
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
 import Loading from "../../../components/Common/Loading";
 import QuestionTagRelated from "../../../components/Common/QuestionTagRelated";
+import ParagraphEditProposal from "../../../components/Common/ParagraphEditProposal";
 
 const DrawerParagraphStatement = () => {
   const {
     state: { paragraphStatement, currentPageId },
+    paragraphEditProposalPreviewId,
+    setPreviewedParagraphEditProposal,
   } = useDrawer();
 
   const [statementVersion, setStatementVersion] = React.useState(
@@ -29,6 +32,10 @@ const DrawerParagraphStatement = () => {
       paragraphStatement.statement.versions[statementVersion]
     ) {
       const statement = paragraphStatement.statement;
+
+      const leftChevronEnabled = statementVersion !== 0;
+      const rightChevronEnabled =
+        statementVersion !== paragraphStatement.statement.versions.length - 1;
 
       return (
         <Box p={3}>
@@ -49,7 +56,7 @@ const DrawerParagraphStatement = () => {
               >
                 <IconButton
                   onClick={() => {
-                    if (statementVersion !== 0)
+                    if (leftChevronEnabled)
                       setStatementVersion(statementVersion - 1);
                   }}
                   as={FiChevronLeft}
@@ -57,26 +64,20 @@ const DrawerParagraphStatement = () => {
                   size="xs"
                   backgroundColor="transparent"
                   cursor="pointer"
-                  isDisabled={statementVersion === 0}
+                  isDisabled={!leftChevronEnabled}
                   _hover={{ backgroundColor: "white" }}
                 />
                 <Text color="gray.500">version: {statementVersion + 1}</Text>
                 <IconButton
                   onClick={() => {
-                    if (
-                      statementVersion !==
-                      paragraphStatement.statement.versions.length - 1
-                    )
+                    if (rightChevronEnabled)
                       setStatementVersion(statementVersion + 1);
                   }}
                   as={FiChevronRight}
                   aria-label="next"
                   size="xs"
                   backgroundColor="transparent"
-                  isDisabled={
-                    statementVersion ===
-                    paragraphStatement.statement.versions.length - 1
-                  }
+                  isDisabled={!rightChevronEnabled}
                   cursor="pointer"
                   _hover={{ backgroundColor: "white" }}
                 />
@@ -85,7 +86,7 @@ const DrawerParagraphStatement = () => {
           </Box>
 
           {/* QUESTIONS */}
-          <Heading size="md" my={2}>
+          <Heading backgroundColor="transparent" size="md" my={2}>
             Questions
           </Heading>
           <QuestionTagRelated
@@ -97,12 +98,44 @@ const DrawerParagraphStatement = () => {
               window.open(`/p/${pageSlug}`, "_blank")
             }
           />
+
+          {/* EDIT PROPOSALS */}
+          {paragraphStatement.statement.versions[statementVersion] &&
+            !!paragraphStatement.statement.versions[statementVersion]
+              .sourceEditProposal && (
+              <Box>
+                <Heading backgroundColor="transparent" size="md" my={2}>
+                  Source
+                </Heading>
+                <ParagraphEditProposal
+                  backgroundColor="gray.100"
+                  paragraphEditProposalId={
+                    paragraphStatement.statement.versions[statementVersion]
+                      .sourceEditProposal!._id
+                  }
+                  editProposalSelected={
+                    paragraphEditProposalPreviewId ===
+                    paragraphStatement.statement.versions[statementVersion]
+                      .sourceEditProposal!._id
+                  }
+                  editProposalPreviewSelection={
+                    setPreviewedParagraphEditProposal
+                  }
+                />
+              </Box>
+            )}
         </Box>
       );
     } else if (paragraphStatement) {
       return <Loading />;
     } else return <ErrorMessage />;
-  }, [paragraphStatement, statementVersion, currentPageId]);
+  }, [
+    paragraphStatement,
+    statementVersion,
+    currentPageId,
+    paragraphEditProposalPreviewId,
+    setPreviewedParagraphEditProposal,
+  ]);
 
   return <Box>{content}</Box>;
 };

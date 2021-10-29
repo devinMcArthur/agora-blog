@@ -4,12 +4,15 @@ import ThemeProvider from "./ThemeProvider";
 import { withRouter } from "react-router-dom";
 import MyApolloProvider from "./ApolloProvider";
 import { DrawerProvider } from "../../contexts/Drawer";
+import { AuthProvider } from "../../contexts/Auth";
 
 export default function Provider(props: { children: React.ReactNode }) {
   return (
     <ThemeProvider>
       <MyApolloProvider>
-        <DrawerProvider>{props.children}</DrawerProvider>
+        <AuthProvider>
+          <DrawerProvider>{props.children}</DrawerProvider>
+        </AuthProvider>
       </MyApolloProvider>
     </ThemeProvider>
   );

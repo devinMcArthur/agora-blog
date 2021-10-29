@@ -2,40 +2,60 @@ import * as React from "react";
 
 import { Box, Link, Stack, Heading, Spacer } from "@chakra-ui/react";
 
-import { withProvider } from "../Providers";
 import { Flex } from "@chakra-ui/react";
-import { RouteComponentProps, Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import { navbarHeight } from "../../constants/styles";
+import NavbarAccount from "./views/Account";
+import { useAuth } from "../../contexts/Auth";
 
-interface Props extends RouteComponentProps {}
+const Navbar = () => {
+  const {
+    state: { user },
+  } = useAuth();
 
-class Navbar extends React.Component<Props> {
-  render() {
-    return (
-      <Box
-        shadow="bottomShadow"
-        p={3}
-        position="fixed"
-        height="5%"
-        width="100%"
-        zIndex="999"
-        backgroundColor="gray.500"
+  return (
+    <Box
+      shadow="bottomShadow"
+      p={1}
+      position="fixed"
+      height={navbarHeight}
+      width="100%"
+      zIndex="998"
+      backgroundColor="gray.500"
+    >
+      <Flex
+        alignItems="center"
+        justify="space-between"
+        minW="80%"
+        margin="0 auto"
+        height="100%"
       >
-        <Flex align="center" justify="space-between" minW="80%" margin="0 auto">
-          <Link as={RouterLink} to="/" margin="auto">
-            <Heading as="h4" fontSize={["2xl", "2xl", "3xl"]}>
-              agora
-            </Heading>
+        <Link as={RouterLink} to="/" margin="auto" height="100%" pt={1} ml={4}>
+          <Heading as="h4" fontSize={["2xl", "2xl", "3xl"]} h="100%" p="auto">
+            agora
+          </Heading>
+        </Link>
+        <Spacer />
+        <Stack
+          spacing={4}
+          direction="row"
+          mr={4}
+          height="100%"
+          pt={user ? 1 : 2}
+        >
+          <Link
+            as={RouterLink}
+            to="/questions"
+            fontWeight="bold"
+            pt={user ? 2 : 1}
+          >
+            Questions
           </Link>
-          <Spacer />
-          <Stack spacing={2} direction="row" mr={4}>
-            <Link as={RouterLink} to="/questions">
-              Questions
-            </Link>
-          </Stack>
-        </Flex>
-      </Box>
-    );
-  }
-}
+          <NavbarAccount />
+        </Stack>
+      </Flex>
+    </Box>
+  );
+};
 
-export default withProvider(Navbar);
+export default Navbar;

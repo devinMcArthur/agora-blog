@@ -15,18 +15,6 @@ export default class ParagraphEditProposalStatementResolver {
    * ----- Field Resolvers -----
    */
 
-  @FieldResolver(() => StatementClass)
-  async statement(
-    @Root()
-    paragraphEditProposalStatement: ParagraphEditProposalStatementDocument
-  ) {
-    if (paragraphEditProposalStatement.statement)
-      return Statement.getById(
-        paragraphEditProposalStatement.statement.toString()
-      );
-    else return null;
-  }
-
   @FieldResolver(() => [QuestionClass])
   async questions(
     @Root()

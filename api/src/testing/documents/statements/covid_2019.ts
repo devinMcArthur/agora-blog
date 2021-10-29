@@ -79,6 +79,8 @@ const page_covid_2019_statement_2_v1 = new Statement({
           styles: [],
         },
       ],
+      sourceEditProposal:
+        _ids.paragraphEditProposals.page_covid_19_paragraph_v1_proposal_1._id,
       questions: [_ids.questions.where_was_the_first_case_of_covid_19._id],
     },
   ],

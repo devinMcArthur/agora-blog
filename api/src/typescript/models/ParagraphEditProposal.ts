@@ -10,7 +10,10 @@ export enum EditProposalChangeTypes {
 
 interface IParagraphEditProposalStatementData {
   changeType: EditProposalChangeTypes;
-  statement?: Types.ObjectId | string;
+  paragraphStatement?: {
+    statement: Types.ObjectId | string;
+    versionIndex: number;
+  };
   questions?: Types.ObjectId[] | string[];
   newQuestions?: string[];
   stringArray?: IStringArrayBuildData[];
@@ -20,5 +23,5 @@ export interface IParagraphEditProposalBuildData {
   paragraph: Types.ObjectId | string;
   author: Types.ObjectId | string;
   description: string;
-  statements: IParagraphEditProposalStatementData[];
+  statementItems: IParagraphEditProposalStatementData[];
 }

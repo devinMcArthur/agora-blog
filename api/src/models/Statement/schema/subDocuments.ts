@@ -3,6 +3,7 @@ import { Field, ObjectType } from "type-graphql";
 
 import {
   PageClass,
+  ParagraphEditProposalClass,
   QuestionClass,
   StatementClass,
   VariableClass,
@@ -90,6 +91,10 @@ export class StatementVersionClass {
   @Field(() => [QuestionClass])
   @prop({ ref: () => QuestionClass, default: [] })
   public questions!: Ref<QuestionClass>[];
+
+  @Field(() => ParagraphEditProposalClass, { nullable: true })
+  @prop({ ref: () => ParagraphEditProposalClass })
+  public sourceEditProposal?: ParagraphEditProposalClass;
 
   @Field({ nullable: false })
   @prop({ default: Date.now, required: true, immutable: true })

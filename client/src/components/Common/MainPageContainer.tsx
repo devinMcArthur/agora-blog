@@ -11,7 +11,7 @@ const MainPageContainer: React.FC = ({ children }) => {
       id="prop-container"
       display="flex"
       flexDir="row"
-      pt="6%"
+      pt="5%"
       pr={isActive ? ["100%", "40%", "30%", "30%", "20%"] : "0"}
     >
       {children}

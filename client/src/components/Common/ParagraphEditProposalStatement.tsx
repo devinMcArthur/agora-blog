@@ -5,18 +5,29 @@ import StringArray from "./StringArray";
 
 interface IParagraphEditProposalStatement {
   statement: ParagraphEditProposalStatementSnippetFragment;
+  versionIndex: number | "EDIT";
 }
 
 const ParagraphEditProposalStatement = ({
   statement,
+  versionIndex,
 }: IParagraphEditProposalStatement) => {
   const stringArray = React.useMemo(() => {
-    if (statement.stringArray && statement.stringArray.length > 0) {
+    if (
+      statement.stringArray &&
+      statement.stringArray.length > 0 &&
+      versionIndex === "EDIT"
+    ) {
       return statement.stringArray;
-    } else if (statement.statement) {
-      return statement.statement.versions[0].stringArray;
+    } else if (statement.paragraphStatement) {
+      return statement.paragraphStatement.statement.versions[
+        versionIndex !== "EDIT" &&
+        statement.paragraphStatement.statement.versions[versionIndex]
+          ? versionIndex
+          : statement.paragraphStatement.versionIndex
+      ].stringArray;
     } else return [];
-  }, [statement]);
+  }, [statement.paragraphStatement, statement.stringArray, versionIndex]);
 
   return (
     <Box>

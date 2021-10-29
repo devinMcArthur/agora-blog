@@ -4,7 +4,7 @@ import { Field, ID, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class UserSchema {
-  @Field(() => ID, { nullable: true })
+  @Field(() => ID, { nullable: false })
   public _id!: Types.ObjectId;
 
   @Field({ nullable: false })
@@ -34,4 +34,8 @@ export class UserSchema {
   @Field({ nullable: false })
   @prop({ required: true, default: false })
   public admin!: boolean;
+
+  @Field({ nullable: false })
+  @prop({ required: true, default: Date.now, immutable: true })
+  public createdAt!: Date;
 }

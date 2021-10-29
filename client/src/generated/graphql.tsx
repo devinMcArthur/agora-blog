@@ -19,6 +19,8 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  currentUser: UserClass;
+  user: UserClass;
   page?: Maybe<PageClass>;
   pages: Array<PageClass>;
   searchPages: Array<PageClass>;
@@ -30,6 +32,11 @@ export type Query = {
   statement?: Maybe<StatementClass>;
   statementsFromQuestion: Array<StatementClass>;
   paragraphEditProposal: ParagraphEditProposalClass;
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -79,6 +86,20 @@ export type QueryParagraphEditProposalArgs = {
   id: Scalars['String'];
 };
 
+export type UserClass = {
+  __typename?: 'UserClass';
+  _id: Scalars['ID'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  middleName?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
+  password: Scalars['String'];
+  verified: Scalars['Boolean'];
+  admin: Scalars['Boolean'];
+  createdAt: Scalars['DateTime'];
+};
+
+
 export type PageClass = {
   __typename?: 'PageClass';
   _id: Scalars['ID'];
@@ -120,6 +141,7 @@ export type StatementVersionClass = {
   __typename?: 'StatementVersionClass';
   stringArray: Array<StringArrayClass>;
   questions: Array<QuestionClass>;
+  sourceEditProposal?: Maybe<ParagraphEditProposalClass>;
   createdAt: Scalars['DateTime'];
 };
 
@@ -172,7 +194,6 @@ export type VariableEquationClass = {
   variable?: Maybe<VariableClass>;
 };
 
-
 export type Image = {
   __typename?: 'Image';
   name: Scalars['String'];
@@ -190,25 +211,13 @@ export type QuestionClass = {
   relatedPages: Array<PageClass>;
 };
 
-export type UserClass = {
-  __typename?: 'UserClass';
-  _id?: Maybe<Scalars['ID']>;
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  middleName?: Maybe<Scalars['String']>;
-  email: Scalars['String'];
-  password: Scalars['String'];
-  verified: Scalars['Boolean'];
-  admin: Scalars['Boolean'];
-};
-
 export type ParagraphEditProposalClass = {
   __typename?: 'ParagraphEditProposalClass';
   _id: Scalars['ID'];
   paragraph: ParagraphClass;
   author: UserClass;
   description: Scalars['String'];
-  statements: Array<ParagraphEditProposalStatementClass>;
+  statementItems: Array<ParagraphEditProposalStatementClass>;
   createdAt: Scalars['DateTime'];
 };
 
@@ -216,7 +225,7 @@ export type ParagraphEditProposalStatementClass = {
   __typename?: 'ParagraphEditProposalStatementClass';
   _id: Scalars['ID'];
   changeType: Scalars['String'];
-  statement?: Maybe<StatementClass>;
+  paragraphStatement?: Maybe<ParagraphStatementClass>;
   stringArray: Array<StringArrayClass>;
   questions: Array<QuestionClass>;
   newQuestions: Array<Scalars['String']>;
@@ -236,8 +245,7 @@ export type Mutation = {
 
 
 export type MutationLoginArgs = {
-  password: Scalars['String'];
-  email: Scalars['String'];
+  data: LoginData;
 };
 
 
@@ -245,19 +253,29 @@ export type MutationCreateParagraphEditProposalArgs = {
   data: ParagraphEditProposalData;
 };
 
+export type LoginData = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+};
+
 export type ParagraphEditProposalData = {
   paragraph: Scalars['String'];
   description: Scalars['String'];
-  statements: Array<ParagraphEditProposalStatementData>;
+  statementItems: Array<ParagraphEditProposalStatementData>;
 };
 
 export type ParagraphEditProposalStatementData = {
   changeType: Scalars['String'];
-  statement?: Maybe<Scalars['String']>;
+  paragraphStatement?: Maybe<ParagraphStatementData>;
   statementVersionIndex?: Maybe<Scalars['Float']>;
   questions?: Maybe<Array<Scalars['String']>>;
   newQuestions?: Maybe<Array<Scalars['String']>>;
   stringArray?: Maybe<Array<StringArrayData>>;
+};
+
+export type ParagraphStatementData = {
+  statement: Scalars['String'];
+  versionIndex: Scalars['Float'];
 };
 
 export type StringArrayData = {
@@ -312,6 +330,9 @@ export type DisplayStatementSnippetFragment = (
     )>, questions: Array<(
       { __typename?: 'QuestionClass' }
       & Pick<QuestionClass, '_id' | 'question'>
+    )>, sourceEditProposal?: Maybe<(
+      { __typename?: 'ParagraphEditProposalClass' }
+      & Pick<ParagraphEditProposalClass, '_id'>
     )> }
   )> }
 );
@@ -338,9 +359,14 @@ export type DisplayStyleSnippetFragment = (
   ) }
 );
 
+export type DisplayUserSnippetFragmentFragment = (
+  { __typename?: 'UserClass' }
+  & Pick<UserClass, 'firstName' | 'lastName' | 'middleName' | 'verified'>
+);
+
 export type FullParagraphEditProposalSnippetFragment = (
   { __typename?: 'ParagraphEditProposalClass' }
-  & { statements: Array<(
+  & { statementItems: Array<(
     { __typename?: 'ParagraphEditProposalStatementClass' }
     & ParagraphEditProposalStatementSnippetFragment
   )> }
@@ -363,6 +389,11 @@ export type FullStringArraySnippetFragment = (
     { __typename?: 'StatementStyleClass' }
     & DisplayStyleSnippetFragment
   )> }
+);
+
+export type FullUserSnippetFragment = (
+  { __typename?: 'UserClass' }
+  & Pick<UserClass, '_id' | 'firstName' | 'middleName' | 'lastName' | 'verified' | 'createdAt'>
 );
 
 export type ImageSnippetFragment = (
@@ -399,9 +430,9 @@ export type PageSnippetFragment = (
 export type ParagraphEditProposalStatementSnippetFragment = (
   { __typename?: 'ParagraphEditProposalStatementClass' }
   & Pick<ParagraphEditProposalStatementClass, '_id' | 'changeType' | 'newQuestions'>
-  & { statement?: Maybe<(
-    { __typename?: 'StatementClass' }
-    & DisplayStatementSnippetFragment
+  & { paragraphStatement?: Maybe<(
+    { __typename?: 'ParagraphStatementClass' }
+    & FullParagraphStatementSnippetFragment
   )>, stringArray: Array<(
     { __typename?: 'StringArrayClass' }
     & FullStringArraySnippetFragment
@@ -466,6 +497,27 @@ export type CreateParagraphEditProposalMutation = (
   & { createParagraphEditProposal: (
     { __typename?: 'ParagraphEditProposalClass' }
     & FullParagraphEditProposalSnippetFragment
+  ) }
+);
+
+export type UserLoginMutationVariables = Exact<{
+  data: LoginData;
+}>;
+
+
+export type UserLoginMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'login'>
+);
+
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CurrentUserQuery = (
+  { __typename?: 'Query' }
+  & { currentUser: (
+    { __typename?: 'UserClass' }
+    & FullUserSnippetFragment
   ) }
 );
 
@@ -618,6 +670,19 @@ export type StatementsFromQuestionQuery = (
   )> }
 );
 
+export type UserQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type UserQuery = (
+  { __typename?: 'Query' }
+  & { user: (
+    { __typename?: 'UserClass' }
+    & DisplayUserSnippetFragmentFragment
+  ) }
+);
+
 export type VariableQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -631,6 +696,14 @@ export type VariableQuery = (
   )> }
 );
 
+export const DisplayUserSnippetFragmentFragmentDoc = gql`
+    fragment DisplayUserSnippetFragment on UserClass {
+  firstName
+  lastName
+  middleName
+  verified
+}
+    `;
 export const PreviewParagraphEditProposalSnippetFragmentDoc = gql`
     fragment PreviewParagraphEditProposalSnippet on ParagraphEditProposalClass {
   _id
@@ -696,15 +769,26 @@ export const DisplayStatementSnippetFragmentDoc = gql`
       _id
       question
     }
+    sourceEditProposal {
+      _id
+    }
   }
 }
     ${FullStringArraySnippetFragmentDoc}`;
+export const FullParagraphStatementSnippetFragmentDoc = gql`
+    fragment FullParagraphStatementSnippet on ParagraphStatementClass {
+  versionIndex
+  statement {
+    ...DisplayStatementSnippet
+  }
+}
+    ${DisplayStatementSnippetFragmentDoc}`;
 export const ParagraphEditProposalStatementSnippetFragmentDoc = gql`
     fragment ParagraphEditProposalStatementSnippet on ParagraphEditProposalStatementClass {
   _id
   changeType
-  statement {
-    ...DisplayStatementSnippet
+  paragraphStatement {
+    ...FullParagraphStatementSnippet
   }
   stringArray {
     ...FullStringArraySnippet
@@ -715,31 +799,33 @@ export const ParagraphEditProposalStatementSnippetFragmentDoc = gql`
   }
   newQuestions
 }
-    ${DisplayStatementSnippetFragmentDoc}
+    ${FullParagraphStatementSnippetFragmentDoc}
 ${FullStringArraySnippetFragmentDoc}`;
 export const FullParagraphEditProposalSnippetFragmentDoc = gql`
     fragment FullParagraphEditProposalSnippet on ParagraphEditProposalClass {
   ...PreviewParagraphEditProposalSnippet
-  statements {
+  statementItems {
     ...ParagraphEditProposalStatementSnippet
   }
 }
     ${PreviewParagraphEditProposalSnippetFragmentDoc}
 ${ParagraphEditProposalStatementSnippetFragmentDoc}`;
+export const FullUserSnippetFragmentDoc = gql`
+    fragment FullUserSnippet on UserClass {
+  _id
+  firstName
+  middleName
+  lastName
+  verified
+  createdAt
+}
+    `;
 export const LinkFormPageSnippetFragmentDoc = gql`
     fragment LinkFormPageSnippet on PageClass {
   _id
   title
 }
     `;
-export const FullParagraphStatementSnippetFragmentDoc = gql`
-    fragment FullParagraphStatementSnippet on ParagraphStatementClass {
-  versionIndex
-  statement {
-    ...DisplayStatementSnippet
-  }
-}
-    ${DisplayStatementSnippetFragmentDoc}`;
 export const DisplayParagraphSnippetFragmentDoc = gql`
     fragment DisplayParagraphSnippet on ParagraphClass {
   statements {
@@ -855,6 +941,68 @@ export function useCreateParagraphEditProposalMutation(baseOptions?: Apollo.Muta
 export type CreateParagraphEditProposalMutationHookResult = ReturnType<typeof useCreateParagraphEditProposalMutation>;
 export type CreateParagraphEditProposalMutationResult = Apollo.MutationResult<CreateParagraphEditProposalMutation>;
 export type CreateParagraphEditProposalMutationOptions = Apollo.BaseMutationOptions<CreateParagraphEditProposalMutation, CreateParagraphEditProposalMutationVariables>;
+export const UserLoginDocument = gql`
+    mutation UserLogin($data: LoginData!) {
+  login(data: $data)
+}
+    `;
+export type UserLoginMutationFn = Apollo.MutationFunction<UserLoginMutation, UserLoginMutationVariables>;
+
+/**
+ * __useUserLoginMutation__
+ *
+ * To run a mutation, you first call `useUserLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userLoginMutation, { data, loading, error }] = useUserLoginMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUserLoginMutation(baseOptions?: Apollo.MutationHookOptions<UserLoginMutation, UserLoginMutationVariables>) {
+        return Apollo.useMutation<UserLoginMutation, UserLoginMutationVariables>(UserLoginDocument, baseOptions);
+      }
+export type UserLoginMutationHookResult = ReturnType<typeof useUserLoginMutation>;
+export type UserLoginMutationResult = Apollo.MutationResult<UserLoginMutation>;
+export type UserLoginMutationOptions = Apollo.BaseMutationOptions<UserLoginMutation, UserLoginMutationVariables>;
+export const CurrentUserDocument = gql`
+    query CurrentUser {
+  currentUser {
+    ...FullUserSnippet
+  }
+}
+    ${FullUserSnippetFragmentDoc}`;
+
+/**
+ * __useCurrentUserQuery__
+ *
+ * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCurrentUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
+      }
+export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
+        }
+export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
+export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
+export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const FullParagraphEditProposalDocument = gql`
     query FullParagraphEditProposal($id: String!) {
   paragraphEditProposal(id: $id) {
@@ -1227,6 +1375,39 @@ export function useStatementsFromQuestionLazyQuery(baseOptions?: Apollo.LazyQuer
 export type StatementsFromQuestionQueryHookResult = ReturnType<typeof useStatementsFromQuestionQuery>;
 export type StatementsFromQuestionLazyQueryHookResult = ReturnType<typeof useStatementsFromQuestionLazyQuery>;
 export type StatementsFromQuestionQueryResult = Apollo.QueryResult<StatementsFromQuestionQuery, StatementsFromQuestionQueryVariables>;
+export const UserDocument = gql`
+    query User($id: String!) {
+  user(id: $id) {
+    ...DisplayUserSnippetFragment
+  }
+}
+    ${DisplayUserSnippetFragmentFragmentDoc}`;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, baseOptions);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, baseOptions);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const VariableDocument = gql`
     query Variable($id: ID!) {
   variable(id: $id) {

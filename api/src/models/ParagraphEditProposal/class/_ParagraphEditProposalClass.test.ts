@@ -41,12 +41,15 @@ describe("Paragraph Edit Proposal Class", () => {
           const data: IParagraphEditProposalBuildData = {
             author: _ids.users.dev._id,
             description: "Test edit proposal",
-            paragraph: _ids.pages.page_covid_2019.paragraphs[0]._id,
-            statements: [
+            paragraph: _ids.pages.page_covid_2019.paragraphs[1]._id,
+            statementItems: [
               {
                 changeType: EditProposalChangeTypes.EDIT,
-                statement:
-                  _ids.pages.page_covid_2019.paragraphs[0].statements[0],
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_2019.paragraphs[0].statements[0],
+                  versionIndex: 0,
+                },
                 questions: [_ids.questions.what_is_covid_19._id],
                 newQuestions: ["What causes the disease COVID-19?"],
                 stringArray: [
@@ -75,18 +78,27 @@ describe("Paragraph Edit Proposal Class", () => {
               },
               {
                 changeType: EditProposalChangeTypes.NONE,
-                statement:
-                  _ids.pages.page_covid_2019.paragraphs[0].statements[2],
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_2019.paragraphs[0].statements[2],
+                  versionIndex: 0,
+                },
               },
               {
                 changeType: EditProposalChangeTypes.NONE,
-                statement:
-                  _ids.pages.page_covid_2019.paragraphs[0].statements[1],
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_2019.paragraphs[0].statements[1],
+                  versionIndex: 0,
+                },
               },
               {
                 changeType: EditProposalChangeTypes.REMOVE,
-                statement:
-                  _ids.pages.page_covid_2019.paragraphs[0].statements[3],
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_2019.paragraphs[0].statements[3],
+                  versionIndex: 0,
+                },
               },
               {
                 changeType: EditProposalChangeTypes.ADD,
@@ -101,8 +113,11 @@ describe("Paragraph Edit Proposal Class", () => {
               },
               {
                 changeType: EditProposalChangeTypes.NONE,
-                statement:
-                  _ids.pages.page_covid_2019.paragraphs[0].statements[4],
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_2019.paragraphs[0].statements[4],
+                  versionIndex: 0,
+                },
               },
             ],
           };
@@ -111,23 +126,311 @@ describe("Paragraph Edit Proposal Class", () => {
 
           expect(paragraphEditProposal).toBeDefined();
 
-          expect(paragraphEditProposal.statements.length).toBe(
-            data.statements.length
+          expect(paragraphEditProposal.statementItems.length).toBe(
+            data.statementItems.length
           );
           expect([
-            ...paragraphEditProposal.statements.map(
+            ...paragraphEditProposal.statementItems.map(
               (statement) => statement.changeType
             ),
           ]).toEqual([
-            ...data.statements.map((statement) => statement.changeType),
+            ...data.statementItems.map((statement) => statement.changeType),
           ]);
           expect([
-            ...paragraphEditProposal.statements.map(
-              (statement) => statement.statement
+            ...paragraphEditProposal.statementItems.map(
+              (statement) => statement.paragraphStatement?.statement
             ),
           ]).toEqual([
-            ...data.statements.map((statement) => statement.statement),
+            ...data.statementItems.map(
+              (statement) => statement.paragraphStatement?.statement
+            ),
           ]);
+        });
+
+        test("should successully submit proposal with only order change", async () => {
+          const data: IParagraphEditProposalBuildData = {
+            author: _ids.users.dev._id,
+            description: "Test edit proposal",
+            paragraph: _ids.pages.page_covid_19_deaths.paragraphs[0]._id,
+            statementItems: [
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[0],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[2],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[1],
+                  versionIndex: 0,
+                },
+              },
+            ],
+          };
+
+          const proposal = await ParagraphEditProposal.build(data);
+
+          expect(proposal).toBeDefined();
+        });
+      });
+
+      describe("error", () => {
+        test("should error if creating edit proposal for old paragraph", async () => {
+          expect.assertions(1);
+
+          const data: IParagraphEditProposalBuildData = {
+            author: _ids.users.dev._id,
+            description: "Test edit proposal",
+            paragraph: _ids.pages.page_covid_2019.paragraphs[0]._id,
+            statementItems: [
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_2019.paragraphs[0].statements[0],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_2019.paragraphs[0].statements[1],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_2019.paragraphs[0].statements[2],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.REMOVE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_2019.paragraphs[0].statements[3],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_2019.paragraphs[0].statements[4],
+                  versionIndex: 0,
+                },
+              },
+            ],
+          };
+
+          try {
+            await ParagraphEditProposal.build(data);
+          } catch (e: any) {
+            expect(e.message).toBe(
+              "paragraphEditProposal.validate: can only add edit proposals to current paragraphs"
+            );
+          }
+        });
+
+        test("should error if invalid statement version index is provided", async () => {
+          expect.assertions(1);
+
+          const data: IParagraphEditProposalBuildData = {
+            author: _ids.users.dev._id,
+            description: "Test edit proposal",
+            paragraph: _ids.pages.page_covid_19_deaths.paragraphs[0]._id,
+            statementItems: [
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[0],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[1],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.REMOVE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[2],
+                  versionIndex: 1,
+                },
+              },
+            ],
+          };
+
+          try {
+            await ParagraphEditProposal.build(data);
+          } catch (e: any) {
+            expect(e.message).toBe(
+              "paragraphEditProposal.validate: statements[2] - must provide a valid version index"
+            );
+          }
+        });
+
+        test("should error if not all paragraph statements are references in proposal", async () => {
+          expect.assertions(1);
+
+          const data: IParagraphEditProposalBuildData = {
+            author: _ids.users.dev._id,
+            description: "Test edit proposal",
+            paragraph: _ids.pages.page_covid_19_deaths.paragraphs[0]._id,
+            statementItems: [
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[0],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.REMOVE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[1],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.ADD,
+                newQuestions: ["What have been the consequences of COVID-19?"],
+                stringArray: [
+                  {
+                    string: "test",
+                    styles: [],
+                  },
+                ],
+              },
+            ],
+          };
+
+          try {
+            await ParagraphEditProposal.build(data);
+          } catch (e: any) {
+            expect(e.message).toBe(
+              "paragraphEditProposal.validate: must provide a statement item for each existing statement in the paragraph"
+            );
+          }
+        });
+
+        test("should error if statement not belonging to paragraph is provided", async () => {
+          expect.assertions(1);
+
+          const data: IParagraphEditProposalBuildData = {
+            author: _ids.users.dev._id,
+            description: "Test edit proposal",
+            paragraph: _ids.pages.page_covid_19_deaths.paragraphs[0]._id,
+            statementItems: [
+              {
+                changeType: EditProposalChangeTypes.REMOVE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[0],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[1],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[2],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_masks.paragraphs[0].statements[0],
+                  versionIndex: 0,
+                },
+              },
+            ],
+          };
+
+          try {
+            await ParagraphEditProposal.build(data);
+          } catch (e: any) {
+            expect(e.message).toBe(
+              "paragraphEditProposal.validate: statements[3] - statement does not belong to this paragraph"
+            );
+          }
+        });
+
+        test("should error if proposal contains no edits", async () => {
+          expect.assertions(1);
+
+          const data: IParagraphEditProposalBuildData = {
+            author: _ids.users.dev._id,
+            description: "Test edit proposal",
+            paragraph: _ids.pages.page_covid_19_deaths.paragraphs[0]._id,
+            statementItems: [
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[0],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[1],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[2],
+                  versionIndex: 0,
+                },
+              },
+            ],
+          };
+
+          try {
+            await ParagraphEditProposal.build(data);
+          } catch (e: any) {
+            expect(e.message).toBe(
+              "paragraphEditProposal.validate: this proposal contains no edits"
+            );
+          }
         });
       });
     });

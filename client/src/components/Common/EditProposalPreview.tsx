@@ -1,3 +1,10 @@
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+} from "@chakra-ui/alert";
+import { CloseButton } from "@chakra-ui/close-button";
 import { Box, Text } from "@chakra-ui/layout";
 import React from "react";
 import { useDrawer } from "../../contexts/Drawer";
@@ -15,12 +22,13 @@ interface IEditProposalPreview {
 const EditProposalPreview = ({ editProposalId }: IEditProposalPreview) => {
   const [editProposal, setEditProposal] =
     React.useState<FullParagraphEditProposalSnippetFragment>();
-  const [search, { data, loading }] = useFullParagraphEditProposalLazyQuery();
+  const [query, { data, loading }] = useFullParagraphEditProposalLazyQuery();
 
   const {
     state: { editProposalStatement },
     setEditProposalStatement,
     clearEditProposalStatement,
+    setPreviewedParagraphEditProposal,
   } = useDrawer();
 
   /**
@@ -29,13 +37,13 @@ const EditProposalPreview = ({ editProposalId }: IEditProposalPreview) => {
 
   React.useEffect(() => {
     if (!editProposal || editProposal._id !== editProposalId) {
-      search({
+      query({
         variables: {
           id: editProposalId,
         },
       });
     }
-  }, [editProposalId, editProposal, search]);
+  }, [editProposalId, editProposal, query]);
 
   React.useEffect(() => {
     if (data?.paragraphEditProposal && !loading) {
@@ -43,17 +51,13 @@ const EditProposalPreview = ({ editProposalId }: IEditProposalPreview) => {
     }
   }, [data, loading]);
 
-  React.useEffect(() => {
-    return () => clearEditProposalStatement();
-  }, [clearEditProposalStatement]);
-
   /**
    * ----- Rendering -----
    */
 
   return React.useMemo(() => {
     if (editProposal) {
-      const statements = editProposal.statements.map((statement) => {
+      const statements = editProposal.statementItems.map((statement) => {
         const selected = editProposalStatement?._id === statement._id;
         let backgroundColor = "gray.100",
           changeType;
@@ -89,7 +93,10 @@ const EditProposalPreview = ({ editProposalId }: IEditProposalPreview) => {
           >
             <Box flexShrink={0} width="5px" backgroundColor="gray.600" mr={4} />
             <Box display="flex" flexDir="column" my={2}>
-              <ParagraphEditProposalStatement statement={statement} />
+              <ParagraphEditProposalStatement
+                statement={statement}
+                versionIndex="EDIT"
+              />
               {changeType && (
                 <Text size="xs" color="gray.600">
                   {changeType}
@@ -100,13 +107,36 @@ const EditProposalPreview = ({ editProposalId }: IEditProposalPreview) => {
         );
       });
 
-      return <div>{statements}</div>;
+      return (
+        <Box display="flex" flexDir="column">
+          <Alert status="info" mb={3}>
+            <Box display="flex" flexDir="column" w="100%">
+              <Box display="flex" flexDir="row" justifyContent="space-between">
+                <Box display="flex" flexDir="row">
+                  <AlertIcon />
+                  <AlertTitle>Previewing:</AlertTitle>
+                  <AlertDescription>
+                    Proposal by {editProposal.author.firstName}{" "}
+                    {editProposal.author.lastName}
+                  </AlertDescription>
+                </Box>
+                <CloseButton
+                  onClick={() => setPreviewedParagraphEditProposal(undefined)}
+                />
+              </Box>
+              {editProposal.description}
+            </Box>
+          </Alert>
+          {statements}
+        </Box>
+      );
     } else return <Loading />;
   }, [
     clearEditProposalStatement,
     editProposal,
     editProposalStatement?._id,
     setEditProposalStatement,
+    setPreviewedParagraphEditProposal,
   ]);
 };
 

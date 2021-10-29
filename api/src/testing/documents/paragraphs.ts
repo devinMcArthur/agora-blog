@@ -5,6 +5,7 @@ import { Paragraph, ParagraphDocument } from "@models";
 export interface SeededParagraphs {
   page_sars_cov_2_paragraph_v1: ParagraphDocument;
   page_covid_2019_paragraph_v1: ParagraphDocument;
+  page_covid_2019_paragraph_v2: ParagraphDocument;
   page_covid_19_transmission_paragraph_v1: ParagraphDocument;
   page_covid_19_symptoms_paragraph_v1: ParagraphDocument;
   page_covid_19_pandemic_paragraph_v1: ParagraphDocument;
@@ -69,7 +70,7 @@ const createParagraphs = () => {
           },
         ],
         version: 1,
-        mostRecent: true,
+        mostRecent: false,
       });
 
       const page_covid_2019_paragraph_v2 = new Paragraph({
@@ -97,7 +98,7 @@ const createParagraphs = () => {
             versionIndex: 0,
           },
         ],
-        version: 1,
+        version: 2,
         mostRecent: true,
         sourceEditProposal:
           _ids.paragraphEditProposals.page_covid_19_paragraph_v1_proposal_1._id,

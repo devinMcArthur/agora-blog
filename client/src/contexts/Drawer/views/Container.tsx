@@ -2,6 +2,7 @@ import { CloseButton } from "@chakra-ui/close-button";
 import { Box, BoxProps } from "@chakra-ui/layout";
 import React from "react";
 import { useDrawer } from "..";
+import { navbarHeight } from "../../../constants/styles";
 import DrawerEditProposalStatement from "./EditProposalStatement";
 import DrawerParagraphStatement from "./ParagraphStatement";
 
@@ -27,14 +28,15 @@ const DrawerContainer = () => {
 
   return (
     <Box
-      top="5%"
+      top={navbarHeight}
       right="0"
       height="95%"
-      borderLeft="1px solid gray"
       width={["100%", "40%", "30%", "30%", "20%"]}
       position="fixed"
       overflowY="hidden"
       backgroundColor="gray.400"
+      boxShadow="rightDrawerShadow"
+      zIndex="999"
       {...hide}
     >
       <Box display="flex" flexDir="column" p={1}>

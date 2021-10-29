@@ -1,4 +1,4 @@
-import { Box, Divider } from "@chakra-ui/layout";
+import { Box, Divider, Text } from "@chakra-ui/layout";
 import { Tag, TagLabel } from "@chakra-ui/tag";
 import React from "react";
 import RecommendedStatements, {
@@ -20,8 +20,6 @@ const QuestionTagRelated = ({
   onStatementSelect,
 }: IQuestionTagRelated) => {
   const [selectedQuestionId, setSelectedQuestionId] = React.useState<string>();
-
-  console.log("avoidPageId", avoidPageId);
 
   return React.useMemo(() => {
     if (questions && questions.length > 0)
@@ -68,7 +66,7 @@ const QuestionTagRelated = ({
           </Box>
         </Box>
       );
-    else return <></>;
+    else return <Text textAlign="center">- no questions -</Text>;
   }, [questions, selectedQuestionId, avoidPageId, onStatementSelect]);
 };
 

@@ -1,5 +1,10 @@
 import { Types } from "mongoose";
-import { QuestionClass, StatementClass, StringArrayClass } from "@models";
+import {
+  ParagraphStatementClass,
+  QuestionClass,
+  StatementClass,
+  StringArrayClass,
+} from "@models";
 import { DocumentType, prop, Ref } from "@typegoose/typegoose";
 import { EditProposalChangeTypes } from "@typescript/models/ParagraphEditProposal";
 import { Field, ID, ObjectType } from "type-graphql";
@@ -13,9 +18,9 @@ export class ParagraphEditProposalStatementClass {
   @prop({ required: true, enum: EditProposalChangeTypes })
   public changeType!: EditProposalChangeTypes;
 
-  @Field(() => StatementClass, { nullable: true })
-  @prop({ ref: () => StatementClass, required: false })
-  public statement?: StatementClass;
+  @Field(() => ParagraphStatementClass, { nullable: true })
+  @prop({ type: () => ParagraphStatementClass, required: false })
+  public paragraphStatement?: ParagraphStatementClass;
 
   @Field(() => [StringArrayClass], { nullable: false })
   @prop({ type: () => StringArrayClass, required: true })

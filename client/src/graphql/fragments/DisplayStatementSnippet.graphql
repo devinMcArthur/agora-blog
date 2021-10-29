@@ -8,5 +8,8 @@ fragment DisplayStatementSnippet on StatementClass {
       _id
       question
     }
+    sourceEditProposal {
+      _id
+    }
   }
 }

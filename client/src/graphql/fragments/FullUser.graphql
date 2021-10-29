@@ -1,0 +1,8 @@
+fragment FullUserSnippet on UserClass {
+  _id
+  firstName
+  middleName
+  lastName
+  verified
+  createdAt
+}

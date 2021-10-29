@@ -20,10 +20,12 @@ const Page = () => {
     variables: { slug: pageSlug },
   });
 
-  const { setCurrentPage, clearState } = useDrawer();
-
-  const [selectedEditProposalId, setSelectedEditProposalId] =
-    React.useState<string>();
+  const {
+    paragraphEditProposalPreviewId,
+    setCurrentPage,
+    clearState,
+    setPreviewedParagraphEditProposal,
+  } = useDrawer();
 
   React.useEffect(() => {
     if (data?.page) setCurrentPage(data.page._id);
@@ -46,9 +48,11 @@ const Page = () => {
       const editProposals = page.currentParagraph.editProposals.map(
         (editProposal) => (
           <ParagraphEditProposal
-            editProposalSelected={editProposal._id === selectedEditProposalId}
+            editProposalSelected={
+              editProposal._id === paragraphEditProposalPreviewId
+            }
             editProposalPreviewSelection={(proposal) =>
-              setSelectedEditProposalId(proposal)
+              setPreviewedParagraphEditProposal(proposal)
             }
             paragraphEditProposalId={editProposal._id}
           />
@@ -60,8 +64,10 @@ const Page = () => {
           <Heading size="lg">{page.title}</Heading>
           <Divider mb={2} />
           <Box my={3}>
-            {selectedEditProposalId ? (
-              <EditProposalPreview editProposalId={selectedEditProposalId} />
+            {paragraphEditProposalPreviewId ? (
+              <EditProposalPreview
+                editProposalId={paragraphEditProposalPreviewId}
+              />
             ) : (
               <Paragraph paragraph={page.currentParagraph} />
             )}
@@ -70,7 +76,7 @@ const Page = () => {
           <Tabs variant="line">
             <TabList>
               <Tab>Related</Tab>
-              <Tab>Edits</Tab>
+              <Tab>Edit Proposals</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
@@ -90,7 +96,12 @@ const Page = () => {
     } else {
       return <Loading />;
     }
-  }, [data, loading, selectedEditProposalId]);
+  }, [
+    data,
+    loading,
+    paragraphEditProposalPreviewId,
+    setPreviewedParagraphEditProposal,
+  ]);
 
   return (
     <Container minW="80%" p={4}>

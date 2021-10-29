@@ -18,14 +18,22 @@ const createParagraphEditProposals = () => {
           author: _ids.users.dev._id,
           description: "Update first recorded case of COVID-19",
           paragraph: _ids.pages.page_covid_2019.paragraphs[0]._id,
-          statements: [
+          statementItems: [
             {
               changeType: EditProposalChangeTypes.NONE,
-              statement: _ids.pages.page_covid_2019.paragraphs[0].statements[0],
+              paragraphStatement: {
+                statement:
+                  _ids.pages.page_covid_2019.paragraphs[0].statements[0],
+                versionIndex: 0,
+              },
             },
             {
               changeType: EditProposalChangeTypes.EDIT,
-              statement: _ids.pages.page_covid_2019.paragraphs[0].statements[1],
+              paragraphStatement: {
+                statement:
+                  _ids.pages.page_covid_2019.paragraphs[0].statements[1],
+                versionIndex: 0,
+              },
               questions: [
                 _ids.questions.where_was_the_first_case_of_covid_19._id,
               ],
@@ -56,15 +64,27 @@ const createParagraphEditProposals = () => {
             },
             {
               changeType: EditProposalChangeTypes.NONE,
-              statement: _ids.pages.page_covid_2019.paragraphs[0].statements[2],
-            },
-            {
-              changeType: EditProposalChangeTypes.REMOVE,
-              statement: _ids.pages.page_covid_2019.paragraphs[0].statements[3],
+              paragraphStatement: {
+                statement:
+                  _ids.pages.page_covid_2019.paragraphs[0].statements[2],
+                versionIndex: 0,
+              },
             },
             {
               changeType: EditProposalChangeTypes.NONE,
-              statement: _ids.pages.page_covid_2019.paragraphs[0].statements[4],
+              paragraphStatement: {
+                statement:
+                  _ids.pages.page_covid_2019.paragraphs[0].statements[3],
+                versionIndex: 0,
+              },
+            },
+            {
+              changeType: EditProposalChangeTypes.NONE,
+              paragraphStatement: {
+                statement:
+                  _ids.pages.page_covid_2019.paragraphs[0].statements[4],
+                versionIndex: 0,
+              },
             },
           ],
         }
@@ -77,10 +97,14 @@ const createParagraphEditProposals = () => {
           author: _ids.users.dev._id,
           description: "Test edit proposal",
           paragraph: _ids.pages.page_covid_2019.paragraphs[1]._id,
-          statements: [
+          statementItems: [
             {
               changeType: EditProposalChangeTypes.EDIT,
-              statement: _ids.pages.page_covid_2019.paragraphs[0].statements[0],
+              paragraphStatement: {
+                statement:
+                  _ids.pages.page_covid_2019.paragraphs[0].statements[0],
+                versionIndex: 0,
+              },
               questions: [_ids.questions.what_is_covid_19._id],
               newQuestions: ["What causes the disease COVID-19?"],
               stringArray: [
@@ -109,15 +133,27 @@ const createParagraphEditProposals = () => {
             },
             {
               changeType: EditProposalChangeTypes.NONE,
-              statement: _ids.pages.page_covid_2019.paragraphs[0].statements[2],
+              paragraphStatement: {
+                statement:
+                  _ids.pages.page_covid_2019.paragraphs[0].statements[2],
+                versionIndex: 0,
+              },
             },
             {
               changeType: EditProposalChangeTypes.NONE,
-              statement: _ids.pages.page_covid_2019.paragraphs[0].statements[1],
+              paragraphStatement: {
+                statement:
+                  _ids.pages.page_covid_2019.paragraphs[0].statements[1],
+                versionIndex: 1,
+              },
             },
             {
               changeType: EditProposalChangeTypes.REMOVE,
-              statement: _ids.pages.page_covid_2019.paragraphs[0].statements[3],
+              paragraphStatement: {
+                statement:
+                  _ids.pages.page_covid_2019.paragraphs[0].statements[3],
+                versionIndex: 0,
+              },
             },
             {
               changeType: EditProposalChangeTypes.ADD,
@@ -132,7 +168,11 @@ const createParagraphEditProposals = () => {
             },
             {
               changeType: EditProposalChangeTypes.NONE,
-              statement: _ids.pages.page_covid_2019.paragraphs[0].statements[4],
+              paragraphStatement: {
+                statement:
+                  _ids.pages.page_covid_2019.paragraphs[0].statements[4],
+                versionIndex: 0,
+              },
             },
           ],
         }
