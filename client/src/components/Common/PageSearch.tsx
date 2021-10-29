@@ -1,22 +1,26 @@
+import Icon from "@chakra-ui/icon";
 import { InputProps } from "@chakra-ui/input";
+import { StackProps } from "@chakra-ui/layout";
 import React from "react";
 import { FiSearch } from "react-icons/fi";
 import {
   LinkFormPageSnippetFragment,
   useLinkFormPageSearchLazyQuery,
 } from "../../generated/graphql";
-import TextDropdown from "./TextDropdown";
+import TextDropdown, { IOptions } from "./TextDropdown";
 
 interface IPageSearch extends InputProps {
-  pageSelected: (page: { id: string; title: string }) => void;
+  pageSelected: (page: { id: string; title: string; slug: string }) => void;
   handleSubmit?: (string: string) => void;
   dropdownId?: string;
+  dropdownProps?: StackProps;
 }
 
 const PageSearch: React.FC<IPageSearch> = ({
   handleSubmit,
   pageSelected,
   dropdownId,
+  dropdownProps,
   ...props
 }) => {
   const [foundPages, setFoundPages] = React.useState<
@@ -49,11 +53,12 @@ const PageSearch: React.FC<IPageSearch> = ({
    * ----- Variables -----
    */
 
-  const pageOptions = React.useMemo(() => {
+  const pageOptions: IOptions<{ slug: string }>[] = React.useMemo(() => {
     return foundPages.map((page) => {
       return {
         label: page.title,
         value: page._id,
+        extraData: { slug: page.slug },
       };
     });
   }, [foundPages]);
@@ -71,6 +76,7 @@ const PageSearch: React.FC<IPageSearch> = ({
   return (
     <form
       onSubmit={(e) => {
+        console.log("submitted");
         e.preventDefault();
         if (handleSubmit) handleSubmit(searchString);
       }}
@@ -78,14 +84,21 @@ const PageSearch: React.FC<IPageSearch> = ({
       <TextDropdown
         onChange={(e) => handleChange(e.target.value)}
         value={searchString}
-        inputRightElement={<FiSearch />}
+        inputRightElement={<Icon as={FiSearch} w={4} height={4} mt={2} />}
         options={pageOptions}
-        onOptionSelection={(value) => {
+        onOptionSelection={(value, extraData) => {
           setSearchString(value.label);
-          pageSelected({ id: value.value, title: value.label });
+          pageSelected({
+            id: value.value,
+            title: value.label,
+            slug: extraData!.slug,
+          });
           setFoundPages([]);
         }}
         containerId={dropdownId}
+        dropdownProps={dropdownProps}
+        selectOptionsWithEnter
+        autoComplete="off"
         {...props}
       />
     </form>

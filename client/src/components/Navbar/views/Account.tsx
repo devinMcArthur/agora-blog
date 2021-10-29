@@ -13,7 +13,7 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/menu";
-import { useUserLoginForm } from "../../../forms/user";
+import { useUserLoginForm, useUserSignupForm } from "../../../forms/user";
 import { useUserLoginMutation } from "../../../generated/graphql";
 import { useAuth } from "../../../contexts/Auth";
 import { useHistory } from "react-router";
@@ -29,15 +29,16 @@ const NavbarAccount = () => {
   } = useAuth();
   const [loginMutation, { loading }] = useUserLoginMutation();
 
-  const { FormComponents, setError } = useUserLoginForm();
+  const { FormComponents: LoginFormComponents, setError: setLoginError } =
+    useUserLoginForm();
+  const { FormComponents: SignupFormComponents, setError: setSignupError } =
+    useUserSignupForm();
 
   const history = useHistory();
 
   React.useEffect(() => {
     if (user) onClose();
   }, [user, onClose]);
-
-  console.log("user", user);
 
   const content = React.useMemo(() => {
     if (user) {
@@ -99,7 +100,8 @@ const NavbarAccount = () => {
             </TabList>
             <TabPanels>
               <TabPanel>
-                <FormComponents.Form
+                {/* SIGN IN */}
+                <LoginFormComponents.Form
                   submitHandler={async (data) => {
                     try {
                       const result = await loginMutation({
@@ -108,7 +110,7 @@ const NavbarAccount = () => {
 
                       if (result.data?.login) login(result.data.login);
                     } catch (e: any) {
-                      setError(
+                      setLoginError(
                         "email",
                         { message: e.message },
                         { shouldFocus: true }
@@ -116,14 +118,31 @@ const NavbarAccount = () => {
                     }
                   }}
                 >
-                  <FormComponents.Email isLoading={loading} />
-                  <FormComponents.Password isLoading={loading} />
+                  <LoginFormComponents.Email isLoading={loading} />
+                  <LoginFormComponents.Password isLoading={loading} />
                   <Button isLoading={loading} type="submit" w="100%" my={2}>
                     Submit
                   </Button>
-                </FormComponents.Form>
+                </LoginFormComponents.Form>
               </TabPanel>
-              <TabPanel>signup</TabPanel>
+              <TabPanel>
+                {/* SIGN UP */}
+                <SignupFormComponents.Form
+                  submitHandler={async (data) => {
+                    console.log("data", data);
+                  }}
+                >
+                  <SignupFormComponents.FirstName />
+                  <SignupFormComponents.LastName />
+                  <SignupFormComponents.MiddleName />
+                  <SignupFormComponents.Email />
+                  <SignupFormComponents.Password />
+                  <SignupFormComponents.ConfirmationPassword />
+                  <Button isLoading={loading} type="submit" w="100%" my={2}>
+                    Submit
+                  </Button>
+                </SignupFormComponents.Form>
+              </TabPanel>
             </TabPanels>
           </Tabs>
         </ModalContent>

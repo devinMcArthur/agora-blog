@@ -403,7 +403,7 @@ export type ImageSnippetFragment = (
 
 export type LinkFormPageSnippetFragment = (
   { __typename?: 'PageClass' }
-  & Pick<PageClass, '_id' | 'title'>
+  & Pick<PageClass, '_id' | 'title' | 'slug'>
 );
 
 export type PageCardSnippetFragment = (
@@ -824,6 +824,7 @@ export const LinkFormPageSnippetFragmentDoc = gql`
     fragment LinkFormPageSnippet on PageClass {
   _id
   title
+  slug
 }
     `;
 export const DisplayParagraphSnippetFragmentDoc = gql`

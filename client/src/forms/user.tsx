@@ -37,8 +37,6 @@ export const useUserLoginForm = () => {
             control={control}
             name="email"
             render={({ field, fieldState }) => {
-              console.log(fieldState);
-              console.log(field);
               return (
                 <TextField
                   {...field}
@@ -77,4 +75,156 @@ export const useUserLoginForm = () => {
     FormComponents,
     ...form,
   };
+};
+
+const UserSignupSchema = yup
+  .object()
+  .shape({
+    firstName: yup
+      .string()
+      .max(50, "must be less than 50 characters")
+      .required("must provide first name"),
+    lastName: yup
+      .string()
+      .max(50, "must be less than 50 characters")
+      .required("must provide last name"),
+    middleName: yup
+      .string()
+      .max(50, "must be less than 50 characters")
+      .optional(),
+    email: yup
+      .string()
+      .email("must provide a valid email")
+      .required("must provide email"),
+    password: yup.string().required("must provide password"),
+    confirmationPassword: yup
+      .string()
+      .required("must confirm password")
+      .oneOf([yup.ref("password"), null], "passwords must match"),
+  })
+  .required();
+
+export const useUserSignupForm = () => {
+  const form = useForm({
+    resolver: yupResolver(UserSignupSchema),
+  });
+
+  const { control, handleSubmit } = form;
+
+  const FormComponents = {
+    Form: ({
+      children,
+      submitHandler,
+    }: {
+      children: React.ReactNode;
+      submitHandler: SubmitHandler<LoginData>;
+    }) => <form onSubmit={handleSubmit(submitHandler)}>{children}</form>,
+    FirstName: () =>
+      React.useMemo(
+        () => (
+          <Controller
+            control={control}
+            name="firstName"
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                errorMessage={fieldState.error?.message}
+                label="First Name"
+              />
+            )}
+          />
+        ),
+        []
+      ),
+    LastName: () =>
+      React.useMemo(
+        () => (
+          <Controller
+            control={control}
+            name="lastName"
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                errorMessage={fieldState.error?.message}
+                label="Last Name"
+              />
+            )}
+          />
+        ),
+        []
+      ),
+    MiddleName: () =>
+      React.useMemo(
+        () => (
+          <Controller
+            control={control}
+            name="middleName"
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                errorMessage={fieldState.error?.message}
+                label="Middle Name"
+              />
+            )}
+          />
+        ),
+        []
+      ),
+    Email: () =>
+      React.useMemo(
+        () => (
+          <Controller
+            control={control}
+            name="email"
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                errorMessage={fieldState.error?.message}
+                label="Email"
+                type="email"
+              />
+            )}
+          />
+        ),
+        []
+      ),
+    Password: () =>
+      React.useMemo(
+        () => (
+          <Controller
+            control={control}
+            name="password"
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                errorMessage={fieldState.error?.message}
+                label="Password"
+                type="password"
+              />
+            )}
+          />
+        ),
+        []
+      ),
+    ConfirmationPassword: () =>
+      React.useMemo(
+        () => (
+          <Controller
+            control={control}
+            name="confirmationPassword"
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                errorMessage={fieldState.error?.message}
+                label="Confirmation Password"
+                type="password"
+              />
+            )}
+          />
+        ),
+        []
+      ),
+  };
+
+  return { ...form, FormComponents };
 };

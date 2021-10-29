@@ -7,6 +7,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { navbarHeight } from "../../constants/styles";
 import NavbarAccount from "./views/Account";
 import { useAuth } from "../../contexts/Auth";
+import NavbarSearch from "./views/Search";
 
 const Navbar = () => {
   const {
@@ -21,21 +22,22 @@ const Navbar = () => {
       height={navbarHeight}
       width="100%"
       zIndex="998"
-      backgroundColor="gray.500"
+      backgroundColor="gray.400"
     >
-      <Flex
-        alignItems="center"
-        justify="space-between"
+      <Box
+        display="flex"
+        // alignItems="center"
+        justifyContent="space-between"
         minW="80%"
         margin="0 auto"
         height="100%"
       >
-        <Link as={RouterLink} to="/" margin="auto" height="100%" pt={1} ml={4}>
+        <Link as={RouterLink} to="/" marginY="auto" height="100%" pt={1} ml={4}>
           <Heading as="h4" fontSize={["2xl", "2xl", "3xl"]} h="100%" p="auto">
             agora
           </Heading>
         </Link>
-        <Spacer />
+        <NavbarSearch />
         <Stack
           spacing={4}
           direction="row"
@@ -53,7 +55,7 @@ const Navbar = () => {
           </Link>
           <NavbarAccount />
         </Stack>
-      </Flex>
+      </Box>
     </Box>
   );
 };
