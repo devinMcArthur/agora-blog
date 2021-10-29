@@ -86,7 +86,9 @@ const AuthProvider = ({ children }: IAuthProvider) => {
    * ----- State Inititalization -----
    */
 
-  const [token, setToken] = React.useState<string>();
+  const [token, setToken] = React.useState(
+    localStorage.getItem(localStorageTokenKey)
+  );
 
   /**
    * ----- Hook Initialization -----
@@ -112,7 +114,7 @@ const AuthProvider = ({ children }: IAuthProvider) => {
   }, []);
 
   const logout: IAuthContext["logout"] = React.useCallback(
-    () => setToken(undefined),
+    () => setToken(null),
     []
   );
 
@@ -135,7 +137,7 @@ const AuthProvider = ({ children }: IAuthProvider) => {
   }, [dispatch]);
 
   const deauthorizeSession = React.useCallback(() => {
-    setToken(undefined);
+    setToken(null);
     dispatch({
       type: "deauthorize-session",
     });
@@ -143,15 +145,11 @@ const AuthProvider = ({ children }: IAuthProvider) => {
 
   const fetchUser = React.useCallback(() => {
     if (currentUserRefetch) {
-      console.log("fetch1");
       currentUserRefetch();
     } else {
-      console.log("fetch2");
       currentUser();
     }
   }, [currentUser, currentUserRefetch]);
-
-  console.log(currentUserLoading);
 
   /**
    * ----- Use-effects and other logic -----
@@ -175,18 +173,16 @@ const AuthProvider = ({ children }: IAuthProvider) => {
 
   // Handle token changes
   React.useEffect(() => {
-    console.log("hello");
     const localStorageToken = localStorage.getItem(localStorageTokenKey);
     if (token && localStorageToken && !state.user) {
-      console.log("1");
       fetchUser();
     } else if (token && !localStorageToken) {
-      console.log("2");
       localStorage.setItem(localStorageTokenKey, token);
       if (!state.user) fetchUser();
     } else if (!token && localStorageToken) {
-      console.log("3");
       localStorage.removeItem(localStorageTokenKey);
+      deauthorizeSession();
+    } else if (!token && !localStorageToken) {
       deauthorizeSession();
     }
   }, [fetchUser, deauthorizeSession, state.user, token]);

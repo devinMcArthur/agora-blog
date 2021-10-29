@@ -9,6 +9,7 @@ import {
   Menu,
   MenuButton,
   MenuDivider,
+  MenuGroup,
   MenuItem,
   MenuList,
 } from "@chakra-ui/menu";
@@ -16,6 +17,7 @@ import { useUserLoginForm } from "../../../forms/user";
 import { useUserLoginMutation } from "../../../generated/graphql";
 import { useAuth } from "../../../contexts/Auth";
 import { useHistory } from "react-router";
+import Loading from "../../Common/Loading";
 
 const NavbarAccount = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,9 +39,9 @@ const NavbarAccount = () => {
 
   console.log("user", user);
 
-  return (
-    <>
-      {user ? (
+  const content = React.useMemo(() => {
+    if (user) {
+      return (
         <Menu>
           <MenuButton
             backgroundColor="gray.700"
@@ -53,14 +55,18 @@ const NavbarAccount = () => {
             {user.firstName.charAt(0)}
           </MenuButton>
           <MenuList>
-            <MenuItem onClick={() => history.push(`/u/${user._id}`)}>
-              Profile
-            </MenuItem>
-            <MenuDivider />
-            <MenuItem onClick={() => logout()}>Logout</MenuItem>
+            <MenuGroup title={`${user.firstName} ${user.lastName}`}>
+              <MenuItem onClick={() => history.push(`/u/${user._id}`)}>
+                Profile
+              </MenuItem>
+              <MenuDivider />
+              <MenuItem onClick={() => logout()}>Logout</MenuItem>
+            </MenuGroup>
           </MenuList>
         </Menu>
-      ) : (
+      );
+    } else if (user === null) {
+      return (
         <Button
           fontWeight="bold"
           backgroundColor="transparent"
@@ -73,7 +79,15 @@ const NavbarAccount = () => {
         >
           Sign In
         </Button>
-      )}
+      );
+    } else if (user === undefined) {
+      return <Loading />;
+    }
+  }, [history, logout, onOpen, user]);
+
+  return (
+    <>
+      {content}
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -102,8 +116,8 @@ const NavbarAccount = () => {
                     }
                   }}
                 >
-                  <FormComponents.Email />
-                  <FormComponents.Password />
+                  <FormComponents.Email isLoading={loading} />
+                  <FormComponents.Password isLoading={loading} />
                   <Button isLoading={loading} type="submit" w="100%" my={2}>
                     Submit
                   </Button>
