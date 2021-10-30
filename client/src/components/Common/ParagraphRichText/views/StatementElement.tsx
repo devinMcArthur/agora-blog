@@ -1,8 +1,8 @@
 import React from "react";
 import { RenderElementProps } from "slate-react";
 
-import { Box, BoxProps, Divider, Heading, HStack } from "@chakra-ui/layout";
-import { ButtonGroup, IconButton } from "@chakra-ui/button";
+import { Box, BoxProps, Heading, HStack } from "@chakra-ui/layout";
+import { Button, ButtonGroup, IconButton } from "@chakra-ui/button";
 import { Tooltip } from "@chakra-ui/tooltip";
 import { FiChevronsDown, FiChevronsUp, FiPlus, FiStar } from "react-icons/fi";
 import { CustomEditor } from "../utils";
@@ -12,6 +12,8 @@ import { Tag, TagLabel, TagCloseButton, TagLeftIcon } from "@chakra-ui/react";
 import QuestionSearch from "../../QuestionSearch";
 import RecommendedStatements from "../../RecommendedStatements";
 import { useParagraphForm } from "../../../../contexts/ParagraphForm";
+import QuotedStatement from "../../../Statement/views/QuotedStatement";
+import { CloseButton } from "@chakra-ui/close-button";
 
 enum Form {
   Question = "Question",
@@ -68,7 +70,13 @@ const StatementElement = ({
   const statementSelected = (statementId: string) => {
     toggleQuestion();
 
-    CustomEditor.setQuote(editor, statementId, element.index);
+    CustomEditor.setInlineQuote(editor, statementId, element.index);
+  };
+
+  const fullQuoteSelected = (quotedStatementId: string) => {
+    toggleQuestion();
+
+    CustomEditor.setFullQuote(editor, quotedStatementId, element.index);
   };
 
   const questionSelected = (question: { _id: string; question: string }) => {
@@ -111,18 +119,25 @@ const StatementElement = ({
     focusedStyling.boxShadow = "0 0 3px blue";
   }
 
+  console.log("element", element.quotedStatementId);
+
   return (
     <Box {...attributes}>
       <Box
         id={element.statementId}
         marginX={1}
         marginY={4}
-        padding={1}
         border="1px solid gray"
         borderRadius={2}
         {...focusedStyling}
       >
-        <Box display="flex" flexDir="column" p={1} contentEditable={false}>
+        <Box
+          display="flex"
+          flexDir="column"
+          p={1}
+          contentEditable={false}
+          backgroundColor="gray.100"
+        >
           <Box
             display="flex"
             flexDir="row"
@@ -134,6 +149,7 @@ const StatementElement = ({
               <HStack m={1}>
                 {element.questions.map((question, index) => (
                   <Tag
+                    backgroundColor="gray.300"
                     key={index}
                     cursor="pointer"
                     onClick={() => toggleQuestion(question._id)}
@@ -152,7 +168,7 @@ const StatementElement = ({
                 ))}
                 {element.newQuestions.map((question, index) => (
                   <Tooltip label="New question">
-                    <Tag key={index}>
+                    <Tag key={index} backgroundColor="gray.300">
                       <TagLeftIcon as={FiStar} />
                       <TagLabel>{question.question}</TagLabel>
                       <TagCloseButton
@@ -167,14 +183,23 @@ const StatementElement = ({
                     </Tag>
                   </Tooltip>
                 ))}
-                <Tag cursor="pointer" onClick={toggleQuestionForm}>
+                <Tag
+                  cursor="pointer"
+                  onClick={toggleQuestionForm}
+                  backgroundColor="gray.300"
+                >
                   <TagLeftIcon as={FiPlus} />
                   <TagLabel>Add Question</TagLabel>
                 </Tag>
               </HStack>
             </Box>
             <Box>
-              <ButtonGroup isAttached variant="outline" size="sm">
+              <ButtonGroup
+                isAttached
+                variant="outline"
+                size="sm"
+                backgroundColor="white"
+              >
                 <Tooltip label="Move statement up">
                   <IconButton
                     aria-label="Add Above"
@@ -214,16 +239,57 @@ const StatementElement = ({
               <Box m={2} borderTop="1px solid darkgray"></Box>
               <RecommendedStatements
                 questionId={selectedQuestionId}
-                selectedStatement={(statementId) =>
-                  statementSelected(statementId)
-                }
                 avoidedPage={pageId}
+                optionButtons={(statementId) => (
+                  <Box display="flex" flexDir="column">
+                    <Button
+                      m={1}
+                      onClick={() => statementSelected(statementId)}
+                    >
+                      Inline
+                    </Button>
+                    <Box
+                      backgroundColor="gray.700"
+                      w="100%"
+                      h="1px"
+                      my={1}
+                    ></Box>
+                    <Button
+                      m={1}
+                      onClick={() => fullQuoteSelected(statementId)}
+                    >
+                      Full
+                    </Button>
+                  </Box>
+                )}
               />
             </Box>
           )}
-          <Divider />
         </Box>
-        <Box m={2} tabIndex={element.index + 1}>
+        {element.quotedStatementId && (
+          <Box contentEditable={false} m={2}>
+            <Box
+              backgroundColor="gray.200"
+              borderRadius={2}
+              p={2}
+              display="flex"
+              flexDir="row"
+              justifyContent="space-between"
+            >
+              <QuotedStatement statementID={element.quotedStatementId} />
+              <CloseButton
+                onClick={() =>
+                  CustomEditor.removeFullQuote(editor, element.index)
+                }
+              />
+            </Box>
+          </Box>
+        )}
+        <Box
+          m={2}
+          tabIndex={element.index + 1}
+          display={element.quotedStatementId ? "none" : ""}
+        >
           {children}
         </Box>
       </Box>

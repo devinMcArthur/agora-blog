@@ -3,6 +3,7 @@ import { DisplayStatementSnippetFragment } from "../../generated/graphql";
 
 import StringArray from "../Common/StringArray";
 import TextLink from "../Common/TextLink";
+import QuotedStatement from "./views/QuotedStatement";
 
 interface IStatement {
   statement: DisplayStatementSnippetFragment;
@@ -37,11 +38,19 @@ const Statement = ({ statement, versionIndex }: IStatement) => {
     });
   }
 
+  const content = React.useMemo(() => {
+    if (currentVersion.quotedStatement) {
+      return (
+        <QuotedStatement statementID={currentVersion.quotedStatement._id} />
+      );
+    } else {
+      return <StringArray stringArray={currentVersion.stringArray} />;
+    }
+  }, [currentVersion]);
+
   return (
     <span>
-      <StringArray
-        stringArray={statement.versions[statementVersion].stringArray}
-      />
+      {content}
       {questions}
     </span>
   );

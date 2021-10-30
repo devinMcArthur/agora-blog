@@ -187,7 +187,7 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
 
   const quoteSubmit = (statementId: string) => {
     toggleQuoteForm();
-    CustomEditor.setQuote(editor, statementId);
+    CustomEditor.setInlineQuote(editor, statementId);
   };
 
   /**

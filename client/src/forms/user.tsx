@@ -4,8 +4,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-import { LoginData } from "../generated/graphql";
+import { CreateUserData, LoginData } from "../generated/graphql";
 import TextField from "../components/Common/TextField";
+import ErrorMessage from "../components/Common/ErrorMessage";
 
 const UserLoginSchema = yup
   .object()
@@ -43,6 +44,7 @@ export const useUserLoginForm = () => {
                   label="Email"
                   errorMessage={fieldState.error?.message}
                   isDisabled={isLoading}
+                  bgColor="white"
                 />
               );
             }}
@@ -63,6 +65,7 @@ export const useUserLoginForm = () => {
                 type="password"
                 errorMessage={fieldState.error?.message}
                 isDisabled={isLoading}
+                bgColor="white"
               />
             )}
           />
@@ -105,6 +108,8 @@ const UserSignupSchema = yup
   .required();
 
 export const useUserSignupForm = () => {
+  const [generalError, setGeneralError] = React.useState<string>();
+
   const form = useForm({
     resolver: yupResolver(UserSignupSchema),
   });
@@ -117,8 +122,13 @@ export const useUserSignupForm = () => {
       submitHandler,
     }: {
       children: React.ReactNode;
-      submitHandler: SubmitHandler<LoginData>;
+      submitHandler: SubmitHandler<CreateUserData>;
     }) => <form onSubmit={handleSubmit(submitHandler)}>{children}</form>,
+    GeneralError: () =>
+      React.useMemo(() => {
+        if (generalError) return <ErrorMessage description={generalError} />;
+        else return <></>;
+      }, []),
     FirstName: () =>
       React.useMemo(
         () => (
@@ -130,6 +140,7 @@ export const useUserSignupForm = () => {
                 {...field}
                 errorMessage={fieldState.error?.message}
                 label="First Name"
+                bgColor="white"
               />
             )}
           />
@@ -147,6 +158,7 @@ export const useUserSignupForm = () => {
                 {...field}
                 errorMessage={fieldState.error?.message}
                 label="Last Name"
+                bgColor="white"
               />
             )}
           />
@@ -164,6 +176,7 @@ export const useUserSignupForm = () => {
                 {...field}
                 errorMessage={fieldState.error?.message}
                 label="Middle Name"
+                bgColor="white"
               />
             )}
           />
@@ -182,6 +195,7 @@ export const useUserSignupForm = () => {
                 errorMessage={fieldState.error?.message}
                 label="Email"
                 type="email"
+                bgColor="white"
               />
             )}
           />
@@ -200,6 +214,7 @@ export const useUserSignupForm = () => {
                 errorMessage={fieldState.error?.message}
                 label="Password"
                 type="password"
+                bgColor="white"
               />
             )}
           />
@@ -218,6 +233,7 @@ export const useUserSignupForm = () => {
                 errorMessage={fieldState.error?.message}
                 label="Confirmation Password"
                 type="password"
+                bgColor="white"
               />
             )}
           />
@@ -226,5 +242,5 @@ export const useUserSignupForm = () => {
       ),
   };
 
-  return { ...form, FormComponents };
+  return { ...form, FormComponents, setGeneralError };
 };

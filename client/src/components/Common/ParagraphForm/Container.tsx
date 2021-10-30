@@ -11,7 +11,7 @@ const Container = () => {
   } = useParagraphForm();
 
   if (slateParagraph === null) return <div>Unable to find page</div>;
-  if (slateParagraph && paragraph)
+  else if (slateParagraph && paragraph)
     return (
       <Tabs>
         <TabList>
@@ -28,6 +28,7 @@ const Container = () => {
         </TabPanels>
       </Tabs>
     );
+  else if (slateParagraph) return <ParagraphRichText />;
 
   return <Loading />;
 };

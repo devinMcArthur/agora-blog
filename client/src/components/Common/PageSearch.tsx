@@ -9,8 +9,9 @@ import {
 } from "../../generated/graphql";
 import TextDropdown, { IOptions } from "./TextDropdown";
 
-interface IPageSearch extends InputProps {
+interface IPageSearch extends Omit<InputProps, "onChange"> {
   pageSelected: (page: { id: string; title: string; slug: string }) => void;
+  onChange?: (value: string) => void;
   handleSubmit?: (string: string) => void;
   dropdownId?: string;
   dropdownProps?: StackProps;
@@ -19,6 +20,7 @@ interface IPageSearch extends InputProps {
 const PageSearch: React.FC<IPageSearch> = ({
   handleSubmit,
   pageSelected,
+  onChange,
   dropdownId,
   dropdownProps,
   ...props
@@ -27,7 +29,7 @@ const PageSearch: React.FC<IPageSearch> = ({
     LinkFormPageSnippetFragment[]
   >([]);
   const [searchString, setSearchString] = React.useState(
-    props.defaultValue?.toString() || ""
+    props.defaultValue?.toString() || props.value?.toString() || ""
   );
   const [searchTimeout, setSearchTimeout] = React.useState<number>();
 
@@ -47,6 +49,7 @@ const PageSearch: React.FC<IPageSearch> = ({
         }, 500)
       );
     } else setFoundPages([]);
+    if (onChange) onChange(value);
   };
 
   /**

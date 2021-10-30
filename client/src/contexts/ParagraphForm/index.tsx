@@ -13,6 +13,7 @@ import {
 import {
   convertParagraphToSlate,
   convertSlateParagraphToParagraph,
+  convertSlateParagraphToStatements,
 } from "./utils";
 
 /**
@@ -23,16 +24,20 @@ import {
  * Context Types
  */
 
-interface IParagraphFormProvider {
-  pageId: string;
+export interface IParagraphFormProvider {
+  pageId?: string;
   children: React.ReactNode;
+
+  onChange?: (state: IState) => void;
 }
 
 interface IState {
+  type: "EDIT" | "NEW";
   originalParagraph: DisplayParagraphSnippetFragment | null | undefined;
   paragraph: DisplayParagraphSnippetFragment | null | undefined;
   previousSlateParagraph: Descendant[] | null | undefined;
   slateParagraph: Descendant[] | null | undefined;
+  statements: DisplayParagraphSnippetFragment["statements"] | null | undefined;
 }
 
 export interface IParagraphFormContext {
@@ -56,6 +61,9 @@ type IAction =
       };
     }
   | {
+      type: "initialize-blank";
+    }
+  | {
       type: "update-slate-paragraph";
       payload: {
         slateParagraph: Descendant[];
@@ -73,6 +81,12 @@ type IAction =
       payload: {
         paragraph: DisplayParagraphSnippetFragment;
       };
+    }
+  | {
+      type: "update-statements";
+      payload: {
+        statements: DisplayParagraphSnippetFragment["statements"];
+      };
     };
 
 /**
@@ -80,10 +94,12 @@ type IAction =
  */
 
 const initialState: IState = {
+  type: "EDIT",
   originalParagraph: undefined,
   paragraph: undefined,
   slateParagraph: undefined,
   previousSlateParagraph: undefined,
+  statements: undefined,
 };
 
 const ParagraphFormContext = React.createContext<
@@ -99,10 +115,29 @@ const ParagraphFormReducer = (draft: IState, action: IAction): IState => {
     case "initialize": {
       return {
         ...draft,
+        type: "EDIT",
         originalParagraph: action.payload.paragraph,
         paragraph: action.payload.paragraph,
         slateParagraph: action.payload.slateParagraph,
         previousSlateParagraph: action.payload.slateParagraph,
+      };
+    }
+    case "initialize-blank": {
+      const blankSlateParagraph: Descendant[] = [
+        {
+          type: "statement",
+          statementId: "NEW",
+          index: 0,
+          questions: [],
+          newQuestions: [],
+          children: [{ text: "" }],
+        },
+      ];
+
+      return {
+        ...draft,
+        type: "NEW",
+        slateParagraph: blankSlateParagraph,
       };
     }
     case "update-slate-paragraph": {
@@ -172,6 +207,12 @@ const ParagraphFormReducer = (draft: IState, action: IAction): IState => {
         paragraph: action.payload.paragraph,
       };
     }
+    case "update-statements": {
+      return {
+        ...draft,
+        statements: action.payload.statements,
+      };
+    }
   }
 };
 
@@ -182,6 +223,7 @@ const ParagraphFormReducer = (draft: IState, action: IAction): IState => {
 const ParagraphFormProvider = ({
   children,
   pageId,
+  onChange,
 }: IParagraphFormProvider) => {
   const [state, dispatch] = useImmerReducer(ParagraphFormReducer, initialState);
   const [savedSelection, setSavedSelection] =
@@ -276,8 +318,27 @@ const ParagraphFormProvider = ({
           ),
         },
       });
+    else if (state.slateParagraph && state.type === "NEW")
+      dispatch({
+        type: "update-statements",
+        payload: {
+          statements: convertSlateParagraphToStatements(state.slateParagraph),
+        },
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.slateParagraph]);
+
+  React.useEffect(() => {
+    if (!pageId) {
+      dispatch({
+        type: "initialize-blank",
+      });
+    }
+  }, [dispatch, pageId]);
+
+  React.useEffect(() => {
+    if (onChange) onChange(state);
+  }, [onChange, state]);
 
   return (
     <ParagraphFormContext.Provider

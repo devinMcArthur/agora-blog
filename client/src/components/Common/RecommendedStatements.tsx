@@ -12,12 +12,14 @@ import { Heading } from "@chakra-ui/react";
 export interface IRecommendedStatements {
   questionId: string;
   avoidedPage?: string;
-  selectedStatement: (statementId: string, pageSlug: string) => void;
+  optionButtons?: (statementId: string, pageSlug: string) => React.ReactNode;
+  selectedStatement?: (statementId: string, pageSlug: string) => void;
 }
 
 const RecommendedStatements = ({
   questionId,
   avoidedPage,
+  optionButtons,
   selectedStatement,
 }: IRecommendedStatements) => {
   const [foundStatements, setFoundStatements] = React.useState<
@@ -56,11 +58,23 @@ const RecommendedStatements = ({
         key={index}
         backgroundColor="white"
         borderRadius={4}
-        cursor="pointer"
-        onClick={() => selectedStatement(statement._id, statement.page.slug)}
+        cursor={!optionButtons ? "pointer" : ""}
+        onClick={() => {
+          if (!optionButtons && selectedStatement)
+            selectedStatement(statement._id, statement.page.slug);
+        }}
       >
-        <Heading size="sm">{statement.page.title}</Heading>
-        <Statement statement={statement} />
+        <Box display="flex" flexDir="row" justifyContent="space-between">
+          <Box>
+            <Heading size="sm">{statement.page.title}</Heading>
+            <Statement statement={statement} />
+          </Box>
+          {optionButtons && (
+            <Box minHeight="100%" borderLeft="1px solid gray">
+              {optionButtons(statement._id, statement.page.slug)}
+            </Box>
+          )}
+        </Box>
       </Box>
     ));
   } else if (data?.statementsFromQuestion.length === 0) {

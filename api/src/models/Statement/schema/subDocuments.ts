@@ -92,6 +92,10 @@ export class StatementVersionClass {
   @prop({ ref: () => QuestionClass, default: [] })
   public questions!: Ref<QuestionClass>[];
 
+  @Field(() => StatementClass, { nullable: true })
+  @prop({ ref: () => StatementClass })
+  public quotedStatement?: Ref<StatementClass>;
+
   @Field(() => ParagraphEditProposalClass, { nullable: true })
   @prop({ ref: () => ParagraphEditProposalClass })
   public sourceEditProposal?: ParagraphEditProposalClass;

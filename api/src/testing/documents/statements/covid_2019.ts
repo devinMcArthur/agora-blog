@@ -94,21 +94,10 @@ const page_covid_2019_statement_3_v1 = new Statement({
   versions: [
     {
       createdAt: new Date("2020-12-04"),
-      stringArray: [
-        {
-          string: "",
-          styles: [
-            {
-              type: "quote",
-              value: {
-                statement:
-                  _ids.pages.page_covid_19_symptoms.paragraphs[0].statements[0],
-              },
-            },
-          ],
-        },
-      ],
-      questions: [],
+      quotedStatement:
+        _ids.pages.page_covid_19_symptoms.paragraphs[0].statements[0],
+      stringArray: [],
+      questions: [_ids.questions.what_are_the_common_symptoms_of_covid_19._id],
     },
   ],
   originalAuthor: _ids.users.dev._id,
@@ -121,22 +110,10 @@ const page_covid_2019_statement_4_v1 = new Statement({
   versions: [
     {
       createdAt: new Date("2020-12-04"),
-      stringArray: [
-        {
-          string: "",
-          styles: [
-            {
-              type: "quote",
-              value: {
-                statement:
-                  _ids.pages.page_covid_19_transmission.paragraphs[0]
-                    .statements[0],
-              },
-            },
-          ],
-        },
-      ],
-      questions: [],
+      quotedStatement:
+        _ids.pages.page_covid_19_transmission.paragraphs[0].statements[0],
+      stringArray: [],
+      questions: [_ids.questions.how_is_sars_cov_2_transmitted._id],
     },
   ],
   originalAuthor: _ids.users.dev._id,
@@ -150,6 +127,10 @@ const page_covid_2019_statement_5_v1 = new Statement({
     {
       createdAt: new Date("2020-12-04"),
       stringArray: [
+        {
+          string: "The mainstream consensus states that: ",
+          style: [],
+        },
         {
           string: "",
           styles: [

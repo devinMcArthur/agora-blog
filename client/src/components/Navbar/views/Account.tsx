@@ -14,7 +14,10 @@ import {
   MenuList,
 } from "@chakra-ui/menu";
 import { useUserLoginForm, useUserSignupForm } from "../../../forms/user";
-import { useUserLoginMutation } from "../../../generated/graphql";
+import {
+  useCreateUserMutation,
+  useUserLoginMutation,
+} from "../../../generated/graphql";
 import { useAuth } from "../../../contexts/Auth";
 import { useHistory } from "react-router";
 import Loading from "../../Common/Loading";
@@ -27,12 +30,16 @@ const NavbarAccount = () => {
     logout,
     state: { user },
   } = useAuth();
-  const [loginMutation, { loading }] = useUserLoginMutation();
+
+  const [loginMutation, { loading: loginLoading }] = useUserLoginMutation();
+  const [createUser, { loading: createUserLoading }] = useCreateUserMutation();
 
   const { FormComponents: LoginFormComponents, setError: setLoginError } =
     useUserLoginForm();
-  const { FormComponents: SignupFormComponents, setError: setSignupError } =
-    useUserSignupForm();
+  const {
+    FormComponents: SignupFormComponents,
+    setGeneralError: setSignupError,
+  } = useUserSignupForm();
 
   const history = useHistory();
 
@@ -98,7 +105,7 @@ const NavbarAccount = () => {
               <Tab>Sign in</Tab>
               <Tab>Sign up</Tab>
             </TabList>
-            <TabPanels>
+            <TabPanels backgroundColor="gray.100">
               <TabPanel>
                 {/* SIGN IN */}
                 <LoginFormComponents.Form
@@ -118,9 +125,15 @@ const NavbarAccount = () => {
                     }
                   }}
                 >
-                  <LoginFormComponents.Email isLoading={loading} />
-                  <LoginFormComponents.Password isLoading={loading} />
-                  <Button isLoading={loading} type="submit" w="100%" my={2}>
+                  <LoginFormComponents.Email isLoading={loginLoading} />
+                  <LoginFormComponents.Password isLoading={loginLoading} />
+                  <Button
+                    border="1px solid black"
+                    isLoading={loginLoading}
+                    type="submit"
+                    w="100%"
+                    mt={3}
+                  >
                     Submit
                   </Button>
                 </LoginFormComponents.Form>
@@ -129,16 +142,30 @@ const NavbarAccount = () => {
                 {/* SIGN UP */}
                 <SignupFormComponents.Form
                   submitHandler={async (data) => {
-                    console.log("data", data);
+                    try {
+                      const result = await createUser({ variables: { data } });
+
+                      if (result.data?.createUser)
+                        login(result.data.createUser);
+                    } catch (e: any) {
+                      setSignupError(e.message);
+                    }
                   }}
                 >
+                  <SignupFormComponents.GeneralError />
                   <SignupFormComponents.FirstName />
                   <SignupFormComponents.LastName />
                   <SignupFormComponents.MiddleName />
                   <SignupFormComponents.Email />
                   <SignupFormComponents.Password />
                   <SignupFormComponents.ConfirmationPassword />
-                  <Button isLoading={loading} type="submit" w="100%" my={2}>
+                  <Button
+                    border="1px solid black"
+                    isLoading={createUserLoading}
+                    type="submit"
+                    w="100%"
+                    mt={3}
+                  >
                     Submit
                   </Button>
                 </SignupFormComponents.Form>

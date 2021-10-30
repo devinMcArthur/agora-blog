@@ -26,6 +26,10 @@ export class ParagraphEditProposalStatementClass {
   @prop({ type: () => StringArrayClass, required: true })
   public stringArray!: StringArrayClass[];
 
+  @Field(() => StatementClass, { nullable: true })
+  @prop({ ref: () => StatementClass })
+  public quotedStatement?: Ref<StatementClass>;
+
   @Field(() => [QuestionClass])
   @prop({ ref: () => QuestionClass, default: [] })
   public questions!: Ref<QuestionClass>[];

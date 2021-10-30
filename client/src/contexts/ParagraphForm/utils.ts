@@ -28,9 +28,8 @@ export const convertStatementToSlate = (
   statement: DisplayStatementSnippetFragment,
   index: number
 ): CustomElements => {
-  console.log("statement", statement);
-
-  const children = statement.versions[0].stringArray.map((stringArray) =>
+  const currentVersion = statement.versions[statement.versions.length - 1];
+  const children = currentVersion.stringArray.map((stringArray) =>
     convertStringArrayToSlate(stringArray)
   );
 
@@ -46,18 +45,23 @@ export const convertStatementToSlate = (
     children.unshift({ text: "" });
   }
 
+  let quotedStatementId;
+  if (currentVersion.quotedStatement)
+    quotedStatementId = currentVersion.quotedStatement._id;
+
   return {
     type: "statement",
     statementId: statement._id,
     index,
-    questions: statement.versions[0].questions.map((question) => {
+    quotedStatementId,
+    questions: currentVersion.questions.map((question) => {
       return {
         _id: question._id,
         question: question.question,
       };
     }),
     newQuestions: [],
-    children,
+    children: children.length > 0 ? children : [{ text: "" }],
   };
 };
 
@@ -107,9 +111,6 @@ export const convertStringArrayToSlate = (
   };
 
   stringArray.styles.forEach((style) => {
-    if (style.type === "variable" && style.value.variable) {
-    }
-
     if (style.type === "bold") {
       leaf[SlateMarks.bold] = true;
     }
@@ -141,6 +142,19 @@ export const convertSlateParagraphToParagraph = (
   slateParagraph: Descendant[],
   originalParagraph: DisplayParagraphSnippetFragment
 ): DisplayParagraphSnippetFragment => {
+  const paragraph: DisplayParagraphSnippetFragment = {
+    page: originalParagraph.page,
+    __typename: originalParagraph.__typename,
+    statements: convertSlateParagraphToStatements(slateParagraph),
+    editProposals: [],
+  };
+
+  return paragraph;
+};
+
+export const convertSlateParagraphToStatements = (
+  slateParagraph: Descendant[]
+) => {
   const statements: DisplayParagraphSnippetFragment["statements"] = [];
 
   for (const i in slateParagraph) {
@@ -231,6 +245,10 @@ export const convertSlateParagraphToParagraph = (
           };
         });
 
+      let quotedStatement;
+      if (element.quotedStatementId)
+        quotedStatement = { _id: element.quotedStatementId };
+
       const statement: DisplayStatementSnippetFragment = {
         _id: element.statementId,
         versions: [
@@ -241,6 +259,7 @@ export const convertSlateParagraphToParagraph = (
                 question: question.question,
               };
             }),
+            quotedStatement,
             stringArray,
           },
         ],
@@ -253,12 +272,5 @@ export const convertSlateParagraphToParagraph = (
     }
   }
 
-  const paragraph: DisplayParagraphSnippetFragment = {
-    page: originalParagraph.page,
-    __typename: originalParagraph.__typename,
-    statements,
-    editProposals: [],
-  };
-
-  return paragraph;
+  return statements;
 };

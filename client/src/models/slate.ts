@@ -36,6 +36,7 @@ export interface ISlateQuestion {
 export type StatementElementType = {
   type: "statement";
   statementId: string;
+  quotedStatementId?: string;
   index: number;
   questions: ISlateQuestion[];
   newQuestions: { question: string }[];

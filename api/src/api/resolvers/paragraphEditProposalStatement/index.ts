@@ -41,4 +41,16 @@ export default class ParagraphEditProposalStatementResolver {
       return [];
     }
   }
+
+  @FieldResolver(() => StatementClass)
+  async quotedStatement(
+    @Root()
+    paragraphEditProposalStatement: ParagraphEditProposalStatementDocument
+  ) {
+    if (paragraphEditProposalStatement.quotedStatement)
+      return Statement.getById(
+        paragraphEditProposalStatement.quotedStatement.toString()
+      );
+    else return null;
+  }
 }

@@ -1,18 +1,23 @@
 import * as React from "react";
 
-import { Box, Link, Stack, Heading, Spacer } from "@chakra-ui/react";
+import { Box, Link, Stack, Heading } from "@chakra-ui/react";
 
-import { Flex } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { navbarHeight } from "../../constants/styles";
 import NavbarAccount from "./views/Account";
 import { useAuth } from "../../contexts/Auth";
 import NavbarSearch from "./views/Search";
+import { Tooltip } from "@chakra-ui/tooltip";
+import { FiPlusSquare } from "react-icons/fi";
+import { Icon } from "@chakra-ui/icon";
+import { useHistory } from "react-router";
 
 const Navbar = () => {
   const {
     state: { user },
   } = useAuth();
+
+  const history = useHistory();
 
   return (
     <Box
@@ -22,7 +27,7 @@ const Navbar = () => {
       height={navbarHeight}
       width="100%"
       zIndex="998"
-      backgroundColor="gray.400"
+      backgroundColor="gray.500"
     >
       <Box
         display="flex"
@@ -39,7 +44,7 @@ const Navbar = () => {
         </Link>
         <NavbarSearch />
         <Stack
-          spacing={4}
+          spacing={6}
           direction="row"
           mr={4}
           height="100%"
@@ -53,6 +58,20 @@ const Navbar = () => {
           >
             Questions
           </Link>
+          {user && (
+            <Box height="100%" pt={1.5}>
+              <Tooltip label="Add Page">
+                <Icon
+                  cursor="pointer"
+                  as={FiPlusSquare}
+                  w={7}
+                  m="auto"
+                  h={7}
+                  onClick={() => history.push("/create-page")}
+                />
+              </Tooltip>
+            </Box>
+          )}
           <NavbarAccount />
         </Stack>
       </Box>

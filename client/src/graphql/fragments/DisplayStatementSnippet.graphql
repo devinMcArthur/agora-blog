@@ -4,6 +4,9 @@ fragment DisplayStatementSnippet on StatementClass {
     stringArray {
       ...FullStringArraySnippet
     }
+    quotedStatement {
+      _id
+    }
     questions {
       _id
       question

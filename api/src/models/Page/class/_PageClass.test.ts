@@ -28,6 +28,12 @@ afterAll(async () => {
 });
 
 describe("Page Class", () => {
+  describe("BUILD", () => {
+    describe("success", () => {
+      test("should should successfully build a new page", async () => {});
+    });
+  });
+
   describe("GET", () => {
     describe("search", () => {
       describe("success", () => {

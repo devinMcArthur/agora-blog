@@ -7,6 +7,9 @@ fragment ParagraphEditProposalStatementSnippet on ParagraphEditProposalStatement
   stringArray {
     ...FullStringArraySnippet
   }
+  quotedStatement {
+    _id
+  }
   questions {
     _id
     question

@@ -203,7 +203,7 @@ const StyleMenu = ({ editor, buttonSize }: IStyleMenu) => {
 
   const quoteSubmit = (statementId: string) => {
     toggleQuoteForm();
-    CustomEditor.setQuote(editor, statementId);
+    CustomEditor.setInlineQuote(editor, statementId);
   };
 
   /**

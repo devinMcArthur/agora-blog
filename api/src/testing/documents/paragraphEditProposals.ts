@@ -173,6 +173,8 @@ const createParagraphEditProposals = () => {
                   _ids.pages.page_covid_2019.paragraphs[0].statements[4],
                 versionIndex: 0,
               },
+              quotedStatement:
+                _ids.pages.page_covid_19_deaths.paragraphs[0].statements[1],
             },
           ],
         }

@@ -141,6 +141,7 @@ export type StatementVersionClass = {
   __typename?: 'StatementVersionClass';
   stringArray: Array<StringArrayClass>;
   questions: Array<QuestionClass>;
+  quotedStatement?: Maybe<StatementClass>;
   sourceEditProposal?: Maybe<ParagraphEditProposalClass>;
   createdAt: Scalars['DateTime'];
 };
@@ -227,6 +228,7 @@ export type ParagraphEditProposalStatementClass = {
   changeType: Scalars['String'];
   paragraphStatement?: Maybe<ParagraphStatementClass>;
   stringArray: Array<StringArrayClass>;
+  quotedStatement?: Maybe<StatementClass>;
   questions: Array<QuestionClass>;
   newQuestions: Array<Scalars['String']>;
 };
@@ -240,12 +242,18 @@ export type StatementsFromQuestionOptions = {
 export type Mutation = {
   __typename?: 'Mutation';
   login: Scalars['String'];
+  createUser: Scalars['String'];
   createParagraphEditProposal: ParagraphEditProposalClass;
 };
 
 
 export type MutationLoginArgs = {
   data: LoginData;
+};
+
+
+export type MutationCreateUserArgs = {
+  data: CreateUserData;
 };
 
 
@@ -256,6 +264,15 @@ export type MutationCreateParagraphEditProposalArgs = {
 export type LoginData = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type CreateUserData = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  middleName?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
+  password: Scalars['String'];
+  confirmationPassword?: Maybe<Scalars['String']>;
 };
 
 export type ParagraphEditProposalData = {
@@ -327,6 +344,9 @@ export type DisplayStatementSnippetFragment = (
     & { stringArray: Array<(
       { __typename?: 'StringArrayClass' }
       & FullStringArraySnippetFragment
+    )>, quotedStatement?: Maybe<(
+      { __typename?: 'StatementClass' }
+      & Pick<StatementClass, '_id'>
     )>, questions: Array<(
       { __typename?: 'QuestionClass' }
       & Pick<QuestionClass, '_id' | 'question'>
@@ -436,6 +456,9 @@ export type ParagraphEditProposalStatementSnippetFragment = (
   )>, stringArray: Array<(
     { __typename?: 'StringArrayClass' }
     & FullStringArraySnippetFragment
+  )>, quotedStatement?: Maybe<(
+    { __typename?: 'StatementClass' }
+    & Pick<StatementClass, '_id'>
   )>, questions: Array<(
     { __typename?: 'QuestionClass' }
     & Pick<QuestionClass, '_id' | 'question'>
@@ -498,6 +521,16 @@ export type CreateParagraphEditProposalMutation = (
     { __typename?: 'ParagraphEditProposalClass' }
     & FullParagraphEditProposalSnippetFragment
   ) }
+);
+
+export type CreateUserMutationVariables = Exact<{
+  data: CreateUserData;
+}>;
+
+
+export type CreateUserMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'createUser'>
 );
 
 export type UserLoginMutationVariables = Exact<{
@@ -765,6 +798,9 @@ export const DisplayStatementSnippetFragmentDoc = gql`
     stringArray {
       ...FullStringArraySnippet
     }
+    quotedStatement {
+      _id
+    }
     questions {
       _id
       question
@@ -792,6 +828,9 @@ export const ParagraphEditProposalStatementSnippetFragmentDoc = gql`
   }
   stringArray {
     ...FullStringArraySnippet
+  }
+  quotedStatement {
+    _id
   }
   questions {
     _id
@@ -942,6 +981,36 @@ export function useCreateParagraphEditProposalMutation(baseOptions?: Apollo.Muta
 export type CreateParagraphEditProposalMutationHookResult = ReturnType<typeof useCreateParagraphEditProposalMutation>;
 export type CreateParagraphEditProposalMutationResult = Apollo.MutationResult<CreateParagraphEditProposalMutation>;
 export type CreateParagraphEditProposalMutationOptions = Apollo.BaseMutationOptions<CreateParagraphEditProposalMutation, CreateParagraphEditProposalMutationVariables>;
+export const CreateUserDocument = gql`
+    mutation CreateUser($data: CreateUserData!) {
+  createUser(data: $data)
+}
+    `;
+export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, CreateUserMutationVariables>;
+
+/**
+ * __useCreateUserMutation__
+ *
+ * To run a mutation, you first call `useCreateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserMutation, { data, loading, error }] = useCreateUserMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserMutation, CreateUserMutationVariables>) {
+        return Apollo.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument, baseOptions);
+      }
+export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
+export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
+export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
 export const UserLoginDocument = gql`
     mutation UserLogin($data: LoginData!) {
   login(data: $data)

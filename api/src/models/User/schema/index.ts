@@ -8,15 +8,15 @@ export class UserSchema {
   public _id!: Types.ObjectId;
 
   @Field({ nullable: false })
-  @prop({ required: true })
+  @prop({ required: true, maxlength: 50 })
   public firstName!: string;
 
   @Field({ nullable: false })
-  @prop({ required: true })
+  @prop({ required: true, maxLength: 50 })
   public lastName!: string;
 
   @Field({ nullable: true })
-  @prop()
+  @prop({ maxlength: 50 })
   public middleName!: string;
 
   @Field({ nullable: false })

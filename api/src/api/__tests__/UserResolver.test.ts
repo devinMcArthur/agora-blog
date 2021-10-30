@@ -6,6 +6,7 @@ import seedDatabase, { SeededDatabase } from "@testing/seedDatabase";
 
 import createApp from "../../app";
 import jestLogin from "@testing/jestLogin";
+import { CreateUserData } from "@api/resolvers/user/mutations";
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
@@ -70,6 +71,57 @@ describe("User Resolver", () => {
   });
 
   describe("MUTATIONS", () => {
+    describe("createUser", () => {
+      const createUser = `
+        mutation CreateUser($data: CreateUserData!) {
+          createUser(data: $data)
+        }
+      `;
+
+      describe("success", () => {
+        test("should successfully create user and get valid token back", async () => {
+          const data: CreateUserData = {
+            firstName: "firstName",
+            lastName: "last",
+            email: "new@email.com",
+            password: "password",
+          };
+
+          const res = await request(app).post("/graphql").send({
+            query: createUser,
+            variables: {
+              data,
+            },
+          });
+
+          expect(res.status).toBe(200);
+
+          const token = res.body.data.createUser;
+
+          expect(token).toBeDefined();
+
+          const authorizedRes = await request(app)
+            .post("/graphql")
+            .send({
+              query: `
+              query CurrentUser {
+                currentUser {
+                  firstName
+                }
+              }
+            `,
+            })
+            .set("Authorization", token);
+
+          expect(authorizedRes.status).toBe(200);
+
+          expect(authorizedRes.body.data.currentUser.firstName).toBe(
+            data.firstName
+          );
+        });
+      });
+    });
+
     describe("login", () => {
       const login = `
         mutation Login($data: LoginData!) {

@@ -80,7 +80,7 @@ export const CustomEditor = {
     });
     Transforms.move(editor);
   },
-  setQuote: (editor: Editor, statementId: string, nodeIndex?: number) => {
+  setInlineQuote: (editor: Editor, statementId: string, nodeIndex?: number) => {
     const options: any = {};
     if (nodeIndex !== undefined) options.at = [nodeIndex, 0];
 
@@ -94,6 +94,28 @@ export const CustomEditor = {
       { ...options }
     );
     Transforms.move(editor);
+  },
+  setFullQuote: (
+    editor: Editor,
+    quotedStatementId: string,
+    nodeIndex: number
+  ) => {
+    const node = Editor.node(editor, [nodeIndex]);
+
+    const element: StatementElementType = JSON.parse(JSON.stringify(node[0]));
+    if (element && element.type === "statement") {
+      element.quotedStatementId = quotedStatementId;
+      Transforms.setNodes(editor, element, { at: [nodeIndex] });
+    }
+  },
+  removeFullQuote: (editor: Editor, nodeIndex: number) => {
+    const node = Editor.node(editor, [nodeIndex]);
+
+    const element: StatementElementType = JSON.parse(JSON.stringify(node[0]));
+    if (element && element.type === "statement") {
+      element.quotedStatementId = undefined;
+      Transforms.setNodes(editor, element, { at: [nodeIndex] });
+    }
   },
   toggleItalic: (editor: Editor) => {
     const isActive = CustomEditor.isMarkActive(editor, SlateMarks.italic);

@@ -6,6 +6,8 @@ import {
   QuestionDocument,
   ParagraphEditProposal,
   ParagraphEditProposalClass,
+  StatementClass,
+  Statement,
 } from "@models";
 
 import fieldResolvers from "./fieldResolvers";
@@ -25,6 +27,13 @@ export default class StatementVersionResolver {
       return ParagraphEditProposal.getById(
         statementVersion.sourceEditProposal.toString()
       );
+    else return null;
+  }
+
+  @FieldResolver(() => StatementClass, { nullable: true })
+  async quotedStatement(@Root() statementVersion: StatementVersionDocument) {
+    if (statementVersion.quotedStatement)
+      return Statement.getById(statementVersion.quotedStatement.toString());
     else return null;
   }
 }

@@ -1,6 +1,9 @@
 import { Box } from "@chakra-ui/layout";
 import React from "react";
 import { ParagraphEditProposalStatementSnippetFragment } from "../../generated/graphql";
+import Statement from "../Statement";
+import QuotedStatement from "../Statement/views/QuotedStatement";
+import ErrorMessage from "./ErrorMessage";
 import StringArray from "./StringArray";
 
 interface IParagraphEditProposalStatement {
@@ -12,28 +15,31 @@ const ParagraphEditProposalStatement = ({
   statement,
   versionIndex,
 }: IParagraphEditProposalStatement) => {
-  const stringArray = React.useMemo(() => {
+  const content = React.useMemo(() => {
     if (
       statement.stringArray &&
       statement.stringArray.length > 0 &&
       versionIndex === "EDIT"
     ) {
-      return statement.stringArray;
+      return <StringArray stringArray={statement.stringArray} />;
     } else if (statement.paragraphStatement) {
-      return statement.paragraphStatement.statement.versions[
-        versionIndex !== "EDIT" &&
-        statement.paragraphStatement.statement.versions[versionIndex]
-          ? versionIndex
-          : statement.paragraphStatement.versionIndex
-      ].stringArray;
-    } else return [];
-  }, [statement.paragraphStatement, statement.stringArray, versionIndex]);
+      return (
+        <Statement
+          statement={statement.paragraphStatement.statement}
+          versionIndex={statement.paragraphStatement.versionIndex}
+        />
+      );
+    } else if (statement.quotedStatement) {
+      return <QuotedStatement statementID={statement.quotedStatement._id} />;
+    } else return <ErrorMessage />;
+  }, [
+    statement.paragraphStatement,
+    statement.quotedStatement,
+    statement.stringArray,
+    versionIndex,
+  ]);
 
-  return (
-    <Box>
-      <StringArray stringArray={stringArray} />
-    </Box>
-  );
+  return <Box>{content}</Box>;
 };
 
 export default ParagraphEditProposalStatement;
