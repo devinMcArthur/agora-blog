@@ -7,6 +7,9 @@ import { PageDocument, PageModel } from "@models";
 import get from "./get";
 import create from "./create";
 import { PageSchema } from "../schema";
+import validate from "./validate";
+import { IPageBuildData } from "@typescript/models/Page";
+import build from "./build";
 
 @ObjectType()
 export class PageClass extends PageSchema {
@@ -56,5 +59,21 @@ export class PageClass extends PageSchema {
 
   public static async search(this: PageModel, searchString: string) {
     return get.search(this, searchString);
+  }
+
+  /**
+   * ----- Build -----
+   */
+
+  public static async build(this: PageModel, data: IPageBuildData) {
+    return build.build(this, data);
+  }
+
+  /**
+   * ----- Validate -----
+   */
+
+  public async validateDocument(this: PageDocument) {
+    return validate.document(this);
   }
 }

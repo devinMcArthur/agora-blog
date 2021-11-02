@@ -8,6 +8,7 @@ export * from "./Statement";
 export * from "./Variable";
 export * from "./VariablePageConnection";
 export * from "./User";
+export * from "./File";
 
 import {
   getModelForClass,
@@ -172,4 +173,18 @@ export interface UserModel extends ReturnModelType<typeof UserClass> {}
 
 export const User = getModelForClass(UserClass, {
   schemaOptions: { collection: "users" },
+});
+
+/**
+ * ----- File -----
+ */
+
+import { FileClass } from "./File/class";
+
+export interface FileDocument extends DocumentType<FileClass> {}
+
+export interface FileModel extends ReturnModelType<typeof FileClass> {}
+
+export const File = getModelForClass(FileClass, {
+  schemaOptions: { collection: "files" },
 });

@@ -13,8 +13,10 @@ import createUsers, { ISeededUsers } from "./documents/users";
 import createParagraphEditProposals, {
   ISeededParagraphEditProposals,
 } from "./documents/paragraphEditProposals";
+import createFiles, { ISeededFiles } from "./documents/files";
 
 export interface SeededDatabase {
+  files: ISeededFiles;
   users: ISeededUsers;
   pages: SeededPages;
   paragraphs: SeededParagraphs;
@@ -36,6 +38,7 @@ const seedDatabase = () => {
       const variables = await createVariables();
       const paragraphs = await createParagraphs();
       const paragraphEditProposals = await createParagraphEditProposals();
+      const files = await createFiles();
       await createStatements();
 
       // Create connection documents
@@ -46,6 +49,7 @@ const seedDatabase = () => {
       console.log("Database seeded");
 
       resolve({
+        files,
         users,
         pages,
         paragraphs,

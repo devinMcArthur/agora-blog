@@ -9,6 +9,7 @@ import {
   VariablePageConnection,
   User,
   ParagraphEditProposal,
+  File,
 } from "@models";
 
 const clearDatabase = () => {
@@ -25,6 +26,8 @@ const clearDatabase = () => {
       await ParagraphEditProposal.deleteMany({});
       await VariablePageConnection.deleteMany({});
       await QuestionPageConnection.deleteMany({});
+
+      await File.removeAll();
       // } else {
       // throw new Error(
       // "clearDatabase: This function can only be used in a test environment"

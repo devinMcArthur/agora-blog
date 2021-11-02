@@ -24,5 +24,5 @@ export class StatementSchema {
 
   @Field(() => UserClass)
   @prop({ ref: () => UserClass, required: true })
-  public originalAuthor!: UserClass;
+  public originalAuthor!: Ref<UserClass>;
 }

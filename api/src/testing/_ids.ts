@@ -301,6 +301,11 @@ const _ids = {
       _id: Types.ObjectId("5eca8581d24f0800000b78dd"),
     },
   },
+  files: {
+    page_rt_pcr_cycle_threshold_statement_3_v1_image: {
+      _id: Types.ObjectId("5eda8581d24f0800000b78dd"),
+    },
+  },
 };
 
 export default _ids;

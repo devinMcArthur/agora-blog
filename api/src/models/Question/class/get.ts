@@ -191,6 +191,20 @@ const search = (Question: QuestionModel, searchString: string) => {
   });
 };
 
+const byQuestion = (Question: QuestionModel, question: string) => {
+  return new Promise<QuestionDocument | null>(async (resolve, reject) => {
+    try {
+      const fetchedQuestion = await Question.findOne({
+        question: { $regex: new RegExp(`^${question}`, "i") },
+      });
+
+      resolve(fetchedQuestion);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 export default {
   byId,
   list,
@@ -198,4 +212,5 @@ export default {
   referencedCount,
   statementReferences,
   search,
+  byQuestion,
 };

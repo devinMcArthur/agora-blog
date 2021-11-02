@@ -99,7 +99,8 @@ const page_rt_pcr_cycle_threshold_statement_3_v1 = new Statement({
               type: "image",
               value: {
                 image: {
-                  name: "viral-culture-per-ct-value.jpg",
+                  file: _ids.files
+                    .page_rt_pcr_cycle_threshold_statement_3_v1_image,
                   sourceURL:
                     "https://academic.oup.com/cid/advance-article/doi/10.1093/cid/ciaa1491/5912603",
                   caption:

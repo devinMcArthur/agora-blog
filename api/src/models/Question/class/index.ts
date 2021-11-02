@@ -6,6 +6,8 @@ import { QuestionDocument, QuestionModel } from "@models";
 
 import { QuestionSchema } from "../schema";
 import get, { IStatementReferencesOptions } from "./get";
+import { IQuestionBuildData } from "@typescript/models/Question";
+import build from "./build";
 
 @ObjectType()
 export class QuestionClass extends QuestionSchema {
@@ -42,5 +44,17 @@ export class QuestionClass extends QuestionSchema {
 
   public static async search(this: QuestionModel, searchString: string) {
     return get.search(this, searchString);
+  }
+
+  public static async getByQuestion(this: QuestionModel, question: string) {
+    return get.byQuestion(this, question);
+  }
+
+  /**
+   * ----- Build -----
+   */
+
+  public static async build(this: QuestionModel, data: IQuestionBuildData) {
+    return build.build(this, data);
   }
 }

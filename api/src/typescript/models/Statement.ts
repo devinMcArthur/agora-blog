@@ -1,4 +1,5 @@
 import { Types } from "mongoose";
+import { FileBuildData } from "./File";
 
 export enum StyleTypes {
   mention = "mention",
@@ -15,7 +16,7 @@ export enum StyleVariants {
 }
 
 interface IStyleValueImageBuildData {
-  name: string;
+  file: FileBuildData;
   sourceUrl?: string;
   caption?: string;
 }
@@ -37,4 +38,18 @@ interface IStylesBuildData {
 export interface IStringArrayBuildData {
   string?: string;
   styles: IStylesBuildData[];
+}
+
+export interface IStatementVersionData {
+  stringArray: IStringArrayBuildData[];
+  questions: Types.ObjectId[] | string[];
+  newQuestions: string[];
+  quotedStatement?: Types.ObjectId | string;
+  sourceEditProposal?: Types.ObjectId | string;
+}
+
+export interface IStatementBuildData {
+  page: Types.ObjectId | string;
+  version: IStatementVersionData;
+  author: Types.ObjectId | string;
 }

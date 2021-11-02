@@ -21,10 +21,6 @@ export class ParagraphSchema {
   public statements!: ParagraphStatementClass[];
 
   @Field()
-  @prop({ required: true, type: Number })
-  public version!: number;
-
-  @Field()
   @prop({ type: Boolean, required: true, default: true })
   public mostRecent!: boolean;
 

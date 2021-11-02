@@ -1,7 +1,8 @@
-import { DocumentType, prop, Ref } from "@typegoose/typegoose";
+import { DocumentType, prop, Ref, ReturnModelType } from "@typegoose/typegoose";
 import { Field, ObjectType } from "type-graphql";
 
 import {
+  FileClass,
   PageClass,
   ParagraphEditProposalClass,
   QuestionClass,
@@ -12,9 +13,9 @@ import { StyleTypes } from "@typescript/models/Statement";
 
 @ObjectType()
 export class Image {
-  @Field()
-  @prop({ required: true, trim: true })
-  public name!: string;
+  @Field(() => FileClass)
+  @prop({ ref: () => FileClass, required: true })
+  public file!: Ref<FileClass>;
 
   @Field({ nullable: true })
   @prop({ trim: true })
@@ -71,6 +72,9 @@ class StatementStyleClass {
   public value!: StatementValueClass;
 }
 
+export interface StatementStyleDocument
+  extends DocumentType<StatementStyleClass> {}
+
 @ObjectType()
 export class StringArrayClass {
   @Field({ nullable: true })
@@ -107,3 +111,6 @@ export class StatementVersionClass {
 
 export interface StatementVersionDocument
   extends DocumentType<StatementVersionClass> {}
+
+export interface StatementVersionModel
+  extends ReturnModelType<typeof StatementVersionClass> {}
