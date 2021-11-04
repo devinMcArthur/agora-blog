@@ -25,7 +25,7 @@ const ImageElement = ({
     (element as ImageElementType).caption || ""
   );
   const [sourceUrl, setSourceUrl] = React.useState(
-    (element as ImageElementType).sourceURL || ""
+    (element as ImageElementType).sourceUrl || ""
   );
   const [sourceUrlError, setSourceUrlError] = React.useState<string>();
 
@@ -35,7 +35,7 @@ const ImageElement = ({
   const changed = React.useMemo(() => {
     const imageElement = element as ImageElementType;
     return (
-      caption !== imageElement.caption || sourceUrl !== imageElement.sourceURL
+      caption !== imageElement.caption || sourceUrl !== imageElement.sourceUrl
     );
   }, [element, caption, sourceUrl]);
 
@@ -55,7 +55,14 @@ const ImageElement = ({
       {...attributes}
     >
       <ImageDisplay
-        image={(element as ImageElementType)!}
+        image={{
+          ...(element as ImageElementType)!,
+          file: {
+            _id: "NEW",
+            buffer: (element as ImageElementType).buffer,
+            mimetype: (element as ImageElementType).contentType,
+          },
+        }}
         canExpand={false}
         showCaption={false}
       >
@@ -69,7 +76,7 @@ const ImageElement = ({
               {
                 ...(element as ImageElementType),
                 caption,
-                sourceURL: sourceUrl,
+                sourceUrl: sourceUrl,
               },
               editor.selection
             );

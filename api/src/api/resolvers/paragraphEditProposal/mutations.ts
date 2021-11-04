@@ -1,6 +1,9 @@
 import { ParagraphEditProposal, ParagraphEditProposalDocument } from "@models";
 import { IContext } from "@typescript/graphql";
-import { EditProposalChangeTypes } from "@typescript/models/ParagraphEditProposal";
+import {
+  EditProposalChangeTypes,
+  IParagraphEditProposalBuildData,
+} from "@typescript/models/ParagraphEditProposal";
 import { Field, InputType } from "type-graphql";
 import { StringArrayData } from "../statement/mutations";
 import resolverHelper from "@utils/resolverHelpers";
@@ -55,9 +58,28 @@ const createParagraphEditProposal = (
     try {
       await resolverHelper.validateVerifiedUser(ctx);
 
+      const statementItems: IParagraphEditProposalBuildData["statementItems"] =
+        [];
+
+      for (let i = 0; i < data.statementItems.length; i++) {
+        const statementItem = data.statementItems[i];
+
+        let stringArray;
+        if (statementItem.stringArray)
+          stringArray = await resolverHelper.handleStringArray(
+            statementItem.stringArray
+          );
+
+        statementItems.push({
+          ...statementItem,
+          stringArray,
+        });
+      }
+
       const paragraphEditProposal = await ParagraphEditProposal.build({
         ...data,
         author: ctx.user!._id,
+        statementItems,
       });
 
       await paragraphEditProposal.save();

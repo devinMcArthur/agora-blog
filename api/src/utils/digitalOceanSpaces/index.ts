@@ -3,19 +3,20 @@ import AWS from "aws-sdk";
 import { GetObjectOutput } from "aws-sdk/clients/s3";
 import { ReadStream } from "fs";
 
-const spacesEndpoint = new AWS.Endpoint(
-  `${process.env.SPACES_REGION}.digitaloceanspaces.com`
-);
-const s3 = new AWS.S3({
-  endpoint: spacesEndpoint,
-  accessKeyId: process.env.SPACES_KEY,
-  secretAccessKey: process.env.SPACES_SECRET,
-});
+const client = () => {
+  return new AWS.S3({
+    endpoint: new AWS.Endpoint(
+      `${process.env.SPACES_REGION}.digitaloceanspaces.com`
+    ),
+    accessKeyId: process.env.SPACES_KEY,
+    secretAccessKey: process.env.SPACES_SECRET,
+  });
+};
 
 const uploadFile = (name: string, body: ReadStream, mimetype: string) => {
   return new Promise(async (resolve, reject) => {
     try {
-      s3.putObject(
+      client().putObject(
         {
           Bucket: process.env.SPACES_NAME!,
           Key: name,
@@ -37,7 +38,7 @@ const uploadFile = (name: string, body: ReadStream, mimetype: string) => {
 const getFile = (name: string) => {
   return new Promise<GetObjectOutput>(async (resolve, reject) => {
     try {
-      s3.getObject(
+      client().getObject(
         {
           Bucket: process.env.SPACES_NAME!,
           Key: name,
@@ -56,7 +57,7 @@ const getFile = (name: string) => {
 const removeFile = (name: string) => {
   return new Promise(async (resolve, reject) => {
     try {
-      s3.deleteObject(
+      client().deleteObject(
         {
           Bucket: process.env.SPACES_NAME!,
           Key: name,

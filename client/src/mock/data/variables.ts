@@ -10,13 +10,13 @@ const var_global_cases_covid_19: Variable = {
       type: "number",
       number: 63000000,
       createdAt: new Date("2020-12-01"),
-      sourceURL: "https://coronavirus.jhu.edu/map.html",
+      sourceUrl: "https://coronavirus.jhu.edu/map.html",
     },
     {
       type: "number",
       number: 67316936,
       createdAt: new Date("2020-12-07"),
-      sourceURL: "https://coronavirus.jhu.edu/map.html",
+      sourceUrl: "https://coronavirus.jhu.edu/map.html",
     },
   ],
 };
@@ -29,7 +29,7 @@ const var_global_deaths_covid_19: Variable = {
       type: "number",
       number: 1539965,
       createdAt: new Date("2020-12-07"),
-      sourceURL: "https://coronavirus.jhu.edu/map.html",
+      sourceUrl: "https://coronavirus.jhu.edu/map.html",
     },
   ],
 };
@@ -42,7 +42,7 @@ const var_covid_19_rt_pcr_test_sensitivity: Variable = {
       type: "number",
       number: 95.9,
       createdAt: new Date("2020-12-07"),
-      sourceURL:
+      sourceUrl:
         "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013705/full",
     },
   ],
@@ -81,7 +81,7 @@ const var_covid_19_rt_pcr_test_specificity: Variable = {
       type: "number",
       number: 98.9,
       createdAt: new Date("2020-12-07"),
-      sourceURL:
+      sourceUrl:
         "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013705/full",
     },
   ],

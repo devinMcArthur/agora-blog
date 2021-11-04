@@ -34,7 +34,9 @@ const first = (Paragraph: ParagraphModel, data: IParagraphBuildData) => {
               page: data.page._id,
               version: statement,
             });
+
             statements.push(newStatement);
+
             return {
               versionIndex: 0,
               statement: newStatement._id,

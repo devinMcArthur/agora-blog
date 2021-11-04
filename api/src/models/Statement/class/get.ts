@@ -1,6 +1,6 @@
 import { FilterQuery, Types } from "mongoose";
 
-import GetByIDOptions from "@typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
 import { StatementDocument, StatementModel } from "@models";
 
@@ -28,7 +28,7 @@ const byId = (
       const statement = await Statement.findOne(query);
 
       if (!statement && options.throwError) {
-        throw new Error("Statement.getByID: Unable to find statement");
+        throw new Error("Statement.getById: Unable to find statement");
       }
 
       resolve(statement);

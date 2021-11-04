@@ -22,19 +22,19 @@ const createVariables = () => {
             type: "number",
             number: 63000000,
             createdAt: new Date("2020-12-01"),
-            sourceURL: "https://coronavirus.jhu.edu/map.html",
+            sourceUrl: "https://coronavirus.jhu.edu/map.html",
           },
           {
             type: "number",
             number: 67316936,
             createdAt: new Date("2020-12-07"),
-            sourceURL: "https://coronavirus.jhu.edu/map.html",
+            sourceUrl: "https://coronavirus.jhu.edu/map.html",
           },
           {
             type: "number",
             number: 109678891,
             createdAt: new Date("2021-02-17"),
-            sourceURL: "https://coronavirus.jhu.edu/map.html",
+            sourceUrl: "https://coronavirus.jhu.edu/map.html",
           },
         ],
       });
@@ -47,13 +47,13 @@ const createVariables = () => {
             type: "number",
             number: 1539965,
             createdAt: new Date("2020-12-07"),
-            sourceURL: "https://coronavirus.jhu.edu/map.html",
+            sourceUrl: "https://coronavirus.jhu.edu/map.html",
           },
           {
             type: "number",
             number: 2423443,
             createdAt: new Date("2020-02-17"),
-            sourceURL: "https://coronavirus.jhu.edu/map.html",
+            sourceUrl: "https://coronavirus.jhu.edu/map.html",
           },
         ],
       });
@@ -66,7 +66,7 @@ const createVariables = () => {
             type: "number",
             number: 95.9,
             createdAt: new Date("2020-12-07"),
-            sourceURL:
+            sourceUrl:
               "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013705/full",
           },
         ],
@@ -106,7 +106,7 @@ const createVariables = () => {
             type: "number",
             number: 98.9,
             createdAt: new Date("2020-12-07"),
-            sourceURL:
+            sourceUrl:
               "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013705/full",
           },
         ],

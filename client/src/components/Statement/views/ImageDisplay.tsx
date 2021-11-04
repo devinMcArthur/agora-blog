@@ -32,14 +32,14 @@ const ImageDisplay: React.FC<IImageDisplay> = ({
 
   const src = React.useMemo(() => {
     if (
-      image.buffer.charAt(0) === "d" &&
-      image.buffer.charAt(1) === "a" &&
-      image.buffer.charAt(2) === "t" &&
-      image.buffer.charAt(3) === "a"
+      image.file.buffer.charAt(0) === "d" &&
+      image.file.buffer.charAt(1) === "a" &&
+      image.file.buffer.charAt(2) === "t" &&
+      image.file.buffer.charAt(3) === "a"
     ) {
-      return image.buffer;
+      return image.file.buffer;
     }
-    return `data:${image.contentType};base64,${image.buffer}`;
+    return `data:${image.file.mimetype};base64,${image.file.buffer}`;
   }, [image]);
 
   const [modalSize, setModalSize] = useState<"xl" | "full">("xl");
@@ -63,7 +63,7 @@ const ImageDisplay: React.FC<IImageDisplay> = ({
       <Flex flexDir="column" align="center" backgroundColor="gray.200" p={2}>
         <img
           src={src}
-          alt={image.name}
+          alt={image.file._id}
           onClick={() => {
             if (canExpand) onOpen();
           }}
@@ -111,9 +111,9 @@ const ImageDisplay: React.FC<IImageDisplay> = ({
             <ModalBody padding={3} mt={8}>
               <img
                 src={src}
-                alt={image.name}
+                alt={image.file._id}
                 onClick={() => {
-                  if (image.sourceURL) window.open(image.sourceURL);
+                  if (image.sourceUrl) window.open(image.sourceUrl);
                   return null;
                 }}
                 style={{
@@ -123,9 +123,9 @@ const ImageDisplay: React.FC<IImageDisplay> = ({
               <Divider m={3} />
               <Text align="center">{image.caption}</Text>
               <Divider m={3} />
-              {image.sourceURL ? (
-                <TextLink link={image.sourceURL} isExternal>
-                  {image.sourceURL}
+              {image.sourceUrl ? (
+                <TextLink link={image.sourceUrl} isExternal>
+                  {image.sourceUrl}
                 </TextLink>
               ) : null}
             </ModalBody>

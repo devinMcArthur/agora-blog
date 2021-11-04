@@ -11,7 +11,6 @@ import {
 import jestLogin from "@testing/jestLogin";
 import { StyleTypes, StyleVariants } from "@typescript/models/Statement";
 import _ids from "@testing/_ids";
-import { ParagraphEditProposalDocument } from "@models";
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
@@ -53,7 +52,7 @@ describe("Paragraph Edit Proposal Resolver", () => {
               firstName
             }
             paragraph {
-              version
+              _id
             }
             description
             statementItems {
@@ -97,8 +96,8 @@ describe("Paragraph Edit Proposal Resolver", () => {
           expect(paragraphEditProposal.author.firstName).toBe(
             documents.users.dev.firstName
           );
-          expect(paragraphEditProposal.paragraph.version).toBe(
-            documents.paragraphs.page_covid_2019_paragraph_v2.version
+          expect(paragraphEditProposal.paragraph._id.toString()).toBe(
+            documents.paragraphs.page_covid_2019_paragraph_v2._id.toString()
           );
 
           expect(

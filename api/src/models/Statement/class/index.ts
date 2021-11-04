@@ -38,4 +38,12 @@ export class StatementClass extends StatementSchema {
   public async validateDocument(this: StatementDocument) {
     return validate.document(this);
   }
+
+  /**
+   * ----- Virtuals -----
+   */
+
+  public get currentVersion() {
+    return this.versions[this.versions.length - 1];
+  }
 }

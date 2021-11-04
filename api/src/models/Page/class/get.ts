@@ -9,7 +9,7 @@ import {
   Statement,
   StatementDocument,
 } from "@models";
-import GetByIDOptions from "@typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
 
 const byIDDefaultOptions: GetByIDOptions = {
@@ -27,7 +27,7 @@ const byID = (
       const page = await Page.findById(id);
 
       if (!page && options.throwError) {
-        throw new Error("Page.getByID: Unable to find page");
+        throw new Error("Page.getById: Unable to find page");
       }
 
       resolve(page);
@@ -129,7 +129,7 @@ const pagesThatReference = (page: PageDocument): Promise<PageDocument[]> => {
         });
 
       for (const connection of pageConnections) {
-        const page = await Page.getByID(connection.referrerPage!.toString());
+        const page = await Page.getById(connection.referrerPage!.toString());
         if (page) pages.push(page);
       }
 

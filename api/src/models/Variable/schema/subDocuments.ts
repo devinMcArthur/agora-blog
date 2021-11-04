@@ -41,7 +41,7 @@ export class VariableVersionClass {
 
   @Field({ nullable: true })
   @prop({ required: false })
-  public sourceURL?: string;
+  public sourceUrl?: string;
 
   @Field()
   @prop({ default: new Date(), required: true })

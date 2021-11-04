@@ -1,7 +1,9 @@
-fragment ImageSnippet on Image {
-  name
-  sourceURL
+fragment ImageSnippet on StatementImageClass {
+  file {
+    _id
+    buffer
+    mimetype
+  }
+  sourceUrl
   caption
-  buffer
-  contentType
 }

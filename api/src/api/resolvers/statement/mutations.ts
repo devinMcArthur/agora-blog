@@ -4,17 +4,14 @@ import { Field, InputType } from "type-graphql";
 
 @InputType()
 class StyleValueImageData {
-  @Field({ nullable: false })
-  public name!: string;
-
   @Field({ nullable: true })
   public sourceUrl?: string;
 
   @Field({ nullable: true })
   public caption?: string;
 
-  @Field(() => GraphQLUpload, { nullable: false })
-  public data!: FileUpload;
+  @Field(() => GraphQLUpload)
+  public file!: FileUpload;
 }
 
 @InputType()

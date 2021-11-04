@@ -64,8 +64,7 @@ export type QuoteElementType = {
 
 export type ImageElementType = {
   type: "image";
-  name: string;
-  sourceURL?: string | null;
+  sourceUrl?: string | null;
   caption?: string | null;
   buffer: string;
   contentType: string;

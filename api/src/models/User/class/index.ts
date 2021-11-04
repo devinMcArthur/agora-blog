@@ -3,7 +3,7 @@ import { UserDocument, UserModel } from "@models";
 import { ObjectType } from "type-graphql";
 
 import { UserSchema } from "../schema";
-import GetByIDOptions from "@typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getById_Options";
 import get from "./get";
 import interact from "./interact";
 import { IUserData } from "@typescript/models/User";

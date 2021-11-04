@@ -4,7 +4,7 @@ fragment VariableSnippet on VariableClass {
   versions {
     finalValue
     createdAt
-    sourceURL
+    sourceUrl
     finalValue
   }
   relatedPages {

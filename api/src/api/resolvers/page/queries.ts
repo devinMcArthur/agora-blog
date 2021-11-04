@@ -2,7 +2,7 @@ import { Page } from "@models";
 
 const page = async ({ id, slug }: { id?: string; slug?: string }) => {
   if (id) {
-    return Page.getByID(id);
+    return Page.getById(id);
   } else if (slug) {
     return Page.getBySlug(slug);
   } else {

@@ -9,7 +9,7 @@ import {
   ParagraphEditProposal,
 } from "@models";
 
-import GetByIDOptions from "@typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
 
 const byIDDefaultOptions: GetByIDOptions = {
@@ -27,7 +27,7 @@ const byID = (
       const paragraph = await Paragraph.findById(id);
 
       if (!paragraph && options.throwError) {
-        throw new Error("Paragraph.getByID: Unable to find paragraph");
+        throw new Error("Paragraph.getById: Unable to find paragraph");
       }
 
       resolve(paragraph);

@@ -38,7 +38,7 @@ afterAll(async () => {
 describe("Statement Class", () => {
   describe("BUILD", () => {
     describe("success", () => {
-      test("should should successfully build a new statement", async () => {
+      test("should successfully build a new statement", async () => {
         const data: IStatementBuildData = {
           author: documents.users.dev._id,
           page: documents.pages.page_covid_19_deaths._id,
@@ -214,6 +214,13 @@ describe("Statement Class", () => {
         await statement.save();
 
         expect(statement).toBeDefined();
+
+        expect(
+          statement.versions[0].stringArray[0].styles[0].value.image?.caption
+        ).toBe(data.version.stringArray[0].styles[0].value?.image?.caption);
+        expect(
+          statement.versions[0].stringArray[0].styles[0].value.image?.sourceUrl
+        ).toBe(data.version.stringArray[0].styles[0].value?.image?.sourceUrl);
 
         const fileId =
           statement.versions[0].stringArray[0].styles[0].value.image?.file;

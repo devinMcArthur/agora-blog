@@ -101,7 +101,7 @@ const page_rt_pcr_cycle_threshold_statement_3_v1 = new Statement({
                 image: {
                   file: _ids.files
                     .page_rt_pcr_cycle_threshold_statement_3_v1_image,
-                  sourceURL:
+                  sourceUrl:
                     "https://academic.oup.com/cid/advance-article/doi/10.1093/cid/ciaa1491/5912603",
                   caption:
                     "Percentage of positive viral cultures of severe acute respiratory syndrome coronavirus 2 polymerase chain reaction–positive nasopharyngeal samples from coronavirus disease 2019 patients, according to Ct value (plain line). The dashed curve indicates the polynomial regression curve. Abbreviations: Ct, cycle threshold; Poly., polynomial.",

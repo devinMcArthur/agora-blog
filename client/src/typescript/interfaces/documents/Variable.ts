@@ -2,11 +2,11 @@ import { Types } from "mongoose";
 import { PagePopulated } from "./Page";
 
 export type VariableValueTypes =
-  | { type: "number"; number: number; sourceURL: string; createdAt: Date }
+  | { type: "number"; number: number; sourceUrl: string; createdAt: Date }
   | {
       type: "equation";
       equation: EquationTypes;
-      sourceURL?: string;
+      sourceUrl?: string;
       createdAt: Date;
     };
 
@@ -14,14 +14,14 @@ export type PopulatedVariableValueTypes =
   | {
       type: "number";
       number: number;
-      sourceURL: string;
+      sourceUrl: string;
       createdAt: Date;
       finalValue: number;
     }
   | {
       type: "equation";
       equation: EquationTypes;
-      sourceURL: string;
+      sourceUrl: string;
       createdAt: Date;
       finalValue: number;
     };

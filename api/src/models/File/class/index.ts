@@ -6,7 +6,7 @@ import { FileSchema } from "../schema";
 import build from "./build";
 import remove from "./remove";
 import validate from "./validate";
-import GetByIDOptions from "@typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getById_Options";
 import get from "./get";
 
 @ObjectType()

@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { ObjectType } from "type-graphql";
 
-import GetByIDOptions from "@typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getById_Options";
 import { PageDocument, PageModel } from "@models";
 
 import get from "./get";
@@ -25,7 +25,7 @@ export class PageClass extends PageSchema {
    * GET
    */
 
-  public static async getByID(
+  public static async getById(
     this: PageModel,
     id: Types.ObjectId | string,
     options: GetByIDOptions = {}

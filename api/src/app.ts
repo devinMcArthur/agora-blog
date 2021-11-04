@@ -10,11 +10,12 @@ import { IContext } from "@typescript/graphql";
 
 import UserResolver from "@api/resolvers/user";
 import PageResolver from "@api/resolvers/page";
-import ImageResolver from "@api/resolvers/image";
+import FileResolver from "@api/resolvers/file";
 import VariableResolver from "@api/resolvers/variable";
 import QuestionResolver from "@api/resolvers/question";
 import ParagraphResolver from "@api/resolvers/paragraph";
 import StatementResolver from "@api/resolvers/statement";
+import StatementImageResolver from "@api/resolvers/statementImage";
 import StatementValueResolver from "@api/resolvers/statementValue";
 import VariableVersionResolver from "@api/resolvers/variableVersion";
 import StatementVersionResolver from "@api/resolvers/statementVersion";
@@ -22,6 +23,7 @@ import VariableEquationResolver from "@api/resolvers/variableEquation";
 import ParagraphStatementResolver from "@api/resolvers/paragraphStatement";
 import ParagraphEditProposalResolver from "@api/resolvers/paragraphEditProposal";
 import ParagraphEditProposalStatementResolver from "@api/resolvers/paragraphEditProposalStatement";
+
 import { User, UserDocument } from "@models";
 import authChecker from "@utils/authChecker";
 
@@ -34,7 +36,8 @@ const createApp = async () => {
     resolvers: [
       UserResolver,
       PageResolver,
-      ImageResolver,
+      FileResolver,
+      StatementImageResolver,
       ParagraphResolver,
       VariableResolver,
       QuestionResolver,

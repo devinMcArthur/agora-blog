@@ -1,7 +1,7 @@
 import { Variable, VariableEquationDocument } from "@models";
 
 const variable = async (variableEquation: VariableEquationDocument) => {
-  return await Variable.getByID(variableEquation.variable!.toString());
+  return await Variable.getById(variableEquation.variable!.toString());
 };
 
 export default { variable };

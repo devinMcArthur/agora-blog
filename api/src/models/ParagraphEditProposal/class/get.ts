@@ -8,7 +8,7 @@ import {
   UserClass,
   UserDocument,
 } from "@models";
-import GetByIDOptions from "@typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getById_Options";
 
 const byIdDefaultOptions: GetByIDOptions = {
   throwError: false,

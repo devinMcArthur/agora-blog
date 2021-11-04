@@ -4,6 +4,10 @@ import {
   DisplayStatementSnippetFragment,
   DisplayStyleSnippetFragment,
   FullStringArraySnippetFragment,
+  NewStatementData,
+  StringArrayData,
+  StringArrayStyleData,
+  StyleValueImageData,
 } from "../../generated/graphql";
 import {
   SlateMarks,
@@ -14,6 +18,7 @@ import {
   VariableElementType,
   ImageElementType,
 } from "../../models/slate";
+import dataUrlToBlob from "../../utils/dataUrlToBlob";
 import replaceSpaces from "../../utils/replacesSpaces";
 
 export const convertParagraphToSlate = (
@@ -97,10 +102,9 @@ export const convertStringArrayToSlate = (
     const style = stringArray.styles.find((style) => style.type === "image");
     return {
       type: "image",
-      buffer: style!.value.image!.buffer,
-      contentType: style!.value.image!.contentType,
-      name: style!.value.image!.name,
-      sourceURL: style!.value.image!.sourceURL,
+      buffer: style!.value.image!.file!.buffer,
+      contentType: style!.value.image!.file!.mimetype,
+      sourceUrl: style!.value.image!.sourceUrl,
       caption: style!.value.image!.caption,
       children: [{ text: "" }],
     };
@@ -234,6 +238,11 @@ export const convertSlateParagraphToStatements = (
               value: {
                 image: {
                   ...item,
+                  file: {
+                    _id: "NEW",
+                    buffer: item.buffer,
+                    mimetype: item.contentType,
+                  },
                 },
               },
             });
@@ -273,4 +282,106 @@ export const convertSlateParagraphToStatements = (
   }
 
   return statements;
+};
+
+export const convertSlateParagraphToStatementData = (
+  slateParagraph: Descendant[]
+): NewStatementData[] => {
+  const buildStatements: NewStatementData[] = [];
+
+  for (const i in slateParagraph) {
+    if (Object.prototype.hasOwnProperty.call(slateParagraph, i)) {
+      const element: StatementElementType = slateParagraph[
+        i
+      ] as StatementElementType;
+
+      const stringArray: StringArrayData[] = element.children.map((child) => {
+        const styles: StringArrayStyleData[] = [];
+        let text = "";
+
+        // Child is StyledText
+        if ((child as StyledText).text) {
+          const item: StyledText = child as StyledText;
+          text = item.text;
+
+          if (item.bold) styles.push({ type: "bold", value: {} });
+
+          if (item.italic) styles.push({ type: "italic", value: {} });
+
+          if (item.externalMentionUrl)
+            styles.push({
+              type: "mention",
+              variant: "external",
+              value: { url: item.externalMentionUrl },
+            });
+
+          if (item.internalMentionPage)
+            styles.push({
+              type: "mention",
+              variant: "internal",
+              value: {
+                page: item.internalMentionPage.id,
+              },
+            });
+        }
+
+        // Child is variable
+        if ((child as CustomElements).type === "variable") {
+          const item: VariableElementType = child as VariableElementType;
+
+          styles.push({
+            type: "variable",
+            value: {
+              variable: item.id,
+            },
+          });
+
+          text = item.children[0].text;
+        }
+
+        // Child is quote
+        if ((child as CustomElements).type === "quote") {
+          const item: QuoteElementType = child as QuoteElementType;
+
+          styles.push({
+            type: "quote",
+            value: { statement: item.statementId },
+          });
+        }
+
+        if ((child as CustomElements).type === "image") {
+          const item: ImageElementType = child as ImageElementType;
+
+          const image: StyleValueImageData = {
+            caption: item.caption,
+            sourceUrl: item.sourceUrl,
+            file: new File([dataUrlToBlob(item.buffer)], `new-image-${i}`, {
+              type: item.contentType,
+            }),
+          };
+
+          styles.push({
+            type: "image",
+            value: {
+              image,
+            },
+          });
+        }
+
+        return {
+          string: text,
+          styles,
+        };
+      });
+
+      buildStatements.push({
+        newQuestions: element.newQuestions.map((question) => question.question),
+        questions: element.questions.map((question) => question._id),
+        quotedStatement: element.quotedStatementId,
+        stringArray: stringArray,
+      });
+    }
+  }
+
+  return buildStatements;
 };

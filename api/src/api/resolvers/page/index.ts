@@ -2,9 +2,12 @@ import {
   Arg,
   Args,
   ArgsType,
+  Authorized,
+  Ctx,
   Field,
   FieldResolver,
   ID,
+  Mutation,
   Query,
   Resolver,
   Root,
@@ -19,6 +22,8 @@ import {
 
 import fieldResolver from "./fieldResolver";
 import queries from "./queries";
+import mutations, { NewPageData } from "./mutations";
+import { IContext } from "@typescript/graphql";
 
 @ArgsType()
 class GetPageArgs {
@@ -70,5 +75,15 @@ export default class PageResolver {
   @Query(() => [PageClass])
   async searchPages(@Arg("searchString") searchString: string) {
     return queries.searchPages(searchString);
+  }
+
+  /**
+   * Mutations
+   */
+
+  @Authorized("VERIFIED")
+  @Mutation(() => PageClass, { nullable: false })
+  async newPage(@Arg("data") data: NewPageData, @Ctx() ctx: IContext) {
+    return mutations.newPage(data, ctx);
   }
 }

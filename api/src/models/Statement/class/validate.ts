@@ -52,7 +52,7 @@ const document = (statement: StatementDocument) => {
                       "must provide a page for an internal mention"
                     );
 
-                  const mentionedPage = await Page.getByID(
+                  const mentionedPage = await Page.getById(
                     style.value.page.toString()
                   );
                   if (!mentionedPage)
@@ -73,7 +73,7 @@ const document = (statement: StatementDocument) => {
                 if (!style.value.variable)
                   throw new Error("must provide a variable to reference");
 
-                const variable = await Variable.getByID(
+                const variable = await Variable.getById(
                   style.value.variable.toString()
                 );
                 if (!variable)
@@ -101,8 +101,8 @@ const document = (statement: StatementDocument) => {
                   throw new Error("must provide an image object");
 
                 if (
-                  style.value.image.sourceURL &&
-                  !isUrl(style.value.image.sourceURL)
+                  style.value.image.sourceUrl &&
+                  !isUrl(style.value.image.sourceUrl)
                 )
                   throw new Error("must provide a valid source url");
 
@@ -117,7 +117,7 @@ const document = (statement: StatementDocument) => {
             }
 
             // validate string if neccesary
-            if (requiresString && !stringArray.string)
+            if (requiresString && stringArray.string === undefined)
               throw new Error("must provide a string for this item");
           }
         } else if (

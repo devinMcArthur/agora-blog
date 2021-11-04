@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { ObjectType } from "type-graphql";
 
-import GetByIDOptions from "@typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getById_Options";
 import { VariableDocument, VariableModel, VariableVersionClass } from "@models";
 
 import { VariableSchema } from "../schema";
@@ -9,7 +9,7 @@ import get from "./get";
 
 @ObjectType()
 export class VariableClass extends VariableSchema {
-  public static async getByID(
+  public static async getById(
     this: VariableModel,
     id: Types.ObjectId | string,
     options: GetByIDOptions = {}

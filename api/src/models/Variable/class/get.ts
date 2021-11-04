@@ -10,7 +10,7 @@ import {
   VariablePageConnectionDocument,
   Variable,
 } from "@models";
-import GetByIDOptions from "@typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
 
 const byIDDefaultOptions: GetByIDOptions = {
@@ -28,7 +28,7 @@ const byID = (
       const variable = await Variable.findById(id);
 
       if (!variable && options.throwError) {
-        throw new Error("Variable.getByID: Unable to find variable");
+        throw new Error("Variable.getById: Unable to find variable");
       }
 
       resolve(variable);
@@ -71,7 +71,7 @@ const versionsFinalValue = (
             } else if (item.type === "operator") {
               equation += item.operator;
             } else if (item.type === "variable") {
-              const variable = await Variable.getByID(
+              const variable = await Variable.getById(
                 item.variable!.toString()
               );
               equation += await Variable.getVersionsFinalValue(
@@ -102,7 +102,7 @@ const pagesThatReference = (
           });
 
         for (const connection of variablePageConnections) {
-          const page = await Page.getByID(connection.referrerPage!.toString());
+          const page = await Page.getById(connection.referrerPage!.toString());
           if (page) pages.push(page);
         }
       }

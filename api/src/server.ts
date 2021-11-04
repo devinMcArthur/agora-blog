@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import path from "path";
-import { start } from "nact";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 

@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { UserClass, UserDocument, UserModel } from "@models";
-import GetByIDOptions from "@typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
 
 const byIDDefaultOptions: GetByIDOptions = {

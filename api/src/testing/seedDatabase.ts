@@ -6,9 +6,6 @@ import createQuestions, { SeededQuestions } from "./documents/questions";
 import createVariables, { SeededVariables } from "./documents/variables";
 import createParagraphs, { SeededParagraphs } from "./documents/paragraphs";
 
-import createPageConnections from "./documents/pageConnections";
-import createQuestionPageConnections from "./documents/questionPageConnections";
-import createVariablePageConnections from "./documents/variablePageConnections";
 import createUsers, { ISeededUsers } from "./documents/users";
 import createParagraphEditProposals, {
   ISeededParagraphEditProposals,
@@ -40,11 +37,6 @@ const seedDatabase = () => {
       const paragraphEditProposals = await createParagraphEditProposals();
       const files = await createFiles();
       await createStatements();
-
-      // Create connection documents
-      await createPageConnections();
-      await createQuestionPageConnections();
-      await createVariablePageConnections();
 
       console.log("Database seeded");
 

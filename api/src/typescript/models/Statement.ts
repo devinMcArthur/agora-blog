@@ -29,7 +29,7 @@ interface IStyleValueBuildData {
   image?: IStyleValueImageBuildData;
 }
 
-interface IStylesBuildData {
+export interface IStylesBuildData {
   type: StyleTypes;
   variant?: StyleVariants;
   value?: IStyleValueBuildData;

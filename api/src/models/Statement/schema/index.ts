@@ -1,10 +1,28 @@
-import { PageClass, StatementVersionClass, UserClass } from "@models";
-import { prop, Ref } from "@typegoose/typegoose";
+import {
+  PageClass,
+  PageConnection,
+  QuestionPageConnection,
+  StatementDocument,
+  StatementVersionClass,
+  UserClass,
+  VariablePageConnection,
+} from "@models";
+import { post, prop, Ref } from "@typegoose/typegoose";
 import { Types } from "mongoose";
 import { Field, ID, ObjectType } from "type-graphql";
 
 export * from "./subDocuments";
 
+@post<StatementDocument>("save", async function (statement) {
+  // handle page connection updates
+  await PageConnection.updateForStatement(statement);
+
+  // handle question page connections
+  await QuestionPageConnection.updateForStatement(statement);
+
+  // handle variable page connections
+  await VariablePageConnection.updateForStatement(statement);
+})
 @ObjectType()
 export class StatementSchema {
   @Field(() => ID, { nullable: false })

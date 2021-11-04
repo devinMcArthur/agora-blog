@@ -15,6 +15,7 @@ interface IPageSearch extends Omit<InputProps, "onChange"> {
   handleSubmit?: (string: string) => void;
   dropdownId?: string;
   dropdownProps?: StackProps;
+  errorMessage?: string;
 }
 
 const PageSearch: React.FC<IPageSearch> = ({

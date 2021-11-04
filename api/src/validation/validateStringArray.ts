@@ -1,4 +1,4 @@
-import { Page, Statement, StringArrayClass, Variable } from "@models";
+import { File, Page, Statement, StringArrayClass, Variable } from "@models";
 import { isEmpty } from "class-validator";
 import isUrl from "./isUrl";
 
@@ -19,17 +19,22 @@ const validateStringArray = (stringArray: StringArrayClass[]) => {
               if (!style.value.image)
                 throw new Error(`must provide image data`);
 
-              if (!style.value.image.name)
-                throw new Error(`must provide an image name`);
-
               if (
-                style.value.image.sourceURL &&
-                !isUrl(style.value.image.sourceURL)
+                style.value.image.sourceUrl &&
+                !isUrl(style.value.image.sourceUrl)
               )
                 throw new Error("source url must be valid");
 
               if (!isEmpty(element.string))
                 throw new Error("cannot have a string with image style");
+
+              if (!style.value.image.file)
+                throw new Error("must include a file");
+
+              const file = await File.getById(
+                style.value.image.file.toString()
+              );
+              if (!file) throw new Error("cannot find saved file");
 
               break;
             }
@@ -49,7 +54,7 @@ const validateStringArray = (stringArray: StringArrayClass[]) => {
                 if (!style.value.page)
                   throw new Error("must provide a page for internal mention");
 
-                const mentionedPage = await Page.getByID(
+                const mentionedPage = await Page.getById(
                   style.value.page.toString()
                 );
                 if (!mentionedPage)
@@ -83,7 +88,7 @@ const validateStringArray = (stringArray: StringArrayClass[]) => {
               if (!style.value.variable)
                 throw new Error("must provide a variable to reference");
 
-              const variable = await Variable.getByID(
+              const variable = await Variable.getById(
                 style.value.variable.toString()
               );
               if (!variable)

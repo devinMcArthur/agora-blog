@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { ObjectType } from "type-graphql";
 
-import GetByIDOptions from "@typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getById_Options";
 import { QuestionDocument, QuestionModel } from "@models";
 
 import { QuestionSchema } from "../schema";

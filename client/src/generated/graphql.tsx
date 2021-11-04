@@ -116,7 +116,6 @@ export type ParagraphClass = {
   _id: Scalars['ID'];
   page: PageClass;
   statements: Array<ParagraphStatementClass>;
-  version: Scalars['Float'];
   mostRecent: Scalars['Boolean'];
   sourceEditProposal?: Maybe<ParagraphEditProposalClass>;
   editProposals: Array<ParagraphEditProposalClass>;
@@ -165,7 +164,7 @@ export type StatementValueClass = {
   page?: Maybe<PageClass>;
   statement?: Maybe<StatementClass>;
   variable?: Maybe<VariableClass>;
-  image?: Maybe<Image>;
+  image?: Maybe<StatementImageClass>;
 };
 
 export type VariableClass = {
@@ -182,7 +181,7 @@ export type VariableVersionClass = {
   type: Scalars['String'];
   number: Scalars['Float'];
   equation: Array<VariableEquationClass>;
-  sourceURL?: Maybe<Scalars['String']>;
+  sourceUrl?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   finalValue: Scalars['Float'];
 };
@@ -195,13 +194,19 @@ export type VariableEquationClass = {
   variable?: Maybe<VariableClass>;
 };
 
-export type Image = {
-  __typename?: 'Image';
-  name: Scalars['String'];
-  sourceURL?: Maybe<Scalars['String']>;
+export type StatementImageClass = {
+  __typename?: 'StatementImageClass';
+  file: FileClass;
+  sourceUrl?: Maybe<Scalars['String']>;
   caption?: Maybe<Scalars['String']>;
+};
+
+export type FileClass = {
+  __typename?: 'FileClass';
+  _id: Scalars['ID'];
+  mimetype: Scalars['String'];
+  createdAt: Scalars['DateTime'];
   buffer: Scalars['String'];
-  contentType: Scalars['String'];
 };
 
 export type QuestionClass = {
@@ -243,6 +248,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   login: Scalars['String'];
   createUser: Scalars['String'];
+  newPage: PageClass;
   createParagraphEditProposal: ParagraphEditProposalClass;
 };
 
@@ -254,6 +260,11 @@ export type MutationLoginArgs = {
 
 export type MutationCreateUserArgs = {
   data: CreateUserData;
+};
+
+
+export type MutationNewPageArgs = {
+  data: NewPageData;
 };
 
 
@@ -275,24 +286,20 @@ export type CreateUserData = {
   confirmationPassword?: Maybe<Scalars['String']>;
 };
 
-export type ParagraphEditProposalData = {
-  paragraph: Scalars['String'];
-  description: Scalars['String'];
-  statementItems: Array<ParagraphEditProposalStatementData>;
+export type NewPageData = {
+  title: Scalars['String'];
+  paragraph: NewPageParagraphData;
 };
 
-export type ParagraphEditProposalStatementData = {
-  changeType: Scalars['String'];
-  paragraphStatement?: Maybe<ParagraphStatementData>;
-  statementVersionIndex?: Maybe<Scalars['Float']>;
-  questions?: Maybe<Array<Scalars['String']>>;
-  newQuestions?: Maybe<Array<Scalars['String']>>;
-  stringArray?: Maybe<Array<StringArrayData>>;
+export type NewPageParagraphData = {
+  statements: Array<NewStatementData>;
 };
 
-export type ParagraphStatementData = {
-  statement: Scalars['String'];
-  versionIndex: Scalars['Float'];
+export type NewStatementData = {
+  stringArray: Array<StringArrayData>;
+  questions: Array<Scalars['ID']>;
+  newQuestions: Array<Scalars['String']>;
+  quotedStatement?: Maybe<Scalars['ID']>;
 };
 
 export type StringArrayData = {
@@ -315,12 +322,31 @@ export type StyleValueData = {
 };
 
 export type StyleValueImageData = {
-  name: Scalars['String'];
   sourceUrl?: Maybe<Scalars['String']>;
   caption?: Maybe<Scalars['String']>;
-  data: Scalars['Upload'];
+  file: Scalars['Upload'];
 };
 
+
+export type ParagraphEditProposalData = {
+  paragraph: Scalars['String'];
+  description: Scalars['String'];
+  statementItems: Array<ParagraphEditProposalStatementData>;
+};
+
+export type ParagraphEditProposalStatementData = {
+  changeType: Scalars['String'];
+  paragraphStatement?: Maybe<ParagraphStatementData>;
+  statementVersionIndex?: Maybe<Scalars['Float']>;
+  questions?: Maybe<Array<Scalars['String']>>;
+  newQuestions?: Maybe<Array<Scalars['String']>>;
+  stringArray?: Maybe<Array<StringArrayData>>;
+};
+
+export type ParagraphStatementData = {
+  statement: Scalars['String'];
+  versionIndex: Scalars['Float'];
+};
 
 export type DisplayParagraphSnippetFragment = (
   { __typename?: 'ParagraphClass' }
@@ -373,7 +399,7 @@ export type DisplayStyleSnippetFragment = (
       { __typename?: 'VariableClass' }
       & Pick<VariableClass, '_id' | 'title' | 'finalValue'>
     )>, image?: Maybe<(
-      { __typename?: 'Image' }
+      { __typename?: 'StatementImageClass' }
       & ImageSnippetFragment
     )> }
   ) }
@@ -417,8 +443,12 @@ export type FullUserSnippetFragment = (
 );
 
 export type ImageSnippetFragment = (
-  { __typename?: 'Image' }
-  & Pick<Image, 'name' | 'sourceURL' | 'caption' | 'buffer' | 'contentType'>
+  { __typename?: 'StatementImageClass' }
+  & Pick<StatementImageClass, 'sourceUrl' | 'caption'>
+  & { file: (
+    { __typename?: 'FileClass' }
+    & Pick<FileClass, '_id' | 'buffer' | 'mimetype'>
+  ) }
 );
 
 export type LinkFormPageSnippetFragment = (
@@ -503,7 +533,7 @@ export type VariableSnippetFragment = (
   & Pick<VariableClass, '_id' | 'title'>
   & { versions: Array<(
     { __typename?: 'VariableVersionClass' }
-    & Pick<VariableVersionClass, 'finalValue' | 'createdAt' | 'sourceURL'>
+    & Pick<VariableVersionClass, 'finalValue' | 'createdAt' | 'sourceUrl'>
   )>, relatedPages: Array<(
     { __typename?: 'PageClass' }
     & PageCardSnippetFragment
@@ -531,6 +561,19 @@ export type CreateUserMutationVariables = Exact<{
 export type CreateUserMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'createUser'>
+);
+
+export type NewPageMutationVariables = Exact<{
+  data: NewPageData;
+}>;
+
+
+export type NewPageMutation = (
+  { __typename?: 'Mutation' }
+  & { newPage: (
+    { __typename?: 'PageClass' }
+    & Pick<PageClass, 'slug'>
+  ) }
 );
 
 export type UserLoginMutationVariables = Exact<{
@@ -750,12 +793,14 @@ export const PreviewParagraphEditProposalSnippetFragmentDoc = gql`
 }
     `;
 export const ImageSnippetFragmentDoc = gql`
-    fragment ImageSnippet on Image {
-  name
-  sourceURL
+    fragment ImageSnippet on StatementImageClass {
+  file {
+    _id
+    buffer
+    mimetype
+  }
+  sourceUrl
   caption
-  buffer
-  contentType
 }
     `;
 export const DisplayStyleSnippetFragmentDoc = gql`
@@ -941,7 +986,7 @@ export const VariableSnippetFragmentDoc = gql`
   versions {
     finalValue
     createdAt
-    sourceURL
+    sourceUrl
     finalValue
   }
   relatedPages {
@@ -1011,6 +1056,38 @@ export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const NewPageDocument = gql`
+    mutation NewPage($data: NewPageData!) {
+  newPage(data: $data) {
+    slug
+  }
+}
+    `;
+export type NewPageMutationFn = Apollo.MutationFunction<NewPageMutation, NewPageMutationVariables>;
+
+/**
+ * __useNewPageMutation__
+ *
+ * To run a mutation, you first call `useNewPageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNewPageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [newPageMutation, { data, loading, error }] = useNewPageMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useNewPageMutation(baseOptions?: Apollo.MutationHookOptions<NewPageMutation, NewPageMutationVariables>) {
+        return Apollo.useMutation<NewPageMutation, NewPageMutationVariables>(NewPageDocument, baseOptions);
+      }
+export type NewPageMutationHookResult = ReturnType<typeof useNewPageMutation>;
+export type NewPageMutationResult = Apollo.MutationResult<NewPageMutation>;
+export type NewPageMutationOptions = Apollo.BaseMutationOptions<NewPageMutation, NewPageMutationVariables>;
 export const UserLoginDocument = gql`
     mutation UserLogin($data: LoginData!) {
   login(data: $data)

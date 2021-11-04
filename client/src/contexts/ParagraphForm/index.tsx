@@ -3,6 +3,7 @@ import { BaseSelection, Descendant } from "slate";
 import { useImmerReducer } from "use-immer";
 import {
   DisplayParagraphSnippetFragment,
+  NewStatementData,
   usePageQuery,
 } from "../../generated/graphql";
 import {
@@ -13,7 +14,7 @@ import {
 import {
   convertParagraphToSlate,
   convertSlateParagraphToParagraph,
-  convertSlateParagraphToStatements,
+  convertSlateParagraphToStatementData,
 } from "./utils";
 
 /**
@@ -37,7 +38,7 @@ interface IState {
   paragraph: DisplayParagraphSnippetFragment | null | undefined;
   previousSlateParagraph: Descendant[] | null | undefined;
   slateParagraph: Descendant[] | null | undefined;
-  statements: DisplayParagraphSnippetFragment["statements"] | null | undefined;
+  statements: NewStatementData[] | null | undefined;
 }
 
 export interface IParagraphFormContext {
@@ -85,7 +86,7 @@ type IAction =
   | {
       type: "update-statements";
       payload: {
-        statements: DisplayParagraphSnippetFragment["statements"];
+        statements: NewStatementData[];
       };
     };
 
@@ -322,7 +323,9 @@ const ParagraphFormProvider = ({
       dispatch({
         type: "update-statements",
         payload: {
-          statements: convertSlateParagraphToStatements(state.slateParagraph),
+          statements: convertSlateParagraphToStatementData(
+            state.slateParagraph
+          ),
         },
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -10,7 +10,7 @@ import { ParagraphEditProposalSchema } from "../schema";
 import build from "./build";
 import get from "./get";
 import validate from "./validate";
-import GetByIDOptions from "@typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getById_Options";
 
 @ObjectType()
 export class ParagraphEditProposalClass extends ParagraphEditProposalSchema {

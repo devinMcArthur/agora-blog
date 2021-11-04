@@ -2,7 +2,7 @@ import { Statement, Variable, Page, StatementValueDocument } from "@models";
 
 const page = async (statementValue: StatementValueDocument) => {
   if (statementValue.page)
-    return await Page.getByID(statementValue.page.toString());
+    return await Page.getById(statementValue.page.toString());
   return null;
 };
 
@@ -14,7 +14,7 @@ const statement = async (statementValue: StatementValueDocument) => {
 
 const variable = async (statementValue: StatementValueDocument) => {
   if (statementValue.variable)
-    return await Variable.getByID(statementValue.variable.toString());
+    return await Variable.getById(statementValue.variable.toString());
   return null;
 };
 

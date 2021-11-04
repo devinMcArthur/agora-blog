@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { FileDocument, FileModel } from "@models";
-import GetByIDOptions from "@typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
 
 const byIdDefaultOptions: GetByIDOptions = {
@@ -18,7 +18,7 @@ const byId = (
       const file = await File.findById(id);
 
       if (!file && options.throwError) {
-        throw new Error("File.getByID: Unable to find file");
+        throw new Error("File.getById: Unable to find file");
       }
 
       resolve(file);

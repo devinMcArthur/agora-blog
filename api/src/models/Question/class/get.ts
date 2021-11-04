@@ -10,7 +10,7 @@ import {
   Statement,
   StatementDocument,
 } from "@models";
-import GetByIDOptions from "@typescript/interface/getByID_Options";
+import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
 
 const byIDDefaultOptions: GetByIDOptions = {
@@ -28,7 +28,7 @@ const byId = (
       const question = await Question.findById(id);
 
       if (!question && options.throwError) {
-        throw new Error("Question.getByID: Unable to find question");
+        throw new Error("Question.getById: Unable to find question");
       }
 
       resolve(question);
@@ -63,7 +63,7 @@ const pagesThatReference = (
         });
 
       for (const connection of questionPageConnections) {
-        const page = await Page.getByID(connection.referrerPage!.toString());
+        const page = await Page.getById(connection.referrerPage!.toString());
         if (page) pages.push(page);
       }
 

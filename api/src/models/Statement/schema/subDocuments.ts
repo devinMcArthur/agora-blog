@@ -12,21 +12,22 @@ import {
 import { StyleTypes } from "@typescript/models/Statement";
 
 @ObjectType()
-export class Image {
+export class StatementImageClass {
   @Field(() => FileClass)
   @prop({ ref: () => FileClass, required: true })
   public file!: Ref<FileClass>;
 
   @Field({ nullable: true })
   @prop({ trim: true })
-  public sourceURL?: string;
+  public sourceUrl?: string;
 
   @Field({ nullable: true })
   @prop({ trim: true })
   public caption?: string;
 }
 
-export interface ImageDocument extends DocumentType<Image> {}
+export interface StatementImageDocument
+  extends DocumentType<StatementImageClass> {}
 
 @ObjectType()
 export class StatementValueClass {
@@ -46,9 +47,9 @@ export class StatementValueClass {
   @prop({ ref: () => VariableClass, required: false })
   public variable?: Ref<VariableClass>;
 
-  @Field(() => Image, { nullable: true })
-  @prop({ type: () => Image, required: false })
-  public image?: Image;
+  @Field(() => StatementImageClass, { nullable: true })
+  @prop({ type: () => StatementImageClass, required: false })
+  public image?: StatementImageClass;
 }
 
 export interface StatementValueDocument

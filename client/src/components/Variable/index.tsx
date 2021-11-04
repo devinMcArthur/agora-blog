@@ -37,9 +37,9 @@ const Variable = (props: Props) => {
           Current: <FinalValue finalValue={currentVersion.finalValue} />
         </Heading>
         <i>updated: {currentVersion.createdAt}</i>
-        {currentVersion.sourceURL ? (
+        {currentVersion.sourceUrl ? (
           <i>
-            <TextLink link={currentVersion.sourceURL} isExternal>
+            <TextLink link={currentVersion.sourceUrl} isExternal>
               source
             </TextLink>
           </i>
