@@ -27,7 +27,6 @@ const QuestionTagRelated = ({
 
   return React.useMemo(() => {
     if (questions && questions.length > 0) {
-      console.log("questions", questions);
       return (
         <Box>
           <Box py={2}>

@@ -184,12 +184,18 @@ describe("Paragraph Edit Proposal Resolver", () => {
                 },
               },
               {
-                changeType: EditProposalChangeTypes.NONE,
+                changeType: EditProposalChangeTypes.EDIT,
                 paragraphStatement: {
                   statement:
                     documents.paragraphs.page_covid_2019_paragraph_v2.statements[1].statement!.toString(),
                   versionIndex: 0,
                 },
+                quotedStatement:
+                  _ids.pages.page_covid_19_deaths.paragraphs[0].statements[0],
+                questions: [
+                  documents.questions.how_many_covid_19_deaths_have_there_been
+                    ._id,
+                ],
               },
               {
                 changeType: EditProposalChangeTypes.REMOVE,
@@ -238,6 +244,11 @@ describe("Paragraph Edit Proposal Resolver", () => {
           expect(
             res.body.data.createParagraphEditProposal.statementItems.length
           ).toBe(data.statementItems.length);
+
+          expect(
+            res.body.data.createParagraphEditProposal.statementItems[3]
+              .quotedStatement
+          ).toBe(data.statementItems[3].quotedStatement);
         });
       });
     });

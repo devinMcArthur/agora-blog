@@ -1,12 +1,13 @@
 import * as React from "react";
 
+import * as qs from "qs";
 import PageCard from "../Common/PageCard";
 import Paragraph from "../Common/Paragraph";
 import { usePageQuery } from "../../generated/graphql";
 import { Container, Divider, Heading, Flex } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/layout";
 import Loading from "../Common/Loading";
-import { useParams } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import { PageMatchParams } from "../../models/pageParams";
 import { Tabs, TabList, Tab, TabPanel, TabPanels } from "@chakra-ui/tabs";
 import ParagraphEditProposal from "../Common/ParagraphEditProposal";
@@ -15,10 +16,13 @@ import { useDrawer } from "../../contexts/Drawer";
 import { Button } from "@chakra-ui/button";
 import { FiEdit } from "react-icons/fi";
 import Card from "../Common/Card";
-import EditPage from "../EditPage";
+import EditParagraph from "../EditParagraph";
 
 const Page = () => {
   const { pageSlug } = useParams<PageMatchParams>();
+
+  const history = useHistory();
+  const location = useLocation();
 
   const { data, loading } = usePageQuery({
     variables: { slug: pageSlug },
@@ -33,6 +37,20 @@ const Page = () => {
     setPreviewedParagraphEditProposal,
   } = useDrawer();
 
+  /**
+   * ----- Variables -----
+   */
+
+  const proposalParams = React.useMemo(() => {
+    if (location.search) {
+      const proposalParam = qs.parse(location.search, {
+        ignoreQueryPrefix: true,
+      }).proposal;
+      if (proposalParam) return proposalParam.toString();
+      else return undefined;
+    }
+  }, [location]);
+
   React.useEffect(() => {
     if (data?.page) {
       setCurrentPage(data.page._id);
@@ -42,6 +60,22 @@ const Page = () => {
       clearState();
     };
   }, [clearState, data?.page, setCurrentPage]);
+
+  // If proposal param is set, set preview
+  React.useEffect(() => {
+    if (proposalParams && !paragraphEditProposalPreviewId) {
+      setPreviewedParagraphEditProposal(proposalParams);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
+
+  // If proposal preview is removed, remove proposal param
+  React.useEffect(() => {
+    if (!paragraphEditProposalPreviewId && proposalParams) {
+      history.push(`/p/${pageSlug}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paragraphEditProposalPreviewId]);
 
   const content = React.useMemo(() => {
     if (data?.page && !loading) {
@@ -91,7 +125,11 @@ const Page = () => {
         );
       if (editting)
         paragraphContent = (
-          <EditPage pageId={page._id} onCancel={() => setEditting(false)} />
+          <EditParagraph
+            pageId={page._id}
+            paragraphId={page.currentParagraph._id}
+            onCancel={() => setEditting(false)}
+          />
         );
 
       return (

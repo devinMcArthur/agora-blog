@@ -7,4 +7,9 @@ fragment PreviewParagraphEditProposalSnippet on ParagraphEditProposalClass {
   }
   description
   createdAt
+  paragraph {
+    page {
+      slug
+    }
+  }
 }

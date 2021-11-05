@@ -9,11 +9,16 @@ import Paragraph from "../Paragraph";
 import RichText from "../RichText";
 
 export interface IParagraphFormContainer {
+  submitLoading?: boolean;
   onCancel?: () => void;
   onSubmit?: (state: IParagraphFormState) => void;
 }
 
-const Container = ({ onCancel, onSubmit }: IParagraphFormContainer) => {
+const Container = ({
+  onCancel,
+  onSubmit,
+  submitLoading,
+}: IParagraphFormContainer) => {
   const { state, updateSlateParagraph } = useParagraphForm();
 
   const { slateParagraph, paragraph } = state;
@@ -35,6 +40,7 @@ const Container = ({ onCancel, onSubmit }: IParagraphFormContainer) => {
               onSubmit={() => {
                 if (onSubmit) onSubmit(state);
               }}
+              submitLoading={submitLoading}
             />
           </TabPanel>
           <TabPanel>

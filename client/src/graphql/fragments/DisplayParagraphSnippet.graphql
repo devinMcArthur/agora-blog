@@ -1,4 +1,5 @@
 fragment DisplayParagraphSnippet on ParagraphClass {
+  _id
   statements {
     ...FullParagraphStatementSnippet
   }

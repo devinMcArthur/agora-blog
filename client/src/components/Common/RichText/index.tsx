@@ -8,6 +8,7 @@ export interface IRichText {
   value: Descendant[];
   onChange: (value: Descendant[]) => void;
   pageId?: string;
+  submitLoading?: boolean;
   onCancel?: () => void;
   onSubmit?: () => void;
 }

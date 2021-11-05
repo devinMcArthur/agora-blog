@@ -147,6 +147,7 @@ export const convertSlateParagraphToParagraph = (
   originalParagraph: DisplayParagraphSnippetFragment
 ): DisplayParagraphSnippetFragment => {
   const paragraph: DisplayParagraphSnippetFragment = {
+    _id: originalParagraph._id,
     page: originalParagraph.page,
     __typename: originalParagraph.__typename,
     statements: convertSlateParagraphToStatements(slateParagraph),
@@ -167,92 +168,98 @@ export const convertSlateParagraphToStatements = (
         i
       ] as StatementElementType;
 
-      const stringArray: FullStringArraySnippetFragment[] =
-        element.children.map((child) => {
-          const styles: DisplayStyleSnippetFragment[] = [];
-          let text = "";
+      let stringArray: FullStringArraySnippetFragment[] = [];
+      if (!element.quotedStatementId)
+        stringArray = element.children
+          .map((child) => {
+            const styles: DisplayStyleSnippetFragment[] = [];
+            let text = "";
 
-          // Child is StyledText
-          if ((child as StyledText).text) {
-            const item: StyledText = child as StyledText;
-            text = item.text;
+            // Child is StyledText
+            if ((child as StyledText).text) {
+              const item: StyledText = child as StyledText;
+              text = item.text;
 
-            if (item.bold) styles.push({ type: "bold", value: {} });
+              if (item.bold) styles.push({ type: "bold", value: {} });
 
-            if (item.italic) styles.push({ type: "italic", value: {} });
+              if (item.italic) styles.push({ type: "italic", value: {} });
 
-            if (item.externalMentionUrl)
+              if (item.externalMentionUrl)
+                styles.push({
+                  type: "mention",
+                  variant: "external",
+                  value: { url: item.externalMentionUrl },
+                });
+
+              if (item.internalMentionPage)
+                styles.push({
+                  type: "mention",
+                  variant: "internal",
+                  value: {
+                    page: {
+                      _id: item.internalMentionPage.id,
+                      title: item.internalMentionPage.title,
+                      slug: replaceSpaces(item.internalMentionPage.title),
+                    },
+                  },
+                });
+            }
+
+            // Child is variable
+            if ((child as CustomElements).type === "variable") {
+              const item: VariableElementType = child as VariableElementType;
+
               styles.push({
-                type: "mention",
-                variant: "external",
-                value: { url: item.externalMentionUrl },
-              });
-
-            if (item.internalMentionPage)
-              styles.push({
-                type: "mention",
-                variant: "internal",
+                type: "variable",
                 value: {
-                  page: {
-                    _id: item.internalMentionPage.id,
-                    title: item.internalMentionPage.title,
-                    slug: replaceSpaces(item.internalMentionPage.title),
+                  variable: {
+                    _id: item.id,
+                    finalValue: item.finalValue,
+                    title: item.title,
                   },
                 },
               });
-          }
 
-          // Child is variable
-          if ((child as CustomElements).type === "variable") {
-            const item: VariableElementType = child as VariableElementType;
+              text = item.children[0].text;
+            }
 
-            styles.push({
-              type: "variable",
-              value: {
-                variable: {
-                  _id: item.id,
-                  finalValue: item.finalValue,
-                  title: item.title,
-                },
-              },
-            });
+            // Child is quote
+            if ((child as CustomElements).type === "quote") {
+              const item: QuoteElementType = child as QuoteElementType;
 
-            text = item.children[0].text;
-          }
+              styles.push({
+                type: "quote",
+                value: { statement: { _id: item.statementId } },
+              });
+            }
 
-          // Child is quote
-          if ((child as CustomElements).type === "quote") {
-            const item: QuoteElementType = child as QuoteElementType;
+            if ((child as CustomElements).type === "image") {
+              const item: ImageElementType = child as ImageElementType;
 
-            styles.push({
-              type: "quote",
-              value: { statement: { _id: item.statementId } },
-            });
-          }
-
-          if ((child as CustomElements).type === "image") {
-            const item: ImageElementType = child as ImageElementType;
-
-            styles.push({
-              type: "image",
-              value: {
-                image: {
-                  ...item,
-                  file: {
-                    _id: "NEW",
-                    buffer: item.buffer,
-                    mimetype: item.contentType,
+              styles.push({
+                type: "image",
+                value: {
+                  image: {
+                    ...item,
+                    file: {
+                      _id: "NEW",
+                      buffer: item.buffer,
+                      mimetype: item.contentType,
+                    },
                   },
                 },
-              },
-            });
-          }
+              });
+            }
 
-          return {
-            string: text,
-            styles,
-          };
-        });
+            return {
+              string: text,
+              styles,
+            };
+          })
+          .filter((item) => {
+            if (item.string === "" && item.styles.length === 0) return false;
+            else return true;
+          });
 
       let quotedStatement;
       if (element.quotedStatementId)

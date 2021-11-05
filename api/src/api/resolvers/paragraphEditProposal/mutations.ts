@@ -4,9 +4,10 @@ import {
   EditProposalChangeTypes,
   IParagraphEditProposalBuildData,
 } from "@typescript/models/ParagraphEditProposal";
-import { Field, InputType } from "type-graphql";
+import { Field, ID, InputType } from "type-graphql";
 import { StringArrayData } from "../statement/mutations";
 import resolverHelper from "@utils/resolverHelpers";
+import { Types } from "mongoose";
 
 @InputType()
 export class ParagraphStatementData {
@@ -25,14 +26,14 @@ class ParagraphEditProposalStatementData {
   @Field(() => ParagraphStatementData, { nullable: true })
   public paragraphStatement?: ParagraphStatementData;
 
-  @Field({ nullable: true })
-  public statementVersionIndex?: number;
-
   @Field(() => [String], { nullable: true })
   public questions?: string[];
 
   @Field(() => [String], { nullable: true })
   public newQuestions?: string[];
+
+  @Field(() => ID, { nullable: true })
+  public quotedStatement?: string | Types.ObjectId;
 
   @Field(() => [StringArrayData], { nullable: true })
   public stringArray?: StringArrayData[];

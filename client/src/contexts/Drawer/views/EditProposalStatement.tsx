@@ -14,6 +14,8 @@ const DrawerEditProposalStatement = () => {
     state: { editProposalStatement, currentPageId },
   } = useDrawer();
 
+  console.log(editProposalStatement);
+
   const hasEdit =
     editProposalStatement?.stringArray &&
     editProposalStatement.stringArray.length > 0
@@ -43,6 +45,8 @@ const DrawerEditProposalStatement = () => {
           editProposalStatement.paragraphStatement!.statement.versions.length -
             1 ===
             statementVersion);
+
+      console.log(statementVersion);
 
       return (
         <Box p={3}>

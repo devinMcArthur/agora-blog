@@ -21,15 +21,22 @@ const ParagraphEditProposalStatement = ({
       statement.stringArray.length > 0 &&
       versionIndex === "EDIT"
     ) {
+      console.log("ONE");
       return <StringArray stringArray={statement.stringArray} />;
     } else if (statement.paragraphStatement) {
+      console.log("TWO", versionIndex);
       return (
         <Statement
           statement={statement.paragraphStatement.statement}
-          versionIndex={statement.paragraphStatement.versionIndex}
+          versionIndex={
+            versionIndex !== "EDIT"
+              ? versionIndex
+              : statement.paragraphStatement.versionIndex
+          }
         />
       );
     } else if (statement.quotedStatement) {
+      console.log("THREE");
       return <QuotedStatement statementID={statement.quotedStatement._id} />;
     } else return <ErrorMessage />;
   }, [

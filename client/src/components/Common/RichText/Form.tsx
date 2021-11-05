@@ -24,6 +24,7 @@ const RichTextForm = ({
   value,
   onChange,
   pageId,
+  submitLoading,
   onCancel,
   onSubmit,
 }: IRichText) => {
@@ -51,12 +52,18 @@ const RichTextForm = ({
               colorScheme="red"
               onClick={onCancel}
               mx={1}
+              isLoading={submitLoading}
             >
               Cancel
             </Button>
           )}
           {onSubmit && (
-            <Button borderColor="black" onClick={onSubmit} mx={1}>
+            <Button
+              borderColor="black"
+              onClick={onSubmit}
+              mx={1}
+              isLoading={submitLoading}
+            >
               Submit
             </Button>
           )}

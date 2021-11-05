@@ -337,9 +337,9 @@ export type ParagraphEditProposalData = {
 export type ParagraphEditProposalStatementData = {
   changeType: Scalars['String'];
   paragraphStatement?: Maybe<ParagraphStatementData>;
-  statementVersionIndex?: Maybe<Scalars['Float']>;
   questions?: Maybe<Array<Scalars['String']>>;
   newQuestions?: Maybe<Array<Scalars['String']>>;
+  quotedStatement?: Maybe<Scalars['ID']>;
   stringArray?: Maybe<Array<StringArrayData>>;
 };
 
@@ -350,6 +350,7 @@ export type ParagraphStatementData = {
 
 export type DisplayParagraphSnippetFragment = (
   { __typename?: 'ParagraphClass' }
+  & Pick<ParagraphClass, '_id'>
   & { statements: Array<(
     { __typename?: 'ParagraphStatementClass' }
     & FullParagraphStatementSnippetFragment
@@ -501,6 +502,12 @@ export type PreviewParagraphEditProposalSnippetFragment = (
   & { author: (
     { __typename?: 'UserClass' }
     & Pick<UserClass, '_id' | 'firstName' | 'lastName'>
+  ), paragraph: (
+    { __typename?: 'ParagraphClass' }
+    & { page: (
+      { __typename?: 'PageClass' }
+      & Pick<PageClass, 'slug'>
+    ) }
   ) }
 );
 
@@ -790,6 +797,11 @@ export const PreviewParagraphEditProposalSnippetFragmentDoc = gql`
   }
   description
   createdAt
+  paragraph {
+    page {
+      slug
+    }
+  }
 }
     `;
 export const ImageSnippetFragmentDoc = gql`
@@ -913,6 +925,7 @@ export const LinkFormPageSnippetFragmentDoc = gql`
     `;
 export const DisplayParagraphSnippetFragmentDoc = gql`
     fragment DisplayParagraphSnippet on ParagraphClass {
+  _id
   statements {
     ...FullParagraphStatementSnippet
   }

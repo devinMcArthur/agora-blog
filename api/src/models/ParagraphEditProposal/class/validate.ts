@@ -116,32 +116,42 @@ const document = (paragraphEditProposal: ParagraphEditProposalDocument) => {
               throw new Error(`must provide a valid version index`);
           }
 
-          // Validate stringArray if necessary
+          // Validate stringArray and questions if necessary
           if (
             statement.changeType === EditProposalChangeTypes.ADD ||
             statement.changeType === EditProposalChangeTypes.EDIT
           ) {
-            if (!statement.stringArray || statement.stringArray.length < 1)
+            if (
+              (!statement.stringArray || statement.stringArray.length < 1) &&
+              !statement.quotedStatement
+            )
               throw new Error(
-                `must provide a string array if editting or adding`
+                `must provide a string array or quoted statement if editting or adding`
               );
 
+            if (statement.stringArray && statement.stringArray.length > 0)
+              try {
+                await validateStringArray(statement.stringArray);
+              } catch (e: any) {
+                throw new Error(`${e.message}`);
+              }
+
+            // validate existence of questions
+            if (
+              (!statement.questions || statement.questions.length < 1) &&
+              (!statement.newQuestions || statement.newQuestions.length < 1)
+            )
+              throw new Error("must provide at least one question");
+
             try {
-              await validateStringArray(statement.stringArray);
+              // Validate questions
+              await validateQuestionArray(statement.questions);
+
+              // Validate newQuestions
+              await validateNewQuestionArray(statement.newQuestions);
             } catch (e: any) {
               throw new Error(`${e.message}`);
             }
-          }
-
-          try {
-            // Validate questions
-
-            await validateQuestionArray(statement.questions);
-
-            // Validate newQuestions
-            await validateNewQuestionArray(statement.newQuestions);
-          } catch (e: any) {
-            throw new Error(`${e.message}`);
           }
         } catch (e: any) {
           throw new Error(`statements[${i}] - ${e.message}`);

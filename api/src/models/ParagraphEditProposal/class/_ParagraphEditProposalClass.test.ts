@@ -132,8 +132,6 @@ describe("Paragraph Edit Proposal Class", () => {
 
           expect(paragraphEditProposal).toBeDefined();
 
-          console.log(paragraphEditProposal);
-
           expect(paragraphEditProposal.statementItems.length).toBe(
             data.statementItems.length
           );
@@ -441,6 +439,52 @@ describe("Paragraph Edit Proposal Class", () => {
           } catch (e: any) {
             expect(e.message).toBe(
               "paragraphEditProposal.validate: this proposal contains no edits"
+            );
+          }
+        });
+
+        test("should successfully error if edit contains no questions", async () => {
+          expect.assertions(1);
+
+          const data: IParagraphEditProposalBuildData = {
+            author: _ids.users.dev._id,
+            description: "Test edit proposal",
+            paragraph: _ids.pages.page_covid_19_deaths.paragraphs[0]._id,
+            statementItems: [
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[0],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[1],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.EDIT,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_deaths.paragraphs[0].statements[2],
+                  versionIndex: 0,
+                },
+                stringArray: [{ string: "Hello", styles: [] }],
+                questions: [],
+              },
+            ],
+          };
+
+          try {
+            await ParagraphEditProposal.build(data);
+          } catch (e: any) {
+            expect(e.message).toBe(
+              "paragraphEditProposal.validate: statements[2] - must provide at least one question"
             );
           }
         });
