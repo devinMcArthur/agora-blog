@@ -134,7 +134,7 @@ describe("Paragraph Edit Proposal Resolver", () => {
       `;
 
       describe("success", () => {
-        test("should successfully search pages", async () => {
+        test("should create edit proposal", async () => {
           const token = await jestLogin(app, documents.users.dev.email);
 
           // @ts-expect-error

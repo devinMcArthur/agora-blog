@@ -4,7 +4,7 @@ import { Box, Divider } from "@chakra-ui/layout";
 import React from "react";
 
 import { Editor, Transforms } from "slate";
-import { useParagraphForm } from "../../../../contexts/ParagraphForm";
+import { useRichText } from "../../../../contexts/RichText";
 import {
   SlateMarks,
   SlateStyleTypes,
@@ -35,11 +35,7 @@ const StyleMenu = ({ editor, buttonSize }: IStyleMenu) => {
     clearSelection,
     restoreDomSelection,
     saveSelection: saveSelectionContext,
-  } = useParagraphForm();
-
-  React.useEffect(() => {
-    console.log("-- INITIAL STYLE-MENU MOUNT --");
-  }, []);
+  } = useRichText();
 
   const [form, setForm] = React.useState<ShowForm>();
 
@@ -47,13 +43,17 @@ const StyleMenu = ({ editor, buttonSize }: IStyleMenu) => {
   const [linkFormDefault, setLinkFormDefault] = React.useState("");
   const [variableFormDefault, setVariableFormDefault] = React.useState("");
 
-  React.useEffect(() => {
-    console.log("styleMenuSelection", editor.selection);
-  }, [editor.selection]);
+  /**
+   * ----- Variables -----
+   */
 
-  React.useEffect(() => {
-    console.log("styleMenuContextSelection", savedSelection);
-  }, [savedSelection]);
+  const linkMarkActive = React.useMemo(() => {
+    return (
+      CustomEditor.isMarkActive(editor, SlateMarks.externalMentionUrl) ||
+      CustomEditor.isMarkActive(editor, SlateMarks.internalMentionPage)
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor, form]);
 
   /**
    * ----- Functions -----
@@ -90,11 +90,11 @@ const StyleMenu = ({ editor, buttonSize }: IStyleMenu) => {
       }
     },
     [
-      clearSelection,
-      editor,
       form,
+      editor,
+      savedSelection,
       restoreDomSelection,
-      savedSelection?.slateSelection,
+      clearSelection,
       saveSelection,
     ]
   );
@@ -159,8 +159,7 @@ const StyleMenu = ({ editor, buttonSize }: IStyleMenu) => {
           CustomEditor.addImage(
             editor,
             event.target.result.toString(),
-            files[0].type,
-            files[0].name
+            files[0].type
           );
         }
       };
@@ -205,18 +204,6 @@ const StyleMenu = ({ editor, buttonSize }: IStyleMenu) => {
     toggleQuoteForm();
     CustomEditor.setInlineQuote(editor, statementId);
   };
-
-  /**
-   * ----- Variables -----
-   */
-
-  const linkMarkActive = React.useMemo(() => {
-    return (
-      CustomEditor.isMarkActive(editor, SlateMarks.externalMentionUrl) ||
-      CustomEditor.isMarkActive(editor, SlateMarks.internalMentionPage)
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editor, form]);
 
   /**
    * ----- Use-effects and other logic -----

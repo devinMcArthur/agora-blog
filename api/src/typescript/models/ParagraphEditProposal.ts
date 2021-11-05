@@ -17,6 +17,7 @@ interface IParagraphEditProposalStatementData {
   questions?: Types.ObjectId[] | string[];
   newQuestions?: string[];
   stringArray?: IStringArrayBuildData[];
+  quotedStatement?: Types.ObjectId | string;
 }
 
 export interface IParagraphEditProposalBuildData {

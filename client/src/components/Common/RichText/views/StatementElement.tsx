@@ -1,7 +1,7 @@
 import React from "react";
 import { RenderElementProps } from "slate-react";
 
-import { Box, BoxProps, Heading, HStack } from "@chakra-ui/layout";
+import { Box, BoxProps, Heading, HStack, Text } from "@chakra-ui/layout";
 import { Button, ButtonGroup, IconButton } from "@chakra-ui/button";
 import { Tooltip } from "@chakra-ui/tooltip";
 import { FiChevronsDown, FiChevronsUp, FiPlus, FiStar } from "react-icons/fi";
@@ -11,9 +11,9 @@ import { StatementElementType } from "../../../../models/slate";
 import { Tag, TagLabel, TagCloseButton, TagLeftIcon } from "@chakra-ui/react";
 import QuestionSearch from "../../QuestionSearch";
 import RecommendedStatements from "../../RecommendedStatements";
-import { useParagraphForm } from "../../../../contexts/ParagraphForm";
 import QuotedStatement from "../../../Statement/views/QuotedStatement";
 import { CloseButton } from "@chakra-ui/close-button";
+import { useRichText } from "../../../../contexts/RichText";
 
 enum Form {
   Question = "Question",
@@ -32,11 +32,9 @@ const StatementElement = ({
   editor,
   pageId,
 }: IStatementElement) => {
-  const { savedSelection } = useParagraphForm();
+  const { savedSelection } = useRichText();
   const [form, setForm] = React.useState<Form>();
   const [selectedQuestionId, setSelectedQuestionId] = React.useState<string>();
-
-  React.useEffect(() => console.log("-- INITIAL STATEMENT MOUNT --"), []);
 
   /**
    * ----- Functions -----
@@ -119,8 +117,6 @@ const StatementElement = ({
     focusedStyling.boxShadow = "0 0 3px blue";
   }
 
-  console.log("element", element.quotedStatementId);
-
   return (
     <Box {...attributes}>
       <Box
@@ -193,7 +189,12 @@ const StatementElement = ({
                 </Tag>
               </HStack>
             </Box>
-            <Box>
+            <Box display="flex" flexDir="row">
+              {element.statementId === "NEW" && (
+                <Text color="gray.600" pr={2} pt={1}>
+                  New
+                </Text>
+              )}
               <ButtonGroup
                 isAttached
                 variant="outline"

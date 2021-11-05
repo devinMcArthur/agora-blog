@@ -12,6 +12,10 @@ import { Tabs, TabList, Tab, TabPanel, TabPanels } from "@chakra-ui/tabs";
 import ParagraphEditProposal from "../Common/ParagraphEditProposal";
 import EditProposalPreview from "../Common/EditProposalPreview";
 import { useDrawer } from "../../contexts/Drawer";
+import { Button } from "@chakra-ui/button";
+import { FiEdit } from "react-icons/fi";
+import Card from "../Common/Card";
+import EditPage from "../EditPage";
 
 const Page = () => {
   const { pageSlug } = useParams<PageMatchParams>();
@@ -19,6 +23,8 @@ const Page = () => {
   const { data, loading } = usePageQuery({
     variables: { slug: pageSlug },
   });
+
+  const [editting, setEditting] = React.useState(false);
 
   const {
     paragraphEditProposalPreviewId,
@@ -28,7 +34,9 @@ const Page = () => {
   } = useDrawer();
 
   React.useEffect(() => {
-    if (data?.page) setCurrentPage(data.page._id);
+    if (data?.page) {
+      setCurrentPage(data.page._id);
+    }
 
     return () => {
       clearState();
@@ -59,19 +67,38 @@ const Page = () => {
         )
       );
 
+      editProposals.unshift(
+        <Card p={0}>
+          <Button
+            w="100%"
+            h="3em"
+            variant="ghost"
+            leftIcon={<FiEdit />}
+            m={0}
+            onClick={() => setEditting(true)}
+          >
+            Add a new Edit
+          </Button>
+        </Card>
+      );
+
+      let paragraphContent = <Paragraph paragraph={page.currentParagraph} />;
+      if (paragraphEditProposalPreviewId)
+        paragraphContent = (
+          <EditProposalPreview
+            editProposalId={paragraphEditProposalPreviewId}
+          />
+        );
+      if (editting)
+        paragraphContent = (
+          <EditPage pageId={page._id} onCancel={() => setEditting(false)} />
+        );
+
       return (
         <Flex flexDirection="column">
           <Heading size="lg">{page.title}</Heading>
           <Divider mb={2} />
-          <Box my={3}>
-            {paragraphEditProposalPreviewId ? (
-              <EditProposalPreview
-                editProposalId={paragraphEditProposalPreviewId}
-              />
-            ) : (
-              <Paragraph paragraph={page.currentParagraph} />
-            )}
-          </Box>
+          <Box my={3}>{paragraphContent}</Box>
 
           <Tabs variant="line">
             <TabList>
@@ -100,6 +127,7 @@ const Page = () => {
     data,
     loading,
     paragraphEditProposalPreviewId,
+    editting,
     setPreviewedParagraphEditProposal,
   ]);
 

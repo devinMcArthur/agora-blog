@@ -85,12 +85,18 @@ describe("Paragraph Edit Proposal Class", () => {
                 },
               },
               {
-                changeType: EditProposalChangeTypes.NONE,
+                changeType: EditProposalChangeTypes.EDIT,
                 paragraphStatement: {
                   statement:
                     _ids.pages.page_covid_2019.paragraphs[0].statements[1],
                   versionIndex: 0,
                 },
+                quotedStatement:
+                  _ids.pages.page_covid_19_deaths.paragraphs[0].statements[0],
+                questions: [
+                  documents.questions.how_many_covid_19_deaths_have_there_been
+                    ._id,
+                ],
               },
               {
                 changeType: EditProposalChangeTypes.REMOVE,
@@ -126,6 +132,8 @@ describe("Paragraph Edit Proposal Class", () => {
 
           expect(paragraphEditProposal).toBeDefined();
 
+          console.log(paragraphEditProposal);
+
           expect(paragraphEditProposal.statementItems.length).toBe(
             data.statementItems.length
           );
@@ -145,6 +153,10 @@ describe("Paragraph Edit Proposal Class", () => {
               (statement) => statement.paragraphStatement?.statement
             ),
           ]);
+
+          expect(
+            paragraphEditProposal.statementItems[2].quotedStatement!.toString()
+          ).toBe(data.statementItems[2].quotedStatement!.toString());
         });
 
         test("should successully submit proposal with only order change", async () => {

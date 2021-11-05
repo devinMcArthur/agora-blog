@@ -37,7 +37,7 @@ const LinkForm: React.FC<ILinkForm> = ({
       {markActive && (
         <IconButton
           padding="auto"
-          icon={<FiX color="white" />}
+          icon={<FiX />}
           aria-label="Delete"
           backgroundColor="inherit"
           variant="outline"

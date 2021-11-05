@@ -5,8 +5,6 @@ import Analytics from "react-router-ga";
 import DrawerContainer from "../contexts/Drawer/views/Container";
 import MainPageContainer from "./Common/MainPageContainer";
 import CreatePage from "./CreatePage";
-// import { createBrowserHistory } from "history";
-// import ReactGA from "react-ga";
 
 import HomePage from "./HomePage";
 import Navbar from "./Navbar";
@@ -16,14 +14,6 @@ import Question from "./Question";
 import Questions from "./Questions";
 import User from "./User";
 import Variable from "./Variable";
-
-// const history = createBrowserHistory();
-
-// history.listen((location) => {
-//   console.log(location);
-//   ReactGA.set({ page: location.pathname });
-//   ReactGA.pageview(location.pathname);
-// });
 
 function Router() {
   return (

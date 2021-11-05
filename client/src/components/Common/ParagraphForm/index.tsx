@@ -3,17 +3,24 @@ import {
   IParagraphFormProvider,
   ParagraphFormProvider,
 } from "../../../contexts/ParagraphForm";
-import Container from "./Container";
+import Container, { IParagraphFormContainer } from "./Container";
 
 interface IParagraphForm {
   pageId?: string;
   onChange?: IParagraphFormProvider["onChange"];
+  onCancel?: () => void;
+  onSubmit?: IParagraphFormContainer["onSubmit"];
 }
 
-const ParagraphForm: React.FC<IParagraphForm> = ({ pageId, onChange }) => {
+const ParagraphForm: React.FC<IParagraphForm> = ({
+  pageId,
+  onChange,
+  onCancel,
+  onSubmit,
+}) => {
   return (
     <ParagraphFormProvider pageId={pageId} onChange={onChange}>
-      <Container />
+      <Container onCancel={onCancel} onSubmit={onSubmit} />
     </ParagraphFormProvider>
   );
 };

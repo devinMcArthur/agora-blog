@@ -4,7 +4,8 @@ import React from "react";
 import { BaseEditor, createEditor, Editor } from "slate";
 import { HistoryEditor, withHistory } from "slate-history";
 import { Editable, ReactEditor, Slate, withReact } from "slate-react";
-import { useParagraphForm } from "../../../contexts/ParagraphForm";
+import { IRichText } from ".";
+import { Button } from "@chakra-ui/button";
 
 import { CustomElements, StyledText } from "../../../models/slate";
 import Element from "./views/Element";
@@ -19,41 +20,48 @@ declare module "slate" {
   }
 }
 
-const ParagraphRichText = () => {
-  const {
-    state: { slateParagraph, paragraph },
-    updateSlateParagraph,
-  } = useParagraphForm();
-
+const RichTextForm = ({
+  value,
+  onChange,
+  pageId,
+  onCancel,
+  onSubmit,
+}: IRichText) => {
   const editor = React.useMemo(
     () => withInlineElements(withHistory(withReact(createEditor()))),
     []
   );
 
   const renderElement = React.useCallback(
-    (props) => (
-      <Element {...props} editor={editor} pageId={paragraph?.page._id} />
-    ),
+    (props) => <Element {...props} editor={editor} pageId={pageId} />,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
   const renderLeaf = React.useCallback((props) => <Leaf {...props} />, []);
 
-  React.useEffect(() => {
-    console.log("-- INITIAL RICH TEXT MOUNT --");
-  }, []);
-
   return (
-    <Slate
-      editor={editor}
-      value={slateParagraph!}
-      onChange={(value) => {
-        console.log("update", value);
-        updateSlateParagraph(value);
-      }}
-    >
-      <StyleMenu editor={editor} />
+    <Slate editor={editor} value={value} onChange={onChange}>
+      <Box display="flex" flexDir="row" justifyContent="space-between">
+        <StyleMenu editor={editor} />
+        <Box>
+          {onCancel && (
+            <Button
+              variant="outline"
+              colorScheme="red"
+              onClick={onCancel}
+              mx={1}
+            >
+              Cancel
+            </Button>
+          )}
+          {onSubmit && (
+            <Button borderColor="black" onClick={onSubmit} mx={1}>
+              Submit
+            </Button>
+          )}
+        </Box>
+      </Box>
       <Box overflowY="scroll" height="45rem">
         <Editable
           renderElement={renderElement}
@@ -88,4 +96,4 @@ const withInlineElements = (editor: Editor) => {
   return editor;
 };
 
-export default React.memo(ParagraphRichText);
+export default React.memo(RichTextForm);

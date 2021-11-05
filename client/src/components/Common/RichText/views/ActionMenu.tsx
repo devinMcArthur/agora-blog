@@ -9,13 +9,13 @@ import {
   SlateStyleTypes,
 } from "../../../../models/slate";
 import LinkForm from "./LinkForm";
-import { useParagraphForm } from "../../../../contexts/ParagraphForm";
 import { CustomEditor } from "../utils";
 import isValidUrl from "../../../../utils/isValidUrl";
 import { Box, Divider } from "@chakra-ui/layout";
 import { useOutsideClick } from "@chakra-ui/hooks";
 import VariableForm from "./VariableForm";
 import QuoteForm from "./QuoteForm";
+import { useRichText } from "../../../../contexts/RichText";
 
 enum ShowForm {
   Link = "Link",
@@ -33,7 +33,7 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
     saveSelection,
     clearSelection: clearSel,
     restoreDomSelection,
-  } = useParagraphForm();
+  } = useRichText();
 
   const ref = React.useRef<HTMLDivElement | null>(null);
 
@@ -42,12 +42,6 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
   const [linkFormError, setLinkFormError] = React.useState(false);
   const [linkFormDefault, setLinkFormDefault] = React.useState("");
   const [variableFormDefault, setVariableFormDefault] = React.useState("");
-  const [savedRange, setSavedRange] = React.useState<{
-    anchorId: string;
-    anchorOffset: number;
-    focusId: string;
-    focusOffset: number;
-  }>();
 
   /**
    * ------ Functions ------
@@ -55,36 +49,10 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
 
   const clearSelection = React.useCallback(() => {
     clearSel();
-    setSavedRange(undefined);
   }, [clearSel]);
 
   const saveSelectionCopy = React.useCallback(() => {
     saveSelection(editor.selection);
-
-    const selection = window.getSelection();
-    if (selection && selection.anchorNode && selection.focusNode) {
-      const getParentSpanId = (node: Node): string | null => {
-        if (!node.parentElement) return null;
-        if (node.parentElement.localName === "document") return null;
-        if (node.parentElement.className === "leaf")
-          return node.parentElement.id;
-        return getParentSpanId(node.parentNode as Node);
-      };
-
-      console.log("range", selection.getRangeAt(0));
-      const range = selection.getRangeAt(0);
-
-      const anchorParentSpanId = getParentSpanId(selection.anchorNode);
-      const focusParentSpanId = getParentSpanId(selection.focusNode);
-      if (anchorParentSpanId && focusParentSpanId) {
-        setSavedRange({
-          anchorId: anchorParentSpanId,
-          anchorOffset: range.startOffset,
-          focusId: focusParentSpanId,
-          focusOffset: range.endOffset,
-        });
-      }
-    } else console.warn("Unable to find range");
   }, [editor.selection, saveSelection]);
 
   const toggleLinkForm = React.useCallback(

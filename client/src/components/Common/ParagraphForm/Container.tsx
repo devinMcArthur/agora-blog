@@ -1,14 +1,22 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs";
 import React from "react";
-import { useParagraphForm } from "../../../contexts/ParagraphForm";
+import {
+  IParagraphFormState,
+  useParagraphForm,
+} from "../../../contexts/ParagraphForm";
 import Loading from "../Loading";
 import Paragraph from "../Paragraph";
-import ParagraphRichText from "../ParagraphRichText";
+import RichText from "../RichText";
 
-const Container = () => {
-  const {
-    state: { slateParagraph, paragraph },
-  } = useParagraphForm();
+export interface IParagraphFormContainer {
+  onCancel?: () => void;
+  onSubmit?: (state: IParagraphFormState) => void;
+}
+
+const Container = ({ onCancel, onSubmit }: IParagraphFormContainer) => {
+  const { state, updateSlateParagraph } = useParagraphForm();
+
+  const { slateParagraph, paragraph } = state;
 
   if (slateParagraph === null) return <div>Unable to find page</div>;
   else if (slateParagraph && paragraph)
@@ -20,7 +28,14 @@ const Container = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <ParagraphRichText />
+            <RichText
+              value={slateParagraph}
+              onChange={updateSlateParagraph}
+              onCancel={onCancel}
+              onSubmit={() => {
+                if (onSubmit) onSubmit(state);
+              }}
+            />
           </TabPanel>
           <TabPanel>
             <Paragraph paragraph={paragraph} />
@@ -28,7 +43,14 @@ const Container = () => {
         </TabPanels>
       </Tabs>
     );
-  else if (slateParagraph) return <ParagraphRichText />;
+  else if (slateParagraph)
+    return (
+      <RichText
+        value={slateParagraph}
+        onChange={updateSlateParagraph}
+        onCancel={onCancel}
+      />
+    );
 
   return <Loading />;
 };

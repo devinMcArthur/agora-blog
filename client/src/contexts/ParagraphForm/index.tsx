@@ -1,6 +1,7 @@
 import React from "react";
-import { BaseSelection, Descendant } from "slate";
+import { Descendant } from "slate";
 import { useImmerReducer } from "use-immer";
+
 import {
   DisplayParagraphSnippetFragment,
   NewStatementData,
@@ -29,10 +30,10 @@ export interface IParagraphFormProvider {
   pageId?: string;
   children: React.ReactNode;
 
-  onChange?: (state: IState) => void;
+  onChange?: (state: IParagraphFormState) => void;
 }
 
-interface IState {
+export interface IParagraphFormState {
   type: "EDIT" | "NEW";
   originalParagraph: DisplayParagraphSnippetFragment | null | undefined;
   paragraph: DisplayParagraphSnippetFragment | null | undefined;
@@ -42,15 +43,10 @@ interface IState {
 }
 
 export interface IParagraphFormContext {
-  state: IState;
-  savedSelection?: { slateSelection: BaseSelection; domRange: Range };
+  state: IParagraphFormState;
 
   updateSlateStatement: (value: Descendant[], index: number) => void;
   updateSlateParagraph: (slateParagraph: Descendant[]) => void;
-  saveSelection: (selection: BaseSelection) => void;
-  clearSelection: () => void;
-  restoreDomSelection: () => void;
-  submitForm: () => void;
 }
 
 type IAction =
@@ -94,7 +90,7 @@ type IAction =
  * ----- Variable Initialization -----
  */
 
-const initialState: IState = {
+const initialState: IParagraphFormState = {
   type: "EDIT",
   originalParagraph: undefined,
   paragraph: undefined,
@@ -111,7 +107,10 @@ const ParagraphFormContext = React.createContext<
  * ----- Reducer ------
  */
 
-const ParagraphFormReducer = (draft: IState, action: IAction): IState => {
+const ParagraphFormReducer = (
+  draft: IParagraphFormState,
+  action: IAction
+): IParagraphFormState => {
   switch (action.type) {
     case "initialize": {
       return {
@@ -227,8 +226,6 @@ const ParagraphFormProvider = ({
   onChange,
 }: IParagraphFormProvider) => {
   const [state, dispatch] = useImmerReducer(ParagraphFormReducer, initialState);
-  const [savedSelection, setSavedSelection] =
-    React.useState<IParagraphFormContext["savedSelection"]>();
 
   /**
    * ----- GraphQL Calls -----
@@ -263,32 +260,6 @@ const ParagraphFormProvider = ({
       },
     });
   };
-
-  const saveSelection: IParagraphFormContext["saveSelection"] = (selection) => {
-    const sel = window.getSelection();
-    if (sel && sel.getRangeAt(0) && sel?.rangeCount) {
-      setSavedSelection({
-        slateSelection: selection,
-        domRange: sel.getRangeAt(0),
-      });
-    } else throw new Error("Unable to save dom selection");
-  };
-
-  const restoreDomSelection: IParagraphFormContext["restoreDomSelection"] =
-    () => {
-      if (savedSelection?.domRange) {
-        if (window.getSelection()) {
-          var sel = window.getSelection();
-          sel?.removeAllRanges();
-          sel?.addRange(savedSelection.domRange);
-        }
-      }
-    };
-
-  const clearSelection: IParagraphFormContext["clearSelection"] = () =>
-    setSavedSelection(undefined);
-
-  const submitForm: IParagraphFormContext["submitForm"] = () => {};
 
   /**
    * ----- Use-effects and other logic -----
@@ -347,13 +318,9 @@ const ParagraphFormProvider = ({
     <ParagraphFormContext.Provider
       value={{
         state,
-        savedSelection,
+
         updateSlateParagraph,
         updateSlateStatement,
-        saveSelection,
-        clearSelection,
-        restoreDomSelection,
-        submitForm,
       }}
     >
       {children}

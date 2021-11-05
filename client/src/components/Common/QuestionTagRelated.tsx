@@ -21,8 +21,13 @@ const QuestionTagRelated = ({
 }: IQuestionTagRelated) => {
   const [selectedQuestionId, setSelectedQuestionId] = React.useState<string>();
 
+  React.useEffect(() => {
+    setSelectedQuestionId(undefined);
+  }, [questions]);
+
   return React.useMemo(() => {
-    if (questions && questions.length > 0)
+    if (questions && questions.length > 0) {
+      console.log("questions", questions);
       return (
         <Box>
           <Box py={2}>
@@ -66,7 +71,7 @@ const QuestionTagRelated = ({
           </Box>
         </Box>
       );
-    else return <Text textAlign="center">- no questions -</Text>;
+    } else return <Text textAlign="center">- no questions -</Text>;
   }, [questions, selectedQuestionId, avoidPageId, onStatementSelect]);
 };
 

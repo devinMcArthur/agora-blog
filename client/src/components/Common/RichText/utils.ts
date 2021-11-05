@@ -201,19 +201,13 @@ export const CustomEditor = {
       });
     }
   },
-  addImage: (
-    editor: Editor,
-    buffer: string,
-    contentType: string,
-    fileName: string
-  ) => {
+  addImage: (editor: Editor, buffer: string, contentType: string) => {
     console.log("buffer", buffer);
     Transforms.insertNodes(editor, {
       type: "image",
       contentType,
       buffer,
       children: [{ text: "" }],
-      name: fileName,
     });
   },
 };
