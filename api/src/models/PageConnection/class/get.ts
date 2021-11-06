@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 import {
   PageConnectionDocument,
   PageConnectionModel,
@@ -11,7 +13,7 @@ const byStatement = (
   return new Promise<PageConnectionDocument[]>(async (resolve, reject) => {
     try {
       const pageConnections = await PageConnection.find({
-        statement: statement._id,
+        statements: statement._id,
       });
 
       resolve(pageConnections);
@@ -21,4 +23,23 @@ const byStatement = (
   });
 };
 
-export default { byStatement };
+const byPages = (
+  PageConnection: PageConnectionModel,
+  referrerPageId: Types.ObjectId | string,
+  referencedPageId: Types.ObjectId | string
+) => {
+  return new Promise<PageConnectionDocument | null>(async (resolve, reject) => {
+    try {
+      const pageConnections = await PageConnection.findOne({
+        referencedPage: referencedPageId,
+        referrerPage: referrerPageId,
+      });
+
+      resolve(pageConnections);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+export default { byStatement, byPages };

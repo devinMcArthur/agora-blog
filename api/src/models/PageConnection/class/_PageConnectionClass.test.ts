@@ -43,7 +43,7 @@ describe("Page Connection Class", () => {
 
         expect(initialConnections.length).toBe(2);
 
-        expect(initialConnections[0].statement!.toString()).toBe(
+        expect(initialConnections[0].statements[0]!.toString()).toBe(
           statement?._id.toString()
         );
         expect(initialConnections[0].referrerPage!.toString()).toBe(
@@ -53,7 +53,7 @@ describe("Page Connection Class", () => {
           documents.pages.page_covid_2019._id.toString()
         );
 
-        expect(initialConnections[1].statement!.toString()).toBe(
+        expect(initialConnections[1].statements[0]!.toString()).toBe(
           statement?._id.toString()
         );
         expect(initialConnections[1].referrerPage!.toString()).toBe(
@@ -74,30 +74,28 @@ describe("Page Connection Class", () => {
 
         // Post update check
 
-        console.log("statement", statement);
-
         const newConnections = await PageConnection.getByStatement(statement!);
 
         expect(newConnections.length).toBe(2);
 
-        expect(newConnections[0].statement!.toString()).toBe(
+        expect(newConnections[0].statements[0]!.toString()).toBe(
           statement?._id.toString()
         );
         expect(newConnections[0].referrerPage!.toString()).toBe(
           statement!.page!.toString()
         );
         expect(newConnections[0].referencedPage!.toString()).toBe(
-          documents.pages.page_covid_19_deaths._id.toString()
+          documents.pages.page_covid_19_pandemic._id.toString()
         );
 
-        expect(newConnections[1].statement!.toString()).toBe(
+        expect(newConnections[1].statements[0]!.toString()).toBe(
           statement?._id.toString()
         );
         expect(newConnections[1].referrerPage!.toString()).toBe(
           statement!.page!.toString()
         );
         expect(newConnections[1].referencedPage!.toString()).toBe(
-          documents.pages.page_covid_19_pandemic._id.toString()
+          documents.pages.page_covid_19_deaths._id.toString()
         );
       });
 
@@ -133,7 +131,7 @@ describe("Page Connection Class", () => {
         expect(newConnections[0].referencedPage!.toString()).toBe(
           documents.pages.page_covid_19_deaths._id.toHexString()
         );
-        expect(newConnections[0].statement!.toString()).toBe(
+        expect(newConnections[0].statements[0]!.toString()).toBe(
           statement?._id.toString()
         );
       });
@@ -180,6 +178,15 @@ describe("Page Connection Class", () => {
         const newConnections = await PageConnection.getByStatement(statement!);
 
         expect(newConnections.length).toBe(0);
+      });
+
+      test("should only make a single connection if multiple statements reference", async () => {
+        const connections = await PageConnection.find({
+          referencedPage: documents.pages.page_covid_2019._id,
+          referrerPage: documents.pages.page_covid_19_testing._id,
+        });
+
+        expect(connections.length).toBe(1);
       });
     });
   });

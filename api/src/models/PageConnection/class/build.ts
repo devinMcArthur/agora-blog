@@ -1,6 +1,46 @@
 import { Types } from "mongoose";
-import { PageConnectionModel, Statement, StatementDocument } from "@models";
+import {
+  PageConnectionDocument,
+  PageConnectionModel,
+  Statement,
+  StatementDocument,
+} from "@models";
 import { StyleTypes } from "@typescript/models/Statement";
+import { IPageConnectionData } from "@typescript/models/PageConnection";
+
+const build = (
+  PageConnection: PageConnectionModel,
+  data: IPageConnectionData
+) => {
+  return new Promise<PageConnectionDocument>(async (resolve, reject) => {
+    try {
+      // See if there is an existing connection
+      let pageConnection = await PageConnection.getByPages(
+        data.referrerPageId,
+        data.referencedPageId
+      );
+      if (pageConnection) {
+        // add statement if not already there
+
+        await pageConnection.addStatement(
+          Types.ObjectId(data.statementId.toString())
+        );
+      } else {
+        // create new page connection if necessary
+
+        pageConnection = new PageConnection({
+          referencedPage: data.referencedPageId,
+          referrerPage: data.referrerPageId,
+          statements: [data.statementId],
+        });
+      }
+
+      resolve(pageConnection);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 
 const forStatement = (
   PageConnection: PageConnectionModel,
@@ -80,24 +120,29 @@ const forStatement = (
       // just remove all existing connections if no longer 'current'
       if (statement.current === false) {
         for (let i = 0; i < existingConnections.length; i++) {
-          await existingConnections[i].remove();
+          try {
+            await existingConnections[i].removeStatement(statement);
+          } catch (e) {
+            // do nothing
+          }
         }
 
         resolve();
         return;
       }
 
-      // get required connections for current statement version
+      // get required connections for current statement version (referencedPage)
       const requiredConnections: Types.ObjectId[] =
         await getRequiredConnections();
 
       // get all new connections
-      const existingConnectionsMap = existingConnections.map(
-        (pageConnection) => pageConnection.referencedPage
+      const existingConnectionsMap = existingConnections.map((pageConnection) =>
+        pageConnection.referencedPage!.toString()
       );
       const newRequiredConnections = requiredConnections.filter(
         (connection) => {
-          if (existingConnectionsMap.includes(connection)) return false;
+          if (existingConnectionsMap.includes(connection.toString()))
+            return false;
           else return true;
         }
       );
@@ -107,10 +152,11 @@ const forStatement = (
         const referencedPageId = newRequiredConnections[i];
 
         if (referencedPageId !== referrerPage) {
-          const pageConnection = new PageConnection({
-            referencedPage: referencedPageId,
-            referrerPage,
-            statement: statement._id,
+          // build / add statement to existing page connection
+          const pageConnection = await PageConnection.build({
+            referencedPageId: referencedPageId,
+            referrerPageId: referrerPage!.toString(),
+            statementId: statement._id,
           });
 
           try {
@@ -122,11 +168,14 @@ const forStatement = (
       }
 
       // remove all old connections
+      const requiredConnectionsMap = requiredConnections.map((connection) =>
+        connection.toString()
+      );
       const oldConnections = existingConnections.filter(
         (existingConnection) => {
           if (
-            !requiredConnections.includes(
-              existingConnection.referencedPage as Types.ObjectId
+            !requiredConnectionsMap.includes(
+              existingConnection.referencedPage!.toString()
             )
           )
             return true;
@@ -136,11 +185,13 @@ const forStatement = (
       for (let i = 0; i < oldConnections.length; i++) {
         if (
           oldConnections[i].referrerPage!.toString() ===
-            referrerPage!.toString() &&
-          oldConnections[i].statement!.toString() ===
-            statement._id.toHexString()
+          referrerPage!.toString()
         ) {
-          await oldConnections[i].remove();
+          try {
+            await oldConnections[i].removeStatement(statement);
+          } catch (e) {
+            // do nothing
+          }
         }
       }
 
@@ -152,5 +203,6 @@ const forStatement = (
 };
 
 export default {
+  build,
   forStatement,
 };

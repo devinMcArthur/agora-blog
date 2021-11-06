@@ -17,7 +17,7 @@ export class PageConnectionSchema {
   @prop({ ref: () => PageClass, required: true })
   public referrerPage!: Ref<PageClass>;
 
-  @Field(() => StatementClass)
+  @Field(() => [StatementClass])
   @prop({ ref: () => StatementClass, required: true })
-  public statement!: Ref<StatementClass>;
+  public statements!: Ref<StatementClass>[];
 }

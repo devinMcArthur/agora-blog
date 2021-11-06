@@ -17,12 +17,17 @@ import { Button } from "@chakra-ui/button";
 import { FiEdit } from "react-icons/fi";
 import Card from "../Common/Card";
 import EditParagraph from "../EditParagraph";
+import { useAuth } from "../../contexts/Auth";
 
 const Page = () => {
   const { pageSlug } = useParams<PageMatchParams>();
 
   const history = useHistory();
   const location = useLocation();
+
+  const {
+    state: { user },
+  } = useAuth();
 
   const { data, loading } = usePageQuery({
     variables: { slug: pageSlug },
@@ -101,20 +106,21 @@ const Page = () => {
         )
       );
 
-      editProposals.unshift(
-        <Card p={0}>
-          <Button
-            w="100%"
-            h="3em"
-            variant="ghost"
-            leftIcon={<FiEdit />}
-            m={0}
-            onClick={() => setEditting(true)}
-          >
-            Add a new Edit
-          </Button>
-        </Card>
-      );
+      if (user && user.verified)
+        editProposals.unshift(
+          <Card p={0}>
+            <Button
+              w="100%"
+              h="3em"
+              variant="ghost"
+              leftIcon={<FiEdit />}
+              m={0}
+              onClick={() => setEditting(true)}
+            >
+              Add a new Edit
+            </Button>
+          </Card>
+        );
 
       let paragraphContent = <Paragraph paragraph={page.currentParagraph} />;
       if (paragraphEditProposalPreviewId)
@@ -164,6 +170,7 @@ const Page = () => {
   }, [
     data,
     loading,
+    user,
     paragraphEditProposalPreviewId,
     editting,
     setPreviewedParagraphEditProposal,
