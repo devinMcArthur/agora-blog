@@ -6,9 +6,16 @@ import { VariableDocument, VariableModel, VariableVersionClass } from "@models";
 
 import { VariableSchema } from "../schema";
 import get from "./get";
+import { IVariableBuildData } from "@typescript/models/Variable";
+import build from "./build";
+import validate from "./validate";
 
 @ObjectType()
 export class VariableClass extends VariableSchema {
+  /**
+   * ----- Get -----
+   */
+
   public static async getById(
     this: VariableModel,
     id: Types.ObjectId | string,
@@ -34,5 +41,29 @@ export class VariableClass extends VariableSchema {
 
   public static async search(this: VariableModel, searchString: string) {
     return get.search(this, searchString);
+  }
+
+  public static async getByTitle(this: VariableModel, title: string) {
+    return get.byTitle(this, title);
+  }
+
+  public async getAuthor(this: VariableDocument) {
+    return get.author(this);
+  }
+
+  /**
+   * ----- Build -----
+   */
+
+  public static async build(this: VariableModel, data: IVariableBuildData) {
+    return build.build(this, data);
+  }
+
+  /**
+   * ----- Validate -----
+   */
+
+  public async validateDocument(this: VariableDocument) {
+    return validate.document(this);
   }
 }

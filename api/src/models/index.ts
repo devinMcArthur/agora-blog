@@ -6,6 +6,7 @@ export * from "./Question";
 export * from "./QuestionPageConnection";
 export * from "./Statement";
 export * from "./Variable";
+export * from "./VariableEditProposal";
 export * from "./VariablePageConnection";
 export * from "./User";
 export * from "./File";
@@ -141,6 +142,25 @@ export interface VariableModel extends ReturnModelType<typeof VariableClass> {}
 export const Variable = getModelForClass(VariableClass, {
   schemaOptions: { collection: "variables" },
 });
+
+/**
+ * ----- Variable Edit Proposal
+ */
+
+import { VariableEditProposalClass } from "./VariableEditProposal";
+
+export interface VariableEditProposalDocument
+  extends DocumentType<VariableEditProposalClass> {}
+
+export interface VariableEditProposalModel
+  extends ReturnModelType<typeof VariableEditProposalClass> {}
+
+export const VariableEditProposal = getModelForClass(
+  VariableEditProposalClass,
+  {
+    schemaOptions: { collection: "variableEditProposals" },
+  }
+);
 
 /**
  * ----- Variable Page Connection -----

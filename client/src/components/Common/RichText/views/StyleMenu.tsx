@@ -216,11 +216,13 @@ const StyleMenu = ({ editor, buttonSize }: IStyleMenu) => {
           size={buttonSize}
           editor={editor}
           styleType={SlateStyleTypes.bold}
+          requireSelection
         />
         <MarkButton
           size={buttonSize}
           editor={editor}
           styleType={SlateStyleTypes.italic}
+          requireSelection
         />
         <MarkButton
           size={buttonSize}

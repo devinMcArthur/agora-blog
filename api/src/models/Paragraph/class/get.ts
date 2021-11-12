@@ -7,6 +7,8 @@ import {
   ParagraphModel,
   ParagraphEditProposalDocument,
   ParagraphEditProposal,
+  PageDocument,
+  Page,
 } from "@models";
 
 import GetByIDOptions from "@typescript/interface/getById_Options";
@@ -70,8 +72,23 @@ const editProposals = (paragraph: ParagraphDocument) => {
   );
 };
 
+const page = (paragraph: ParagraphDocument) => {
+  return new Promise<PageDocument>(async (resolve, reject) => {
+    try {
+      const page = await Page.getById(paragraph.page!.toString());
+
+      if (!page) throw new Error("unable to find this paragraphs page");
+
+      resolve(page);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 export default {
   byID,
+  page,
   statements,
   editProposals,
 };

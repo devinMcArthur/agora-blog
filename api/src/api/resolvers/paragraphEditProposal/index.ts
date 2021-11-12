@@ -1,4 +1,5 @@
 import {
+  PageClass,
   ParagraphClass,
   ParagraphEditProposalClass,
   ParagraphEditProposalDocument,
@@ -56,5 +57,11 @@ export default class ParagraphEditProposalResolver {
     @Ctx() ctx: IContext
   ) {
     return mutations.createParagraphEditProposal(data, ctx);
+  }
+
+  @Authorized("VERIFIED")
+  @Mutation(() => PageClass)
+  async approveParagraphEditProposal(@Arg("id") id: string) {
+    return mutations.approve(id);
   }
 }

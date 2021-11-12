@@ -1,21 +1,25 @@
 import React from "react";
 
-import { InputProps } from "@chakra-ui/input";
 import {
   QuestionSearchSnippetFragment,
   useSearchQuestionsLazyQuery,
 } from "../../generated/graphql";
 import TextDropdown from "./TextDropdown";
 import { FiSearch } from "react-icons/fi";
+import { BoxProps } from "@chakra-ui/layout";
+import { ITextField } from "./TextField";
 
-interface IQuestionSearch extends InputProps {
+interface IQuestionSearch extends ITextField {
   questionSelected: (question: { _id: string; question: string }) => void;
   handleSubmit?: (question: string) => void;
+  dropdownProps?: BoxProps;
 }
 
 const QuestionSearch = ({
   questionSelected,
   handleSubmit,
+  dropdownProps,
+  inputRightElement = <FiSearch />,
   ...props
 }: IQuestionSearch) => {
   const [foundQuestions, setFoundQuestions] = React.useState<
@@ -77,7 +81,7 @@ const QuestionSearch = ({
       <TextDropdown
         onChange={(e) => handleChange(e.target.value)}
         value={searchString}
-        inputRightElement={<FiSearch />}
+        inputRightElement={inputRightElement}
         options={options}
         placeholder="Search Questions"
         onOptionSelection={(value) => {
@@ -85,6 +89,8 @@ const QuestionSearch = ({
           questionSelected({ _id: value.value, question: value.label });
           setFoundQuestions([]);
         }}
+        dropdownProps={dropdownProps}
+        autoComplete="off"
         {...props}
       />
     </form>

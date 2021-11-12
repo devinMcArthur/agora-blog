@@ -103,7 +103,7 @@ export class StatementVersionClass {
 
   @Field(() => ParagraphEditProposalClass, { nullable: true })
   @prop({ ref: () => ParagraphEditProposalClass })
-  public sourceEditProposal?: ParagraphEditProposalClass;
+  public sourceEditProposal?: Ref<ParagraphEditProposalClass>;
 
   @Field({ nullable: false })
   @prop({ default: Date.now, required: true, immutable: true })

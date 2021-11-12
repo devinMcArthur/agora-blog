@@ -11,10 +11,12 @@ import fieldResolvers from "./fieldResolvers";
 
 @Resolver(() => VariableEquationClass)
 export default class VariableEquationResolver {
-  @FieldResolver(() => VariableClass)
+  @FieldResolver(() => VariableClass, { nullable: true })
   async variable(
     @Root() variableEquation: VariableEquationDocument
   ): Promise<VariableDocument | null> {
-    return fieldResolvers.variable(variableEquation);
+    if (variableEquation.variable)
+      return fieldResolvers.variable(variableEquation);
+    else return null;
   }
 }

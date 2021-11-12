@@ -1,14 +1,20 @@
 import React from "react";
 import { RenderElementProps } from "slate-react";
 
-import { Box, BoxProps, Heading, HStack, Text } from "@chakra-ui/layout";
+import { Box, BoxProps, Heading, Text } from "@chakra-ui/layout";
 import { Button, ButtonGroup, IconButton } from "@chakra-ui/button";
 import { Tooltip } from "@chakra-ui/tooltip";
 import { FiChevronsDown, FiChevronsUp, FiPlus, FiStar } from "react-icons/fi";
 import { CustomEditor } from "../utils";
 import { Editor } from "slate";
 import { StatementElementType } from "../../../../models/slate";
-import { Tag, TagLabel, TagCloseButton, TagLeftIcon } from "@chakra-ui/react";
+import {
+  Tag,
+  TagLabel,
+  TagCloseButton,
+  TagLeftIcon,
+  Icon,
+} from "@chakra-ui/react";
 import QuestionSearch from "../../QuestionSearch";
 import RecommendedStatements from "../../RecommendedStatements";
 import QuotedStatement from "../../../Statement/views/QuotedStatement";
@@ -117,6 +123,21 @@ const StatementElement = ({
     focusedStyling.boxShadow = "0 0 3px blue";
   }
 
+  const hideChildren = React.useMemo(() => {
+    if (
+      (element.newQuestions.length < 1 && element.questions.length < 1) ||
+      element.quotedStatementId
+    )
+      return true;
+    else return false;
+  }, [
+    element.newQuestions.length,
+    element.questions.length,
+    element.quotedStatementId,
+  ]);
+
+  console.log("hideChildren", hideChildren);
+
   return (
     <Box {...attributes}>
       <Box
@@ -128,6 +149,7 @@ const StatementElement = ({
         {...focusedStyling}
       >
         <Box
+          flexWrap="wrap"
           display="flex"
           flexDir="column"
           p={1}
@@ -139,34 +161,63 @@ const StatementElement = ({
             flexDir="row"
             justifyContent="space-between"
             m={1}
+            maxW="100%"
+            flexWrap="unset"
           >
-            <Box display="flex" flexDir="column">
+            <Box display="flex" flexDir="column" flexWrap="wrap">
               {/* QUESTIONS */}
-              <HStack m={1}>
+              <Box
+                display="flex"
+                flexDir="row"
+                maxW="100%"
+                flexWrap="wrap"
+                justifyContent="start"
+              >
                 {element.questions.map((question, index) => (
-                  <Tag
-                    backgroundColor="gray.300"
+                  <Tooltip
                     key={index}
-                    cursor="pointer"
-                    onClick={() => toggleQuestion(question._id)}
+                    label={
+                      question.question.length > 30
+                        ? question.question
+                        : undefined
+                    }
                   >
-                    <TagLabel>{question.question}</TagLabel>
-                    <TagCloseButton
-                      onClick={() =>
-                        CustomEditor.removeQuestion(
-                          editor,
-                          element.index,
-                          index
-                        )
-                      }
-                    />
-                  </Tag>
+                    <Tag
+                      m={1}
+                      maxW="25em"
+                      cursor="pointer"
+                      backgroundColor="gray.300"
+                      onClick={() => toggleQuestion(question._id)}
+                    >
+                      <TagLabel>
+                        <Text isTruncated>{question.question}</Text>
+                      </TagLabel>
+                      <TagCloseButton
+                        onClick={() =>
+                          CustomEditor.removeQuestion(
+                            editor,
+                            element.index,
+                            index
+                          )
+                        }
+                      />
+                    </Tag>
+                  </Tooltip>
                 ))}
                 {element.newQuestions.map((question, index) => (
-                  <Tooltip label="New question">
-                    <Tag key={index} backgroundColor="gray.300">
+                  <Tooltip
+                    label={
+                      question.question.length > 30
+                        ? question.question
+                        : "New Question"
+                    }
+                    key={index}
+                  >
+                    <Tag backgroundColor="gray.300" maxW="25em" m={1}>
                       <TagLeftIcon as={FiStar} />
-                      <TagLabel>{question.question}</TagLabel>
+                      <TagLabel>
+                        <Text isTruncated>{question.question}</Text>
+                      </TagLabel>
                       <TagCloseButton
                         onClick={() =>
                           CustomEditor.removeNewQuestion(
@@ -179,17 +230,30 @@ const StatementElement = ({
                     </Tag>
                   </Tooltip>
                 ))}
-                <Tag
-                  cursor="pointer"
-                  onClick={toggleQuestionForm}
+                <Box
                   backgroundColor="gray.300"
+                  maxW="25em"
+                  m={1}
+                  p={1}
+                  borderRadius="0.375rem"
                 >
-                  <TagLeftIcon as={FiPlus} />
-                  <TagLabel>Add Question</TagLabel>
-                </Tag>
-              </HStack>
+                  {/* <Icon as={FiPlus} mx={1} /> */}
+                  <QuestionSearch
+                    questionSelected={questionSelected}
+                    handleSubmit={questionSubmitted}
+                    placeholder="Add question"
+                    size="xs"
+                    border="none"
+                    maxH="1em"
+                    dropdownProps={{ backgroundColor: "gray.300" }}
+                    _focus={{ border: "none" }}
+                    inputRightElement={null}
+                    inputLeftElement={<Icon as={FiPlus} />}
+                  />
+                </Box>
+              </Box>
             </Box>
-            <Box display="flex" flexDir="row">
+            <Box display="flex" flexDir="row" height="100%">
               {element.statementId === "NEW" && (
                 <Text color="gray.600" pr={2} pt={1}>
                   New
@@ -200,6 +264,7 @@ const StatementElement = ({
                 variant="outline"
                 size="sm"
                 backgroundColor="white"
+                alignContent="center"
               >
                 <Tooltip label="Move statement up">
                   <IconButton
@@ -289,7 +354,7 @@ const StatementElement = ({
         <Box
           m={2}
           tabIndex={element.index + 1}
-          display={element.quotedStatementId ? "none" : ""}
+          display={hideChildren ? "none" : ""}
         >
           {children}
         </Box>

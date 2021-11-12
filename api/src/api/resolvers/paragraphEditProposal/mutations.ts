@@ -1,4 +1,8 @@
-import { ParagraphEditProposal, ParagraphEditProposalDocument } from "@models";
+import {
+  PageDocument,
+  ParagraphEditProposal,
+  ParagraphEditProposalDocument,
+} from "@models";
 import { IContext } from "@typescript/graphql";
 import {
   EditProposalChangeTypes,
@@ -92,6 +96,28 @@ const createParagraphEditProposal = (
   });
 };
 
+const approve = (id: string) => {
+  return new Promise<PageDocument>(async (resolve, reject) => {
+    try {
+      const editProposal = await ParagraphEditProposal.getById(id);
+      if (!editProposal) throw new Error("unable to find that edit proposal");
+
+      const { oldParagraph, newParagraph, page, statements } =
+        await editProposal.approve();
+
+      for (let i = 0; i < statements.length; i++) await statements[i].save();
+      await newParagraph.save();
+      await oldParagraph.save();
+      await page.save();
+
+      resolve(page);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 export default {
   createParagraphEditProposal,
+  approve,
 };

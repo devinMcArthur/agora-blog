@@ -5,28 +5,55 @@ import { Box, BoxProps, Text } from "@chakra-ui/layout";
 
 import {
   PreviewParagraphEditProposalSnippetFragment,
+  useApproveParagraphEditProposalMutation,
   usePreviewParagraphEditProposalLazyQuery,
 } from "../../generated/graphql";
 import Card from "./Card";
 import SkeletonCard from "./SkeletonCard";
 import UserLink from "./UserLink";
+import { Button } from "@chakra-ui/button";
+import { useAuth } from "../../contexts/Auth";
 
 interface IParagraphEditProposal extends BoxProps {
   paragraphEditProposalId: string;
   editProposalPreviewSelection?: (editProposalId?: string) => void;
   editProposalSelected?: boolean;
+  allowApproval?: boolean;
 }
 
 const ParagraphEditProposal = ({
   paragraphEditProposalId,
   editProposalSelected,
+  allowApproval = false,
   editProposalPreviewSelection,
   ...props
 }: IParagraphEditProposal) => {
+  const {
+    state: { user },
+  } = useAuth();
+
   const [editProposal, setEditProposal] =
     React.useState<PreviewParagraphEditProposalSnippetFragment>();
-  const [query, { data, loading, networkStatus }] =
+  const [query, { data, loading: queryLoading, networkStatus }] =
     usePreviewParagraphEditProposalLazyQuery();
+  const [approve, { loading: approvalLoading }] =
+    useApproveParagraphEditProposalMutation();
+
+  /**
+   * ----- Functions -----
+   */
+
+  const handleApproval = React.useCallback(() => {
+    if (editProposal) {
+      approve({
+        variables: { id: editProposal?._id },
+      }).catch((err) => console.error(err));
+    }
+  }, [approve, editProposal]);
+
+  /**
+   * ----- Use-effects and other logic -----
+   */
 
   React.useEffect(() => {
     if (!editProposal && networkStatus === 7) {
@@ -39,10 +66,10 @@ const ParagraphEditProposal = ({
   }, [query, editProposal, networkStatus, paragraphEditProposalId]);
 
   React.useEffect(() => {
-    if (data?.paragraphEditProposal && !loading) {
+    if (data?.paragraphEditProposal && !queryLoading) {
       setEditProposal(data.paragraphEditProposal);
     }
-  }, [data, loading]);
+  }, [data, queryLoading]);
 
   /**
    * ----- Rendering -----
@@ -58,9 +85,15 @@ const ParagraphEditProposal = ({
               <Text>{editProposal.description}</Text>
               <UserLink user={editProposal.author} />
             </Box>
-            <Box display="flex" justifyContent="start">
+            <Box
+              display="flex"
+              flexDir="row"
+              justifyContent="space-between"
+              pt={2}
+            >
               {editProposalPreviewSelection && (
                 <Checkbox
+                  mx={2}
                   checked={editProposalSelected}
                   onChange={(e) => {
                     if (e.target.checked)
@@ -71,11 +104,30 @@ const ParagraphEditProposal = ({
                   Preview
                 </Checkbox>
               )}
+              {allowApproval && user?.verified && (
+                <Button
+                  mx={2}
+                  variant="outline"
+                  onClick={() => handleApproval()}
+                  isLoading={approvalLoading}
+                >
+                  Approve
+                </Button>
+              )}
             </Box>
           </Box>
         </Card>
       );
-  }, [editProposal, editProposalPreviewSelection, editProposalSelected, props]);
+  }, [
+    allowApproval,
+    approvalLoading,
+    editProposal,
+    editProposalPreviewSelection,
+    editProposalSelected,
+    handleApproval,
+    props,
+    user?.verified,
+  ]);
 
   return content;
 };

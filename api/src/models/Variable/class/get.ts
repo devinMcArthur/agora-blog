@@ -9,6 +9,8 @@ import {
   VariablePageConnection,
   VariablePageConnectionDocument,
   Variable,
+  UserDocument,
+  User,
 } from "@models";
 import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
@@ -155,8 +157,37 @@ const search = (Variable: VariableModel, searchString: string) => {
   });
 };
 
+const author = (variable: VariableDocument) => {
+  return new Promise<UserDocument>(async (resolve, reject) => {
+    try {
+      const author = await User.getById(variable.originalAuthor!.toString());
+      if (!author) throw new Error("unable to find author");
+
+      resolve(author);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+const byTitle = (Variable: VariableModel, title: string) => {
+  return new Promise<VariableDocument | null>(async (resolve, reject) => {
+    try {
+      const variable = await Variable.findOne({
+        title: { $regex: new RegExp(`^${title}`, "i") },
+      });
+
+      resolve(variable);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 export default {
   byID,
+  byTitle,
+  author,
   finalValue,
   versionsFinalValue,
   pagesThatReference,

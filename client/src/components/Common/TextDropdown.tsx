@@ -1,6 +1,7 @@
-import { useOutsideClick } from "@chakra-ui/hooks";
-import { Box, Stack, StackProps } from "@chakra-ui/layout";
 import React from "react";
+
+import { useOutsideClick } from "@chakra-ui/hooks";
+import { Box, BoxProps, Stack } from "@chakra-ui/layout";
 import TextField, { ITextField } from "./TextField";
 
 export interface IOptions<ExtraData> {
@@ -16,7 +17,7 @@ interface ITextDropdown<ExtraData> extends ITextField {
     extraData?: ExtraData
   ) => void;
   containerId?: string;
-  dropdownProps?: StackProps;
+  dropdownProps?: BoxProps;
   selectOptionsWithEnter?: boolean;
 }
 
@@ -88,14 +89,20 @@ const TextDropdown = <ExtraData extends object>({
       <Box
         borderRadius="0 0 0.375rem 0.375rem"
         position="absolute"
-        top="2.2rem"
+        top={
+          `${
+            (inputRef.current?.getBoundingClientRect().height || 8) / 1.09
+          }px` || "2.25em"
+        }
         border="1px solid"
         borderColor="inherit"
         borderTop="none"
         paddingTop={2}
         zIndex={9999}
         backgroundColor="white"
-        width="100%"
+        w="100%"
+        maxH="25vh"
+        overflowY="scroll"
         {...dropdownProps}
       >
         <Box h="1px" w="95%" backgroundColor="gray.400" mx="auto" mb={2}></Box>
@@ -128,6 +135,7 @@ const TextDropdown = <ExtraData extends object>({
       <TextField
         onFocus={() => setDropdown(true)}
         onKeyDown={handleKeyDown}
+        autoComplete="off"
         {...props}
       />
       {dropdownJSX}

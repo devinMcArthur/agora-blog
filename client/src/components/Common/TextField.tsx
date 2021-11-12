@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Input,
+  InputElementProps,
   InputGroup,
   InputLeftAddon,
   InputLeftElement,
@@ -21,6 +22,7 @@ export interface ITextField extends InputProps {
   inputRightAddon?: React.ReactNode;
   inputLeftElement?: React.ReactNode;
   inputRightElement?: React.ReactNode;
+  inputRightElementProps?: InputElementProps;
 }
 
 const TextField = React.forwardRef<HTMLInputElement, ITextField>(
@@ -32,6 +34,7 @@ const TextField = React.forwardRef<HTMLInputElement, ITextField>(
       inputLeftElement,
       inputRightAddon,
       inputRightElement,
+      inputRightElementProps,
       ...props
     },
     ref
@@ -40,11 +43,18 @@ const TextField = React.forwardRef<HTMLInputElement, ITextField>(
       <FormControl isInvalid={!!errorMessage} margin="auto">
         {label && <FormLabel>{label}</FormLabel>}
         <InputGroup>
-          {inputLeftElement && <InputLeftElement children={inputLeftElement} />}
+          {inputLeftElement && (
+            <InputLeftElement h="auto" children={inputLeftElement} />
+          )}
           {inputLeftAddon && <InputLeftAddon children={inputLeftAddon} />}
           <Input ref={ref} {...props} />
           {inputRightElement && (
-            <InputRightElement children={inputRightElement} />
+            <InputRightElement
+              h="auto"
+              py="auto"
+              children={inputRightElement}
+              {...inputRightElementProps}
+            />
           )}
           {inputRightAddon && <InputRightAddon children={inputRightAddon} />}
         </InputGroup>

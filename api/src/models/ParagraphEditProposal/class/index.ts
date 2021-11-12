@@ -11,6 +11,7 @@ import build from "./build";
 import get from "./get";
 import validate from "./validate";
 import GetByIDOptions from "@typescript/interface/getById_Options";
+import interact from "./interact";
 
 @ObjectType()
 export class ParagraphEditProposalClass extends ParagraphEditProposalSchema {
@@ -50,6 +51,14 @@ export class ParagraphEditProposalClass extends ParagraphEditProposalSchema {
     data: IParagraphEditProposalBuildData
   ) {
     return build.build(this, data);
+  }
+
+  /**
+   * ----- Interact -----
+   */
+
+  public async approve(this: ParagraphEditProposalDocument) {
+    return interact.approve(this);
   }
 
   /**

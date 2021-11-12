@@ -1,7 +1,11 @@
 import { Types } from "mongoose";
 import { ObjectType } from "type-graphql";
 
-import { ParagraphDocument, ParagraphModel } from "@models";
+import {
+  ParagraphDocument,
+  ParagraphEditProposalDocument,
+  ParagraphModel,
+} from "@models";
 import GetByIDOptions from "@typescript/interface/getById_Options";
 
 import { ParagraphSchema } from "../schema";
@@ -32,12 +36,23 @@ export class ParagraphClass extends ParagraphSchema {
     return get.editProposals(this);
   }
 
+  public async getPage(this: ParagraphDocument) {
+    return get.page(this);
+  }
+
   /**
    * ----- Build -----
    */
 
   public static buildFirst(this: ParagraphModel, data: IParagraphBuildData) {
     return build.first(this, data);
+  }
+
+  public static buildFromProposal(
+    this: ParagraphModel,
+    editProposal: ParagraphEditProposalDocument
+  ) {
+    return build.fromProposal(this, editProposal);
   }
 
   /**

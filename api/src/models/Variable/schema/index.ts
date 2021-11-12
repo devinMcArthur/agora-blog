@@ -1,4 +1,4 @@
-import { VariableVersionClass } from "@models";
+import { UserClass, VariableVersionClass } from "@models";
 import { index, prop } from "@typegoose/typegoose";
 import { Types } from "mongoose";
 import { Field, ID, ObjectType } from "type-graphql";
@@ -18,4 +18,8 @@ export class VariableSchema {
   @Field(() => [VariableVersionClass])
   @prop({ type: () => VariableVersionClass, default: [] })
   public versions!: VariableVersionClass[];
+
+  @Field(() => UserClass)
+  @prop({ ref: () => UserClass, required: true })
+  public originalAuthor!: UserClass;
 }

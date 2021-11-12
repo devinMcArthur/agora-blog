@@ -36,7 +36,14 @@ const createVariables = () => {
             createdAt: new Date("2021-02-17"),
             sourceUrl: "https://coronavirus.jhu.edu/map.html",
           },
+          {
+            type: "number",
+            number: 251795820,
+            createdAt: new Date("2021-11-11"),
+            sourceUrl: "https://coronavirus.jhu.edu/map.html",
+          },
         ],
+        originalAuthor: _ids.users.dev._id,
       });
 
       const var_global_deaths_covid_19 = new Variable({
@@ -52,10 +59,17 @@ const createVariables = () => {
           {
             type: "number",
             number: 2423443,
-            createdAt: new Date("2020-02-17"),
+            createdAt: new Date("2021-02-17"),
+            sourceUrl: "https://coronavirus.jhu.edu/map.html",
+          },
+          {
+            type: "number",
+            number: 5077932,
+            createdAt: new Date("2021-11-11"),
             sourceUrl: "https://coronavirus.jhu.edu/map.html",
           },
         ],
+        originalAuthor: _ids.users.dev._id,
       });
 
       const var_covid_19_rt_pcr_test_sensitivity = new Variable({
@@ -70,6 +84,7 @@ const createVariables = () => {
               "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013705/full",
           },
         ],
+        originalAuthor: _ids.users.dev._id,
       });
 
       const var_covid_19_rt_pcr_test_false_negative_rate = new Variable({
@@ -96,6 +111,7 @@ const createVariables = () => {
             createdAt: new Date("2020-12-07"),
           },
         ],
+        originalAuthor: _ids.users.dev._id,
       });
 
       const var_covid_19_rt_pcr_test_specificity = new Variable({
@@ -110,6 +126,7 @@ const createVariables = () => {
               "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013705/full",
           },
         ],
+        originalAuthor: _ids.users.dev._id,
       });
 
       const var_covid_19_rt_pcr_test_false_positive_rate = new Variable({
@@ -136,6 +153,7 @@ const createVariables = () => {
             createdAt: new Date("2020-12-07"),
           },
         ],
+        originalAuthor: _ids.users.dev._id,
       });
 
       const variables = {

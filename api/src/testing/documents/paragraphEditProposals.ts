@@ -107,29 +107,8 @@ const createParagraphEditProposals = () => {
               },
               questions: [_ids.questions.what_is_covid_19._id],
               newQuestions: ["What causes the disease COVID-19?"],
-              stringArray: [
-                {
-                  string: "A contagious disease that is caused by ",
-                  styles: [],
-                },
-                {
-                  string:
-                    "severe actute respiratory syndrome coronavirus 2 (SARS-CoV-2)",
-                  styles: [
-                    {
-                      type: StyleTypes.mention,
-                      variant: StyleVariants.internal,
-                      value: {
-                        page: _ids.pages.page_sars_cov_2._id,
-                      },
-                    },
-                  ],
-                },
-                {
-                  string: ".",
-                  styles: [],
-                },
-              ],
+              quotedStatement:
+                _ids.pages.page_sars_cov_2.paragraphs[0].statements[0],
             },
             {
               changeType: EditProposalChangeTypes.NONE,
@@ -140,12 +119,40 @@ const createParagraphEditProposals = () => {
               },
             },
             {
-              changeType: EditProposalChangeTypes.NONE,
+              changeType: EditProposalChangeTypes.EDIT,
               paragraphStatement: {
                 statement:
                   _ids.pages.page_covid_2019.paragraphs[0].statements[1],
                 versionIndex: 1,
               },
+              questions: [
+                _ids.questions.where_was_the_first_case_of_covid_19._id,
+              ],
+              newQuestions: ["When was the first case of COVID-19?"],
+              stringArray: [
+                {
+                  string:
+                    "The first case of this was reported by officians in Wuhan, China in December 2019, although it is ",
+                  styles: [],
+                },
+                {
+                  string: "now suspected",
+                  styles: [
+                    {
+                      type: StyleTypes.mention,
+                      variant: StyleVariants.external,
+                      value: {
+                        url: "https://www.livescience.com/first-case-coronavirus-found.html",
+                      },
+                    },
+                  ],
+                },
+                {
+                  string:
+                    " that the first case dates back to November 17th, 2019.",
+                  styles: [],
+                },
+              ],
             },
             {
               changeType: EditProposalChangeTypes.REMOVE,
@@ -158,10 +165,25 @@ const createParagraphEditProposals = () => {
             {
               changeType: EditProposalChangeTypes.ADD,
               newQuestions: ["What have been the consequences of COVID-19?"],
+              quotedStatement:
+                _ids.pages.page_covid_19_masks.paragraphs[0].statements[5],
+            },
+            {
+              changeType: EditProposalChangeTypes.ADD,
+              questions: [
+                _ids.questions.are_masks_effective_against_covid_19._id,
+              ],
               stringArray: [
                 {
-                  string:
-                    "COVID-19 has been singularly responsible for the loss of freedoms in the worlds freest countries and has been used as an excuse by governments for tyrannical control over their citizens",
+                  string: "Hello there, my name is ",
+                  styles: [],
+                },
+                {
+                  string: "Dev",
+                  styles: [{ type: "bold" }],
+                },
+                {
+                  string: ".",
                   styles: [],
                 },
               ],

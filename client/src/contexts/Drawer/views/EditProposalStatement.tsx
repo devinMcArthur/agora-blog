@@ -8,23 +8,26 @@ import QuestionTagRelated from "../../../components/Common/QuestionTagRelated";
 import { Tag, TagLabel } from "@chakra-ui/tag";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { IconButton } from "@chakra-ui/button";
+import { EditProposalChangeTypes } from "../../../models/paragraphEditProposal";
 
 const DrawerEditProposalStatement = () => {
   const {
     state: { editProposalStatement, currentPageId },
   } = useDrawer();
 
-  console.log(editProposalStatement);
-
   const hasEdit =
-    editProposalStatement?.stringArray &&
-    editProposalStatement.stringArray.length > 0
+    editProposalStatement?.changeType === EditProposalChangeTypes.EDIT ||
+    editProposalStatement?.changeType === EditProposalChangeTypes.ADD
       ? true
       : false;
 
   const [statementVersion, setStatementVersion] = React.useState<
     number | "EDIT"
-  >(hasEdit ? "EDIT" : editProposalStatement!.paragraphStatement!.versionIndex);
+  >(
+    hasEdit
+      ? "EDIT"
+      : editProposalStatement?.paragraphStatement?.versionIndex || 0
+  );
 
   React.useEffect(() => {
     if (editProposalStatement)
@@ -42,11 +45,11 @@ const DrawerEditProposalStatement = () => {
       const rightChevronDisabled =
         statementVersion === "EDIT" ||
         (!hasEdit &&
-          editProposalStatement.paragraphStatement!.statement.versions.length -
-            1 ===
-            statementVersion);
-
-      console.log(statementVersion);
+          (!editProposalStatement.paragraphStatement ||
+            editProposalStatement.paragraphStatement!.statement.versions
+              .length -
+              1 ===
+              statementVersion));
 
       return (
         <Box p={3}>

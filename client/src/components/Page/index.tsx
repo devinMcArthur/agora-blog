@@ -102,6 +102,7 @@ const Page = () => {
               setPreviewedParagraphEditProposal(proposal)
             }
             paragraphEditProposalId={editProposal._id}
+            allowApproval
           />
         )
       );

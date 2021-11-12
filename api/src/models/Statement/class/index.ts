@@ -1,7 +1,12 @@
 import { Types } from "mongoose";
 import { ObjectType } from "type-graphql";
 
-import { StatementDocument, StatementModel } from "@models";
+import {
+  ParagraphEditProposalDocument,
+  ParagraphEditProposalStatementClass,
+  StatementDocument,
+  StatementModel,
+} from "@models";
 
 import get, { IStatementByIdOptions } from "./get";
 import { StatementSchema } from "../schema";
@@ -17,6 +22,14 @@ export class StatementClass extends StatementSchema {
 
   public static async build(this: StatementModel, data: IStatementBuildData) {
     return build.build(this, data);
+  }
+
+  public static async buildFromEditProposalStatement(
+    this: StatementModel,
+    statementItem: ParagraphEditProposalStatementClass,
+    editProposal: ParagraphEditProposalDocument
+  ) {
+    return build.fromEditProposalStatement(this, statementItem, editProposal);
   }
 
   /**

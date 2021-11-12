@@ -80,7 +80,6 @@ const PageSearch: React.FC<IPageSearch> = ({
   return (
     <form
       onSubmit={(e) => {
-        console.log("submitted");
         e.preventDefault();
         if (handleSubmit) handleSubmit(searchString);
       }}
@@ -88,6 +87,7 @@ const PageSearch: React.FC<IPageSearch> = ({
       <TextDropdown
         onChange={(e) => handleChange(e.target.value)}
         value={searchString}
+        inputRightElementProps={{ pt: "0.4rem" }}
         inputRightElement={<Icon as={FiSearch} w={4} height={4} mt={2} />}
         options={pageOptions}
         onOptionSelection={(value, extraData) => {
@@ -102,7 +102,6 @@ const PageSearch: React.FC<IPageSearch> = ({
         containerId={dropdownId}
         dropdownProps={dropdownProps}
         selectOptionsWithEnter
-        autoComplete="off"
         {...props}
       />
     </form>
