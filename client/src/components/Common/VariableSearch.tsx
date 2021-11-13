@@ -92,7 +92,7 @@ const VariableSearch: React.FC<IVariableSearch> = ({
           variableSelected({
             id: value.value,
             title: value.label,
-            finalValue: extraData.finalValue,
+            finalValue: extraData!.finalValue,
           });
           setFoundVariables([]);
         }}

@@ -21,6 +21,7 @@ import VariableVersionResolver from "@api/resolvers/variableVersion";
 import StatementVersionResolver from "@api/resolvers/statementVersion";
 import VariableEquationResolver from "@api/resolvers/variableEquation";
 import ParagraphStatementResolver from "@api/resolvers/paragraphStatement";
+import VariableEditProposalResolver from "@api/resolvers/variableEditProposal";
 import ParagraphEditProposalResolver from "@api/resolvers/paragraphEditProposal";
 import ParagraphEditProposalStatementResolver from "@api/resolvers/paragraphEditProposalStatement";
 
@@ -48,6 +49,7 @@ const createApp = async () => {
       VariableEquationResolver,
       StatementVersionResolver,
       ParagraphStatementResolver,
+      VariableEditProposalResolver,
       ParagraphEditProposalResolver,
       ParagraphEditProposalStatementResolver,
     ],

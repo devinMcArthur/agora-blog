@@ -29,18 +29,24 @@ const createVariables = () => {
             number: 67316936,
             createdAt: new Date("2020-12-07"),
             sourceUrl: "https://coronavirus.jhu.edu/map.html",
+            sourceEditProposal:
+              _ids.variableEditProposals.var_global_cases_covid_19_v2._id,
           },
           {
             type: "number",
             number: 109678891,
             createdAt: new Date("2021-02-17"),
             sourceUrl: "https://coronavirus.jhu.edu/map.html",
+            sourceEditProposal:
+              _ids.variableEditProposals.var_global_cases_covid_19_v3._id,
           },
           {
             type: "number",
             number: 251795820,
             createdAt: new Date("2021-11-11"),
             sourceUrl: "https://coronavirus.jhu.edu/map.html",
+            sourceEditProposal:
+              _ids.variableEditProposals.var_global_cases_covid_19_v4._id,
           },
         ],
         originalAuthor: _ids.users.dev._id,
@@ -61,12 +67,16 @@ const createVariables = () => {
             number: 2423443,
             createdAt: new Date("2021-02-17"),
             sourceUrl: "https://coronavirus.jhu.edu/map.html",
+            sourceEditProposal:
+              _ids.variableEditProposals.var_global_deaths_covid_19_v2._id,
           },
           {
             type: "number",
             number: 5077932,
             createdAt: new Date("2021-11-11"),
             sourceUrl: "https://coronavirus.jhu.edu/map.html",
+            sourceEditProposal:
+              _ids.variableEditProposals.var_global_deaths_covid_19_v3._id,
           },
         ],
         originalAuthor: _ids.users.dev._id,

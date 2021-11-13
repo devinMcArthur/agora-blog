@@ -1,7 +1,7 @@
 import { DocumentType, prop, Ref } from "@typegoose/typegoose";
 import { Field, ObjectType } from "type-graphql";
 
-import { VariableClass } from "@models";
+import { VariableClass, VariableEditProposalClass } from "@models";
 import {
   VariableEquationTypes,
   VariableOperatorTypes,
@@ -54,6 +54,10 @@ export class VariableVersionClass {
   @Field({ nullable: false })
   @prop({ default: new Date(), required: true })
   public createdAt!: Date;
+
+  @Field(() => VariableEditProposalClass, { nullable: true })
+  @prop({ ref: () => VariableEditProposalClass })
+  public sourceEditProposal?: Ref<VariableEditProposalClass>;
 }
 
 export interface VariableVersionDocument

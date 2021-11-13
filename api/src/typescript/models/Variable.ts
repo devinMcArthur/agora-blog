@@ -34,6 +34,7 @@ export interface IVariableVersion {
   sourceUrl?: string;
   number?: number;
   equation?: IVariableEquationItem[];
+  sourceEditProposal?: Types.ObjectId | string;
 }
 
 export interface IVariableBuildData {

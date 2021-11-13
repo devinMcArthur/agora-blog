@@ -2,13 +2,19 @@ import { Types } from "mongoose";
 import { ObjectType } from "type-graphql";
 
 import GetByIDOptions from "@typescript/interface/getById_Options";
-import { VariableDocument, VariableModel, VariableVersionClass } from "@models";
+import {
+  VariableDocument,
+  VariableEditProposalDocument,
+  VariableModel,
+  VariableVersionClass,
+} from "@models";
 
 import { VariableSchema } from "../schema";
 import get from "./get";
 import { IVariableBuildData } from "@typescript/models/Variable";
 import build from "./build";
 import validate from "./validate";
+import update from "./update";
 
 @ObjectType()
 export class VariableClass extends VariableSchema {
@@ -65,5 +71,16 @@ export class VariableClass extends VariableSchema {
 
   public async validateDocument(this: VariableDocument) {
     return validate.document(this);
+  }
+
+  /**
+   * ----- Update -----
+   */
+
+  public async updateFromProposal(
+    this: VariableDocument,
+    variableEditProposal: VariableEditProposalDocument
+  ) {
+    return update.fromProposal(this, variableEditProposal);
   }
 }

@@ -172,6 +172,7 @@ export type VariableClass = {
   _id: Scalars['ID'];
   title: Scalars['String'];
   versions: Array<VariableVersionClass>;
+  originalAuthor: UserClass;
   finalValue: Scalars['Float'];
   relatedPages: Array<PageClass>;
 };
@@ -179,7 +180,7 @@ export type VariableClass = {
 export type VariableVersionClass = {
   __typename?: 'VariableVersionClass';
   type: Scalars['String'];
-  number: Scalars['Float'];
+  number?: Maybe<Scalars['Float']>;
   equation: Array<VariableEquationClass>;
   sourceUrl?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
@@ -249,6 +250,8 @@ export type Mutation = {
   login: Scalars['String'];
   createUser: Scalars['String'];
   newPage: PageClass;
+  scrapeTest: Scalars['String'];
+  newVariable: VariableClass;
   createParagraphEditProposal: ParagraphEditProposalClass;
   approveParagraphEditProposal: PageClass;
 };
@@ -266,6 +269,17 @@ export type MutationCreateUserArgs = {
 
 export type MutationNewPageArgs = {
   data: NewPageData;
+};
+
+
+export type MutationScrapeTestArgs = {
+  id: Scalars['String'];
+  url: Scalars['String'];
+};
+
+
+export type MutationNewVariableArgs = {
+  data: NewVariableData;
 };
 
 
@@ -333,6 +347,25 @@ export type StyleValueImageData = {
   file: Scalars['Upload'];
 };
 
+
+export type NewVariableData = {
+  title: Scalars['String'];
+  version: VariableVersionData;
+};
+
+export type VariableVersionData = {
+  type: Scalars['String'];
+  sourceUrl?: Maybe<Scalars['String']>;
+  number?: Maybe<Scalars['Float']>;
+  equation?: Maybe<Array<VariableEquationItemData>>;
+};
+
+export type VariableEquationItemData = {
+  type: Scalars['String'];
+  operator?: Maybe<Scalars['String']>;
+  number?: Maybe<Scalars['Float']>;
+  variable?: Maybe<Scalars['ID']>;
+};
 
 export type ParagraphEditProposalData = {
   paragraph: Scalars['String'];
@@ -599,6 +632,19 @@ export type NewPageMutation = (
   & { newPage: (
     { __typename?: 'PageClass' }
     & Pick<PageClass, 'slug'>
+  ) }
+);
+
+export type NewVariableMutationVariables = Exact<{
+  data: NewVariableData;
+}>;
+
+
+export type NewVariableMutation = (
+  { __typename?: 'Mutation' }
+  & { newVariable: (
+    { __typename?: 'VariableClass' }
+    & VariableSnippetFragment
   ) }
 );
 
@@ -1152,6 +1198,38 @@ export function useNewPageMutation(baseOptions?: Apollo.MutationHookOptions<NewP
 export type NewPageMutationHookResult = ReturnType<typeof useNewPageMutation>;
 export type NewPageMutationResult = Apollo.MutationResult<NewPageMutation>;
 export type NewPageMutationOptions = Apollo.BaseMutationOptions<NewPageMutation, NewPageMutationVariables>;
+export const NewVariableDocument = gql`
+    mutation NewVariable($data: NewVariableData!) {
+  newVariable(data: $data) {
+    ...VariableSnippet
+  }
+}
+    ${VariableSnippetFragmentDoc}`;
+export type NewVariableMutationFn = Apollo.MutationFunction<NewVariableMutation, NewVariableMutationVariables>;
+
+/**
+ * __useNewVariableMutation__
+ *
+ * To run a mutation, you first call `useNewVariableMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNewVariableMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [newVariableMutation, { data, loading, error }] = useNewVariableMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useNewVariableMutation(baseOptions?: Apollo.MutationHookOptions<NewVariableMutation, NewVariableMutationVariables>) {
+        return Apollo.useMutation<NewVariableMutation, NewVariableMutationVariables>(NewVariableDocument, baseOptions);
+      }
+export type NewVariableMutationHookResult = ReturnType<typeof useNewVariableMutation>;
+export type NewVariableMutationResult = Apollo.MutationResult<NewVariableMutation>;
+export type NewVariableMutationOptions = Apollo.BaseMutationOptions<NewVariableMutation, NewVariableMutationVariables>;
 export const UserLoginDocument = gql`
     mutation UserLogin($data: LoginData!) {
   login(data: $data)

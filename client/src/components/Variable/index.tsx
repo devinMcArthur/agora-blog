@@ -17,38 +17,41 @@ const Variable = (props: Props) => {
     variables: { id: props.match.params.variableID },
   });
 
-  let content = <Loading />;
-  if (data?.variable && !loading) {
-    const { variable } = data;
-    const relatedPageList = variable.relatedPages.map((relatedPage) => (
-      <PageCard
-        page={relatedPage}
-        referenceObject={{ type: "variable", variableID: variable._id }}
-      />
-    ));
+  const content = React.useMemo(() => {
+    if (data?.variable && !loading) {
+      const { variable } = data;
+      const relatedPageList = variable.relatedPages.map((relatedPage) => (
+        <PageCard
+          page={relatedPage}
+          referenceObject={{ type: "variable", variableID: variable._id }}
+        />
+      ));
 
-    const currentVersion = variable.versions[variable.versions.length - 1];
+      const currentVersion = variable.versions[variable.versions.length - 1];
 
-    content = (
-      <Flex flexDirection="column">
-        <Heading size="lg">{variable.title}</Heading>
-        <Divider m={2} />
-        <Heading size="md">
-          Current: <FinalValue finalValue={currentVersion.finalValue} />
-        </Heading>
-        <i>updated: {currentVersion.createdAt}</i>
-        {currentVersion.sourceUrl ? (
-          <i>
-            <TextLink link={currentVersion.sourceUrl} isExternal>
-              source
-            </TextLink>
-          </i>
-        ) : null}
-        <Divider m={2} />
-        <Flex>{relatedPageList}</Flex>
-      </Flex>
-    );
-  }
+      return (
+        <Flex flexDirection="column">
+          <Heading size="lg">{variable.title}</Heading>
+          <Divider m={2} />
+          <Heading size="md">
+            Current: <FinalValue finalValue={currentVersion.finalValue} />
+          </Heading>
+          <i>updated: {currentVersion.createdAt}</i>
+          {currentVersion.sourceUrl ? (
+            <i>
+              <TextLink link={currentVersion.sourceUrl} isExternal>
+                source
+              </TextLink>
+            </i>
+          ) : null}
+          <Divider m={2} />
+          <Flex>{relatedPageList}</Flex>
+        </Flex>
+      );
+    } else {
+      return <Loading />;
+    }
+  }, [data, loading]);
 
   return (
     <Container minW="80%" p={4}>

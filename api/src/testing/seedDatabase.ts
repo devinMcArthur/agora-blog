@@ -11,6 +11,9 @@ import createParagraphEditProposals, {
   ISeededParagraphEditProposals,
 } from "./documents/paragraphEditProposals";
 import createFiles, { ISeededFiles } from "./documents/files";
+import createVariableEditProposals, {
+  ISeededVariableEditProposals,
+} from "./documents/variableEditProposals";
 
 export interface SeededDatabase {
   files: ISeededFiles;
@@ -19,6 +22,7 @@ export interface SeededDatabase {
   paragraphs: SeededParagraphs;
   questions: SeededQuestions;
   variables: SeededVariables;
+  variableEditProposals: ISeededVariableEditProposals;
   paragraphEditProposals: ISeededParagraphEditProposals;
 }
 
@@ -35,6 +39,7 @@ const seedDatabase = () => {
       const variables = await createVariables();
       const paragraphs = await createParagraphs();
       const paragraphEditProposals = await createParagraphEditProposals();
+      const variableEditProposals = await createVariableEditProposals();
       const files = await createFiles();
       await createStatements();
 
@@ -47,6 +52,7 @@ const seedDatabase = () => {
         paragraphs,
         questions,
         variables,
+        variableEditProposals,
         paragraphEditProposals,
       });
     } catch (e) {

@@ -301,6 +301,26 @@ const _ids = {
       _id: Types.ObjectId("5eca8581d24f0800000b78dd"),
     },
   },
+  variableEditProposals: {
+    var_global_cases_covid_19_v2: {
+      _id: Types.ObjectId("618f035bcf744f00ebcc3448"),
+    },
+    var_global_cases_covid_19_v3: {
+      _id: Types.ObjectId("618f035bcf744f00ebcc3449"),
+    },
+    var_global_cases_covid_19_v4: {
+      _id: Types.ObjectId("618f035bcf744f00ebcc3450"),
+    },
+    var_global_deaths_covid_19_v2: {
+      _id: Types.ObjectId("618f035bcf744f00ebcc3451"),
+    },
+    var_global_deaths_covid_19_v3: {
+      _id: Types.ObjectId("618f035bcf744f00ebcc3452"),
+    },
+    var_covid_19_rt_pcr_test_sensitivity_v2: {
+      _id: Types.ObjectId("618f035bcf744f00ebcc3453"),
+    },
+  },
   files: {
     page_rt_pcr_cycle_threshold_statement_3_v1_image: {
       _id: Types.ObjectId("5eda8581d24f0800000b78dd"),
