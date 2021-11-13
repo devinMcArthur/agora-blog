@@ -6,8 +6,17 @@ fragment VariableSnippet on VariableClass {
     createdAt
     sourceUrl
     finalValue
+    sourceEditProposal {
+      ...VariableEditProposalSnippet
+    }
   }
   relatedPages {
     ...PageCardSnippet
+  }
+  editProposals {
+    ...VariableEditProposalSnippet
+  }
+  originalAuthor {
+    ...UserSnippet
   }
 }

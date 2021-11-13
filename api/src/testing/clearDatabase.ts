@@ -10,6 +10,7 @@ import {
   User,
   ParagraphEditProposal,
   File,
+  VariableEditProposal,
 } from "@models";
 
 const clearDatabase = () => {
@@ -23,6 +24,7 @@ const clearDatabase = () => {
       await Paragraph.deleteMany({});
       await Statement.deleteMany({});
       await PageConnection.deleteMany({});
+      await VariableEditProposal.deleteMany({});
       await ParagraphEditProposal.deleteMany({});
       await VariablePageConnection.deleteMany({});
       await QuestionPageConnection.deleteMany({});

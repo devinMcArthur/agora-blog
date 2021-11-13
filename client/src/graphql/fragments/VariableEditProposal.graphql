@@ -1,0 +1,11 @@
+fragment VariableEditProposalSnippet on VariableEditProposalClass {
+  _id
+  author {
+    ...UserSnippet
+  }
+  finalValue
+  description
+  value {
+    sourceUrl
+  }
+}

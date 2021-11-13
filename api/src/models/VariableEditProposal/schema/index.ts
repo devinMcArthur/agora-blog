@@ -45,6 +45,10 @@ export class VariableEditProposalSchema {
   @prop({ required: true })
   public variableVersionIndex!: number;
 
+  @Field({ nullable: false })
+  @prop({ required: true })
+  public description!: string;
+
   @Field(() => Version, { nullable: false })
   @prop({ type: () => Version, required: true })
   public value!: Version;

@@ -17,6 +17,9 @@ const document = (variableEditProposal: VariableEditProposalDocument) => {
       );
       if (!author) throw new Error("unable to find author");
 
+      if (!variableEditProposal.description)
+        throw new Error("must provide a description");
+
       await validateVariableVersion(variableEditProposal.value);
 
       resolve();

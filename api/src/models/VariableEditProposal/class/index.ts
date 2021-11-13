@@ -26,6 +26,18 @@ export class VariableEditProposalClass extends VariableEditProposalSchema {
     return get.byId(this, id, options);
   }
 
+  public async getFinalValue(this: VariableEditProposalDocument) {
+    return get.finalValue(this);
+  }
+
+  public async getAuthor(this: VariableEditProposalDocument) {
+    return get.author(this);
+  }
+
+  public async getVariable(this: VariableEditProposalDocument) {
+    return get.variable(this);
+  }
+
   /**
    * ----- Build -----
    */

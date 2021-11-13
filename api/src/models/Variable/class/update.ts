@@ -13,7 +13,7 @@ const fromProposal = (
         throw new Error("this edit proposal is outdated");
 
       variable.versions.push({
-        ...variableEditProposal.value,
+        ...JSON.parse(JSON.stringify(variableEditProposal.value)),
         sourceEditProposal: variableEditProposal._id,
       });
 

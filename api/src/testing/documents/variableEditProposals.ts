@@ -16,6 +16,7 @@ const createVariableEditProposals = () => {
     try {
       const var_global_cases_covid_19_v2 = new VariableEditProposal({
         variable: _ids.variables.var_global_cases_covid_19._id,
+        description: "Update value from same source",
         variableVersionIndex: 0,
         value: {
           type: "number",
@@ -28,6 +29,7 @@ const createVariableEditProposals = () => {
 
       const var_global_cases_covid_19_v3 = new VariableEditProposal({
         variable: _ids.variables.var_global_cases_covid_19._id,
+        description: "Update value from same source",
         variableVersionIndex: 1,
         value: {
           type: "number",
@@ -41,6 +43,7 @@ const createVariableEditProposals = () => {
       const var_global_cases_covid_19_v4 = new VariableEditProposal({
         variable: _ids.variables.var_global_cases_covid_19._id,
         variableVersionIndex: 2,
+        description: "Update value from same source",
         value: {
           type: "number",
           number: 251795820,
@@ -53,6 +56,7 @@ const createVariableEditProposals = () => {
       const var_global_deaths_covid_19_v2 = new VariableEditProposal({
         variable: _ids.variables.var_global_deaths_covid_19._id,
         variableVersionIndex: 0,
+        description: "Update value from same source",
         value: {
           type: "number",
           number: 2423443,
@@ -65,6 +69,7 @@ const createVariableEditProposals = () => {
       const var_global_deaths_covid_19_v3 = new VariableEditProposal({
         variable: _ids.variables.var_global_deaths_covid_19._id,
         variableVersionIndex: 1,
+        description: "Update value from same source",
         value: {
           type: "number",
           number: 5077932,
@@ -77,6 +82,7 @@ const createVariableEditProposals = () => {
       const var_covid_19_rt_pcr_test_sensitivity_v2 = new VariableEditProposal({
         variable: _ids.variables.var_covid_19_rt_pcr_test_sensitivity._id,
         variableVersionIndex: 0,
+        description: "Lower value was determined by a recent study",
         value: {
           type: "number",
           number: 85.7,

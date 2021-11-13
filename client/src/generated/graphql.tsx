@@ -175,6 +175,7 @@ export type VariableClass = {
   originalAuthor: UserClass;
   finalValue: Scalars['Float'];
   relatedPages: Array<PageClass>;
+  editProposals: Array<VariableEditProposalClass>;
 };
 
 export type VariableVersionClass = {
@@ -184,6 +185,7 @@ export type VariableVersionClass = {
   equation: Array<VariableEquationClass>;
   sourceUrl?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
+  sourceEditProposal?: Maybe<VariableEditProposalClass>;
   finalValue: Scalars['Float'];
 };
 
@@ -193,6 +195,27 @@ export type VariableEquationClass = {
   operator?: Maybe<Scalars['String']>;
   number?: Maybe<Scalars['Float']>;
   variable?: Maybe<VariableClass>;
+};
+
+export type VariableEditProposalClass = {
+  __typename?: 'VariableEditProposalClass';
+  _id: Scalars['ID'];
+  variable: VariableClass;
+  variableVersionIndex: Scalars['Float'];
+  description: Scalars['String'];
+  value: Version;
+  author: UserClass;
+  createdAt: Scalars['DateTime'];
+  finalValue: Scalars['Float'];
+};
+
+export type Version = {
+  __typename?: 'Version';
+  type: Scalars['String'];
+  number?: Maybe<Scalars['Float']>;
+  equation: Array<VariableEquationClass>;
+  sourceUrl?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
 };
 
 export type StatementImageClass = {
@@ -252,6 +275,8 @@ export type Mutation = {
   newPage: PageClass;
   scrapeTest: Scalars['String'];
   newVariable: VariableClass;
+  newVariableEditProposal: VariableEditProposalClass;
+  approveVariableEditProposal: VariableClass;
   createParagraphEditProposal: ParagraphEditProposalClass;
   approveParagraphEditProposal: PageClass;
 };
@@ -280,6 +305,16 @@ export type MutationScrapeTestArgs = {
 
 export type MutationNewVariableArgs = {
   data: NewVariableData;
+};
+
+
+export type MutationNewVariableEditProposalArgs = {
+  data: NewVariableEditProposalData;
+};
+
+
+export type MutationApproveVariableEditProposalArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -365,6 +400,12 @@ export type VariableEquationItemData = {
   operator?: Maybe<Scalars['String']>;
   number?: Maybe<Scalars['Float']>;
   variable?: Maybe<Scalars['ID']>;
+};
+
+export type NewVariableEditProposalData = {
+  variable: Scalars['ID'];
+  value: VariableVersionData;
+  description: Scalars['String'];
 };
 
 export type ParagraphEditProposalData = {
@@ -569,6 +610,23 @@ export type QuestionSnippetFragment = (
   )> }
 );
 
+export type UserSnippetFragment = (
+  { __typename?: 'UserClass' }
+  & Pick<UserClass, '_id' | 'firstName' | 'middleName' | 'lastName'>
+);
+
+export type VariableEditProposalSnippetFragment = (
+  { __typename?: 'VariableEditProposalClass' }
+  & Pick<VariableEditProposalClass, '_id' | 'finalValue' | 'description'>
+  & { author: (
+    { __typename?: 'UserClass' }
+    & UserSnippetFragment
+  ), value: (
+    { __typename?: 'Version' }
+    & Pick<Version, 'sourceUrl'>
+  ) }
+);
+
 export type VariableSearchSnippetFragment = (
   { __typename?: 'VariableClass' }
   & Pick<VariableClass, '_id' | 'title' | 'finalValue'>
@@ -580,10 +638,20 @@ export type VariableSnippetFragment = (
   & { versions: Array<(
     { __typename?: 'VariableVersionClass' }
     & Pick<VariableVersionClass, 'finalValue' | 'createdAt' | 'sourceUrl'>
+    & { sourceEditProposal?: Maybe<(
+      { __typename?: 'VariableEditProposalClass' }
+      & VariableEditProposalSnippetFragment
+    )> }
   )>, relatedPages: Array<(
     { __typename?: 'PageClass' }
     & PageCardSnippetFragment
-  )> }
+  )>, editProposals: Array<(
+    { __typename?: 'VariableEditProposalClass' }
+    & VariableEditProposalSnippetFragment
+  )>, originalAuthor: (
+    { __typename?: 'UserClass' }
+    & UserSnippetFragment
+  ) }
 );
 
 export type ApproveParagraphEditProposalMutationVariables = Exact<{
@@ -596,6 +664,19 @@ export type ApproveParagraphEditProposalMutation = (
   & { approveParagraphEditProposal: (
     { __typename?: 'PageClass' }
     & PageSnippetFragment
+  ) }
+);
+
+export type ApproveVariableEditProposalMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type ApproveVariableEditProposalMutation = (
+  { __typename?: 'Mutation' }
+  & { approveVariableEditProposal: (
+    { __typename?: 'VariableClass' }
+    & VariableSnippetFragment
   ) }
 );
 
@@ -645,6 +726,19 @@ export type NewVariableMutation = (
   & { newVariable: (
     { __typename?: 'VariableClass' }
     & VariableSnippetFragment
+  ) }
+);
+
+export type NewVariableEditProposalMutationVariables = Exact<{
+  data: NewVariableEditProposalData;
+}>;
+
+
+export type NewVariableEditProposalMutation = (
+  { __typename?: 'Mutation' }
+  & { newVariableEditProposal: (
+    { __typename?: 'VariableEditProposalClass' }
+    & VariableEditProposalSnippetFragment
   ) }
 );
 
@@ -1057,6 +1151,27 @@ export const VariableSearchSnippetFragmentDoc = gql`
   finalValue
 }
     `;
+export const UserSnippetFragmentDoc = gql`
+    fragment UserSnippet on UserClass {
+  _id
+  firstName
+  middleName
+  lastName
+}
+    `;
+export const VariableEditProposalSnippetFragmentDoc = gql`
+    fragment VariableEditProposalSnippet on VariableEditProposalClass {
+  _id
+  author {
+    ...UserSnippet
+  }
+  finalValue
+  description
+  value {
+    sourceUrl
+  }
+}
+    ${UserSnippetFragmentDoc}`;
 export const VariableSnippetFragmentDoc = gql`
     fragment VariableSnippet on VariableClass {
   _id
@@ -1066,12 +1181,23 @@ export const VariableSnippetFragmentDoc = gql`
     createdAt
     sourceUrl
     finalValue
+    sourceEditProposal {
+      ...VariableEditProposalSnippet
+    }
   }
   relatedPages {
     ...PageCardSnippet
   }
+  editProposals {
+    ...VariableEditProposalSnippet
+  }
+  originalAuthor {
+    ...UserSnippet
+  }
 }
-    ${PageCardSnippetFragmentDoc}`;
+    ${VariableEditProposalSnippetFragmentDoc}
+${PageCardSnippetFragmentDoc}
+${UserSnippetFragmentDoc}`;
 export const ApproveParagraphEditProposalDocument = gql`
     mutation ApproveParagraphEditProposal($id: String!) {
   approveParagraphEditProposal(id: $id) {
@@ -1104,6 +1230,38 @@ export function useApproveParagraphEditProposalMutation(baseOptions?: Apollo.Mut
 export type ApproveParagraphEditProposalMutationHookResult = ReturnType<typeof useApproveParagraphEditProposalMutation>;
 export type ApproveParagraphEditProposalMutationResult = Apollo.MutationResult<ApproveParagraphEditProposalMutation>;
 export type ApproveParagraphEditProposalMutationOptions = Apollo.BaseMutationOptions<ApproveParagraphEditProposalMutation, ApproveParagraphEditProposalMutationVariables>;
+export const ApproveVariableEditProposalDocument = gql`
+    mutation ApproveVariableEditProposal($id: String!) {
+  approveVariableEditProposal(id: $id) {
+    ...VariableSnippet
+  }
+}
+    ${VariableSnippetFragmentDoc}`;
+export type ApproveVariableEditProposalMutationFn = Apollo.MutationFunction<ApproveVariableEditProposalMutation, ApproveVariableEditProposalMutationVariables>;
+
+/**
+ * __useApproveVariableEditProposalMutation__
+ *
+ * To run a mutation, you first call `useApproveVariableEditProposalMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useApproveVariableEditProposalMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [approveVariableEditProposalMutation, { data, loading, error }] = useApproveVariableEditProposalMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useApproveVariableEditProposalMutation(baseOptions?: Apollo.MutationHookOptions<ApproveVariableEditProposalMutation, ApproveVariableEditProposalMutationVariables>) {
+        return Apollo.useMutation<ApproveVariableEditProposalMutation, ApproveVariableEditProposalMutationVariables>(ApproveVariableEditProposalDocument, baseOptions);
+      }
+export type ApproveVariableEditProposalMutationHookResult = ReturnType<typeof useApproveVariableEditProposalMutation>;
+export type ApproveVariableEditProposalMutationResult = Apollo.MutationResult<ApproveVariableEditProposalMutation>;
+export type ApproveVariableEditProposalMutationOptions = Apollo.BaseMutationOptions<ApproveVariableEditProposalMutation, ApproveVariableEditProposalMutationVariables>;
 export const CreateParagraphEditProposalDocument = gql`
     mutation CreateParagraphEditProposal($data: ParagraphEditProposalData!) {
   createParagraphEditProposal(data: $data) {
@@ -1230,6 +1388,38 @@ export function useNewVariableMutation(baseOptions?: Apollo.MutationHookOptions<
 export type NewVariableMutationHookResult = ReturnType<typeof useNewVariableMutation>;
 export type NewVariableMutationResult = Apollo.MutationResult<NewVariableMutation>;
 export type NewVariableMutationOptions = Apollo.BaseMutationOptions<NewVariableMutation, NewVariableMutationVariables>;
+export const NewVariableEditProposalDocument = gql`
+    mutation NewVariableEditProposal($data: NewVariableEditProposalData!) {
+  newVariableEditProposal(data: $data) {
+    ...VariableEditProposalSnippet
+  }
+}
+    ${VariableEditProposalSnippetFragmentDoc}`;
+export type NewVariableEditProposalMutationFn = Apollo.MutationFunction<NewVariableEditProposalMutation, NewVariableEditProposalMutationVariables>;
+
+/**
+ * __useNewVariableEditProposalMutation__
+ *
+ * To run a mutation, you first call `useNewVariableEditProposalMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNewVariableEditProposalMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [newVariableEditProposalMutation, { data, loading, error }] = useNewVariableEditProposalMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useNewVariableEditProposalMutation(baseOptions?: Apollo.MutationHookOptions<NewVariableEditProposalMutation, NewVariableEditProposalMutationVariables>) {
+        return Apollo.useMutation<NewVariableEditProposalMutation, NewVariableEditProposalMutationVariables>(NewVariableEditProposalDocument, baseOptions);
+      }
+export type NewVariableEditProposalMutationHookResult = ReturnType<typeof useNewVariableEditProposalMutation>;
+export type NewVariableEditProposalMutationResult = Apollo.MutationResult<NewVariableEditProposalMutation>;
+export type NewVariableEditProposalMutationOptions = Apollo.BaseMutationOptions<NewVariableEditProposalMutation, NewVariableEditProposalMutationVariables>;
 export const UserLoginDocument = gql`
     mutation UserLogin($data: LoginData!) {
   login(data: $data)

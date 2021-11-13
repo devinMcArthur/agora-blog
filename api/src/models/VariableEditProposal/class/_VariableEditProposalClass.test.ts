@@ -42,6 +42,7 @@ describe("Variable Edit Proposal Class", () => {
         test("should successfully build a new number variable edit proposal", async () => {
           const data: IVariableEditProposalData = {
             variable: _ids.variables.var_global_deaths_covid_19._id,
+            description: "description",
             value: {
               type: VariableVersionTypes.number,
               number: 42,
@@ -53,6 +54,8 @@ describe("Variable Edit Proposal Class", () => {
           const variableEditProposal = await VariableEditProposal.build(data);
 
           expect(variableEditProposal).toBeDefined();
+
+          expect(variableEditProposal.description).toBe(data.description);
 
           expect(variableEditProposal.variableVersionIndex).toBe(
             documents.variables.var_global_deaths_covid_19.versions.length - 1
@@ -68,6 +71,7 @@ describe("Variable Edit Proposal Class", () => {
         test("should successfully build a new equation variable", async () => {
           const data: IVariableEditProposalData = {
             variable: documents.variables.var_global_cases_covid_19._id,
+            description: "description",
             value: {
               type: VariableVersionTypes.equation,
               equation: [
@@ -154,6 +158,7 @@ describe("Variable Edit Proposal Class", () => {
             variable:
               documents.variables.var_covid_19_rt_pcr_test_false_negative_rate
                 ._id,
+            description: "description",
             value: {
               sourceUrl: "invalid",
               type: VariableVersionTypes.number,
@@ -178,6 +183,7 @@ describe("Variable Edit Proposal Class", () => {
               documents.variables.var_covid_19_rt_pcr_test_false_negative_rate
                 ._id,
             author: documents.users.dev._id,
+            description: "desc",
           };
 
           expect.assertions(1);
@@ -186,6 +192,29 @@ describe("Variable Edit Proposal Class", () => {
             await VariableEditProposal.build(data);
           } catch (e: any) {
             expect(e.message).toBe("must provide a value for this version");
+          }
+        });
+
+        test("should error if no description is provided", async () => {
+          const data: IVariableEditProposalData = {
+            variable:
+              documents.variables.var_covid_19_rt_pcr_test_false_negative_rate
+                ._id,
+            description: "",
+            value: {
+              sourceUrl: "valid.com",
+              type: VariableVersionTypes.number,
+              number: 12,
+            },
+            author: documents.users.dev._id,
+          };
+
+          expect.assertions(1);
+
+          try {
+            await VariableEditProposal.build(data);
+          } catch (e: any) {
+            expect(e.message).toBe("must provide a description");
           }
         });
       });
@@ -210,6 +239,16 @@ describe("Variable Edit Proposal Class", () => {
           expect(
             updatedVariable.versions[1].sourceEditProposal!.toString()
           ).toBe(variableEditProposal._id.toString());
+
+          expect(updatedVariable.versions[1].type).toBe(
+            variableEditProposal.value.type
+          );
+          expect(updatedVariable.versions[1].number).toBe(
+            variableEditProposal.value.number
+          );
+          expect(updatedVariable.versions[1].sourceUrl).toBe(
+            variableEditProposal.value.sourceUrl
+          );
         });
       });
 

@@ -1,0 +1,5 @@
+mutation NewVariableEditProposal($data: NewVariableEditProposalData!) {
+  newVariableEditProposal(data: $data) {
+    ...VariableEditProposalSnippet
+  }
+}

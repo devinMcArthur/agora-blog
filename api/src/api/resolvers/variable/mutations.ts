@@ -24,7 +24,7 @@ class VariableEquationItemData {
 }
 
 @InputType()
-class VariableVersionData {
+export class VariableVersionData {
   @Field({ nullable: false })
   public type!: VariableVersionTypes;
 

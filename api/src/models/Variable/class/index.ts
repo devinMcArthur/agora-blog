@@ -57,6 +57,10 @@ export class VariableClass extends VariableSchema {
     return get.author(this);
   }
 
+  public async getEditProposals(this: VariableDocument) {
+    return get.editProposals(this);
+  }
+
   /**
    * ----- Build -----
    */

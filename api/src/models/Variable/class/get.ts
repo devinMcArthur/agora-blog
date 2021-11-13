@@ -11,9 +11,12 @@ import {
   Variable,
   UserDocument,
   User,
+  VariableEditProposalDocument,
+  VariableEditProposal,
 } from "@models";
 import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
+import getVariableVersionValue from "@utils/getVariableVersionValue";
 
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,
@@ -55,35 +58,12 @@ const finalValue = (variable: VariableDocument): Promise<number> => {
 };
 
 const versionsFinalValue = (
-  Variable: VariableModel,
+  _: VariableModel,
   variableValue: VariableVersionClass
 ): Promise<number> => {
   return new Promise(async (resolve, reject) => {
     try {
-      switch (variableValue.type) {
-        case "number":
-          resolve(variableValue.number!);
-          break;
-        case "equation":
-          let equation = "";
-          for (let i = 0; i < variableValue.equation.length; i++) {
-            const item = variableValue.equation[i];
-            if (item.type === "number") {
-              equation += item.number;
-            } else if (item.type === "operator") {
-              equation += item.operator;
-            } else if (item.type === "variable") {
-              const variable = await Variable.getById(
-                item.variable!.toString()
-              );
-              equation += await Variable.getVersionsFinalValue(
-                variable?.versions[variable?.versions.length - 1]!
-              );
-            }
-          }
-          resolve(eval(equation));
-          break;
-      }
+      resolve(await getVariableVersionValue(variableValue));
     } catch (e) {
       reject(e);
     }
@@ -184,6 +164,23 @@ const byTitle = (Variable: VariableModel, title: string) => {
   });
 };
 
+const editProposals = (variable: VariableDocument) => {
+  return new Promise<VariableEditProposalDocument[]>(
+    async (resolve, reject) => {
+      try {
+        const variableEditProposals = await VariableEditProposal.find({
+          variableVersionIndex: variable.versions.length - 1,
+          variable: variable._id,
+        });
+
+        resolve(variableEditProposals);
+      } catch (e) {
+        reject(e);
+      }
+    }
+  );
+};
+
 export default {
   byID,
   byTitle,
@@ -192,4 +189,5 @@ export default {
   versionsFinalValue,
   pagesThatReference,
   search,
+  editProposals,
 };

@@ -17,6 +17,7 @@ import {
   PageDocument,
   PageClass,
   UserClass,
+  VariableEditProposalClass,
 } from "@models";
 
 import fieldResolvers from "./fieldResolvers";
@@ -44,6 +45,11 @@ export default class VariableResolver {
   @FieldResolver(() => UserClass)
   async originalAuthor(@Root() variable: VariableDocument) {
     return variable.getAuthor();
+  }
+
+  @FieldResolver(() => [VariableEditProposalClass])
+  async editProposals(@Root() variable: VariableDocument) {
+    return variable.getEditProposals();
   }
 
   /**
