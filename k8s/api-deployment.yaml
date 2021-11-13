@@ -23,6 +23,11 @@ spec:
                 secretKeyRef:
                   name: api-secrets
                   key: mongoURI
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: jwtSecret
             - name: SPACES_NAME
               valueFrom:
                 secretKeyRef:
