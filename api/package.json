@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "build": "rimraf dist && tsc",
+    "build": "rimraf dist && tsc && tscpaths -p tsconfig.json -s ./src -o ./dist",
     "start": "node dist/server.js",
     "start:dev": "nodemon",
     "test": "jest"
@@ -58,6 +58,7 @@
     "ts-jest": "26.4.4",
     "ts-node": "9.1.1",
     "tsconfig-paths": "^3.11.0",
+    "tscpaths": "0.0.9",
     "tslint": "6.1.3"
   }
 }
