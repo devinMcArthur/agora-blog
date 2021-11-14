@@ -22,7 +22,7 @@ const main = async () => {
     console.log("MongoDB Connected");
     console.log("Database seeding...");
 
-    if (process.env.NODE_ENV !== "production") await seedDatabase();
+    await seedDatabase();
   }
 
   let port = process.env.PORT || 8080;
