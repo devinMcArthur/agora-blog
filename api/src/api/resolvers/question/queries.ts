@@ -10,8 +10,8 @@ const questions = async () => {
   return await Question.getList();
 };
 
-const searchQuestions = async (searchString: string) => {
-  return Question.search(searchString);
+const searchQuestions = async (searchString: string, limit?: number) => {
+  return Question.search(searchString, limit);
 };
 
 export default {

@@ -73,8 +73,11 @@ export default class PageResolver {
   }
 
   @Query(() => [PageClass])
-  async searchPages(@Arg("searchString") searchString: string) {
-    return queries.searchPages(searchString);
+  async searchPages(
+    @Arg("searchString") searchString: string,
+    @Arg("limit", { nullable: true }) limit?: number
+  ) {
+    return queries.searchPages(searchString, limit);
   }
 
   /**

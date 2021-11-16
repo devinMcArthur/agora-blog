@@ -45,7 +45,10 @@ export default class QuestionResolver {
   }
 
   @Query(() => [QuestionClass])
-  async searchQuestions(@Arg("searchString") searchString: string) {
-    return queries.searchQuestions(searchString);
+  async searchQuestions(
+    @Arg("searchString") searchString: string,
+    @Arg("limit", { nullable: true }) limit?: number
+  ) {
+    return queries.searchQuestions(searchString, limit);
   }
 }

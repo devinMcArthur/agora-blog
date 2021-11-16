@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useOutsideClick } from "@chakra-ui/hooks";
-import { Box, BoxProps, Stack } from "@chakra-ui/layout";
+import { Box, BoxProps, Heading, Stack } from "@chakra-ui/layout";
 import TextField, { ITextField } from "./TextField";
 
 export interface IOptions<ExtraData> {
@@ -10,8 +10,13 @@ export interface IOptions<ExtraData> {
   extraData?: ExtraData;
 }
 
+export interface IGroupedOptions<ExtraData> {
+  [key: string]: IOptions<ExtraData>[];
+}
+
 interface ITextDropdown<ExtraData> extends ITextField {
   options?: IOptions<ExtraData>[];
+  groupedOptions?: { [key: string]: IOptions<ExtraData>[] };
   onOptionSelection: (
     choice: { value: string; label: string },
     extraData?: ExtraData
@@ -23,6 +28,7 @@ interface ITextDropdown<ExtraData> extends ITextField {
 
 const TextDropdown = <ExtraData extends object>({
   options,
+  groupedOptions,
   onOptionSelection,
   containerId,
   dropdownProps,
@@ -84,7 +90,69 @@ const TextDropdown = <ExtraData extends object>({
   }, [options]);
 
   let dropdownJSX;
-  if (dropdown && options && options.length > 0) {
+  let groupedOptionsPopulated = false;
+  if (groupedOptions)
+    for (let i = 0; i < Object.values(groupedOptions).length; i++) {
+      if (
+        Object.values(groupedOptions)[i] &&
+        Object.values(groupedOptions)[i].length > 0
+      )
+        groupedOptionsPopulated = true;
+    }
+  if (dropdown && groupedOptionsPopulated) {
+    dropdownJSX = (
+      <Box
+        borderRadius="0 0 0.375rem 0.375rem"
+        position="absolute"
+        top={
+          `${
+            (inputRef.current?.getBoundingClientRect().height || 8) / 1.09
+          }px` || "2.25em"
+        }
+        border="1px solid"
+        borderColor="inherit"
+        borderTop="none"
+        paddingTop={2}
+        zIndex={9999}
+        backgroundColor="white"
+        w="100%"
+        maxH="25vh"
+        overflowY="scroll"
+        {...dropdownProps}
+      >
+        <Box h="1px" w="95%" backgroundColor="gray.400" mx="auto" mb={2}></Box>
+        <Stack>
+          {Object.values(groupedOptions!).map((value, i) => (
+            <Box>
+              <Heading size="sm" w="100%" backgroundColor="gray.300" p={2}>
+                {Object.keys(groupedOptions!)[i].toUpperCase()}
+              </Heading>
+              <Stack>
+                {value.map((option, index) => (
+                  <Box
+                    as="span"
+                    cursor="pointer"
+                    onMouseOver={() => setSelectedIndex(index)}
+                    onMouseLeave={() => setSelectedIndex(undefined)}
+                    padding={1}
+                    paddingLeft="1rem"
+                    onClick={() => {
+                      setDropdown(false);
+                      onOptionSelection(option, option.extraData);
+                    }}
+                    key={index}
+                    fontWeight={selectedIndex === index ? "bold" : ""}
+                  >
+                    {option.label}
+                  </Box>
+                ))}
+              </Stack>
+            </Box>
+          ))}
+        </Stack>
+      </Box>
+    );
+  } else if (dropdown && options && options.length > 0) {
     dropdownJSX = (
       <Box
         borderRadius="0 0 0.375rem 0.375rem"

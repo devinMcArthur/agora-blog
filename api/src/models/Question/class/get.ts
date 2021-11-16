@@ -150,9 +150,15 @@ const statementReferences = (
   });
 };
 
-const search = (Question: QuestionModel, searchString: string) => {
+const search = (
+  Question: QuestionModel,
+  searchString: string,
+  limit?: number
+) => {
   return new Promise<QuestionDocument[]>(async (resolve, reject) => {
     try {
+      let remainingLimit = limit || 250;
+
       /**
        * Partial Search
        */
@@ -163,7 +169,7 @@ const search = (Question: QuestionModel, searchString: string) => {
 
         return Question.find({
           question: new RegExp(escapeRegex(searchString), "gi"),
-        });
+        }).limit(remainingLimit);
       };
 
       /**
@@ -172,7 +178,7 @@ const search = (Question: QuestionModel, searchString: string) => {
       const fullSearch = async () => {
         return Question.find({
           $text: { $search: searchString, $caseSensitive: false },
-        });
+        }).limit(remainingLimit);
       };
 
       /**

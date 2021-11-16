@@ -96,9 +96,15 @@ const pagesThatReference = (
   });
 };
 
-const search = (Variable: VariableModel, searchString: string) => {
+const search = (
+  Variable: VariableModel,
+  searchString: string,
+  limit?: number
+) => {
   return new Promise<VariableDocument[]>(async (resolve, reject) => {
     try {
+      let remainingLimit = limit || 250;
+
       /**
        * Partial Search
        */
@@ -109,7 +115,7 @@ const search = (Variable: VariableModel, searchString: string) => {
 
         return Variable.find({
           title: new RegExp(escapeRegex(searchString), "gi"),
-        });
+        }).limit(remainingLimit);
       };
 
       /**
@@ -118,7 +124,7 @@ const search = (Variable: VariableModel, searchString: string) => {
       const fullSearch = async () => {
         return Variable.find({
           $text: { $search: searchString, $caseSensitive: false },
-        });
+        }).limit(remainingLimit);
       };
 
       /**

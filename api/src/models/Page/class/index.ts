@@ -57,8 +57,12 @@ export class PageClass extends PageSchema {
     return get.statementReferences(this);
   }
 
-  public static async search(this: PageModel, searchString: string) {
-    return get.search(this, searchString);
+  public static async search(
+    this: PageModel,
+    searchString: string,
+    limit?: number
+  ) {
+    return get.search(this, searchString, limit);
   }
 
   /**

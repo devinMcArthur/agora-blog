@@ -1,5 +1,5 @@
-query LinkFormPageSearch($searchString: String!) {
-  searchPages(searchString: $searchString) {
+query LinkFormPageSearch($searchString: String!, $limit: Float) {
+  searchPages(searchString: $searchString, limit: $limit) {
     ...LinkFormPageSnippet
   }
 }

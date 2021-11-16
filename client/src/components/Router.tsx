@@ -12,6 +12,7 @@ import Page from "./Page";
 import Playground from "./Playground";
 import Question from "./Question";
 import Questions from "./Questions";
+import Search from "./Search";
 import User from "./User";
 import Variable from "./Variable";
 
@@ -31,6 +32,7 @@ function Router() {
             <Route exact path="/questions" component={Questions} />
             <Route exact path="/create-page" component={CreatePage} />
             <Route exact path="/playground" component={Playground} />
+            <Route exact path="/search" component={Search} />
           </Switch>
           <DrawerContainer />
         </MainPageContainer>

@@ -14,8 +14,8 @@ const pages = async () => {
   return await Page.getList();
 };
 
-const searchPages = async (searchString: string) => {
-  return Page.search(searchString);
+const searchPages = async (searchString: string, limit?: number) => {
+  return Page.search(searchString, limit);
 };
 
 export default { page, pages, searchPages };

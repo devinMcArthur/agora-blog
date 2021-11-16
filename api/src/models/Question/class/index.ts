@@ -42,8 +42,12 @@ export class QuestionClass extends QuestionSchema {
     return get.statementReferences(this, options);
   }
 
-  public static async search(this: QuestionModel, searchString: string) {
-    return get.search(this, searchString);
+  public static async search(
+    this: QuestionModel,
+    searchString: string,
+    limit?: number
+  ) {
+    return get.search(this, searchString, limit);
   }
 
   public static async getByQuestion(this: QuestionModel, question: string) {

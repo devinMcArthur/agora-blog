@@ -76,10 +76,13 @@ const list = (Page: PageModel): Promise<PageDocument[]> => {
 
 const search = (
   Page: PageModel,
-  searchString: string
+  searchString: string,
+  limit?: number
 ): Promise<PageDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
+      let reminaingLimit = limit || 250;
+
       /**
        * Partial Search
        */
@@ -90,7 +93,7 @@ const search = (
 
         return Page.find({
           title: new RegExp(escapeRegex(searchString), "gi"),
-        });
+        }).limit(reminaingLimit);
       };
 
       /**
@@ -99,7 +102,7 @@ const search = (
       const fullSearch = async () => {
         return Page.find({
           $text: { $search: searchString, $caseSensitive: false },
-        });
+        }).limit(reminaingLimit);
       };
 
       /**

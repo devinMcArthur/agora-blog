@@ -1,1 +1,1 @@
-export const navbarHeight = "6%";
+export const navbarHeight = "3.4rem";

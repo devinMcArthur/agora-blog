@@ -1,5 +1,5 @@
-query SearchQuestions($searchString: String!) {
-  searchQuestions(searchString: $searchString) {
+query SearchQuestions($searchString: String!, $limit: Float) {
+  searchQuestions(searchString: $searchString, limit: $limit) {
     ...QuestionSearchSnippet
   }
 }

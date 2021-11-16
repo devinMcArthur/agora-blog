@@ -64,8 +64,11 @@ export default class VariableResolver {
   }
 
   @Query(() => [VariableClass])
-  async searchVariables(@Arg("searchString") searchString: string) {
-    return queries.searchVariables(searchString);
+  async searchVariables(
+    @Arg("searchString") searchString: string,
+    @Arg("limit", { nullable: true }) limit?: number
+  ) {
+    return queries.searchVariables(searchString, limit);
   }
 
   /**

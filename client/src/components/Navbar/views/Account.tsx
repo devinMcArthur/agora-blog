@@ -63,7 +63,7 @@ const NavbarAccount = () => {
             {user.firstName.charAt(0)}
           </MenuButton>
           <MenuList>
-            <MenuGroup title={`${user.firstName} ${user.lastName}`}>
+            <MenuGroup>
               <MenuItem onClick={() => history.push(`/u/${user._id}`)}>
                 Profile
               </MenuItem>

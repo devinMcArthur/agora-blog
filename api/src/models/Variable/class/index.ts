@@ -45,8 +45,12 @@ export class VariableClass extends VariableSchema {
     return get.pagesThatReference(this);
   }
 
-  public static async search(this: VariableModel, searchString: string) {
-    return get.search(this, searchString);
+  public static async search(
+    this: VariableModel,
+    searchString: string,
+    limit?: number
+  ) {
+    return get.search(this, searchString, limit);
   }
 
   public static async getByTitle(this: VariableModel, title: string) {

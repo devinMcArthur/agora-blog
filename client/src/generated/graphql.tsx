@@ -47,6 +47,7 @@ export type QueryPageArgs = {
 
 
 export type QuerySearchPagesArgs = {
+  limit?: Maybe<Scalars['Float']>;
   searchString: Scalars['String'];
 };
 
@@ -57,6 +58,7 @@ export type QueryVariableArgs = {
 
 
 export type QuerySearchVariablesArgs = {
+  limit?: Maybe<Scalars['Float']>;
   searchString: Scalars['String'];
 };
 
@@ -67,6 +69,7 @@ export type QueryQuestionArgs = {
 
 
 export type QuerySearchQuestionsArgs = {
+  limit?: Maybe<Scalars['Float']>;
   searchString: Scalars['String'];
 };
 
@@ -778,6 +781,7 @@ export type FullParagraphEditProposalQuery = (
 
 export type LinkFormPageSearchQueryVariables = Exact<{
   searchString: Scalars['String'];
+  limit?: Maybe<Scalars['Float']>;
 }>;
 
 
@@ -809,6 +813,20 @@ export type PagesQueryVariables = Exact<{ [key: string]: never; }>;
 export type PagesQuery = (
   { __typename?: 'Query' }
   & { pages: Array<(
+    { __typename?: 'PageClass' }
+    & PageCardSnippetFragment
+  )> }
+);
+
+export type PreviewPageSearchQueryVariables = Exact<{
+  searchString: Scalars['String'];
+  limit?: Maybe<Scalars['Float']>;
+}>;
+
+
+export type PreviewPageSearchQuery = (
+  { __typename?: 'Query' }
+  & { searchPages: Array<(
     { __typename?: 'PageClass' }
     & PageCardSnippetFragment
   )> }
@@ -853,6 +871,7 @@ export type QuestionsQuery = (
 
 export type SearchQuestionsQueryVariables = Exact<{
   searchString: Scalars['String'];
+  limit?: Maybe<Scalars['Float']>;
 }>;
 
 
@@ -866,6 +885,7 @@ export type SearchQuestionsQuery = (
 
 export type SearchVariablesQueryVariables = Exact<{
   searchString: Scalars['String'];
+  limit?: Maybe<Scalars['Float']>;
 }>;
 
 
@@ -1516,8 +1536,8 @@ export type FullParagraphEditProposalQueryHookResult = ReturnType<typeof useFull
 export type FullParagraphEditProposalLazyQueryHookResult = ReturnType<typeof useFullParagraphEditProposalLazyQuery>;
 export type FullParagraphEditProposalQueryResult = Apollo.QueryResult<FullParagraphEditProposalQuery, FullParagraphEditProposalQueryVariables>;
 export const LinkFormPageSearchDocument = gql`
-    query LinkFormPageSearch($searchString: String!) {
-  searchPages(searchString: $searchString) {
+    query LinkFormPageSearch($searchString: String!, $limit: Float) {
+  searchPages(searchString: $searchString, limit: $limit) {
     ...LinkFormPageSnippet
   }
 }
@@ -1536,6 +1556,7 @@ export const LinkFormPageSearchDocument = gql`
  * const { data, loading, error } = useLinkFormPageSearchQuery({
  *   variables: {
  *      searchString: // value for 'searchString'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
@@ -1614,6 +1635,40 @@ export function usePagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Page
 export type PagesQueryHookResult = ReturnType<typeof usePagesQuery>;
 export type PagesLazyQueryHookResult = ReturnType<typeof usePagesLazyQuery>;
 export type PagesQueryResult = Apollo.QueryResult<PagesQuery, PagesQueryVariables>;
+export const PreviewPageSearchDocument = gql`
+    query PreviewPageSearch($searchString: String!, $limit: Float) {
+  searchPages(searchString: $searchString, limit: $limit) {
+    ...PageCardSnippet
+  }
+}
+    ${PageCardSnippetFragmentDoc}`;
+
+/**
+ * __usePreviewPageSearchQuery__
+ *
+ * To run a query within a React component, call `usePreviewPageSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePreviewPageSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePreviewPageSearchQuery({
+ *   variables: {
+ *      searchString: // value for 'searchString'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function usePreviewPageSearchQuery(baseOptions: Apollo.QueryHookOptions<PreviewPageSearchQuery, PreviewPageSearchQueryVariables>) {
+        return Apollo.useQuery<PreviewPageSearchQuery, PreviewPageSearchQueryVariables>(PreviewPageSearchDocument, baseOptions);
+      }
+export function usePreviewPageSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewPageSearchQuery, PreviewPageSearchQueryVariables>) {
+          return Apollo.useLazyQuery<PreviewPageSearchQuery, PreviewPageSearchQueryVariables>(PreviewPageSearchDocument, baseOptions);
+        }
+export type PreviewPageSearchQueryHookResult = ReturnType<typeof usePreviewPageSearchQuery>;
+export type PreviewPageSearchLazyQueryHookResult = ReturnType<typeof usePreviewPageSearchLazyQuery>;
+export type PreviewPageSearchQueryResult = Apollo.QueryResult<PreviewPageSearchQuery, PreviewPageSearchQueryVariables>;
 export const PreviewParagraphEditProposalDocument = gql`
     query PreviewParagraphEditProposal($id: String!) {
   paragraphEditProposal(id: $id) {
@@ -1713,8 +1768,8 @@ export type QuestionsQueryHookResult = ReturnType<typeof useQuestionsQuery>;
 export type QuestionsLazyQueryHookResult = ReturnType<typeof useQuestionsLazyQuery>;
 export type QuestionsQueryResult = Apollo.QueryResult<QuestionsQuery, QuestionsQueryVariables>;
 export const SearchQuestionsDocument = gql`
-    query SearchQuestions($searchString: String!) {
-  searchQuestions(searchString: $searchString) {
+    query SearchQuestions($searchString: String!, $limit: Float) {
+  searchQuestions(searchString: $searchString, limit: $limit) {
     ...QuestionSearchSnippet
   }
 }
@@ -1733,6 +1788,7 @@ export const SearchQuestionsDocument = gql`
  * const { data, loading, error } = useSearchQuestionsQuery({
  *   variables: {
  *      searchString: // value for 'searchString'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
@@ -1746,8 +1802,8 @@ export type SearchQuestionsQueryHookResult = ReturnType<typeof useSearchQuestion
 export type SearchQuestionsLazyQueryHookResult = ReturnType<typeof useSearchQuestionsLazyQuery>;
 export type SearchQuestionsQueryResult = Apollo.QueryResult<SearchQuestionsQuery, SearchQuestionsQueryVariables>;
 export const SearchVariablesDocument = gql`
-    query SearchVariables($searchString: String!) {
-  searchVariables(searchString: $searchString) {
+    query SearchVariables($searchString: String!, $limit: Float) {
+  searchVariables(searchString: $searchString, limit: $limit) {
     ...VariableSearchSnippet
   }
 }
@@ -1766,6 +1822,7 @@ export const SearchVariablesDocument = gql`
  * const { data, loading, error } = useSearchVariablesQuery({
  *   variables: {
  *      searchString: // value for 'searchString'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
