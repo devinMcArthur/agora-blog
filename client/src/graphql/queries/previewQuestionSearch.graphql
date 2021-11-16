@@ -1,0 +1,6 @@
+query PreviewQuestionSearch($searchString: String!, $limit: Float) {
+  searchQuestions(searchString: $searchString, limit: $limit) {
+    ...QuestionCardSnippet
+    
+  }
+}

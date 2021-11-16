@@ -1,11 +1,14 @@
-import { Box, Center, Heading } from "@chakra-ui/layout";
 import React from "react";
-import { useHistory, useParams } from "react-router";
-import PagesSearch from "./views/pages";
+import { Center, Container, Heading } from "@chakra-ui/layout";
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs";
+import { useHistory } from "react-router";
+
+import PagesSearch from "./views/Pages";
+import QuestionsSearch from "./views/Questions";
+import VariablesSearch from "./views/Variables";
 
 const Search = () => {
   const history = useHistory();
-  const params = useParams();
 
   const searchString = React.useMemo(() => {
     const queryString = new URLSearchParams(history.location.search);
@@ -13,21 +16,33 @@ const Search = () => {
     return queryString.get("search_string");
   }, [history.location.search]);
 
-  console.log("history", history);
-  console.log("params", params);
-
-  console.log("searchString", searchString);
-
   return (
-    <Box w="100%" p={2}>
+    <Container maxW="80%" p={4}>
       {searchString ? (
-        <PagesSearch searchString={searchString} />
+        <Tabs>
+          <TabList>
+            <Tab>Pages</Tab>
+            <Tab>Questions</Tab>
+            <Tab>Variables</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel>
+              <PagesSearch searchString={searchString} />
+            </TabPanel>
+            <TabPanel>
+              <QuestionsSearch searchString={searchString} />
+            </TabPanel>
+            <TabPanel>
+              <VariablesSearch searchString={searchString} />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
       ) : (
         <Center pt="10%">
           <Heading>No Results</Heading>
         </Center>
       )}
-    </Box>
+    </Container>
   );
 };
 

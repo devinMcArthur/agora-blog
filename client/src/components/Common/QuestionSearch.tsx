@@ -72,28 +72,24 @@ const QuestionSearch = ({
   }, [loading, data]);
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
+    <TextDropdown
+      onChange={(e) => handleChange(e.target.value)}
+      value={searchString}
+      inputRightElement={inputRightElement}
+      options={options}
+      placeholder="Search Questions"
+      onOptionSelection={(value) => {
+        setSearchString(value.label);
+        questionSelected({ _id: value.value, question: value.label });
+        setFoundQuestions([]);
+      }}
+      handleSubmit={() => {
         if (handleSubmit) handleSubmit(searchString);
       }}
-    >
-      <TextDropdown
-        onChange={(e) => handleChange(e.target.value)}
-        value={searchString}
-        inputRightElement={inputRightElement}
-        options={options}
-        placeholder="Search Questions"
-        onOptionSelection={(value) => {
-          setSearchString(value.label);
-          questionSelected({ _id: value.value, question: value.label });
-          setFoundQuestions([]);
-        }}
-        dropdownProps={dropdownProps}
-        autoComplete="off"
-        {...props}
-      />
-    </form>
+      dropdownProps={dropdownProps}
+      autoComplete="off"
+      {...props}
+    />
   );
 };
 

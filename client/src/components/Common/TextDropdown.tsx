@@ -21,6 +21,7 @@ interface ITextDropdown<ExtraData> extends ITextField {
     choice: { value: string; label: string },
     extraData?: ExtraData
   ) => void;
+  handleSubmit?: () => void;
   containerId?: string;
   dropdownProps?: BoxProps;
   selectOptionsWithEnter?: boolean;
@@ -30,46 +31,141 @@ const TextDropdown = <ExtraData extends object>({
   options,
   groupedOptions,
   onOptionSelection,
+  handleSubmit,
   containerId,
   dropdownProps,
   selectOptionsWithEnter = false,
   ...props
 }: ITextDropdown<ExtraData>) => {
+  /**
+   * ----- Initialize Hooks -----
+   */
+
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const [dropdown, setDropdown] = React.useState(false);
 
   const [selectedIndex, setSelectedIndex] = React.useState<number>();
 
+  useOutsideClick({
+    ref: inputRef,
+    handler: () => setDropdown(false),
+  });
+
+  /**
+   * ----- Variables -----
+   */
+
+  const groupedOptionsLengthArray = React.useMemo(() => {
+    let array: number[] | undefined = undefined;
+
+    if (groupedOptions) {
+      array = [];
+      for (let i = 0; i < Object.values(groupedOptions).length; i++) {
+        array.push(Object.values(groupedOptions)[i].length || 0);
+      }
+    }
+
+    return array;
+  }, [groupedOptions]);
+
+  const optionsLength = React.useMemo(() => {
+    if (options && options.length > 0) {
+      return options.length;
+    } else if (groupedOptionsLengthArray) {
+      return groupedOptionsLengthArray.reduce((a, b) => a + b);
+    } else return 0;
+  }, [options, groupedOptionsLengthArray]);
+
+  /**
+   * ----- Functions -----
+   */
+
+  const handleOptionSelection = React.useCallback(
+    (option: IOptions<ExtraData>, extraData?: ExtraData) => {
+      setDropdown(false);
+      onOptionSelection(option, extraData);
+    },
+    [onOptionSelection]
+  );
+
+  const scrollToOption = React.useCallback((index?: number) => {
+    if (index !== undefined) {
+      // scroll to the previous option so the option remains visible
+      const element = document.getElementById(`option-${index - 1}`);
+      if (element) element.scrollIntoView();
+    }
+  }, []);
+
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
-    if (options) {
+    if (optionsLength > 0) {
       switch (e.key) {
         case "ArrowDown": {
-          if (selectedIndex === undefined) setSelectedIndex(0);
-          else if (selectedIndex !== options.length - 1)
-            setSelectedIndex(selectedIndex + 1);
+          e.preventDefault();
+
+          let newSelectedIndex = undefined;
+          if (selectedIndex === undefined) newSelectedIndex = 0;
+          else if (selectedIndex !== optionsLength - 1)
+            newSelectedIndex = selectedIndex + 1;
+          else newSelectedIndex = optionsLength - 1;
+
+          setSelectedIndex(newSelectedIndex);
+          scrollToOption(newSelectedIndex);
 
           break;
         }
         case "ArrowUp": {
+          e.preventDefault();
           if (selectedIndex !== undefined) {
-            if (selectedIndex === 0) {
-              e.preventDefault();
-              setSelectedIndex(undefined);
-            } else setSelectedIndex(selectedIndex - 1);
+            let newIndex = undefined;
+
+            if (selectedIndex !== 0) {
+              newIndex = selectedIndex - 1;
+            }
+
+            setSelectedIndex(newIndex);
+
+            if (newIndex === undefined) {
+              // Scroll to top
+              document.getElementById("options-container")?.scrollTo({
+                top: 0,
+              });
+            } else scrollToOption(newIndex);
           }
 
           break;
         }
         case "Enter": {
           if (selectOptionsWithEnter) {
-            e.preventDefault();
+            if (selectedIndex !== undefined) {
+              e.preventDefault();
 
-            if (selectedIndex !== undefined)
-              onOptionSelection(
-                options[selectedIndex],
-                options[selectedIndex].extraData
-              );
+              if (options && options.length > 0) {
+                handleOptionSelection(
+                  options[selectedIndex],
+                  options[selectedIndex].extraData
+                );
+              } else if (groupedOptionsLengthArray && groupedOptions) {
+                let skippedIndices = 0;
+                for (let i = 0; i < groupedOptionsLengthArray.length; i++) {
+                  if (
+                    groupedOptionsLengthArray[i] !== 0 &&
+                    selectedIndex <=
+                      groupedOptionsLengthArray[i] - 1 + skippedIndices
+                  ) {
+                    handleOptionSelection(
+                      Object.values(groupedOptions)[i][
+                        selectedIndex - skippedIndices
+                      ],
+                      Object.values(groupedOptions)[i][
+                        selectedIndex - skippedIndices
+                      ].extraData
+                    );
+                    break;
+                  } else skippedIndices += groupedOptionsLengthArray[i];
+                }
+              }
+            }
           }
         }
       }
@@ -80,28 +176,38 @@ const TextDropdown = <ExtraData extends object>({
    * ----- Use-effects and other logic -----
    */
 
-  useOutsideClick({
-    ref: inputRef,
-    handler: () => setDropdown(false),
-  });
+  React.useEffect(() => {
+    if (!dropdown) setSelectedIndex(undefined);
+  }, [dropdown]);
 
   React.useEffect(() => {
     setSelectedIndex(undefined);
-  }, [options]);
+  }, [options, groupedOptions]);
 
   let dropdownJSX;
-  let groupedOptionsPopulated = false;
-  if (groupedOptions)
-    for (let i = 0; i < Object.values(groupedOptions).length; i++) {
-      if (
-        Object.values(groupedOptions)[i] &&
-        Object.values(groupedOptions)[i].length > 0
-      )
-        groupedOptionsPopulated = true;
-    }
+  let rootIndex = 0;
+  const groupedOptionsPopulated = React.useMemo(() => {
+    let populated = false;
+    if (groupedOptions)
+      for (let i = 0; i < Object.values(groupedOptions).length; i++) {
+        if (
+          Object.values(groupedOptions)[i] &&
+          Object.values(groupedOptions)[i].length > 0
+        )
+          populated = true;
+      }
+
+    return populated;
+  }, [groupedOptions]);
+
+  /**
+   * ----- Rendering -----
+   */
+
   if (dropdown && groupedOptionsPopulated) {
     dropdownJSX = (
       <Box
+        id="options-container"
         borderRadius="0 0 0.375rem 0.375rem"
         position="absolute"
         top={
@@ -122,39 +228,52 @@ const TextDropdown = <ExtraData extends object>({
       >
         <Box h="1px" w="95%" backgroundColor="gray.400" mx="auto" mb={2}></Box>
         <Stack>
-          {Object.values(groupedOptions!).map((value, i) => (
-            <Box>
-              <Heading size="sm" w="100%" backgroundColor="gray.300" p={2}>
-                {Object.keys(groupedOptions!)[i].toUpperCase()}
-              </Heading>
-              <Stack>
-                {value.map((option, index) => (
-                  <Box
-                    as="span"
-                    cursor="pointer"
-                    onMouseOver={() => setSelectedIndex(index)}
-                    onMouseLeave={() => setSelectedIndex(undefined)}
-                    padding={1}
-                    paddingLeft="1rem"
-                    onClick={() => {
-                      setDropdown(false);
-                      onOptionSelection(option, option.extraData);
-                    }}
-                    key={index}
-                    fontWeight={selectedIndex === index ? "bold" : ""}
-                  >
-                    {option.label}
-                  </Box>
-                ))}
-              </Stack>
-            </Box>
-          ))}
+          {Object.values(groupedOptions!).map((value, i) => {
+            if (value && value.length > 0)
+              return (
+                <Box>
+                  <Heading size="sm" w="100%" backgroundColor="gray.300" p={2}>
+                    {Object.keys(groupedOptions!)[i].toUpperCase()}
+                  </Heading>
+                  <Stack>
+                    {value.map((option) => {
+                      const index = rootIndex;
+                      rootIndex += 1;
+
+                      return (
+                        <Box
+                          id={`option-${index}`}
+                          as="span"
+                          cursor="pointer"
+                          onMouseOver={() => {
+                            setSelectedIndex(index);
+                          }}
+                          onMouseLeave={() => setSelectedIndex(undefined)}
+                          padding={1}
+                          paddingLeft="1rem"
+                          onClick={() => {
+                            setDropdown(false);
+                            handleOptionSelection(option, option.extraData);
+                          }}
+                          key={index}
+                          fontWeight={index === selectedIndex ? "bold" : ""}
+                        >
+                          {option.label}
+                        </Box>
+                      );
+                    })}
+                  </Stack>
+                </Box>
+              );
+            else return null;
+          })}
         </Stack>
       </Box>
     );
   } else if (dropdown && options && options.length > 0) {
     dropdownJSX = (
       <Box
+        id="options-container"
         borderRadius="0 0 0.375rem 0.375rem"
         position="absolute"
         top={
@@ -179,13 +298,14 @@ const TextDropdown = <ExtraData extends object>({
             <Box
               as="span"
               cursor="pointer"
+              id={`option-${index}`}
               onMouseOver={() => setSelectedIndex(index)}
               onMouseLeave={() => setSelectedIndex(undefined)}
               padding={1}
               paddingLeft="1rem"
               onClick={() => {
                 setDropdown(false);
-                onOptionSelection(option, option.extraData);
+                handleOptionSelection(option, option.extraData);
               }}
               key={index}
               fontWeight={selectedIndex === index ? "bold" : ""}
@@ -200,12 +320,21 @@ const TextDropdown = <ExtraData extends object>({
 
   return (
     <div ref={inputRef} style={{ position: "relative" }} id={containerId}>
-      <TextField
-        onFocus={() => setDropdown(true)}
-        onKeyDown={handleKeyDown}
-        autoComplete="off"
-        {...props}
-      />
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setDropdown(false);
+          if (handleSubmit) handleSubmit();
+        }}
+      >
+        <TextField
+          onClick={() => setDropdown(true)}
+          onFocus={() => setDropdown(true)}
+          onKeyDown={handleKeyDown}
+          autoComplete="off"
+          {...props}
+        />
+      </form>
       {dropdownJSX}
     </div>
   );

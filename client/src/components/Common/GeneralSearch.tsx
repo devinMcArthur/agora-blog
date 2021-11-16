@@ -11,11 +11,17 @@ import {
   useSearchVariablesLazyQuery,
   VariableSearchSnippetFragment,
 } from "../../generated/graphql";
+import { useHistory } from "react-router";
 
 interface IItems {
   pages: LinkFormPageSnippetFragment[];
   questions: QuestionSearchSnippetFragment[];
   variables: VariableSearchSnippetFragment[];
+}
+
+interface IExtraData {
+  type: "page" | "variable" | "question";
+  slug?: string;
 }
 
 interface IGeneralSearch extends Omit<InputProps, "onChange"> {
@@ -61,6 +67,8 @@ const GeneralSearch = ({
   const [searchVariables, { data: variablesData, loading: variablesLoading }] =
     useSearchVariablesLazyQuery();
 
+  const history = useHistory();
+
   /**
    * ----- Functions -----
    */
@@ -71,6 +79,8 @@ const GeneralSearch = ({
     if (value !== "") {
       setSearchTimeout(
         setTimeout(() => {
+          setFoundItems(initialFoundItemsState);
+
           searchPages({
             variables: { searchString, limit },
           });
@@ -88,34 +98,60 @@ const GeneralSearch = ({
     if (onChange) onChange(value);
   };
 
+  const handleOptionSelection = (
+    value: { value: string; label: string },
+    extraData: IExtraData
+  ) => {
+    if (!extraData) {
+      console.warn("Internal Error: no extra data found");
+      return;
+    }
+
+    switch (extraData.type) {
+      case "page": {
+        history.push(`/p/${extraData.slug!}`);
+        break;
+      }
+      case "question": {
+        history.push(`/q/${value.value}`);
+        break;
+      }
+      case "variable": {
+        history.push(`/v/${value.value}`);
+        break;
+      }
+    }
+  };
+
   /**
    * ----- Variables -----
    */
 
-  const groupedOptions: IGroupedOptions<{ slug?: string }> =
-    React.useMemo(() => {
-      return {
-        pages: foundItems.pages.map((page) => {
-          return {
-            label: page.title,
-            value: page._id,
-            extraData: { slug: page.slug },
-          };
-        }),
-        variables: foundItems.variables.map((variable) => {
-          return {
-            label: variable.title,
-            value: variable._id,
-          };
-        }),
-        questions: foundItems.questions.map((question) => {
-          return {
-            label: question.question,
-            value: question._id,
-          };
-        }),
-      };
-    }, [foundItems]);
+  const groupedOptions: IGroupedOptions<IExtraData> = React.useMemo(() => {
+    return {
+      pages: foundItems.pages.map((page) => {
+        return {
+          label: page.title,
+          value: page._id,
+          extraData: { slug: page.slug, type: "page" },
+        };
+      }),
+      variables: foundItems.variables.map((variable) => {
+        return {
+          label: variable.title,
+          value: variable._id,
+          extraData: { type: "variable" },
+        };
+      }),
+      questions: foundItems.questions.map((question) => {
+        return {
+          label: question.question,
+          value: question._id,
+          extraData: { type: "question" },
+        };
+      }),
+    };
+  }, [foundItems]);
 
   /**
    * ----- Use-effects and other logic -----
@@ -158,23 +194,20 @@ const GeneralSearch = ({
    * ----- Rendering -----
    */
 
-  console.log("foundItems", foundItems);
-
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
+    <TextDropdown
+      onChange={(e) => handleChange(e.target.value)}
+      value={searchString}
+      groupedOptions={groupedOptions}
+      onOptionSelection={(value, extraData) =>
+        handleOptionSelection(value, extraData!)
+      }
+      handleSubmit={() => {
         if (handleSubmit) handleSubmit(searchString);
       }}
-    >
-      <TextDropdown
-        onChange={(e) => handleChange(e.target.value)}
-        value={searchString}
-        groupedOptions={groupedOptions}
-        onOptionSelection={() => {}}
-        {...props}
-      />
-    </form>
+      selectOptionsWithEnter
+      {...props}
+    />
   );
 };
 

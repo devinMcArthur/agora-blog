@@ -78,33 +78,29 @@ const PageSearch: React.FC<IPageSearch> = ({
   }, [loading, data]);
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
+    <TextDropdown
+      onChange={(e) => handleChange(e.target.value)}
+      value={searchString}
+      inputRightElementProps={{ pt: "0.4rem" }}
+      inputRightElement={<Icon as={FiSearch} w={4} height={4} mt={2} />}
+      options={pageOptions}
+      onOptionSelection={(value, extraData) => {
+        setSearchString(value.label);
+        pageSelected({
+          id: value.value,
+          title: value.label,
+          slug: extraData!.slug,
+        });
+        setFoundPages([]);
+      }}
+      handleSubmit={() => {
         if (handleSubmit) handleSubmit(searchString);
       }}
-    >
-      <TextDropdown
-        onChange={(e) => handleChange(e.target.value)}
-        value={searchString}
-        inputRightElementProps={{ pt: "0.4rem" }}
-        inputRightElement={<Icon as={FiSearch} w={4} height={4} mt={2} />}
-        options={pageOptions}
-        onOptionSelection={(value, extraData) => {
-          setSearchString(value.label);
-          pageSelected({
-            id: value.value,
-            title: value.label,
-            slug: extraData!.slug,
-          });
-          setFoundPages([]);
-        }}
-        containerId={dropdownId}
-        dropdownProps={dropdownProps}
-        selectOptionsWithEnter
-        {...props}
-      />
-    </form>
+      containerId={dropdownId}
+      dropdownProps={dropdownProps}
+      selectOptionsWithEnter
+      {...props}
+    />
   );
 };
 

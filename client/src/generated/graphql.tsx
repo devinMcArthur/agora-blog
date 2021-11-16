@@ -845,6 +845,20 @@ export type PreviewParagraphEditProposalQuery = (
   ) }
 );
 
+export type PreviewQuestionSearchQueryVariables = Exact<{
+  searchString: Scalars['String'];
+  limit?: Maybe<Scalars['Float']>;
+}>;
+
+
+export type PreviewQuestionSearchQuery = (
+  { __typename?: 'Query' }
+  & { searchQuestions: Array<(
+    { __typename?: 'QuestionClass' }
+    & QuestionCardSnippetFragment
+  )> }
+);
+
 export type QuestionQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -1702,6 +1716,40 @@ export function usePreviewParagraphEditProposalLazyQuery(baseOptions?: Apollo.La
 export type PreviewParagraphEditProposalQueryHookResult = ReturnType<typeof usePreviewParagraphEditProposalQuery>;
 export type PreviewParagraphEditProposalLazyQueryHookResult = ReturnType<typeof usePreviewParagraphEditProposalLazyQuery>;
 export type PreviewParagraphEditProposalQueryResult = Apollo.QueryResult<PreviewParagraphEditProposalQuery, PreviewParagraphEditProposalQueryVariables>;
+export const PreviewQuestionSearchDocument = gql`
+    query PreviewQuestionSearch($searchString: String!, $limit: Float) {
+  searchQuestions(searchString: $searchString, limit: $limit) {
+    ...QuestionCardSnippet
+  }
+}
+    ${QuestionCardSnippetFragmentDoc}`;
+
+/**
+ * __usePreviewQuestionSearchQuery__
+ *
+ * To run a query within a React component, call `usePreviewQuestionSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePreviewQuestionSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePreviewQuestionSearchQuery({
+ *   variables: {
+ *      searchString: // value for 'searchString'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function usePreviewQuestionSearchQuery(baseOptions: Apollo.QueryHookOptions<PreviewQuestionSearchQuery, PreviewQuestionSearchQueryVariables>) {
+        return Apollo.useQuery<PreviewQuestionSearchQuery, PreviewQuestionSearchQueryVariables>(PreviewQuestionSearchDocument, baseOptions);
+      }
+export function usePreviewQuestionSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PreviewQuestionSearchQuery, PreviewQuestionSearchQueryVariables>) {
+          return Apollo.useLazyQuery<PreviewQuestionSearchQuery, PreviewQuestionSearchQueryVariables>(PreviewQuestionSearchDocument, baseOptions);
+        }
+export type PreviewQuestionSearchQueryHookResult = ReturnType<typeof usePreviewQuestionSearchQuery>;
+export type PreviewQuestionSearchLazyQueryHookResult = ReturnType<typeof usePreviewQuestionSearchLazyQuery>;
+export type PreviewQuestionSearchQueryResult = Apollo.QueryResult<PreviewQuestionSearchQuery, PreviewQuestionSearchQueryVariables>;
 export const QuestionDocument = gql`
     query Question($id: ID!) {
   question(id: $id) {

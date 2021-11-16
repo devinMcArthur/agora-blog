@@ -76,30 +76,26 @@ const VariableSearch: React.FC<IVariableSearch> = ({
   }, [loading, data]);
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
+    <TextDropdown
+      onChange={(e) => handleChange(e.target.value)}
+      value={searchString}
+      inputRightElement={<FiSearch />}
+      options={variableOptions}
+      onOptionSelection={(value, extraData) => {
+        setSearchString(value.label);
+        variableSelected({
+          id: value.value,
+          title: value.label,
+          finalValue: extraData!.finalValue,
+        });
+        setFoundVariables([]);
+      }}
+      handleSubmit={() => {
         if (handleSubmit) handleSubmit(searchString);
       }}
-    >
-      <TextDropdown
-        onChange={(e) => handleChange(e.target.value)}
-        value={searchString}
-        inputRightElement={<FiSearch />}
-        options={variableOptions}
-        onOptionSelection={(value, extraData) => {
-          setSearchString(value.label);
-          variableSelected({
-            id: value.value,
-            title: value.label,
-            finalValue: extraData!.finalValue,
-          });
-          setFoundVariables([]);
-        }}
-        containerId={dropdownId}
-        {...props}
-      />
-    </form>
+      containerId={dropdownId}
+      {...props}
+    />
   );
 };
 
