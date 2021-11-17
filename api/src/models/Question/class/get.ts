@@ -176,9 +176,26 @@ const search = (
        * Full Search
        */
       const fullSearch = async () => {
-        return Question.find({
-          $text: { $search: searchString, $caseSensitive: false },
-        }).limit(remainingLimit);
+        const aggregates = await Question.aggregate([
+          {
+            $search: {
+              text: {
+                query: searchString,
+                path: {
+                  wildcard: "*",
+                },
+              },
+            },
+          },
+        ]).limit(remainingLimit);
+
+        const questions: QuestionDocument[] = [];
+        for (let i = 0; i < aggregates.length; i++) {
+          const question = await Question.getById(aggregates[i]._id);
+          if (question) questions.push(question);
+        }
+
+        return questions;
       };
 
       /**

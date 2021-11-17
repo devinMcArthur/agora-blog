@@ -82,15 +82,15 @@ const GeneralSearch = ({
           setFoundItems(initialFoundItemsState);
 
           searchPages({
-            variables: { searchString, limit },
+            variables: { searchString: value, limit },
           });
 
           searchQuestions({
-            variables: { searchString, limit },
+            variables: { searchString: value, limit },
           });
 
           searchVariables({
-            variables: { searchString, limit },
+            variables: { searchString: value, limit },
           });
         }, 500)
       );

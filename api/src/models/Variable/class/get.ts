@@ -122,9 +122,26 @@ const search = (
        * Full Search
        */
       const fullSearch = async () => {
-        return Variable.find({
-          $text: { $search: searchString, $caseSensitive: false },
-        }).limit(remainingLimit);
+        const aggregates = await Variable.aggregate([
+          {
+            $search: {
+              text: {
+                query: searchString,
+                path: {
+                  wildcard: "*",
+                },
+              },
+            },
+          },
+        ]).limit(remainingLimit);
+
+        const variables: VariableDocument[] = [];
+        for (let i = 0; i < aggregates.length; i++) {
+          const variable = await Variable.getById(aggregates[i]._id);
+          if (variable) variables.push(variable);
+        }
+
+        return variables;
       };
 
       /**

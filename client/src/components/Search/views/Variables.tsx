@@ -14,7 +14,7 @@ const VariablesSearch = ({ searchString }: IVariablesSearch) => {
   });
 
   const content = React.useMemo(() => {
-    if (data && !loading) {
+    if (data?.searchVariables && data.searchVariables.length > 0 && !loading) {
       return (
         <Box>
           {data.searchVariables.map((variable) => (
@@ -22,7 +22,7 @@ const VariablesSearch = ({ searchString }: IVariablesSearch) => {
           ))}
         </Box>
       );
-    } else if (!loading && !data?.searchVariables) {
+    } else if (!loading) {
       return <Heading>No Results</Heading>;
     } else return <Loading />;
   }, [data, loading]);

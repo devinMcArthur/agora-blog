@@ -100,9 +100,27 @@ const search = (
        * Full Search
        */
       const fullSearch = async () => {
-        return Page.find({
-          $text: { $search: searchString, $caseSensitive: false },
-        }).limit(reminaingLimit);
+        // requires Atlas Search Index
+        const aggregates = await Page.aggregate([
+          {
+            $search: {
+              text: {
+                query: searchString,
+                path: {
+                  wildcard: "*",
+                },
+              },
+            },
+          },
+        ]).limit(reminaingLimit);
+
+        const pages: PageDocument[] = [];
+        for (let i = 0; i < aggregates.length; i++) {
+          const page = await Page.getById(aggregates[i]._id);
+          if (page) pages.push(page);
+        }
+
+        return pages;
       };
 
       /**
@@ -116,6 +134,7 @@ const search = (
 
       resolve(pages);
     } catch (e) {
+      console.error(e);
       reject(e);
     }
   });
