@@ -292,6 +292,9 @@ const _ids = {
     nonVerified: {
       _id: Types.ObjectId("5fca8581d24f0800000b78dd"),
     },
+    verificationRequested: {
+      _id: Types.ObjectId("5fca8581d25f0800000b78dd"),
+    },
   },
   paragraphEditProposals: {
     page_covid_19_paragraph_v1_proposal_1: {

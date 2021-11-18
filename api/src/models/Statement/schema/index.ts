@@ -1,3 +1,4 @@
+import SchemaVersions from "@constants/SchemaVersions";
 import {
   PageClass,
   PageConnection,
@@ -43,4 +44,12 @@ export class StatementSchema {
   @Field(() => UserClass)
   @prop({ ref: () => UserClass, required: true })
   public originalAuthor!: Ref<UserClass>;
+
+  @Field({ nullable: false })
+  @prop({ required: true, default: SchemaVersions.Statement })
+  public schemaVersion!: number;
+
+  @Field({ nullable: false })
+  @prop({ required: true, default: Date.now, immutable: true })
+  public createdAt!: Date;
 }

@@ -1,3 +1,4 @@
+import { useDisclosure } from "@chakra-ui/hooks";
 import React from "react";
 import { useImmerReducer } from "use-immer";
 
@@ -5,6 +6,8 @@ import {
   FullUserSnippetFragment,
   useCurrentUserLazyQuery,
 } from "../../generated/graphql";
+import SignIn from "./views/SignIn";
+import VerificationModal from "./views/Verification";
 
 /**
  * ----- Types -----
@@ -23,6 +26,8 @@ interface IAuthContext {
 
   login: (jwt: string) => void;
   logout: () => void;
+  openSignInModal: () => void;
+  requiresVerification: (callback: () => void) => void;
 }
 
 type IAuthAction =
@@ -105,6 +110,18 @@ const AuthProvider = ({ children }: IAuthProvider) => {
     },
   ] = useCurrentUserLazyQuery({ notifyOnNetworkStatusChange: true });
 
+  const {
+    isOpen: signInModalOpen,
+    onOpen: onSignInModalOpen,
+    onClose: onSignInModalClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: verificationModalOpen,
+    onOpen: onVerificationModalOpen,
+    onClose: onVerificationModalClose,
+  } = useDisclosure();
+
   /**
    * ----- Functions -----
    */
@@ -151,6 +168,15 @@ const AuthProvider = ({ children }: IAuthProvider) => {
     }
   }, [currentUser, currentUserRefetch]);
 
+  const requiresVerification = React.useCallback(
+    (callback: () => void) => {
+      if (!state.user) onSignInModalOpen();
+      else if (!state.user?.verified) onVerificationModalOpen();
+      else if (state.user.verified) callback();
+    },
+    [onSignInModalOpen, onVerificationModalOpen, state.user]
+  );
+
   /**
    * ----- Use-effects and other logic -----
    */
@@ -187,8 +213,26 @@ const AuthProvider = ({ children }: IAuthProvider) => {
     }
   }, [fetchUser, deauthorizeSession, state.user, token]);
 
+  // Close sign in modal if logged in
+  React.useEffect(() => {
+    if (state.user) onSignInModalClose();
+  }, [onSignInModalClose, state.user]);
+
   return (
-    <AuthContext.Provider value={{ state, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        state,
+        login,
+        logout,
+        openSignInModal: onSignInModalOpen,
+        requiresVerification,
+      }}
+    >
+      <SignIn isOpen={signInModalOpen} close={onSignInModalClose} />
+      <VerificationModal
+        isOpen={verificationModalOpen}
+        close={onVerificationModalClose}
+      />
       {children}
     </AuthContext.Provider>
   );

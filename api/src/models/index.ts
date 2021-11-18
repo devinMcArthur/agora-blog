@@ -9,6 +9,7 @@ export * from "./Variable";
 export * from "./VariableEditProposal";
 export * from "./VariablePageConnection";
 export * from "./User";
+export * from "./UserVerificationRequest";
 export * from "./File";
 
 import {
@@ -194,6 +195,25 @@ export interface UserModel extends ReturnModelType<typeof UserClass> {}
 export const User = getModelForClass(UserClass, {
   schemaOptions: { collection: "users" },
 });
+
+/**
+ * ----- User Verification Request -----
+ */
+
+import { UserVerificationRequestClass } from "./UserVerificationRequest/class";
+
+export interface UserVerificationRequestDocument
+  extends DocumentType<UserVerificationRequestClass> {}
+
+export interface UserVerificationRequestModel
+  extends ReturnModelType<typeof UserVerificationRequestClass> {}
+
+export const UserVerificationRequest = getModelForClass(
+  UserVerificationRequestClass,
+  {
+    schemaOptions: { collection: "userVerificationRequests" },
+  }
+);
 
 /**
  * ----- File -----

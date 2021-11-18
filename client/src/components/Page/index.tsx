@@ -4,7 +4,13 @@ import * as qs from "qs";
 import PageCard from "../Common/PageCard";
 import Paragraph from "../Common/Paragraph";
 import { usePageQuery } from "../../generated/graphql";
-import { Container, Divider, Heading, Flex } from "@chakra-ui/react";
+import {
+  Container,
+  Divider,
+  Heading,
+  Flex,
+  IconButton,
+} from "@chakra-ui/react";
 import { Box } from "@chakra-ui/layout";
 import Loading from "../Common/Loading";
 import { useHistory, useLocation, useParams } from "react-router";
@@ -13,9 +19,7 @@ import { Tabs, TabList, Tab, TabPanel, TabPanels } from "@chakra-ui/tabs";
 import ParagraphEditProposal from "../Common/ParagraphEditProposal";
 import EditProposalPreview from "../Common/EditProposalPreview";
 import { useDrawer } from "../../contexts/Drawer";
-import { Button } from "@chakra-ui/button";
 import { FiEdit } from "react-icons/fi";
-import Card from "../Common/Card";
 import EditParagraph from "../EditParagraph";
 import { useAuth } from "../../contexts/Auth";
 
@@ -25,9 +29,7 @@ const Page = () => {
   const history = useHistory();
   const location = useLocation();
 
-  const {
-    state: { user },
-  } = useAuth();
+  const { requiresVerification } = useAuth();
 
   const { data, loading } = usePageQuery({
     variables: { slug: pageSlug },
@@ -107,22 +109,6 @@ const Page = () => {
         )
       );
 
-      if (user && user.verified)
-        editProposals.unshift(
-          <Card p={0}>
-            <Button
-              w="100%"
-              h="3em"
-              variant="ghost"
-              leftIcon={<FiEdit />}
-              m={0}
-              onClick={() => setEditting(true)}
-            >
-              Add a new Edit
-            </Button>
-          </Card>
-        );
-
       let paragraphContent = <Paragraph paragraph={page.currentParagraph} />;
       if (paragraphEditProposalPreviewId)
         paragraphContent = (
@@ -141,7 +127,19 @@ const Page = () => {
 
       return (
         <Flex flexDirection="column">
-          <Heading size="lg">{page.title}</Heading>
+          <Box
+            display="flex"
+            flexDir="row"
+            justifyContent="space-between"
+            my={2}
+          >
+            <Heading size="lg">{page.title}</Heading>
+            <IconButton
+              aria-label="edit"
+              icon={<FiEdit />}
+              onClick={() => requiresVerification(() => setEditting(true))}
+            />
+          </Box>
           <Divider mb={2} />
           <Box my={3}>{paragraphContent}</Box>
 
@@ -171,10 +169,10 @@ const Page = () => {
   }, [
     data,
     loading,
-    user,
     paragraphEditProposalPreviewId,
     editting,
     setPreviewedParagraphEditProposal,
+    requiresVerification,
   ]);
 
   return (

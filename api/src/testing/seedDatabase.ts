@@ -14,6 +14,9 @@ import createFiles, { ISeededFiles } from "./documents/files";
 import createVariableEditProposals, {
   ISeededVariableEditProposals,
 } from "./documents/variableEditProposals";
+import createUserVerificationRequests, {
+  ISeededUserVerificationRequests,
+} from "./documents/userVerificationRequests";
 
 export interface SeededDatabase {
   files: ISeededFiles;
@@ -24,6 +27,7 @@ export interface SeededDatabase {
   variables: SeededVariables;
   variableEditProposals: ISeededVariableEditProposals;
   paragraphEditProposals: ISeededParagraphEditProposals;
+  userVerificationRequests: ISeededUserVerificationRequests;
 }
 
 const seedDatabase = () => {
@@ -41,6 +45,7 @@ const seedDatabase = () => {
       const paragraphEditProposals = await createParagraphEditProposals();
       const variableEditProposals = await createVariableEditProposals();
       const files = await createFiles();
+      const userVerificationRequests = await createUserVerificationRequests();
       await createStatements();
 
       console.log("Database seeded");
@@ -54,6 +59,7 @@ const seedDatabase = () => {
         variables,
         variableEditProposals,
         paragraphEditProposals,
+        userVerificationRequests,
       });
     } catch (e) {
       reject(e);

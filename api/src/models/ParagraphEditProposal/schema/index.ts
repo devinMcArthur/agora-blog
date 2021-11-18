@@ -1,3 +1,4 @@
+import SchemaVersions from "@constants/SchemaVersions";
 import { ParagraphClass, UserClass } from "@models";
 import { prop, Ref } from "@typegoose/typegoose";
 import { Types } from "mongoose";
@@ -28,6 +29,10 @@ export class ParagraphEditProposalSchema {
   public statementItems!: ParagraphEditProposalStatementClass[];
 
   @Field({ nullable: false })
-  @prop({ required: true, default: Date.now })
+  @prop({ required: true, default: SchemaVersions.ParagraphEditProposal })
+  public schemaVersion!: number;
+
+  @Field({ nullable: false })
+  @prop({ required: true, default: Date.now, immutable: true })
   public createdAt!: Date;
 }

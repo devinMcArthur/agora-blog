@@ -1,3 +1,4 @@
+import SchemaVersions from "@constants/SchemaVersions";
 import { UserClass, VariableVersionClass } from "@models";
 import { index, prop } from "@typegoose/typegoose";
 import { Types } from "mongoose";
@@ -22,4 +23,12 @@ export class VariableSchema {
   @Field(() => UserClass)
   @prop({ ref: () => UserClass, required: true })
   public originalAuthor!: UserClass;
+
+  @Field({ nullable: false })
+  @prop({ required: true, default: SchemaVersions.Variable })
+  public schemaVersion!: number;
+
+  @Field({ nullable: false })
+  @prop({ required: true, default: Date.now, immutable: true })
+  public createdAt!: Date;
 }

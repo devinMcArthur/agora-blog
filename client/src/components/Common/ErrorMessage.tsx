@@ -9,7 +9,7 @@ import React from "react";
 
 interface IErrorMessage extends AlertProps {
   title?: string;
-  description?: string;
+  description?: string | null;
 }
 
 const ErrorMessage = ({

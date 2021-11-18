@@ -1,3 +1,4 @@
+import SchemaVersions from "@constants/SchemaVersions";
 import { prop } from "@typegoose/typegoose";
 import { Types } from "mongoose";
 import { Field, ID, ObjectType } from "type-graphql";
@@ -34,6 +35,10 @@ export class UserSchema {
   @Field({ nullable: false })
   @prop({ required: true, default: false })
   public admin!: boolean;
+
+  @Field({ nullable: false })
+  @prop({ required: true, default: SchemaVersions.User })
+  public schemaVersion!: number;
 
   @Field({ nullable: false })
   @prop({ required: true, default: Date.now, immutable: true })

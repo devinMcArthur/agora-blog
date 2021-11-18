@@ -9,6 +9,7 @@ import interact from "./interact";
 import { IUserData } from "@typescript/models/User";
 import build from "./build";
 import validate from "./validate";
+import update from "./update";
 
 @ObjectType()
 export class UserClass extends UserSchema {
@@ -38,6 +39,14 @@ export class UserClass extends UserSchema {
 
   public static async build(this: UserModel, data: IUserData) {
     return build.build(this, data);
+  }
+
+  /**
+   * ----- Update -----
+   */
+
+  public async requestVerification(this: UserDocument) {
+    return update.requestVerification(this);
   }
 
   /**

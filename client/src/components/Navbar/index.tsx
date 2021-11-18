@@ -26,10 +26,9 @@ const Navbar = () => {
   const {
     state: { user },
     logout,
+    requiresVerification,
   } = useAuth();
   const [isLargerThan480] = useMediaQuery("(min-width: 580px)");
-
-  console.log(isLargerThan480);
 
   const history = useHistory();
 
@@ -51,18 +50,18 @@ const Navbar = () => {
           >
             Questions
           </Link>
-          {user && (
-            <Box height="100%" pt={1.5}>
-              <Icon
-                cursor="pointer"
-                as={FiPlusSquare}
-                w={7}
-                m="auto"
-                h={7}
-                onClick={() => history.push("/create-page")}
-              />
-            </Box>
-          )}
+          <Box height="100%" pt={user ? 2 : 1}>
+            <Icon
+              cursor="pointer"
+              as={FiPlusSquare}
+              w={7}
+              m="auto"
+              h={7}
+              onClick={() =>
+                requiresVerification(() => history.push("/create-page"))
+              }
+            />
+          </Box>
           <NavbarAccount />
         </Stack>
       );
@@ -103,7 +102,7 @@ const Navbar = () => {
         </Menu>
       );
     }
-  }, [isLargerThan480, history, user, logout]);
+  }, [isLargerThan480, user, requiresVerification, history, logout]);
 
   return (
     <Box

@@ -4,6 +4,7 @@ import { Field, ID, ObjectType } from "type-graphql";
 import { PageClass, ParagraphEditProposalClass } from "@models";
 import { prop, Ref } from "@typegoose/typegoose";
 import { ParagraphStatementClass } from "./subDocuments";
+import SchemaVersions from "@constants/SchemaVersions";
 
 export * from "./subDocuments";
 
@@ -27,4 +28,12 @@ export class ParagraphSchema {
   @Field(() => ParagraphEditProposalClass, { nullable: true })
   @prop({ ref: () => ParagraphEditProposalClass, required: false })
   public sourceEditProposal?: ParagraphEditProposalClass;
+
+  @Field({ nullable: false })
+  @prop({ required: true, default: SchemaVersions.Paragraph })
+  public schemaVersion!: number;
+
+  @Field({ nullable: false })
+  @prop({ required: true, default: Date.now, immutable: true })
+  public createdAt!: Date;
 }

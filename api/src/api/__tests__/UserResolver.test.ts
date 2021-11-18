@@ -7,6 +7,7 @@ import seedDatabase, { SeededDatabase } from "@testing/seedDatabase";
 import createApp from "../../app";
 import jestLogin from "@testing/jestLogin";
 import { CreateUserData } from "@api/resolvers/user/mutations";
+import { UserVerificationRequest } from "@models";
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
@@ -151,6 +152,42 @@ describe("User Resolver", () => {
           expect(decoded).toBeDefined();
 
           expect(decoded!.userId).toBe(documents.users.dev._id.toString());
+        });
+      });
+    });
+
+    describe("requestVerification", () => {
+      const requestVerificationMutation = `
+        mutation RequestVerification {
+          requestVerification {
+            verificationRequested {
+              _id
+            }
+          }
+        }
+      `;
+
+      describe("success", () => {
+        test("should successfully request verification", async () => {
+          const token = await jestLogin(app, documents.users.nonVerified.email);
+
+          const res = await request(app)
+            .post("/graphql")
+            .send({
+              query: requestVerificationMutation,
+            })
+            .set("Authorization", token);
+
+          expect(res.status).toBe(200);
+
+          expect(
+            res.body.data.requestVerification.verificationRequested
+          ).toBeDefined();
+
+          const verificationRequest = await UserVerificationRequest.getById(
+            res.body.data.requestVerification.verificationRequested._id
+          );
+          expect(verificationRequest).toBeDefined();
         });
       });
     });

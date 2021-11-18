@@ -99,9 +99,19 @@ export type UserClass = {
   password: Scalars['String'];
   verified: Scalars['Boolean'];
   admin: Scalars['Boolean'];
+  schemaVersion: Scalars['Float'];
   createdAt: Scalars['DateTime'];
+  verificationRequested?: Maybe<UserVerificationRequestClass>;
 };
 
+
+export type UserVerificationRequestClass = {
+  __typename?: 'UserVerificationRequestClass';
+  _id: Scalars['ID'];
+  user: UserClass;
+  schemaVersion: Scalars['Float'];
+  createdAt: Scalars['DateTime'];
+};
 
 export type PageClass = {
   __typename?: 'PageClass';
@@ -109,6 +119,8 @@ export type PageClass = {
   title: Scalars['String'];
   slug: Scalars['String'];
   paragraphs: Array<ParagraphClass>;
+  schemaVersion: Scalars['Float'];
+  createdAt: Scalars['DateTime'];
   currentParagraph: ParagraphClass;
   relatedPages: Array<PageClass>;
   referencedCount: Scalars['Float'];
@@ -121,6 +133,8 @@ export type ParagraphClass = {
   statements: Array<ParagraphStatementClass>;
   mostRecent: Scalars['Boolean'];
   sourceEditProposal?: Maybe<ParagraphEditProposalClass>;
+  schemaVersion: Scalars['Float'];
+  createdAt: Scalars['DateTime'];
   editProposals: Array<ParagraphEditProposalClass>;
 };
 
@@ -137,6 +151,8 @@ export type StatementClass = {
   versions: Array<StatementVersionClass>;
   current: Scalars['Boolean'];
   originalAuthor: UserClass;
+  schemaVersion: Scalars['Float'];
+  createdAt: Scalars['DateTime'];
 };
 
 export type StatementVersionClass = {
@@ -176,6 +192,8 @@ export type VariableClass = {
   title: Scalars['String'];
   versions: Array<VariableVersionClass>;
   originalAuthor: UserClass;
+  schemaVersion: Scalars['Float'];
+  createdAt: Scalars['DateTime'];
   finalValue: Scalars['Float'];
   relatedPages: Array<PageClass>;
   editProposals: Array<VariableEditProposalClass>;
@@ -208,6 +226,7 @@ export type VariableEditProposalClass = {
   description: Scalars['String'];
   value: Version;
   author: UserClass;
+  schemaVersion: Scalars['Float'];
   createdAt: Scalars['DateTime'];
   finalValue: Scalars['Float'];
 };
@@ -232,6 +251,7 @@ export type FileClass = {
   __typename?: 'FileClass';
   _id: Scalars['ID'];
   mimetype: Scalars['String'];
+  schemaVersion: Scalars['Float'];
   createdAt: Scalars['DateTime'];
   buffer: Scalars['String'];
 };
@@ -240,6 +260,8 @@ export type QuestionClass = {
   __typename?: 'QuestionClass';
   _id: Scalars['ID'];
   question: Scalars['String'];
+  schemaVersion: Scalars['Float'];
+  createdAt: Scalars['DateTime'];
   referencedCount: Scalars['Float'];
   relatedPages: Array<PageClass>;
 };
@@ -251,6 +273,7 @@ export type ParagraphEditProposalClass = {
   author: UserClass;
   description: Scalars['String'];
   statementItems: Array<ParagraphEditProposalStatementClass>;
+  schemaVersion: Scalars['Float'];
   createdAt: Scalars['DateTime'];
 };
 
@@ -275,6 +298,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   login: Scalars['String'];
   createUser: Scalars['String'];
+  requestVerification: UserClass;
   newPage: PageClass;
   scrapeTest: Scalars['String'];
   newVariable: VariableClass;
@@ -524,6 +548,10 @@ export type FullStringArraySnippetFragment = (
 export type FullUserSnippetFragment = (
   { __typename?: 'UserClass' }
   & Pick<UserClass, '_id' | 'firstName' | 'middleName' | 'lastName' | 'verified' | 'createdAt'>
+  & { verificationRequested?: Maybe<(
+    { __typename?: 'UserVerificationRequestClass' }
+    & Pick<UserVerificationRequestClass, '_id' | 'createdAt'>
+  )> }
 );
 
 export type ImageSnippetFragment = (
@@ -742,6 +770,17 @@ export type NewVariableEditProposalMutation = (
   & { newVariableEditProposal: (
     { __typename?: 'VariableEditProposalClass' }
     & VariableEditProposalSnippetFragment
+  ) }
+);
+
+export type RequestVerificationMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RequestVerificationMutation = (
+  { __typename?: 'Mutation' }
+  & { requestVerification: (
+    { __typename?: 'UserClass' }
+    & FullUserSnippetFragment
   ) }
 );
 
@@ -1107,6 +1146,10 @@ export const FullUserSnippetFragmentDoc = gql`
   lastName
   verified
   createdAt
+  verificationRequested {
+    _id
+    createdAt
+  }
 }
     `;
 export const LinkFormPageSnippetFragmentDoc = gql`
@@ -1454,6 +1497,37 @@ export function useNewVariableEditProposalMutation(baseOptions?: Apollo.Mutation
 export type NewVariableEditProposalMutationHookResult = ReturnType<typeof useNewVariableEditProposalMutation>;
 export type NewVariableEditProposalMutationResult = Apollo.MutationResult<NewVariableEditProposalMutation>;
 export type NewVariableEditProposalMutationOptions = Apollo.BaseMutationOptions<NewVariableEditProposalMutation, NewVariableEditProposalMutationVariables>;
+export const RequestVerificationDocument = gql`
+    mutation RequestVerification {
+  requestVerification {
+    ...FullUserSnippet
+  }
+}
+    ${FullUserSnippetFragmentDoc}`;
+export type RequestVerificationMutationFn = Apollo.MutationFunction<RequestVerificationMutation, RequestVerificationMutationVariables>;
+
+/**
+ * __useRequestVerificationMutation__
+ *
+ * To run a mutation, you first call `useRequestVerificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRequestVerificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [requestVerificationMutation, { data, loading, error }] = useRequestVerificationMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRequestVerificationMutation(baseOptions?: Apollo.MutationHookOptions<RequestVerificationMutation, RequestVerificationMutationVariables>) {
+        return Apollo.useMutation<RequestVerificationMutation, RequestVerificationMutationVariables>(RequestVerificationDocument, baseOptions);
+      }
+export type RequestVerificationMutationHookResult = ReturnType<typeof useRequestVerificationMutation>;
+export type RequestVerificationMutationResult = Apollo.MutationResult<RequestVerificationMutation>;
+export type RequestVerificationMutationOptions = Apollo.BaseMutationOptions<RequestVerificationMutation, RequestVerificationMutationVariables>;
 export const UserLoginDocument = gql`
     mutation UserLogin($data: LoginData!) {
   login(data: $data)

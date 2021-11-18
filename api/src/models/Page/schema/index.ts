@@ -2,6 +2,7 @@ import { index, prop, Ref } from "@typegoose/typegoose";
 import { Types } from "mongoose";
 import { ParagraphClass } from "@models";
 import { Field, ID, ObjectType } from "type-graphql";
+import SchemaVersions from "@constants/SchemaVersions";
 
 @index({ title: "text" })
 @ObjectType()
@@ -20,4 +21,12 @@ export class PageSchema {
   @Field(() => [ParagraphClass])
   @prop({ ref: () => ParagraphClass })
   public paragraphs!: Ref<ParagraphClass>[];
+
+  @Field({ nullable: false })
+  @prop({ required: true, default: SchemaVersions.Page })
+  public schemaVersion!: number;
+
+  @Field({ nullable: false })
+  @prop({ required: true, default: Date.now, immutable: true })
+  public createdAt!: Date;
 }

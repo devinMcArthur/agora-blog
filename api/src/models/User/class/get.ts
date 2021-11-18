@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { UserClass, UserDocument, UserModel } from "@models";
+import { UserDocument, UserModel } from "@models";
 import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
 

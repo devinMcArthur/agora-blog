@@ -6,6 +6,7 @@ import hashPassword from "@utils/hashPassword";
 export interface ISeededUsers {
   dev: UserDocument;
   nonVerified: UserDocument;
+  verificationRequested: UserDocument;
 }
 
 const createUsers = () => {
@@ -29,9 +30,18 @@ const createUsers = () => {
         password: await hashPassword("password"),
       });
 
+      const verificationRequested = new User({
+        _id: _ids.users.verificationRequested._id,
+        firstName: "Verification",
+        lastName: "Requested",
+        email: "requested-verification@agora.voto",
+        password: await hashPassword("password"),
+      });
+
       const users: ISeededUsers = {
         dev,
         nonVerified,
+        verificationRequested,
       };
 
       for (let i = 0; i < Object.values(users).length; i++) {

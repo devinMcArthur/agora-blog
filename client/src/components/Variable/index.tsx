@@ -36,9 +36,7 @@ const Variable = (props: Props) => {
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const {
-    state: { user },
-  } = useAuth();
+  const { requiresVerification } = useAuth();
 
   const { data, loading } = useVariableQuery({
     variables: { id: props.match.params.variableID },
@@ -88,13 +86,11 @@ const Variable = (props: Props) => {
         <Flex flexDirection="column">
           <Box display="flex" flexDir="row" justifyContent="space-between">
             <Heading size="lg">{variable.title}</Heading>
-            {user && user.verified && (
-              <IconButton
-                aria-label="edit"
-                icon={<FiEdit />}
-                onClick={onOpen}
-              />
-            )}
+            <IconButton
+              aria-label="edit"
+              icon={<FiEdit />}
+              onClick={() => requiresVerification(() => onOpen())}
+            />
           </Box>
           <Divider m={2} />
           <Box
@@ -181,7 +177,7 @@ const Variable = (props: Props) => {
     } else {
       return <Loading />;
     }
-  }, [data, isOpen, loading, onClose, onOpen, user, version]);
+  }, [data, isOpen, loading, onClose, onOpen, requiresVerification, version]);
 
   return (
     <Container minW="80%" p={4}>

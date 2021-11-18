@@ -1,4 +1,5 @@
-import { User } from "@models";
+import { User, UserDocument } from "@models";
+import { IContext } from "@typescript/graphql";
 import { Field, InputType } from "type-graphql";
 
 @InputType()
@@ -59,7 +60,26 @@ const create = (data: CreateUserData) => {
   });
 };
 
+const requestVerification = (ctx: IContext) => {
+  return new Promise<UserDocument>(async (resolve, reject) => {
+    try {
+      if (!ctx.user) throw new Error("must be logged in");
+
+      const user = ctx.user;
+
+      const request = await user.requestVerification();
+
+      await request.save();
+
+      resolve(user);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 export default {
   login,
   create,
+  requestVerification,
 };

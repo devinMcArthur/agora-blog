@@ -1,11 +1,34 @@
-import { UserClass } from "@models";
+import {
+  UserClass,
+  UserDocument,
+  UserVerificationRequest,
+  UserVerificationRequestClass,
+} from "@models";
 import { IContext } from "@typescript/graphql";
-import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Authorized,
+  Ctx,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from "type-graphql";
 import mutations, { CreateUserData, LoginData } from "./mutations";
 import queries from "./queries";
 
 @Resolver(() => UserClass)
 export default class UserResolver {
+  /**
+   * ----- Field Resolvers -----
+   */
+
+  @FieldResolver(() => UserVerificationRequestClass, { nullable: true })
+  async verificationRequested(@Root() user: UserDocument) {
+    return UserVerificationRequest.getByUserId(user._id);
+  }
+
   /**
    * ----- Queries -----
    */
@@ -33,5 +56,11 @@ export default class UserResolver {
   @Mutation(() => String)
   async createUser(@Arg("data") data: CreateUserData) {
     return mutations.create(data);
+  }
+
+  @Authorized()
+  @Mutation(() => UserClass)
+  async requestVerification(@Ctx() ctx: IContext) {
+    return mutations.requestVerification(ctx);
   }
 }

@@ -2,13 +2,8 @@ import MongoMemoryServer from "mongodb-memory-server-core";
 
 import { disconnectAndStopServer, prepareDatabase } from "@testing/jestDB";
 import seedDatabase, { SeededDatabase } from "@testing/seedDatabase";
-import { ParagraphEditProposal, User } from "@models";
-import {
-  EditProposalChangeTypes,
-  IParagraphEditProposalBuildData,
-} from "@typescript/models/ParagraphEditProposal";
+import { User } from "@models";
 import _ids from "@testing/_ids";
-import { StyleTypes, StyleVariants } from "@typescript/models/Statement";
 import { IUserData } from "@typescript/models/User";
 import { compare } from "bcryptjs";
 
@@ -77,6 +72,21 @@ describe("User Class", () => {
               "user.validateDocument: user with this email already exists"
             );
           }
+        });
+      });
+    });
+  });
+
+  describe("UPDATE", () => {
+    describe("requestVerification", () => {
+      describe("success", () => {
+        test("should successfully request verification", async () => {
+          const request =
+            await documents.users.nonVerified.requestVerification();
+
+          expect(request.user!.toString()).toBe(
+            documents.users.nonVerified._id.toString()
+          );
         });
       });
     });

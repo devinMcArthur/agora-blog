@@ -1,3 +1,4 @@
+import SchemaVersions from "@constants/SchemaVersions";
 import { prop } from "@typegoose/typegoose";
 import { MimeTypeEnum } from "@typescript/models/File";
 import { Types } from "mongoose";
@@ -11,6 +12,10 @@ export class FileSchema {
   @Field({ nullable: false })
   @prop({ required: true, enum: MimeTypeEnum })
   public mimetype!: MimeTypeEnum;
+
+  @Field({ nullable: false })
+  @prop({ required: true, default: SchemaVersions.File })
+  public schemaVersion!: number;
 
   @Field({ nullable: false })
   @prop({ required: true, default: Date.now, immutable: true })

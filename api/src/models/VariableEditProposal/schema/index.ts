@@ -1,3 +1,4 @@
+import SchemaVersions from "@constants/SchemaVersions";
 import {
   UserClass,
   VariableClass,
@@ -57,7 +58,11 @@ export class VariableEditProposalSchema {
   @prop({ ref: () => UserClass, required: true })
   public author!: Ref<UserClass>;
 
-  @Field()
-  @prop({ default: Date.now, required: true })
+  @Field({ nullable: false })
+  @prop({ required: true, default: SchemaVersions.VariableEditProposal })
+  public schemaVersion!: number;
+
+  @Field({ nullable: false })
+  @prop({ required: true, default: Date.now, immutable: true })
   public createdAt!: Date;
 }

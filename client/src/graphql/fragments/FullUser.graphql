@@ -5,4 +5,8 @@ fragment FullUserSnippet on UserClass {
   lastName
   verified
   createdAt
+  verificationRequested {
+    _id
+    createdAt
+  }
 }
