@@ -19,9 +19,11 @@ const main = async () => {
       useUnifiedTopology: true,
     });
     console.log("MongoDB Connected");
-    console.log("Database seeding...");
 
-    await seedDatabase();
+    if (process.env.NODE_ENV !== "production") {
+      console.log("Database seeding...");
+      await seedDatabase();
+    }
   }
 
   let port = process.env.PORT || 8080;
