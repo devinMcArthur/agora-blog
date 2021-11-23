@@ -1,5 +1,6 @@
 import { Box, Divider, Text } from "@chakra-ui/layout";
 import { Tag, TagLabel } from "@chakra-ui/tag";
+import { Tooltip } from "@chakra-ui/tooltip";
 import React from "react";
 import RecommendedStatements, {
   IRecommendedStatements,
@@ -30,41 +31,44 @@ const QuestionTagRelated = ({
       return (
         <Box>
           <Box py={2}>
-            {questions.map((question) => {
+            {questions.map((question, index) => {
               const selected = selectedQuestionId === question._id;
               return (
-                <Tag
-                  backgroundColor={selected ? "gray.300" : "gray.200"}
-                  width={selected ? "100%" : "auto"}
-                >
-                  <Box display="flex" flexDir="column" width="100%">
-                    <TagLabel
-                      cursor="pointer"
-                      onClick={() =>
-                        selected
-                          ? setSelectedQuestionId(undefined)
-                          : setSelectedQuestionId(question._id)
-                      }
-                      fontWeight="bold"
-                      my={2}
-                    >
-                      {question.question}
-                    </TagLabel>
-                    {selectedQuestionId && (
-                      <Box mb={2}>
-                        <Divider my={1} />
-                        <RecommendedStatements
-                          avoidedPage={avoidPageId}
-                          questionId={selectedQuestionId}
-                          selectedStatement={(statementId, pageSlug) => {
-                            if (onStatementSelect)
-                              onStatementSelect(statementId, pageSlug);
-                          }}
-                        />
-                      </Box>
-                    )}
-                  </Box>
-                </Tag>
+                <Tooltip label={question.question} key={question._id}>
+                  <Tag
+                    m={1}
+                    backgroundColor={selected ? "gray.300" : "gray.200"}
+                    width={selected ? "100%" : "auto"}
+                  >
+                    <Box display="flex" flexDir="column" width="100%">
+                      <TagLabel
+                        cursor="pointer"
+                        onClick={() =>
+                          selected
+                            ? setSelectedQuestionId(undefined)
+                            : setSelectedQuestionId(question._id)
+                        }
+                        fontWeight="bold"
+                        my={2}
+                      >
+                        {question.question}
+                      </TagLabel>
+                      {selectedQuestionId === question._id && (
+                        <Box mb={2}>
+                          <Divider my={1} />
+                          <RecommendedStatements
+                            avoidedPage={avoidPageId}
+                            questionId={selectedQuestionId}
+                            selectedStatement={(statementId, pageSlug) => {
+                              if (onStatementSelect)
+                                onStatementSelect(statementId, pageSlug);
+                            }}
+                          />
+                        </Box>
+                      )}
+                    </Box>
+                  </Tag>
+                </Tooltip>
               );
             })}
           </Box>

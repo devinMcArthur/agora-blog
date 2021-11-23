@@ -19,12 +19,18 @@ const Question = (props: Props) => {
 
   if (data?.question && !loading) {
     const { question } = data;
-    const relatedPageList = data!.question.relatedPages.map((relatedPage) => (
-      <PageCard
-        page={relatedPage}
-        referenceObject={{ type: "question", questionID: data!.question!._id }}
-      />
-    ));
+    const relatedPageList = data!.question.relatedPages.map(
+      (relatedPage, index) => (
+        <PageCard
+          key={index}
+          page={relatedPage}
+          referenceObject={{
+            type: "question",
+            questionID: data!.question!._id,
+          }}
+        />
+      )
+    );
 
     content = (
       <Flex flexDirection="column">

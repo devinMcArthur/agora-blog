@@ -75,59 +75,50 @@ const ParagraphEditProposal = ({
    * ----- Rendering -----
    */
 
-  const content = React.useMemo(() => {
-    if (!editProposal) return <SkeletonCard variant="page" />;
-    else
-      return (
-        <Card {...props}>
-          <Box display="flex" flexDir="column">
-            <Box display="flex" flexDir="row" justifyContent="space-between">
-              <Text>{editProposal.description}</Text>
-              <UserLink user={editProposal.author} />
-            </Box>
-            <Box
-              display="flex"
-              flexDir="row"
-              justifyContent="space-between"
-              pt={2}
-            >
-              {editProposalPreviewSelection && (
-                <Checkbox
-                  mx={2}
-                  checked={editProposalSelected}
-                  onChange={(e) => {
-                    if (e.target.checked)
-                      editProposalPreviewSelection(editProposal._id);
-                    else editProposalPreviewSelection();
-                  }}
-                >
-                  Preview
-                </Checkbox>
-              )}
-              {allowApproval && user?.verified && (
-                <Button
-                  mx={2}
-                  variant="outline"
-                  onClick={() => handleApproval()}
-                  isLoading={approvalLoading}
-                >
-                  Approve
-                </Button>
-              )}
-            </Box>
+  let content = <SkeletonCard variant="page" />;
+  if (editProposal) {
+    content = (
+      <Card {...props}>
+        <Box display="flex" flexDir="column">
+          <Box display="flex" flexDir="row" justifyContent="space-between">
+            <Text>{editProposal.description}</Text>
+            <UserLink user={editProposal.author} />
           </Box>
-        </Card>
-      );
-  }, [
-    allowApproval,
-    approvalLoading,
-    editProposal,
-    editProposalPreviewSelection,
-    editProposalSelected,
-    handleApproval,
-    props,
-    user?.verified,
-  ]);
+          <Box
+            display="flex"
+            flexDir="row"
+            justifyContent="space-between"
+            pt={2}
+          >
+            {editProposalPreviewSelection && (
+              <Checkbox
+                mx={2}
+                checked={editProposalSelected}
+                isChecked={editProposalSelected}
+                onChange={(e) => {
+                  if (e.target.checked)
+                    editProposalPreviewSelection(editProposal._id);
+                  else editProposalPreviewSelection();
+                }}
+              >
+                Preview
+              </Checkbox>
+            )}
+            {allowApproval && user?.verified && (
+              <Button
+                mx={2}
+                variant="outline"
+                onClick={() => handleApproval()}
+                isLoading={approvalLoading}
+              >
+                Approve
+              </Button>
+            )}
+          </Box>
+        </Box>
+      </Card>
+    );
+  }
 
   return content;
 };

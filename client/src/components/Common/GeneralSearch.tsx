@@ -11,7 +11,6 @@ import {
   useSearchVariablesLazyQuery,
   VariableSearchSnippetFragment,
 } from "../../generated/graphql";
-import { useHistory } from "react-router";
 
 interface IItems {
   pages: LinkFormPageSnippetFragment[];
@@ -25,12 +24,10 @@ interface IExtraData {
 }
 
 interface IGeneralSearch extends Omit<InputProps, "onChange"> {
-  itemSelected: (item: {
-    type: "page" | "variable" | "question";
-    page?: { id: string; title: string; slug: string };
-    question?: { id: string; question: string };
-    variable?: { id: string };
-  }) => void;
+  itemSelected: (
+    value: { value: string; label: string },
+    extraData: IExtraData
+  ) => void;
   onChange?: (value: string) => void;
   handleSubmit?: (string: string) => void;
   dropdownId?: string;
@@ -47,6 +44,7 @@ const initialFoundItemsState: IItems = {
 const limit = 5;
 
 const GeneralSearch = ({
+  itemSelected,
   onChange,
   handleSubmit,
   ...props
@@ -66,8 +64,6 @@ const GeneralSearch = ({
     useSearchQuestionsLazyQuery();
   const [searchVariables, { data: variablesData, loading: variablesLoading }] =
     useSearchVariablesLazyQuery();
-
-  const history = useHistory();
 
   /**
    * ----- Functions -----
@@ -96,31 +92,6 @@ const GeneralSearch = ({
       );
     } else setFoundItems(initialFoundItemsState);
     if (onChange) onChange(value);
-  };
-
-  const handleOptionSelection = (
-    value: { value: string; label: string },
-    extraData: IExtraData
-  ) => {
-    if (!extraData) {
-      console.warn("Internal Error: no extra data found");
-      return;
-    }
-
-    switch (extraData.type) {
-      case "page": {
-        history.push(`/p/${extraData.slug!}`);
-        break;
-      }
-      case "question": {
-        history.push(`/q/${value.value}`);
-        break;
-      }
-      case "variable": {
-        history.push(`/v/${value.value}`);
-        break;
-      }
-    }
   };
 
   /**
@@ -199,9 +170,7 @@ const GeneralSearch = ({
       onChange={(e) => handleChange(e.target.value)}
       value={searchString}
       groupedOptions={groupedOptions}
-      onOptionSelection={(value, extraData) =>
-        handleOptionSelection(value, extraData!)
-      }
+      onOptionSelection={(value, extraData) => itemSelected(value, extraData!)}
       handleSubmit={() => {
         if (handleSubmit) handleSubmit(searchString);
       }}

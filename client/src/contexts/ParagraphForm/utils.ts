@@ -242,7 +242,7 @@ export const convertSlateParagraphToStatements = (
                   image: {
                     ...item,
                     file: {
-                      _id: "NEW",
+                      _id: "NEW-IMAGE",
                       buffer: item.buffer,
                       mimetype: item.contentType,
                     },

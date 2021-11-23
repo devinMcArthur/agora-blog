@@ -1,17 +1,22 @@
 import * as React from "react";
-import { ChakraStyleProps, Link } from "@chakra-ui/react";
+import { Link } from "@chakra-ui/react";
+import { LinkProps } from "@chakra-ui/layout";
 import { Link as RouterLink } from "react-router-dom";
 
-type Props = {
+interface ITextLink extends LinkProps {
   children: React.ReactNode;
   link: string;
   title?: string;
   isExternal?: boolean;
-} & ChakraStyleProps;
+}
 
-const TextLink = (props: Props) => {
-  const { title, link, children, isExternal, ...rest } = props;
-
+const TextLink = ({
+  title,
+  link,
+  children,
+  isExternal,
+  ...rest
+}: ITextLink) => {
   const linkProps: any = {
     color: "blue.600",
   };

@@ -2,6 +2,9 @@ fragment PageSnippet on PageClass {
   _id
   title
   slug
+  paragraphs {
+    _id
+  }
   currentParagraph {
     ...DisplayParagraphSnippet
   }

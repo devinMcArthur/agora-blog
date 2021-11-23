@@ -27,7 +27,7 @@ const HomePage = () => {
     content = (
       <Flex flexDirection="column" alignContent="center" id="pages-flex">
         {pages.map((page) => (
-          <PageCard page={page} />
+          <PageCard page={page} key={page._id} />
         ))}
       </Flex>
     );

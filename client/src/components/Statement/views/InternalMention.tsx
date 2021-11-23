@@ -1,18 +1,19 @@
+import { LinkProps } from "@chakra-ui/layout";
 import React from "react";
 import { DisplayStyleSnippetFragment } from "../../../generated/graphql";
 import TextLink from "../../Common/TextLink";
 
-type Props = {
+interface IInternalMention extends Omit<LinkProps, "style"> {
   style: DisplayStyleSnippetFragment;
   children: React.ReactNode;
   key: string | number;
-};
+}
 
-const InternalMention = (props: Props) => {
+const InternalMention = ({ style, ...props }: IInternalMention) => {
   return (
     <TextLink
-      link={`/p/${props.style.value.page!.slug}`}
-      title={props.style.value.page!.title}
+      link={`/p/${style.value.page!.slug}`}
+      title={style.value.page!.title}
     >
       {props.children}
     </TextLink>

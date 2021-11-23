@@ -1,5 +1,5 @@
-// import { SkeletonText } from "@chakra-ui/react";
 import React from "react";
+
 import { useStatementQuery } from "../../../generated/graphql";
 import Statement from "..";
 import { Text, Box, BoxProps } from "@chakra-ui/react";
@@ -8,10 +8,9 @@ import TextLink from "../../Common/TextLink";
 
 interface IQuotedStatement extends BoxProps {
   statementID: string;
-  key?: string | number;
 }
 
-const QuotedStatement = ({ statementID, key, ...props }: IQuotedStatement) => {
+const QuotedStatement = ({ statementID, ...props }: IQuotedStatement) => {
   const { data, loading } = useStatementQuery({
     variables: { id: statementID },
   });

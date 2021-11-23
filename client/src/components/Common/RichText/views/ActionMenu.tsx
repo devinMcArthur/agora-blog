@@ -179,8 +179,6 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
     handler: () => clearSelection(),
   });
 
-  console.log("savedSelection", savedSelection);
-
   React.useEffect(() => {
     const el = ref.current;
     const { selection } = editor;
@@ -194,7 +192,6 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
         SlateRange.isCollapsed(selection) ||
         Editor.string(editor, selection) === "")
     ) {
-      console.log("turnoff");
       if (!!form) toggleLinkForm();
       el.removeAttribute("style");
       return;
@@ -207,11 +204,9 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
       let range = domSelection?.getRangeAt(0);
 
       if (savedSelection?.domRange) {
-        console.log("USING SAVED RANGE");
         range = savedSelection.domRange;
       }
       if (range) {
-        console.log("render", range);
         const rect = range.getBoundingClientRect();
 
         el.style.opacity = "1";

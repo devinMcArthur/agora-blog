@@ -1,17 +1,16 @@
 import React from "react";
 
+import { LinkProps } from "@chakra-ui/layout";
 import { DisplayStyleSnippetFragment } from "../../../generated/graphql";
 import TextLink from "../../Common/TextLink";
 
-type Props = {
+interface IExternalMention extends Omit<LinkProps, "style"> {
   style: DisplayStyleSnippetFragment;
-  children: React.ReactNode;
-  key: string | number;
-};
+}
 
-const ExternalMention = (props: Props) => {
+const ExternalMention = ({ style, ...props }: IExternalMention) => {
   return (
-    <TextLink link={props.style.value.url!} key={props.key} isExternal={true}>
+    <TextLink link={style.value.url!} isExternal={true} {...props}>
       {props.children}
     </TextLink>
   );

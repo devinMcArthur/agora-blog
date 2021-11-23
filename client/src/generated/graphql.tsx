@@ -580,7 +580,10 @@ export type PageCardSnippetFragment = (
 export type PageSnippetFragment = (
   { __typename?: 'PageClass' }
   & Pick<PageClass, '_id' | 'title' | 'slug'>
-  & { currentParagraph: (
+  & { paragraphs: Array<(
+    { __typename?: 'ParagraphClass' }
+    & Pick<ParagraphClass, '_id'>
+  )>, currentParagraph: (
     { __typename?: 'ParagraphClass' }
     & DisplayParagraphSnippetFragment
   ), relatedPages: Array<(
@@ -1189,6 +1192,9 @@ export const PageSnippetFragmentDoc = gql`
   _id
   title
   slug
+  paragraphs {
+    _id
+  }
   currentParagraph {
     ...DisplayParagraphSnippet
   }

@@ -63,7 +63,7 @@ const convertToParagraphEditProposal = (
       const currentStringArray = paragraphStatementVersion.stringArray;
 
       // Handle NEW statments
-      if (slateStatement.statementId === "NEW") {
+      if (slateStatement.statementId.includes("NEW")) {
         changeType = EditProposalChangeTypes.ADD;
         stringArray = currentStringArray;
         questions = slateStatement.questions.map((question) => question._id);

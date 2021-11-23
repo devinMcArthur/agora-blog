@@ -2,7 +2,6 @@ import * as React from "react";
 
 import * as qs from "qs";
 import PageCard from "../Common/PageCard";
-import Paragraph from "../Common/Paragraph";
 import { usePageQuery } from "../../generated/graphql";
 import {
   Container,
@@ -22,6 +21,8 @@ import { useDrawer } from "../../contexts/Drawer";
 import { FiEdit } from "react-icons/fi";
 import EditParagraph from "../EditParagraph";
 import { useAuth } from "../../contexts/Auth";
+import Paragraphs from "./views/Paragraphs";
+import paragraphs from "../../mock/data/paragraphs";
 
 const Page = () => {
   const { pageSlug } = useParams<PageMatchParams>();
@@ -84,19 +85,28 @@ const Page = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paragraphEditProposalPreviewId]);
 
+  /**
+   * ----- Rendering -----
+   */
+
   const content = React.useMemo(() => {
     if (data?.page && !loading) {
       const { page } = data;
-      const relatedPageList = page.relatedPages.map((relatedPage) => (
+
+      console.log(page);
+
+      const relatedPageList = page.relatedPages.map((relatedPage, index) => (
         <PageCard
+          key={index}
           page={relatedPage}
           referenceObject={{ type: "page", pageID: page._id }}
         />
       ));
 
       const editProposals = page.currentParagraph.editProposals.map(
-        (editProposal) => (
+        (editProposal, index) => (
           <ParagraphEditProposal
+            key={index}
             editProposalSelected={
               editProposal._id === paragraphEditProposalPreviewId
             }
@@ -109,7 +119,12 @@ const Page = () => {
         )
       );
 
-      let paragraphContent = <Paragraph paragraph={page.currentParagraph} />;
+      let paragraphContent = (
+        <Paragraphs
+          paragraphIds={page.paragraphs.map((paragraph) => paragraph._id)}
+          mostRecentParagraph={page.currentParagraph}
+        />
+      );
       if (paragraphEditProposalPreviewId)
         paragraphContent = (
           <EditProposalPreview

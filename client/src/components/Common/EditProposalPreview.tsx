@@ -57,7 +57,7 @@ const EditProposalPreview = ({ editProposalId }: IEditProposalPreview) => {
 
   return React.useMemo(() => {
     if (editProposal) {
-      const statements = editProposal.statementItems.map((statement) => {
+      const statements = editProposal.statementItems.map((statement, index) => {
         const selected = editProposalStatement?._id === statement._id;
         let backgroundColor = "gray.100",
           changeType;
@@ -79,6 +79,7 @@ const EditProposalPreview = ({ editProposalId }: IEditProposalPreview) => {
 
         return (
           <Box
+            key={index}
             display="flex"
             flexDir="row"
             my={2}

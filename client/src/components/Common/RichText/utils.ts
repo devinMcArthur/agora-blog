@@ -194,15 +194,12 @@ export const CustomEditor = {
     selection: BaseSelection
   ) => {
     if (selection) {
-      console.log("imageElement", imageElement);
-      console.log("selection", selection);
       Transforms.setNodes(editor, imageElement, {
         at: [selection.anchor.path[0], selection.anchor.path[1]],
       });
     }
   },
   addImage: (editor: Editor, buffer: string, contentType: string) => {
-    console.log("buffer", buffer);
     Transforms.insertNodes(editor, {
       type: "image",
       contentType,

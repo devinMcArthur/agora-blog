@@ -136,13 +136,15 @@ const DrawerEditProposalStatement = () => {
                 <Heading size="md" my={2}>
                   New Questions
                 </Heading>
-                {editProposalStatement.newQuestions.map((newQuestion) => (
-                  <Tag>
-                    <TagLabel fontWeight="bold" my={2}>
-                      {newQuestion}
-                    </TagLabel>
-                  </Tag>
-                ))}
+                {editProposalStatement.newQuestions.map(
+                  (newQuestion, index) => (
+                    <Tag key={index}>
+                      <TagLabel fontWeight="bold" my={2}>
+                        {newQuestion}
+                      </TagLabel>
+                    </Tag>
+                  )
+                )}
               </Box>
             )}
         </Box>

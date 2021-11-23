@@ -18,12 +18,13 @@ const Paragraph = ({ paragraph }: IParagraph) => {
   } = useDrawer();
 
   const paragraphJSX = React.useMemo(() => {
-    return paragraph.statements.map((statement) => {
+    return paragraph.statements.map((statement, index) => {
       const selected =
         paragraphStatement?.statement._id === statement.statement._id;
 
       return (
         <Box
+          key={index}
           display="flex"
           flexDir="row"
           my={2}

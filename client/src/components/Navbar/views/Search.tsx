@@ -14,7 +14,27 @@ const NavbarSearch = () => {
         mt={1}
         placeholder="Search . . ."
         handleSubmit={(value) => history.push(`/search?search_string=${value}`)}
-        itemSelected={(item) => console.log("selectedItem", item)}
+        itemSelected={(value, extraData) => {
+          if (!extraData) {
+            console.warn("Internal Error: no extra data found");
+            return;
+          }
+
+          switch (extraData.type) {
+            case "page": {
+              history.push(`/p/${extraData.slug!}`);
+              break;
+            }
+            case "question": {
+              history.push(`/q/${value.value}`);
+              break;
+            }
+            case "variable": {
+              history.push(`/v/${value.value}`);
+              break;
+            }
+          }
+        }}
         bg="gray.200"
         color="gray.900"
         _focus={{ boxShadow: "none" }}

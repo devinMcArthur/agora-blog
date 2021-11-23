@@ -209,6 +209,23 @@ const StyleMenu = ({ editor, buttonSize }: IStyleMenu) => {
    * ----- Use-effects and other logic -----
    */
 
+  // close form and clear saved selection if selection is changed after form is opened
+  React.useEffect(() => {
+    if (
+      savedSelection &&
+      editor.selection &&
+      savedSelection.slateSelection !== editor.selection &&
+      !!form
+    ) {
+      clearSelection();
+      setForm(undefined);
+    }
+  }, [clearSelection, editor.selection, savedSelection, form]);
+
+  /**
+   * ----- Rendering -----
+   */
+
   return (
     <Box display="flex" flexDir="column">
       <Box display="flex" flexDir="row">

@@ -136,8 +136,6 @@ const StatementElement = ({
     element.quotedStatementId,
   ]);
 
-  console.log("hideChildren", hideChildren);
-
   return (
     <Box {...attributes}>
       <Box
@@ -254,7 +252,7 @@ const StatementElement = ({
               </Box>
             </Box>
             <Box display="flex" flexDir="row" height="100%">
-              {element.statementId === "NEW" && (
+              {element.statementId.includes("NEW") && (
                 <Text color="gray.600" pr={2} pt={1}>
                   New
                 </Text>

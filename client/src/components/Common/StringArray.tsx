@@ -17,27 +17,24 @@ const StringArray = ({ stringArray }: IStringArray) => {
     let newJSX = <span key={index}>{object.string}</span>;
     let placedMention = false;
     if (object.styles) {
-      object.styles.forEach((style) => {
+      object.styles.forEach((style, i) => {
         if (style.type === "mention" && style.value && !placedMention) {
           if (style.variant === "external") {
             newJSX = (
-              <ExternalMention key={index} style={style}>
+              <ExternalMention key={i} style={style}>
                 {newJSX}
               </ExternalMention>
             );
           } else if (style.variant === "internal") {
             newJSX = (
-              <InternalMention key={index} style={style}>
+              <InternalMention key={i} style={style}>
                 {newJSX}
               </InternalMention>
             );
           }
         } else if (style.type === "quote") {
           newJSX = (
-            <QuotedStatement
-              statementID={style.value.statement!._id}
-              key={index}
-            />
+            <QuotedStatement key={1} statementID={style.value.statement!._id} />
           );
         } else if (style.type === "variable") {
           newJSX = <Variable style={style} />;

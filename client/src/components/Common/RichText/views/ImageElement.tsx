@@ -58,7 +58,7 @@ const ImageElement = ({
         image={{
           ...(element as ImageElementType)!,
           file: {
-            _id: "NEW",
+            _id: "NEW-IMAGE",
             buffer: (element as ImageElementType).buffer,
             mimetype: (element as ImageElementType).contentType,
           },

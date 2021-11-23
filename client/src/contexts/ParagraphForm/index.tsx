@@ -1,4 +1,5 @@
 import React from "react";
+import { v4 as uuidv4 } from "uuid";
 import { Descendant } from "slate";
 import { useImmerReducer } from "use-immer";
 
@@ -126,7 +127,7 @@ const ParagraphFormReducer = (
       const blankSlateParagraph: Descendant[] = [
         {
           type: "statement",
-          statementId: "NEW",
+          statementId: `NEW-${uuidv4()}`,
           index: 0,
           questions: [],
           newQuestions: [],
@@ -169,15 +170,16 @@ const ParagraphFormReducer = (
         const seenIds: string[] = [];
         for (let i = 0; i < statementIds.length; i++) {
           if (seenIds.includes(statementIds[i])) {
-            (slateParagraph[i] as StatementElementType).statementId = "NEW";
+            (
+              slateParagraph[i] as StatementElementType
+            ).statementId = `NEW-${uuidv4()}`;
             (slateParagraph[i] as StatementElementType).newQuestions = [];
             (slateParagraph[i] as StatementElementType).questions = [];
           }
 
-          // Add to seenIds array after
-          if (statementIds[i] !== "NEW") seenIds.push(statementIds[i]);
-
           (slateParagraph[i] as StatementElementType).index = i;
+
+          seenIds.push(statementIds[i]);
         }
       }
 

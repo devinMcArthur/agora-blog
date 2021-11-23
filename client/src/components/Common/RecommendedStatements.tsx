@@ -32,8 +32,6 @@ const RecommendedStatements = ({
    * ----- Use-effects and other logic -----
    */
 
-  console.log("questionId", questionId);
-
   React.useEffect(() => {
     setFoundStatements([]);
     getStatements({

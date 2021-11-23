@@ -23,7 +23,7 @@ const Questions = () => {
       .slice()
       .sort((a, b) => b.referencedCount - a.referencedCount);
     const questionsJSX = sortedQuestions.map((question) => (
-      <QuestionCard question={question} />
+      <QuestionCard question={question} key={question._id} />
     ));
 
     content = <Flex flexDirection="column">{questionsJSX}</Flex>;
