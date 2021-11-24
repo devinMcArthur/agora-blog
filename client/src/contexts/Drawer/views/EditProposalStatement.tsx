@@ -10,56 +10,118 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { IconButton } from "@chakra-ui/button";
 import { EditProposalChangeTypes } from "../../../models/paragraphEditProposal";
 
+/**
+ * @description handles drawer view of an edit proposal statement
+ */
+
 const DrawerEditProposalStatement = () => {
+  /**
+   * ----- Hook Initialization -----
+   */
+
   const {
     state: { editProposalStatement, currentPageId },
   } = useDrawer();
 
-  const hasEdit =
-    editProposalStatement?.changeType === EditProposalChangeTypes.EDIT ||
-    editProposalStatement?.changeType === EditProposalChangeTypes.ADD
+  /**
+   * ----- Variables -----
+   */
+
+  /**
+   * @desc boolean representing whether this statement has some sort of change
+   */
+  const hasEdit = React.useMemo(() => {
+    return editProposalStatement?.changeType === EditProposalChangeTypes.EDIT ||
+      editProposalStatement?.changeType === EditProposalChangeTypes.ADD
       ? true
       : false;
+  }, [editProposalStatement?.changeType]);
 
+  /**
+   * @desc if this is an accepted or outdated proposal and this statement has been edited,
+   *       this is the index that was edited
+   */
+  const edittedVersionIndex = React.useMemo(() => {
+    if (!hasEdit) return undefined;
+    else if (editProposalStatement?.paragraphStatement)
+      return editProposalStatement.paragraphStatement.versionIndex + 1;
+    else return undefined;
+  }, [editProposalStatement?.paragraphStatement, hasEdit]);
+
+  console.log("edittedVersionIndex", edittedVersionIndex);
+
+  const defaultIndex = React.useMemo(() => {
+    if (edittedVersionIndex !== undefined) return edittedVersionIndex;
+    else if (editProposalStatement?.paragraphStatement)
+      return editProposalStatement.paragraphStatement.versionIndex;
+    else return undefined;
+  }, [editProposalStatement?.paragraphStatement, edittedVersionIndex]);
+
+  /**
+   * @desc state value holding the currently rendered version, undefined if there are no other version (ADDED)
+   */
   const [statementVersion, setStatementVersion] = React.useState<
-    number | "EDIT"
-  >(
-    hasEdit
-      ? "EDIT"
-      : editProposalStatement?.paragraphStatement?.versionIndex || 0
-  );
+    number | undefined
+  >(defaultIndex);
 
+  console.log("statementVersion", statementVersion);
+
+  /**
+   * ----- Use-effects and other logic -----
+   */
+
+  // reset statementVersion to default if editProposalStatement changes
   React.useEffect(() => {
-    if (editProposalStatement)
-      setStatementVersion(
-        hasEdit
-          ? "EDIT"
-          : editProposalStatement!.paragraphStatement!.versionIndex
-      );
-  }, [editProposalStatement, hasEdit]);
+    console.log("hi", defaultIndex);
+    if (editProposalStatement) setStatementVersion(defaultIndex);
+  }, [defaultIndex, editProposalStatement, edittedVersionIndex, hasEdit]);
+
+  /**
+   * ----- Rendering -----
+   */
 
   const content = React.useMemo(() => {
     if (editProposalStatement) {
+      // disable left chevron if this statement is newly added or we are at index 0
       const leftChevronDisabled =
-        editProposalStatement.changeType === "ADD" || statementVersion === 0;
+        statementVersion === undefined ||
+        editProposalStatement.changeType === "ADD" ||
+        statementVersion === 0;
+
+      /**
+       * disable right chevron if:
+       *  - statement version is undefined
+       *  - there are no other versions
+       *  - we are at the end of the versions array
+       */
       const rightChevronDisabled =
-        statementVersion === "EDIT" ||
-        (!hasEdit &&
-          (!editProposalStatement.paragraphStatement ||
-            editProposalStatement.paragraphStatement!.statement.versions
-              .length -
-              1 ===
-              statementVersion));
+        statementVersion === undefined ||
+        !editProposalStatement.paragraphStatement ||
+        editProposalStatement.paragraphStatement!.statement.versions.length -
+          1 ===
+          statementVersion;
+
+      // index used for ParagraphEditProposalStatement
+      const finalIndex =
+        statementVersion === edittedVersionIndex ||
+        statementVersion === undefined
+          ? "EDIT"
+          : statementVersion;
 
       return (
         <Box p={3}>
           <Box backgroundColor="white" borderRadius="1em">
             <Box m={2} display="flex" flexDir="column">
               <Box p={2}>
-                <ParagraphEditProposalStatement
-                  statement={editProposalStatement}
-                  versionIndex={statementVersion}
-                />
+                {(finalIndex === "EDIT" ||
+                  editProposalStatement.paragraphStatement?.statement.versions[
+                    finalIndex
+                  ]) && (
+                  <ParagraphEditProposalStatement
+                    statement={editProposalStatement}
+                    versionIndex={finalIndex}
+                  />
+                )}
               </Box>
               <Box
                 display="flex"
@@ -76,22 +138,17 @@ const DrawerEditProposalStatement = () => {
                   _hover={{ backgroundColor: "white" }}
                   onClick={() => {
                     if (!leftChevronDisabled) {
-                      if (
-                        editProposalStatement.paragraphStatement &&
-                        statementVersion === "EDIT"
-                      )
-                        setStatementVersion(
-                          editProposalStatement.paragraphStatement.versionIndex
-                        );
-                      else if (statementVersion !== "EDIT")
-                        setStatementVersion(statementVersion - 1);
+                      setStatementVersion(statementVersion - 1);
                     }
                   }}
                   isDisabled={leftChevronDisabled}
                 />
                 <Text color="gray.500">
                   version:{" "}
-                  {statementVersion === "EDIT" ? "NEW" : statementVersion + 1}
+                  {statementVersion === edittedVersionIndex ||
+                  statementVersion === undefined
+                    ? "EDIT"
+                    : statementVersion + 1}
                 </Text>
                 <IconButton
                   as={FiChevronRight}
@@ -102,15 +159,7 @@ const DrawerEditProposalStatement = () => {
                   _hover={{ backgroundColor: "white" }}
                   onClick={() => {
                     if (!rightChevronDisabled) {
-                      if (
-                        editProposalStatement.paragraphStatement!.statement
-                          .versions.length -
-                          1 ===
-                        statementVersion
-                      )
-                        setStatementVersion("EDIT");
-                      else
-                        setStatementVersion((statementVersion as number) + 1);
+                      setStatementVersion(statementVersion + 1);
                     }
                   }}
                   isDisabled={rightChevronDisabled}
@@ -150,7 +199,12 @@ const DrawerEditProposalStatement = () => {
         </Box>
       );
     } else <ErrorMessage />;
-  }, [currentPageId, editProposalStatement, hasEdit, statementVersion]);
+  }, [
+    currentPageId,
+    editProposalStatement,
+    edittedVersionIndex,
+    statementVersion,
+  ]);
 
   return <Box>{content}</Box>;
 };

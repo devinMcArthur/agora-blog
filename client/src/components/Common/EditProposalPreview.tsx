@@ -17,9 +17,13 @@ import ParagraphEditProposalStatement from "./ParagraphEditProposalStatement";
 
 interface IEditProposalPreview {
   editProposalId: string;
+  closePreview: () => void;
 }
 
-const EditProposalPreview = ({ editProposalId }: IEditProposalPreview) => {
+const EditProposalPreview = ({
+  editProposalId,
+  closePreview,
+}: IEditProposalPreview) => {
   const [editProposal, setEditProposal] =
     React.useState<FullParagraphEditProposalSnippetFragment>();
   const [query, { data, loading }] = useFullParagraphEditProposalLazyQuery();
@@ -28,7 +32,6 @@ const EditProposalPreview = ({ editProposalId }: IEditProposalPreview) => {
     state: { editProposalStatement },
     setEditProposalStatement,
     clearEditProposalStatement,
-    setPreviewedParagraphEditProposal,
   } = useDrawer();
 
   /**
@@ -121,9 +124,7 @@ const EditProposalPreview = ({ editProposalId }: IEditProposalPreview) => {
                     {editProposal.author.lastName}
                   </AlertDescription>
                 </Box>
-                <CloseButton
-                  onClick={() => setPreviewedParagraphEditProposal(undefined)}
-                />
+                <CloseButton onClick={() => closePreview()} />
               </Box>
               {editProposal.description}
             </Box>
@@ -134,10 +135,10 @@ const EditProposalPreview = ({ editProposalId }: IEditProposalPreview) => {
     } else return <Loading />;
   }, [
     clearEditProposalStatement,
+    closePreview,
     editProposal,
     editProposalStatement?._id,
     setEditProposalStatement,
-    setPreviewedParagraphEditProposal,
   ]);
 };
 

@@ -1,0 +1,5 @@
+query Paragraph($id: String!) {
+  paragraph(id: $id) {
+    ...DisplayParagraphSnippet
+  }
+}

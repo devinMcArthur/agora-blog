@@ -23,7 +23,6 @@ interface IDrawerState {
 interface IDrawerContext {
   state: IDrawerState;
   isActive: boolean;
-  paragraphEditProposalPreviewId?: string;
 
   setParagraphStatement: (
     statement: FullParagraphStatementSnippetFragment
@@ -35,10 +34,6 @@ interface IDrawerContext {
   clearEditProposalStatement: () => void;
   setCurrentPage: (currentPageId: string) => void;
   clearState: () => void;
-
-  setPreviewedParagraphEditProposal: React.Dispatch<
-    React.SetStateAction<string | undefined>
-  >;
 }
 
 type IDrawerAction =
@@ -139,8 +134,6 @@ const DrawerProvider = ({ children }: IDrawerProvider) => {
   const [state, dispatch] = useImmerReducer(DrawerReducer, initialState);
 
   const [isActive, setIsActive] = React.useState(false);
-  const [paragraphEditProposalPreviewId, setParagraphEditProposalPreviewId] =
-    React.useState<string>();
 
   /**
    * ----- Functions -----
@@ -214,7 +207,6 @@ const DrawerProvider = ({ children }: IDrawerProvider) => {
       value={{
         state,
         isActive,
-        paragraphEditProposalPreviewId,
 
         setParagraphStatement,
         clearParagraphStatement,
@@ -222,8 +214,6 @@ const DrawerProvider = ({ children }: IDrawerProvider) => {
         clearEditProposalStatement,
         setCurrentPage,
         clearState,
-
-        setPreviewedParagraphEditProposal: setParagraphEditProposalPreviewId,
       }}
     >
       {children}

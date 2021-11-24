@@ -29,6 +29,7 @@ export type Query = {
   question?: Maybe<QuestionClass>;
   questions: Array<QuestionClass>;
   searchQuestions: Array<QuestionClass>;
+  paragraph: ParagraphClass;
   statement?: Maybe<StatementClass>;
   statementsFromQuestion: Array<StatementClass>;
   paragraphEditProposal: ParagraphEditProposalClass;
@@ -71,6 +72,11 @@ export type QueryQuestionArgs = {
 export type QuerySearchQuestionsArgs = {
   limit?: Maybe<Scalars['Float']>;
   searchString: Scalars['String'];
+};
+
+
+export type QueryParagraphArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -467,6 +473,9 @@ export type DisplayParagraphSnippetFragment = (
   ), editProposals: Array<(
     { __typename?: 'ParagraphEditProposalClass' }
     & Pick<ParagraphEditProposalClass, '_id'>
+  )>, sourceEditProposal?: Maybe<(
+    { __typename?: 'ParagraphEditProposalClass' }
+    & Pick<ParagraphEditProposalClass, '_id'>
   )> }
 );
 
@@ -860,6 +869,19 @@ export type PagesQuery = (
   )> }
 );
 
+export type ParagraphQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type ParagraphQuery = (
+  { __typename?: 'Query' }
+  & { paragraph: (
+    { __typename?: 'ParagraphClass' }
+    & DisplayParagraphSnippetFragment
+  ) }
+);
+
 export type PreviewPageSearchQueryVariables = Exact<{
   searchString: Scalars['String'];
   limit?: Maybe<Scalars['Float']>;
@@ -1172,6 +1194,9 @@ export const DisplayParagraphSnippetFragmentDoc = gql`
     _id
   }
   editProposals {
+    _id
+  }
+  sourceEditProposal {
     _id
   }
 }
@@ -1729,6 +1754,39 @@ export function usePagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Page
 export type PagesQueryHookResult = ReturnType<typeof usePagesQuery>;
 export type PagesLazyQueryHookResult = ReturnType<typeof usePagesLazyQuery>;
 export type PagesQueryResult = Apollo.QueryResult<PagesQuery, PagesQueryVariables>;
+export const ParagraphDocument = gql`
+    query Paragraph($id: String!) {
+  paragraph(id: $id) {
+    ...DisplayParagraphSnippet
+  }
+}
+    ${DisplayParagraphSnippetFragmentDoc}`;
+
+/**
+ * __useParagraphQuery__
+ *
+ * To run a query within a React component, call `useParagraphQuery` and pass it any options that fit your needs.
+ * When your component renders, `useParagraphQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useParagraphQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useParagraphQuery(baseOptions: Apollo.QueryHookOptions<ParagraphQuery, ParagraphQueryVariables>) {
+        return Apollo.useQuery<ParagraphQuery, ParagraphQueryVariables>(ParagraphDocument, baseOptions);
+      }
+export function useParagraphLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ParagraphQuery, ParagraphQueryVariables>) {
+          return Apollo.useLazyQuery<ParagraphQuery, ParagraphQueryVariables>(ParagraphDocument, baseOptions);
+        }
+export type ParagraphQueryHookResult = ReturnType<typeof useParagraphQuery>;
+export type ParagraphLazyQueryHookResult = ReturnType<typeof useParagraphLazyQuery>;
+export type ParagraphQueryResult = Apollo.QueryResult<ParagraphQuery, ParagraphQueryVariables>;
 export const PreviewPageSearchDocument = gql`
     query PreviewPageSearch($searchString: String!, $limit: Float) {
   searchPages(searchString: $searchString, limit: $limit) {

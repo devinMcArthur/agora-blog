@@ -22,7 +22,6 @@ import { FiEdit } from "react-icons/fi";
 import EditParagraph from "../EditParagraph";
 import { useAuth } from "../../contexts/Auth";
 import Paragraphs from "./views/Paragraphs";
-import paragraphs from "../../mock/data/paragraphs";
 
 const Page = () => {
   const { pageSlug } = useParams<PageMatchParams>();
@@ -37,13 +36,10 @@ const Page = () => {
   });
 
   const [editting, setEditting] = React.useState(false);
+  const [previewParagraphEditProposalId, setPreviewParagraphEditProposalId] =
+    React.useState<string>();
 
-  const {
-    paragraphEditProposalPreviewId,
-    setCurrentPage,
-    clearState,
-    setPreviewedParagraphEditProposal,
-  } = useDrawer();
+  const { setCurrentPage, clearState } = useDrawer();
 
   /**
    * ----- Variables -----
@@ -59,6 +55,10 @@ const Page = () => {
     }
   }, [location]);
 
+  /**
+   * ----- Use-effects and other logic -----
+   */
+
   React.useEffect(() => {
     if (data?.page) {
       setCurrentPage(data.page._id);
@@ -71,19 +71,19 @@ const Page = () => {
 
   // If proposal param is set, set preview
   React.useEffect(() => {
-    if (proposalParams && !paragraphEditProposalPreviewId) {
-      setPreviewedParagraphEditProposal(proposalParams);
+    if (proposalParams && !previewParagraphEditProposalId) {
+      setPreviewParagraphEditProposalId(proposalParams);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
 
   // If proposal preview is removed, remove proposal param
   React.useEffect(() => {
-    if (!paragraphEditProposalPreviewId && proposalParams) {
+    if (!previewParagraphEditProposalId && proposalParams) {
       history.push(`/p/${pageSlug}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paragraphEditProposalPreviewId]);
+  }, [previewParagraphEditProposalId]);
 
   /**
    * ----- Rendering -----
@@ -108,10 +108,10 @@ const Page = () => {
           <ParagraphEditProposal
             key={index}
             editProposalSelected={
-              editProposal._id === paragraphEditProposalPreviewId
+              editProposal._id === previewParagraphEditProposalId
             }
             editProposalPreviewSelection={(proposal) =>
-              setPreviewedParagraphEditProposal(proposal)
+              setPreviewParagraphEditProposalId(proposal)
             }
             paragraphEditProposalId={editProposal._id}
             allowApproval
@@ -125,10 +125,11 @@ const Page = () => {
           mostRecentParagraph={page.currentParagraph}
         />
       );
-      if (paragraphEditProposalPreviewId)
+      if (previewParagraphEditProposalId)
         paragraphContent = (
           <EditProposalPreview
-            editProposalId={paragraphEditProposalPreviewId}
+            closePreview={() => setPreviewParagraphEditProposalId(undefined)}
+            editProposalId={previewParagraphEditProposalId}
           />
         );
       if (editting)
@@ -184,9 +185,9 @@ const Page = () => {
   }, [
     data,
     loading,
-    paragraphEditProposalPreviewId,
+    previewParagraphEditProposalId,
     editting,
-    setPreviewedParagraphEditProposal,
+    setPreviewParagraphEditProposalId,
     requiresVerification,
   ]);
 

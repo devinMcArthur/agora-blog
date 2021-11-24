@@ -1,8 +1,15 @@
-import { Button } from "@chakra-ui/button";
-import { Box } from "@chakra-ui/layout";
+import { IconButton } from "@chakra-ui/button";
+import { Box, Text } from "@chakra-ui/layout";
 import React from "react";
-import { DisplayParagraphSnippetFragment } from "../../../generated/graphql";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import {
+  DisplayParagraphSnippetFragment,
+  useParagraphLazyQuery,
+} from "../../../generated/graphql";
+import EditProposalPreview from "../../Common/EditProposalPreview";
+import Loading from "../../Common/Loading";
 import Paragraph from "../../Common/Paragraph";
+import ParagraphEditProposal from "../../Common/ParagraphEditProposal";
 
 interface IParagraphs {
   mostRecentParagraph?: DisplayParagraphSnippetFragment;
@@ -25,6 +32,12 @@ const Paragraphs = ({ mostRecentParagraph, paragraphIds }: IParagraphs) => {
     paragraphIds.length - 1
   );
 
+  const [previewEditProposalId, setPreviewEditProposalId] =
+    React.useState<string>();
+
+  const [getParagraph, { loading: queryLoading, data }] =
+    useParagraphLazyQuery();
+
   /**
    * ----- Variables -----
    */
@@ -35,8 +48,7 @@ const Paragraphs = ({ mostRecentParagraph, paragraphIds }: IParagraphs) => {
 
   const leftDisabled = selectedParagraphIndex === 0;
   const rightDisabled = selectedParagraphIndex === paragraphs.length - 1;
-
-  console.log(typeof selectedParagraph);
+  const loading = queryLoading || typeof selectedParagraph === "string";
 
   /**
    * ----- Use-effects and other logic -----
@@ -45,32 +57,95 @@ const Paragraphs = ({ mostRecentParagraph, paragraphIds }: IParagraphs) => {
   React.useEffect(() => {
     if (typeof selectedParagraph === "object") {
       setParagraph(selectedParagraph);
+    } else {
+      setParagraph(undefined);
+      getParagraph({
+        variables: {
+          id: selectedParagraph,
+        },
+      });
     }
-  }, [selectedParagraph]);
+  }, [getParagraph, selectedParagraph]);
+
+  React.useEffect(() => {
+    if (!queryLoading && data) {
+      setParagraph(data.paragraph);
+
+      const paragraphsCopy = [...paragraphs];
+      paragraphsCopy[selectedParagraphIndex] = data.paragraph;
+      setParagraphs(paragraphsCopy);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, queryLoading]);
+
+  React.useEffect(() => {
+    setPreviewEditProposalId(undefined);
+  }, [selectedParagraphIndex]);
+
+  /**
+   * ----- Rendering -----
+   */
+
+  const paragraphContent = React.useMemo(() => {
+    if (!!paragraph) {
+      if (previewEditProposalId) {
+        return (
+          <EditProposalPreview
+            closePreview={() => setPreviewEditProposalId(undefined)}
+            editProposalId={previewEditProposalId}
+          />
+        );
+      }
+
+      return <Paragraph paragraph={paragraph} />;
+    } else {
+      return <Loading minH="10rem" />;
+    }
+  }, [paragraph, previewEditProposalId]);
+
+  console.log("paragraph", paragraph);
 
   return (
     <Box>
-      <Box>
-        <Button
+      {paragraphContent}
+      <Box display="flex" flexDir="row" justifyContent="space-between">
+        <IconButton
+          aria-label="previous"
+          icon={<FiChevronLeft />}
+          isLoading={loading}
           isDisabled={leftDisabled}
           onClick={() => {
             if (!leftDisabled)
               setSelectedParagraphIndex(selectedParagraphIndex - 1);
           }}
-        >
-          Left
-        </Button>
-        <Button
+        />
+        <Box display="flex" flexDir="column">
+          <Text color="gray.600" margin="auto">
+            Paragraph Version: {selectedParagraphIndex + 1}
+          </Text>
+          {paragraph && paragraph.sourceEditProposal && (
+            <ParagraphEditProposal
+              paragraphEditProposalId={paragraph.sourceEditProposal._id}
+              editProposalPreviewSelection={(proposalId) =>
+                setPreviewEditProposalId(proposalId)
+              }
+              editProposalSelected={
+                paragraph.sourceEditProposal._id === previewEditProposalId
+              }
+            />
+          )}
+        </Box>
+        <IconButton
+          aria-label="next"
+          icon={<FiChevronRight />}
+          isLoading={loading}
           isDisabled={rightDisabled}
           onClick={() => {
             if (!rightDisabled)
               setSelectedParagraphIndex(selectedParagraphIndex + 1);
           }}
-        >
-          Right
-        </Button>
+        />
       </Box>
-      {!!paragraph && <Paragraph paragraph={paragraph} />}
     </Box>
   );
 };

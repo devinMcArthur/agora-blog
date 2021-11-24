@@ -9,4 +9,7 @@ fragment DisplayParagraphSnippet on ParagraphClass {
   editProposals {
     _id
   }
+  sourceEditProposal {
+    _id
+  }
 }

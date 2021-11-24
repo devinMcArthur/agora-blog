@@ -1,14 +1,12 @@
 import React from "react";
 
-import { Center, Container, Spinner } from "@chakra-ui/react";
+import { Center, CenterProps, Spinner } from "@chakra-ui/react";
 
-const Loading = () => {
+const Loading = (props: CenterProps) => {
   return (
-    <Container>
-      <Center>
-        <Spinner />
-      </Center>
-    </Container>
+    <Center {...props}>
+      <Spinner m="auto" />
+    </Center>
   );
 };
 

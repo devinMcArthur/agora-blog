@@ -71,6 +71,10 @@ const ParagraphEditProposal = ({
     }
   }, [data, queryLoading]);
 
+  React.useEffect(() => {
+    setEditProposal(undefined);
+  }, [paragraphEditProposalId]);
+
   /**
    * ----- Rendering -----
    */
