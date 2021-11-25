@@ -11,8 +11,16 @@ const forStatement = (
         statement
       );
 
+      /**
+       * remove all existing connections if statement:
+       *  - is no longer 'current'
+       *  - or is now a full 'quotedStatement'
+       */
       // remove all existing connection if statement is no longer current
-      if (statement.current === false) {
+      if (
+        statement.current === false ||
+        statement.versions[statement.versions.length - 1].quotedStatement
+      ) {
         for (let i = 0; i < existingConnections.length; i++) {
           await existingConnections[i].remove();
         }

@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react";
 import React from "react";
 import { DisplayStyleSnippetFragment } from "../../../generated/graphql";
 import TextLink from "../../Common/TextLink";
-import FinalValue from "../../Variable/views/FinalValue";
+import FinalValue from "../../../Pages/Variable/views/FinalValue";
 
 type Props = {
   style: DisplayStyleSnippetFragment;

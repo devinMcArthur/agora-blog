@@ -1,11 +1,24 @@
 import { Center, Container, Flex, Spinner } from "@chakra-ui/react";
 import React from "react";
 import { useQuestionsQuery } from "../../generated/graphql";
-import QuestionCard from "../Common/QuestionCard";
-import SkeletonCard from "../Common/SkeletonCard";
+import QuestionCard from "../../components/Common/QuestionCard";
+import SkeletonCard from "../../components/Common/SkeletonCard";
+import setDocumentTitle from "../../utils/setDocumentTitle";
 
 const Questions = () => {
   const { data, loading } = useQuestionsQuery();
+
+  /**
+   * ----- Use-effects and other logic -----
+   */
+
+  React.useEffect(() => {
+    setDocumentTitle("Questions");
+  });
+
+  /**
+   * ----- Rendering -----
+   */
 
   let content = (
     <Flex flexDirection="column">

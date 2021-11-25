@@ -1,14 +1,27 @@
 import * as React from "react";
 import { Center, Container, Flex, Spinner } from "@chakra-ui/react";
 
-import { withProvider } from "../Providers";
+import { withProvider } from "../../components/Providers";
 
 import { usePagesQuery } from "../../generated/graphql";
-import SkeletonCard from "../Common/SkeletonCard";
-import PageCard from "../Common/PageCard";
+import SkeletonCard from "../../components/Common/SkeletonCard";
+import PageCard from "../../components/Common/PageCard";
+import setDocumentTitle from "../../utils/setDocumentTitle";
 
 const HomePage = () => {
   const { data, loading } = usePagesQuery();
+
+  /**
+   * ----- Use-effects and other logic -----
+   */
+
+  React.useEffect(() => {
+    setDocumentTitle();
+  });
+
+  /**
+   * ----- Rendering -----
+   */
 
   let content = (
     <Flex flexDirection="column" id="pages-skeleton-flex">

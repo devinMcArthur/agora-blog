@@ -1,8 +1,8 @@
 import { Box, Heading } from "@chakra-ui/layout";
 import React from "react";
 import { useSearchVariablesQuery } from "../../../generated/graphql";
-import Loading from "../../Common/Loading";
-import VariableCard from "../../Common/VariableCard";
+import Loading from "../../../components/Common/Loading";
+import VariableCard from "../../../components/Common/VariableCard";
 
 interface IVariablesSearch {
   searchString: string;

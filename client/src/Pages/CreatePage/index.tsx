@@ -1,15 +1,20 @@
 import React from "react";
 
 import { Container, Heading } from "@chakra-ui/react";
-import PageSearch from "../Common/PageSearch";
+import PageSearch from "../../components/Common/PageSearch";
 import { Button } from "@chakra-ui/button";
 import { Box } from "@chakra-ui/layout";
-import ParagraphForm from "../Common/ParagraphForm";
+import ParagraphForm from "../../components/Common/ParagraphForm";
 import { NewStatementData, useNewPageMutation } from "../../generated/graphql";
 import { useHistory } from "react-router";
-import ErrorMessage from "../Common/ErrorMessage";
+import ErrorMessage from "../../components/Common/ErrorMessage";
+import setDocumentTitle from "../../utils/setDocumentTitle";
 
 const CreatePage = () => {
+  /**
+   * ----- Hook Initialization -----
+   */
+
   const history = useHistory();
 
   const [title, setTitle] = React.useState("");
@@ -21,6 +26,10 @@ const CreatePage = () => {
   const [generalError, setGeneralError] = React.useState<string>();
 
   const [createPage, { loading }] = useNewPageMutation();
+
+  /**
+   * ----- Functions -----
+   */
 
   const handleSubmit = () => {
     errorCheck().then(() => {
@@ -76,10 +85,22 @@ const CreatePage = () => {
     });
   };
 
+  /**
+   * ----- Use-effects and other logic -----
+   */
+
   // Clear title error
   React.useEffect(() => {
     setTitleError(undefined);
   }, [title]);
+
+  React.useEffect(() => {
+    setDocumentTitle("Create Page");
+  });
+
+  /**
+   * ----- Rendering -----
+   */
 
   return (
     <Container minW="80%">

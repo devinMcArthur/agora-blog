@@ -3,7 +3,7 @@ import React from "react";
 import { useParams } from "react-router";
 import { UserMatchParams } from "../../models/pageParams";
 import { UserQuery, useUserQuery } from "../../generated/graphql";
-import Loading from "../Common/Loading";
+import Loading from "../../components/Common/Loading";
 import { Box, Container, Heading } from "@chakra-ui/layout";
 import Icon from "@chakra-ui/icon";
 import { GoVerified } from "react-icons/go";
@@ -18,6 +18,7 @@ import {
   ModalOverlay,
 } from "@chakra-ui/modal";
 import UserSettings from "./views/Settings";
+import setDocumentTitle from "../../utils/setDocumentTitle";
 
 const User = () => {
   /**
@@ -46,6 +47,10 @@ const User = () => {
   React.useEffect(() => {
     if (!loading && data?.user) setUser(data.user);
   }, [data, loading]);
+
+  React.useEffect(() => {
+    setDocumentTitle(!!user ? `${user.firstName} ${user.lastName}` : undefined);
+  }, [user]);
 
   /**
    * ----- Rendering -----

@@ -3,7 +3,7 @@ import React from "react";
 import { Box, Divider, Heading, Text } from "@chakra-ui/layout";
 import { useAuth } from "../../../contexts/Auth";
 import { Alert, AlertDescription, AlertIcon } from "@chakra-ui/alert";
-import ErrorMessage from "../../Common/ErrorMessage";
+import ErrorMessage from "../../../components/Common/ErrorMessage";
 import { Button } from "@chakra-ui/button";
 import { useRequestVerificationMutation } from "../../../generated/graphql";
 import dayjs from "dayjs";

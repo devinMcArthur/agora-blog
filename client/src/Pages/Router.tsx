@@ -3,13 +3,13 @@ import * as React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Analytics from "react-router-ga";
 import DrawerContainer from "../contexts/Drawer/views/Container";
-import MainPageContainer from "./Common/MainPageContainer";
+import MainPageContainer from "../components/Common/MainPageContainer";
 import CreatePage from "./CreatePage";
 
 import HomePage from "./HomePage";
-import Navbar from "./Navbar";
+import Navbar from "../components/Navbar";
 import Page from "./Page";
-import Playground from "./Playground";
+import Playground from "../components/Playground";
 import Question from "./Question";
 import Questions from "./Questions";
 import Search from "./Search";

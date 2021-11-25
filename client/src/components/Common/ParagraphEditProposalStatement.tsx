@@ -15,9 +15,6 @@ const ParagraphEditProposalStatement = ({
   statement,
   versionIndex,
 }: IParagraphEditProposalStatement) => {
-  console.log("statement", statement);
-  console.log("versionIndex", versionIndex);
-
   const content = React.useMemo(() => {
     if (
       statement.stringArray &&

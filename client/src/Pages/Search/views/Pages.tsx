@@ -1,8 +1,8 @@
 import { Box, Heading } from "@chakra-ui/layout";
 import React from "react";
 import { usePreviewPageSearchQuery } from "../../../generated/graphql";
-import Loading from "../../Common/Loading";
-import PageCard from "../../Common/PageCard";
+import Loading from "../../../components/Common/Loading";
+import PageCard from "../../../components/Common/PageCard";
 
 interface IPagesSearch {
   searchString: string;

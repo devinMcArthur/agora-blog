@@ -6,17 +6,26 @@ import {
   DisplayParagraphSnippetFragment,
   useParagraphLazyQuery,
 } from "../../../generated/graphql";
-import EditProposalPreview from "../../Common/EditProposalPreview";
-import Loading from "../../Common/Loading";
-import Paragraph from "../../Common/Paragraph";
-import ParagraphEditProposal from "../../Common/ParagraphEditProposal";
+import EditProposalPreview from "../../../components/Common/EditProposalPreview";
+import Loading from "../../../components/Common/Loading";
+import Paragraph from "../../../components/Common/Paragraph";
+import ParagraphEditProposal from "../../../components/Common/ParagraphEditProposal";
 
 interface IParagraphs {
   mostRecentParagraph?: DisplayParagraphSnippetFragment;
   paragraphIds: string[];
+
+  // allows edit proposal preview to be toggled from parent
+  previewEditProposal?: string;
+  onClearPreviewedProposal?: () => void;
 }
 
-const Paragraphs = ({ mostRecentParagraph, paragraphIds }: IParagraphs) => {
+const Paragraphs = ({
+  mostRecentParagraph,
+  paragraphIds,
+  previewEditProposal,
+  onClearPreviewedProposal,
+}: IParagraphs) => {
   /**
    * ----- Hook Initialization
    */
@@ -34,6 +43,7 @@ const Paragraphs = ({ mostRecentParagraph, paragraphIds }: IParagraphs) => {
 
   const [previewEditProposalId, setPreviewEditProposalId] =
     React.useState<string>();
+  const [showEditProposalCard, setShowEditProposalCard] = React.useState(false);
 
   const [getParagraph, { loading: queryLoading, data }] =
     useParagraphLazyQuery();
@@ -49,6 +59,16 @@ const Paragraphs = ({ mostRecentParagraph, paragraphIds }: IParagraphs) => {
   const leftDisabled = selectedParagraphIndex === 0;
   const rightDisabled = selectedParagraphIndex === paragraphs.length - 1;
   const loading = queryLoading || typeof selectedParagraph === "string";
+
+  /**
+   * ----- Functions -----
+   */
+
+  const clearEditProposalPreview = React.useCallback(() => {
+    setPreviewEditProposalId(undefined);
+    if (onClearPreviewedProposal) onClearPreviewedProposal();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * ----- Use-effects and other logic -----
@@ -79,8 +99,15 @@ const Paragraphs = ({ mostRecentParagraph, paragraphIds }: IParagraphs) => {
   }, [data, queryLoading]);
 
   React.useEffect(() => {
-    setPreviewEditProposalId(undefined);
-  }, [selectedParagraphIndex]);
+    clearEditProposalPreview();
+  }, [clearEditProposalPreview, selectedParagraphIndex]);
+
+  React.useEffect(() => {
+    if (previewEditProposal) {
+      setSelectedParagraphIndex(paragraphs.length - 1);
+      setPreviewEditProposalId(previewEditProposal);
+    }
+  }, [paragraphs.length, previewEditProposal]);
 
   /**
    * ----- Rendering -----
@@ -91,7 +118,7 @@ const Paragraphs = ({ mostRecentParagraph, paragraphIds }: IParagraphs) => {
       if (previewEditProposalId) {
         return (
           <EditProposalPreview
-            closePreview={() => setPreviewEditProposalId(undefined)}
+            closePreview={() => clearEditProposalPreview()}
             editProposalId={previewEditProposalId}
           />
         );
@@ -101,9 +128,23 @@ const Paragraphs = ({ mostRecentParagraph, paragraphIds }: IParagraphs) => {
     } else {
       return <Loading minH="10rem" />;
     }
-  }, [paragraph, previewEditProposalId]);
+  }, [clearEditProposalPreview, paragraph, previewEditProposalId]);
 
-  console.log("paragraph", paragraph);
+  const editProposalCard = React.useMemo(() => {
+    if (showEditProposalCard && paragraph && paragraph.sourceEditProposal) {
+      return (
+        <ParagraphEditProposal
+          paragraphEditProposalId={paragraph.sourceEditProposal._id}
+          editProposalPreviewSelection={(proposalId) =>
+            setPreviewEditProposalId(proposalId)
+          }
+          editProposalSelected={
+            paragraph.sourceEditProposal._id === previewEditProposalId
+          }
+        />
+      );
+    }
+  }, [paragraph, previewEditProposalId, showEditProposalCard]);
 
   return (
     <Box>
@@ -120,20 +161,15 @@ const Paragraphs = ({ mostRecentParagraph, paragraphIds }: IParagraphs) => {
           }}
         />
         <Box display="flex" flexDir="column">
-          <Text color="gray.600" margin="auto">
+          <Text
+            color="gray.600"
+            margin="auto"
+            cursor="pointer"
+            onClick={() => setShowEditProposalCard(!showEditProposalCard)}
+          >
             Paragraph Version: {selectedParagraphIndex + 1}
           </Text>
-          {paragraph && paragraph.sourceEditProposal && (
-            <ParagraphEditProposal
-              paragraphEditProposalId={paragraph.sourceEditProposal._id}
-              editProposalPreviewSelection={(proposalId) =>
-                setPreviewEditProposalId(proposalId)
-              }
-              editProposalSelected={
-                paragraph.sourceEditProposal._id === previewEditProposalId
-              }
-            />
-          )}
+          {editProposalCard}
         </Box>
         <IconButton
           aria-label="next"

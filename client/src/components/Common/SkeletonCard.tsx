@@ -1,15 +1,15 @@
 import * as React from "react";
 import { Box, Divider, Skeleton, Spinner, Tag } from "@chakra-ui/react";
-import Card from "./Card";
+import Card, { ICard } from "./Card";
 
-type Props = {
+interface ISkeletonCard extends Omit<ICard, "variant"> {
   variant: "page" | "question";
-};
+}
 
-const SkeletonCard = (props: Props) => {
+const SkeletonCard = ({ variant, ...props }: ISkeletonCard) => {
   // Page default
   let content = (
-    <Card>
+    <Card {...props}>
       <Skeleton height={5} width="70%" m={2} />
       <Divider />
       <Skeleton height={4} m={2} />
@@ -17,9 +17,9 @@ const SkeletonCard = (props: Props) => {
       <Skeleton height={4} width="70%" m={2} />
     </Card>
   );
-  if (props.variant === "question") {
+  if (variant === "question") {
     content = (
-      <Card>
+      <Card {...props}>
         <Skeleton height={5} width="70%" m={2} />
         <Divider />
         <Box pt={2}>

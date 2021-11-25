@@ -1,10 +1,11 @@
 import * as React from "react";
 
-import PageCard from "../Common/PageCard";
-import Loading from "../Common/Loading";
+import PageCard from "../../components/Common/PageCard";
+import Loading from "../../components/Common/Loading";
 
 import { useQuestionQuery } from "../../generated/graphql";
 import { Container, Divider, Flex, Heading } from "@chakra-ui/react";
+import setDocumentTitle from "../../utils/setDocumentTitle";
 
 type Props = {
   match: any;
@@ -14,6 +15,18 @@ const Question = (props: Props) => {
   const { data, loading } = useQuestionQuery({
     variables: { id: props.match.params.questionID },
   });
+
+  /**
+   * ----- Use-effects and other logic -----
+   */
+
+  React.useEffect(() => {
+    setDocumentTitle(data?.question?.question);
+  }, [data]);
+
+  /**
+   * ----- Rendering -----
+   */
 
   let content = <Loading />;
 

@@ -1,8 +1,8 @@
 import * as React from "react";
 import dayjs from "dayjs";
 
-import PageCard from "../Common/PageCard";
-import Loading from "../Common/Loading";
+import PageCard from "../../components/Common/PageCard";
+import Loading from "../../components/Common/Loading";
 import FinalValue from "./views/FinalValue";
 
 import { useVariableQuery } from "../../generated/graphql";
@@ -16,14 +16,15 @@ import {
 } from "@chakra-ui/modal";
 import { Box } from "@chakra-ui/layout";
 import { IconButton } from "@chakra-ui/button";
-import TextLink from "../Common/TextLink";
+import TextLink from "../../components/Common/TextLink";
 import { FiChevronLeft, FiChevronRight, FiEdit } from "react-icons/fi";
-import UserLink from "../Common/UserLink";
+import UserLink from "../../components/Common/UserLink";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs";
-import VariableEditProposal from "../Common/VariableEditProposal";
+import VariableEditProposal from "../../components/Common/VariableEditProposal";
 import { useAuth } from "../../contexts/Auth";
 import { useDisclosure } from "@chakra-ui/hooks";
-import EditVariable from "../EditVariable";
+import EditVariable from "../../components/EditVariable";
+import setDocumentTitle from "../../utils/setDocumentTitle";
 
 type Props = {
   match: any;
@@ -53,6 +54,10 @@ const Variable = (props: Props) => {
       setVersion(data.variable.versions.length - 1);
     }
   }, [data, loading]);
+
+  React.useEffect(() => {
+    setDocumentTitle(data?.variable?.title);
+  }, [data]);
 
   /**
    * ----- Rendering -----

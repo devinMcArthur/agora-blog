@@ -17,6 +17,7 @@ import { useAuth } from "../../contexts/Auth";
 interface IParagraphEditProposal extends BoxProps {
   paragraphEditProposalId: string;
   editProposalPreviewSelection?: (editProposalId?: string) => void;
+  onApproval?: () => void;
   editProposalSelected?: boolean;
   allowApproval?: boolean;
 }
@@ -26,6 +27,7 @@ const ParagraphEditProposal = ({
   editProposalSelected,
   allowApproval = false,
   editProposalPreviewSelection,
+  onApproval,
   ...props
 }: IParagraphEditProposal) => {
   const {
@@ -47,9 +49,13 @@ const ParagraphEditProposal = ({
     if (editProposal) {
       approve({
         variables: { id: editProposal?._id },
-      }).catch((err) => console.error(err));
+      })
+        .then(() => {
+          if (onApproval) onApproval();
+        })
+        .catch((err) => console.error(err));
     }
-  }, [approve, editProposal]);
+  }, [approve, editProposal, onApproval]);
 
   /**
    * ----- Use-effects and other logic -----
@@ -79,10 +85,10 @@ const ParagraphEditProposal = ({
    * ----- Rendering -----
    */
 
-  let content = <SkeletonCard variant="page" />;
+  let content = <SkeletonCard variant="page" minW="25rem" />;
   if (editProposal) {
     content = (
-      <Card {...props}>
+      <Card minW="25rem" {...props}>
         <Box display="flex" flexDir="column">
           <Box display="flex" flexDir="row" justifyContent="space-between">
             <Text>{editProposal.description}</Text>

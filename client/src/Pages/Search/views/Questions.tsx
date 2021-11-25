@@ -1,8 +1,8 @@
 import { Box, Heading } from "@chakra-ui/layout";
 import React from "react";
 import { usePreviewQuestionSearchQuery } from "../../../generated/graphql";
-import Loading from "../../Common/Loading";
-import QuestionCard from "../../Common/QuestionCard";
+import Loading from "../../../components/Common/Loading";
+import QuestionCard from "../../../components/Common/QuestionCard";
 
 interface IQuestionsSearch {
   searchString: string;

@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import * as qs from "qs";
-import PageCard from "../Common/PageCard";
+import PageCard from "../../components/Common/PageCard";
 import { usePageQuery } from "../../generated/graphql";
 import {
   Container,
@@ -11,17 +11,17 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/layout";
-import Loading from "../Common/Loading";
+import Loading from "../../components/Common/Loading";
 import { useHistory, useLocation, useParams } from "react-router";
 import { PageMatchParams } from "../../models/pageParams";
 import { Tabs, TabList, Tab, TabPanel, TabPanels } from "@chakra-ui/tabs";
-import ParagraphEditProposal from "../Common/ParagraphEditProposal";
-import EditProposalPreview from "../Common/EditProposalPreview";
+import ParagraphEditProposal from "../../components/Common/ParagraphEditProposal";
 import { useDrawer } from "../../contexts/Drawer";
 import { FiEdit } from "react-icons/fi";
-import EditParagraph from "../EditParagraph";
+import EditParagraph from "../../components/EditParagraph";
 import { useAuth } from "../../contexts/Auth";
 import Paragraphs from "./views/Paragraphs";
+import setDocumentTitle from "../../utils/setDocumentTitle";
 
 const Page = () => {
   const { pageSlug } = useParams<PageMatchParams>();
@@ -85,6 +85,10 @@ const Page = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previewParagraphEditProposalId]);
 
+  React.useEffect(() => {
+    setDocumentTitle(data?.page?.title);
+  }, [data?.page]);
+
   /**
    * ----- Rendering -----
    */
@@ -92,8 +96,6 @@ const Page = () => {
   const content = React.useMemo(() => {
     if (data?.page && !loading) {
       const { page } = data;
-
-      console.log(page);
 
       const relatedPageList = page.relatedPages.map((relatedPage, index) => (
         <PageCard
@@ -123,15 +125,12 @@ const Page = () => {
         <Paragraphs
           paragraphIds={page.paragraphs.map((paragraph) => paragraph._id)}
           mostRecentParagraph={page.currentParagraph}
+          previewEditProposal={previewParagraphEditProposalId}
+          onClearPreviewedProposal={() =>
+            setPreviewParagraphEditProposalId(undefined)
+          }
         />
       );
-      if (previewParagraphEditProposalId)
-        paragraphContent = (
-          <EditProposalPreview
-            closePreview={() => setPreviewParagraphEditProposalId(undefined)}
-            editProposalId={previewParagraphEditProposalId}
-          />
-        );
       if (editting)
         paragraphContent = (
           <EditParagraph
