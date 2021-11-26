@@ -1,0 +1,13 @@
+query StatementsFromQuestion(
+  $questionId: ID!
+  $options: StatementsFromQuestionOptions
+) {
+  statementsFromQuestion(questionId: $questionId, options: $options) {
+    ...DisplayStatementSnippet
+    page {
+      title
+      slug
+      _id
+    }
+  }
+}

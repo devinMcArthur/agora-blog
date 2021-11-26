@@ -1,0 +1,5 @@
+mutation NewPage($data: NewPageData!) {
+  newPage(data: $data) {
+    slug
+  }
+}

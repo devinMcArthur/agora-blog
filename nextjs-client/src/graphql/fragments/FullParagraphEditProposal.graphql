@@ -1,0 +1,6 @@
+fragment FullParagraphEditProposalSnippet on ParagraphEditProposalClass {
+  ...PreviewParagraphEditProposalSnippet
+  statementItems {
+    ...ParagraphEditProposalStatementSnippet
+  }
+}

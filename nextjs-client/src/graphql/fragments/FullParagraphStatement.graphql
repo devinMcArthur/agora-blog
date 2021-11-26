@@ -1,0 +1,6 @@
+fragment FullParagraphStatementSnippet on ParagraphStatementClass {
+  versionIndex
+  statement {
+    ...DisplayStatementSnippet
+  }
+}

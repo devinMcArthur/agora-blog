@@ -1,0 +1,9 @@
+fragment PageCardSnippet on PageClass {
+  _id
+  title
+  slug
+  referencedCount
+  currentParagraph {
+    ...DisplayParagraphSnippet
+  }
+}

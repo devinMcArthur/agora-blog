@@ -1,0 +1,9 @@
+fragment ImageSnippet on StatementImageClass {
+  file {
+    _id
+    buffer
+    mimetype
+  }
+  sourceUrl
+  caption
+}

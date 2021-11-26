@@ -1,0 +1,5 @@
+fragment QuestionCardSnippet on QuestionClass {
+  _id
+  question
+  referencedCount
+}

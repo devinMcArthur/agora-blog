@@ -1,0 +1,18 @@
+fragment DisplayStatementSnippet on StatementClass {
+  _id
+  versions {
+    stringArray {
+      ...FullStringArraySnippet
+    }
+    quotedStatement {
+      _id
+    }
+    questions {
+      _id
+      question
+    }
+    sourceEditProposal {
+      _id
+    }
+  }
+}

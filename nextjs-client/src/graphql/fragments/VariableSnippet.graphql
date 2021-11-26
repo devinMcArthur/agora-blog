@@ -1,0 +1,22 @@
+fragment VariableSnippet on VariableClass {
+  _id
+  title
+  versions {
+    finalValue
+    createdAt
+    sourceUrl
+    finalValue
+    sourceEditProposal {
+      ...VariableEditProposalSnippet
+    }
+  }
+  relatedPages {
+    ...PageCardSnippet
+  }
+  editProposals {
+    ...VariableEditProposalSnippet
+  }
+  originalAuthor {
+    ...UserSnippet
+  }
+}

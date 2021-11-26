@@ -1,0 +1,5 @@
+mutation CreateParagraphEditProposal($data: ParagraphEditProposalData!) {
+  createParagraphEditProposal(data: $data) {
+    ...FullParagraphEditProposalSnippet
+  }
+}

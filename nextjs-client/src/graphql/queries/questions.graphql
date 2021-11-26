@@ -1,0 +1,5 @@
+query Questions {
+  questions {
+    ...QuestionCardSnippet
+  }
+}
