@@ -13,8 +13,6 @@ import ParagraphEditProposal from "../../../components/Common/ParagraphEditPropo
 const DrawerParagraphStatement = () => {
   const {
     state: { paragraphStatement, currentPageId },
-    paragraphEditProposalPreviewId,
-    setPreviewedParagraphEditProposal,
   } = useDrawer();
 
   const [statementVersion, setStatementVersion] = React.useState(
@@ -113,14 +111,6 @@ const DrawerParagraphStatement = () => {
                     paragraphStatement.statement.versions[statementVersion]
                       .sourceEditProposal!._id
                   }
-                  editProposalSelected={
-                    paragraphEditProposalPreviewId ===
-                    paragraphStatement.statement.versions[statementVersion]
-                      .sourceEditProposal!._id
-                  }
-                  editProposalPreviewSelection={
-                    setPreviewedParagraphEditProposal
-                  }
                 />
               </Box>
             )}
@@ -129,13 +119,7 @@ const DrawerParagraphStatement = () => {
     } else if (paragraphStatement) {
       return <Loading />;
     } else return <ErrorMessage />;
-  }, [
-    paragraphStatement,
-    statementVersion,
-    currentPageId,
-    paragraphEditProposalPreviewId,
-    setPreviewedParagraphEditProposal,
-  ]);
+  }, [paragraphStatement, statementVersion, currentPageId]);
 
   return <Box>{content}</Box>;
 };

@@ -1,5 +1,0 @@
-query PreviewPageSearch($searchString: String!, $limit: Float) {
-  searchPages(searchString: $searchString, limit: $limit) {
-    ...PageCardSnippet
-  }
-}

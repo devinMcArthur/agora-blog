@@ -1,5 +1,0 @@
-query Page($slug: String, $id: ID) {
-  page(slug: $slug, id: $id) {
-    ...PageSnippet
-  }
-}

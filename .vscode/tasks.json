@@ -27,8 +27,8 @@
     },
     {
       "type": "npm",
-      "script": "gen",
-      "path": "client/",
+      "script": "codegen",
+      "path": "nextjs-client/",
       "problemMatcher": [],
       "label": "GraphQL Gen",
       "detail": "generate graphql hooks",

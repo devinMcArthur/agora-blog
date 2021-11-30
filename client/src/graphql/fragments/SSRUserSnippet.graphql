@@ -1,0 +1,12 @@
+fragment SSRUserSnippet on UserClass {
+  _id
+  firstName
+  middleName
+  lastName
+  verified
+  createdAt
+  verificationRequested {
+    _id
+    createdAt
+  }
+}

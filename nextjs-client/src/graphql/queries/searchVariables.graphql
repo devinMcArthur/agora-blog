@@ -1,5 +1,0 @@
-query SearchVariables($searchString: String!, $limit: Float) {
-  searchVariables(searchString: $searchString, limit: $limit) {
-    ...VariableSearchSnippet
-  }
-}

@@ -1,0 +1,5 @@
+query RestSSRVariable($id: ID!) {
+  variable(id: $id) {
+    ...RestSSRVariableSnippet
+  }
+}

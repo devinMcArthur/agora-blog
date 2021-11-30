@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ChakraStyleProps, Link } from "@chakra-ui/react";
-import { Link as RouterLink } from "react-router-dom";
+import TextLink from "./TextLink";
 
 type Props = {
   children: React.ReactNode;
@@ -12,9 +12,8 @@ const HeaderLink = (props: Props) => {
   const { title, link, children, ...rest } = props;
 
   return (
-    <Link
-      as={RouterLink}
-      to={link}
+    <TextLink
+      link={link}
       title={title}
       margin={0}
       fontWeight="bold"
@@ -22,7 +21,7 @@ const HeaderLink = (props: Props) => {
       {...rest}
     >
       {children}
-    </Link>
+    </TextLink>
   );
 };
 

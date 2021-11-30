@@ -1,5 +1,0 @@
-mutation NewVariable($data: NewVariableData!) {
-  newVariable(data: $data) {
-    ...VariableSnippet
-  }
-}

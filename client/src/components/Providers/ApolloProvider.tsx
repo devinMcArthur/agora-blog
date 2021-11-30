@@ -4,18 +4,21 @@ import { createUploadLink } from "apollo-upload-client";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { localStorageTokenKey } from "../../contexts/Auth";
+import useStorage from "../../hooks/useStorage";
 
 export default function MyApolloProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { getItem } = useStorage();
+
   const httpLink = createUploadLink({
-    uri: `${process.env.REACT_APP_API_URL}`,
+    uri: `${process.env.NEXT_PUBLIC_API_URL}`,
   });
 
   const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem(localStorageTokenKey);
+    const token = getItem(localStorageTokenKey);
 
     return {
       headers: {

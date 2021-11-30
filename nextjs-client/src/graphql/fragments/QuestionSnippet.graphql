@@ -1,8 +1,0 @@
-fragment QuestionSnippet on QuestionClass {
-  _id
-  question
-  relatedPages {
-    ...PageCardSnippet
-  }
-  referencedCount
-}

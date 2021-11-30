@@ -2,14 +2,12 @@ import * as React from "react";
 
 import { Box, Link, Stack, Heading } from "@chakra-ui/react";
 
-import { Link as RouterLink } from "react-router-dom";
 import { navbarHeight } from "../../constants/styles";
 import NavbarAccount from "./views/Account";
 import { useAuth } from "../../contexts/Auth";
 import NavbarSearch from "./views/Search";
 import { FiPlusSquare } from "react-icons/fi";
 import { Icon } from "@chakra-ui/icon";
-import { useHistory } from "react-router";
 import { useMediaQuery } from "@chakra-ui/media-query";
 import {
   Menu,
@@ -21,6 +19,9 @@ import {
 } from "@chakra-ui/menu";
 import { IconButton } from "@chakra-ui/button";
 import { FiMenu } from "react-icons/fi";
+import TextLink from "../Common/TextLink";
+import { useRouter } from "next/router";
+import useMounted from "../../hooks/useMounted";
 
 const Navbar = () => {
   const {
@@ -28,12 +29,15 @@ const Navbar = () => {
     logout,
     requiresVerification,
   } = useAuth();
+  const { hasMounted } = useMounted();
   const [isLargerThan480] = useMediaQuery("(min-width: 580px)");
 
-  const history = useHistory();
+  const router = useRouter();
+
+  const isLarger = hasMounted ? isLargerThan480 : true;
 
   const responsiveContent = React.useMemo(() => {
-    if (isLargerThan480) {
+    if (isLarger) {
       return (
         <Stack
           spacing={6}
@@ -42,14 +46,14 @@ const Navbar = () => {
           height="100%"
           pt={user ? 1 : 2}
         >
-          <Link
-            as={RouterLink}
-            to="/questions"
+          <TextLink
+            color="black"
+            link="/questions"
             fontWeight="bold"
             pt={user ? 2 : 1}
           >
             Questions
-          </Link>
+          </TextLink>
           <Box height="100%" pt={user ? 2 : 1}>
             <Icon
               cursor="pointer"
@@ -58,7 +62,7 @@ const Navbar = () => {
               m="auto"
               h={7}
               onClick={() =>
-                requiresVerification(() => history.push("/create-page"))
+                requiresVerification(() => router.push("/create-page"))
               }
             />
           </Box>
@@ -78,16 +82,16 @@ const Navbar = () => {
           />
           <MenuList>
             <MenuGroup title="Pages">
-              <MenuItem onClick={() => history.push("/questions")}>
+              <MenuItem onClick={() => router.push("/questions")}>
                 Questions
               </MenuItem>
             </MenuGroup>
             {user ? (
               <MenuGroup title={`${user.firstName} ${user.lastName}`}>
-                <MenuItem onClick={() => history.push("/create-page")}>
+                <MenuItem onClick={() => router.push("/create-page")}>
                   Create
                 </MenuItem>
-                <MenuItem onClick={() => history.push(`/u/${user._id}`)}>
+                <MenuItem onClick={() => router.push(`/u/${user._id}`)}>
                   Profile
                 </MenuItem>
                 <MenuDivider />
@@ -102,7 +106,7 @@ const Navbar = () => {
         </Menu>
       );
     }
-  }, [isLargerThan480, user, requiresVerification, history, logout]);
+  }, [isLargerThan480, user, requiresVerification, router, logout]);
 
   return (
     <Box
@@ -121,11 +125,18 @@ const Navbar = () => {
         margin="0 auto"
         height="100%"
       >
-        <Link as={RouterLink} to="/" marginY="auto" height="100%" pt={1} ml={4}>
+        <TextLink
+          color="black"
+          link="/"
+          marginY="auto"
+          height="100%"
+          pt={1}
+          ml={4}
+        >
           <Heading as="h4" fontSize={["2xl", "2xl", "3xl"]} h="100%" p="auto">
             agora
           </Heading>
-        </Link>
+        </TextLink>
         <NavbarSearch />
         {responsiveContent}
       </Box>

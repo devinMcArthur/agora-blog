@@ -1,6 +1,0 @@
-fragment FullStringArraySnippet on StringArrayClass {
-  string
-  styles {
-    ...DisplayStyleSnippet
-  }
-}

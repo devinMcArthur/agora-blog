@@ -1,0 +1,9 @@
+fragment RestSSRVariableSnippet on VariableClass {
+  _id
+  relatedPages {
+    ...PageCardSnippet
+  }
+  editProposals {
+    ...VariableEditProposalSnippet
+  }
+}

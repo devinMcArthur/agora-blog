@@ -1,9 +1,10 @@
-import { Center, Container, Flex, Spinner } from "@chakra-ui/react";
 import React from "react";
+
 import { useQuestionsQuery } from "../../generated/graphql";
-import QuestionCard from "../../components/Common/QuestionCard";
+import { Center, Container, Flex } from "@chakra-ui/layout";
 import SkeletonCard from "../../components/Common/SkeletonCard";
-import setDocumentTitle from "../../utils/setDocumentTitle";
+import { Spinner } from "@chakra-ui/spinner";
+import QuestionCard from "../../components/Common/QuestionCard";
 
 const Questions = () => {
   const { data, loading } = useQuestionsQuery();
@@ -12,35 +13,30 @@ const Questions = () => {
    * ----- Use-effects and other logic -----
    */
 
-  React.useEffect(() => {
-    setDocumentTitle("Questions");
-  });
-
-  /**
-   * ----- Rendering -----
-   */
-
-  let content = (
-    <Flex flexDirection="column">
-      <SkeletonCard variant="question" />
-      <SkeletonCard variant="question" />
-      <SkeletonCard variant="question" />
-      <Center pt={4}>
-        <Spinner />
-      </Center>
-    </Flex>
-  );
-
-  if (data?.questions && !loading) {
-    const sortedQuestions = data.questions
-      .slice()
-      .sort((a, b) => b.referencedCount - a.referencedCount);
-    const questionsJSX = sortedQuestions.map((question) => (
-      <QuestionCard question={question} key={question._id} />
-    ));
-
-    content = <Flex flexDirection="column">{questionsJSX}</Flex>;
-  }
+  const content = React.useMemo(() => {
+    if (data?.questions && !loading) {
+      return (
+        <Flex flexDir="column">
+          {data.questions
+            .slice()
+            .sort((a, b) => b.referencedCount - a.referencedCount)
+            .map((question) => (
+              <QuestionCard question={question} key={question._id} />
+            ))}
+        </Flex>
+      );
+    } else
+      return (
+        <Flex flexDirection="column">
+          <SkeletonCard variant="question" />
+          <SkeletonCard variant="question" />
+          <SkeletonCard variant="question" />
+          <Center pt={4}>
+            <Spinner />
+          </Center>
+        </Flex>
+      );
+  }, [data, loading]);
 
   return (
     <Container minW="80%" p={4}>

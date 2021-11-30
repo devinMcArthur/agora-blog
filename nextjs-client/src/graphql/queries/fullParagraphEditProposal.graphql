@@ -1,5 +1,0 @@
-query FullParagraphEditProposal($id: String!) {
-  paragraphEditProposal(id: $id) {
-    ...FullParagraphEditProposalSnippet
-  }
-}

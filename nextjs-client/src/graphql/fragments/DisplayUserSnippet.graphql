@@ -1,6 +1,0 @@
-fragment DisplayUserSnippetFragment on UserClass {
-  firstName
-  lastName
-  middleName
-  verified
-}

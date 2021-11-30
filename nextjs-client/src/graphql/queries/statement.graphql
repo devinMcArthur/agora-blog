@@ -1,9 +1,0 @@
-query Statement($id: ID!) {
-  statement(id: $id) {
-    ...DisplayStatementSnippet
-    page {
-      slug
-      title
-    }
-  }
-}

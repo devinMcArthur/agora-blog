@@ -1,5 +1,0 @@
-mutation ApproveVariableEditProposal($id: String!) {
-  approveVariableEditProposal(id: $id) {
-    ...VariableSnippet
-  }
-}

@@ -7,10 +7,10 @@ import {
 } from "../../generated/graphql";
 import Card from "./Card";
 import UserLink from "./UserLink";
-import FinalValue from "../../Pages/Variable/views/FinalValue";
 import TextLink from "./TextLink";
 import { useAuth } from "../../contexts/Auth";
 import { Button } from "@chakra-ui/button";
+import FinalValue from "./Variable/FinalValue";
 
 interface IVariableEditProposal {
   variableEditProposal: VariableEditProposalSnippetFragment;

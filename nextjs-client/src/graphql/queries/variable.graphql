@@ -1,5 +1,0 @@
-query Variable($id: ID!) {
-  variable(id: $id) {
-    ...VariableSnippet
-  }
-}

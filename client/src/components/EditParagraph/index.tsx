@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/layout";
+import { useRouter } from "next/router";
 import React from "react";
-import { useHistory } from "react-router";
 import { IParagraphFormState } from "../../contexts/ParagraphForm";
 import { useCreateParagraphEditProposalMutation } from "../../generated/graphql";
 import convertToParagraphEditProposal from "../../utils/convertToParagraphEditProposal";
@@ -19,7 +19,7 @@ const EditParagraph = ({ pageId, paragraphId, onCancel }: IEditParagraph) => {
   const [descriptionError, setDescriptionError] = React.useState<string>();
   const [generalError, setGeneralError] = React.useState<string>();
 
-  const history = useHistory();
+  const router = useRouter();
   const [createProposal, { loading }] =
     useCreateParagraphEditProposalMutation();
 
@@ -39,7 +39,7 @@ const EditParagraph = ({ pageId, paragraphId, onCancel }: IEditParagraph) => {
         .then((res) => {
           if (res.data?.createParagraphEditProposal) {
             if (onCancel) onCancel();
-            history.push(
+            router.push(
               `/p/${res.data?.createParagraphEditProposal.paragraph.page.slug}?proposal=${res.data.createParagraphEditProposal._id}`
             );
           }

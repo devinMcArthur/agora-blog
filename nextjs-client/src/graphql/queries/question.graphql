@@ -1,5 +1,0 @@
-query Question($id: ID!) {
-  question(id: $id) {
-    ...QuestionSnippet
-  }
-}

@@ -1,5 +1,0 @@
-fragment VariableSearchSnippet on VariableClass {
-  _id
-  title
-  finalValue
-}

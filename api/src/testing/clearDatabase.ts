@@ -11,6 +11,7 @@ import {
   ParagraphEditProposal,
   File,
   VariableEditProposal,
+  UserVerificationRequest,
 } from "@models";
 
 const clearDatabase = () => {
@@ -28,6 +29,7 @@ const clearDatabase = () => {
       await ParagraphEditProposal.deleteMany({});
       await VariablePageConnection.deleteMany({});
       await QuestionPageConnection.deleteMany({});
+      await UserVerificationRequest.deleteMany({});
 
       await File.removeAll();
       // } else {

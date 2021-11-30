@@ -1,0 +1,5 @@
+query SSRPage($id: ID, $slug: String) {
+  page(id: $id, slug: $slug) {
+    ...SSRPageSnippet
+  }
+}

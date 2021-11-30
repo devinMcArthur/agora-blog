@@ -1,0 +1,5 @@
+query SSRVariable($id: ID!) {
+  variable(id: $id) {
+    ...SSRVariableSnippet
+  }
+}

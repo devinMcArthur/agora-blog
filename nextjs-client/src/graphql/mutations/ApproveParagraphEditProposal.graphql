@@ -1,5 +1,0 @@
-mutation ApproveParagraphEditProposal($id: String!) {
-  approveParagraphEditProposal(id: $id) {
-    ...PageSnippet
-  }
-}
