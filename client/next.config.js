@@ -6,4 +6,7 @@ module.exports = {
     };
     return config;
   },
+  serverRuntimeConfig: {
+    SSR_API_URL: process.env.SSR_API_URL,
+  },
 };
