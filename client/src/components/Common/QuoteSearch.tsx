@@ -6,7 +6,7 @@ import { PageSnippetFragment, usePageLazyQuery } from "../../generated/graphql";
 import Statement from "../Statement";
 import PageSearch from "./PageSearch";
 
-interface IQuoteSearch extends InputProps {
+interface IQuoteSearch extends Omit<InputProps, "onChange"> {
   statementSelect: (statementId: string) => void;
 }
 

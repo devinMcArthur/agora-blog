@@ -21,10 +21,10 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - NODE_ENV=development
       - REACT_APP_ENV=development
-    command: yarn start
     volumes:
       - ./client/:/usr/src/app
       - /usr/src/app/node_modules
+    restart: always
     depends_on:
       - api
     ports:

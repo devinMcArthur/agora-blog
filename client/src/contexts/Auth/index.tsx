@@ -6,6 +6,7 @@ import {
   FullUserSnippetFragment,
   useCurrentUserLazyQuery,
 } from "../../generated/graphql";
+import useStorage from "../../hooks/useStorage";
 import SignIn from "./views/SignIn";
 import VerificationModal from "./views/Verification";
 
@@ -87,12 +88,14 @@ const AuthReducer = (draft: IAuthState, action: IAuthAction): IAuthState => {
 const AuthProvider = ({ children }: IAuthProvider) => {
   const [state, dispatch] = useImmerReducer(AuthReducer, initialState);
 
+  const { getItem, setItem, removeItem } = useStorage();
+
   /**
    * ----- State Inititalization -----
    */
 
   const [token, setToken] = React.useState(
-    localStorage.getItem(localStorageTokenKey)
+    getItem(localStorageTokenKey) || null
   );
 
   /**
@@ -199,19 +202,19 @@ const AuthProvider = ({ children }: IAuthProvider) => {
 
   // Handle token changes
   React.useEffect(() => {
-    const localStorageToken = localStorage.getItem(localStorageTokenKey);
+    const localStorageToken = getItem(localStorageTokenKey);
     if (token && localStorageToken && !state.user) {
       fetchUser();
     } else if (token && !localStorageToken) {
-      localStorage.setItem(localStorageTokenKey, token);
+      setItem(localStorageTokenKey, token);
       if (!state.user) fetchUser();
     } else if (!token && localStorageToken) {
-      localStorage.removeItem(localStorageTokenKey);
+      removeItem(localStorageTokenKey);
       deauthorizeSession();
     } else if (!token && !localStorageToken) {
       deauthorizeSession();
     }
-  }, [fetchUser, deauthorizeSession, state.user, token]);
+  }, [deauthorizeSession, state.user, token]);
 
   // Close sign in modal if logged in
   React.useEffect(() => {

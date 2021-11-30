@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import ThemeProvider from "./ThemeProvider";
-import { withRouter } from "react-router-dom";
 import MyApolloProvider from "./ApolloProvider";
 import { DrawerProvider } from "../../contexts/Drawer";
 import { AuthProvider } from "../../contexts/Auth";
@@ -19,5 +18,5 @@ export default function Provider(props: { children: React.ReactNode }) {
 }
 
 export function withProvider(WrappedComponent: any) {
-  return withRouter(WrappedComponent);
+  return WrappedComponent;
 }

@@ -1,24 +1,23 @@
 import * as React from "react";
-import { Box, Link } from "@chakra-ui/react";
-import { Link as RouterLink } from "react-router-dom";
-import { Types } from "mongoose";
+import { Box } from "@chakra-ui/react";
 
 import Card from "./Card";
 
-import ParagraphService from "../../services/paragraphService";
+import ParagraphService from "../../services/Paragraph";
 import { PageCardSnippetFragment } from "../../generated/graphql";
 import Statement from "../Statement";
+import TextLink from "./TextLink";
 
 type ReferenceObject =
   | {
       type: "page";
-      pageID: Types.ObjectId | string;
+      pageID: string;
     }
   | {
       type: "question";
-      questionID: Types.ObjectId | string;
+      questionID: string;
     }
-  | { type: "variable"; variableID: Types.ObjectId | string };
+  | { type: "variable"; variableID: string };
 
 interface IPageCard {
   page: PageCardSnippetFragment;
@@ -61,15 +60,15 @@ const PageCard = ({ page, referenceObject }: IPageCard) => {
     <Card
       key={page._id}
       heading={
-        <Link
-          as={RouterLink}
-          to={`/p/${page.slug}`}
-          style={{ margin: "0" }}
+        <TextLink
+          color="black"
+          link={`/p/${page.slug}`}
           fontWeight="bold"
           fontSize="lg"
+          margin={0}
         >
           {page.title}
-        </Link>
+        </TextLink>
       }
     >
       <Box mt={2}>

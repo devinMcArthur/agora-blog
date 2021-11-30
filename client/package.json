@@ -1,16 +1,13 @@
 {
-  "name": "client",
-  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "gen": "graphql-codegen --config codegen.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
-    "@apollo/client": "3.3.6",
+    "@apollo/client": "^3.5.5",
     "@chakra-ui/react": "1.0.4",
     "@chakra-ui/theme-tools": "^1.0.2",
     "@emotion/css": "^11.1.3",
@@ -27,67 +24,36 @@
     "lodash": "^4.17.21",
     "mongoose": "5.10.17",
     "qs": "^6.10.1",
-    "react": "^16.8.6",
-    "react-contenteditable": "^3.3.6",
-    "react-dom": "^16.8.6",
+    "next": "latest",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
     "react-ga": "3.3.0",
     "react-hook-form": "^7.18.0",
     "react-icons": "4.1.0",
-    "react-router-dom": "5.2.0",
-    "react-router-ga": "1.2.3",
+    "remark": "^14.0.1",
+    "remark-html": "^15.0.0",
     "react-scripts": "4.0.1",
-    "react-select": "^5.1.0",
     "slate": "^0.66.0",
     "slate-history": "^0.66.0",
     "slate-react": "^0.66.0",
-    "typescript": "4.0.5",
+    "typescript": "4.3.2",
     "use-immer": "0.6.0",
     "uuid": "^8.3.2",
     "web-vitals": "^0.2.4",
     "yup": "^0.32.11"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.3%",
-      "not ie 11",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version",
-      ">0.3%",
-      "not ie 11",
-      "not dead",
-      "not op_mini all"
-    ]
-  },
   "devDependencies": {
-    "@graphql-codegen/cli": "1.20.0",
-    "@graphql-codegen/typescript": "1.19.0",
-    "@graphql-codegen/typescript-operations": "1.17.13",
-    "@graphql-codegen/typescript-react-apollo": "2.2.1",
-    "@graphql-codegen/typescript-urql": "2.0.3",
+    "@graphql-codegen/cli": "^2.3.0",
+    "@graphql-codegen/import-types-preset": "^2.1.8",
+    "@graphql-codegen/typescript": "^2.4.1",
+    "@graphql-codegen/typescript-operations": "^2.2.1",
+    "@graphql-codegen/typescript-react-apollo": "^3.2.2",
     "@types/apollo-upload-client": "^14.1.0",
-    "@types/axios": "0.14.0",
-    "@types/axios-mock-adapter": "1.10.0",
-    "@types/jest": "^26.0.15",
-    "@types/mongoose": "5.10.1",
-    "@types/node": "^12.0.0",
+    "@types/graphql": "^14.5.0",
+    "@types/node": "^16.3.3",
     "@types/qs": "^6.9.7",
-    "@types/react": "16.14.2",
-    "@types/react-dom": "^16.9.8",
-    "@types/react-icons": "3.0.0",
-    "@types/react-router-dom": "5.1.6",
-    "@types/styled-components": "5.1.4",
-    "@types/styled-system": "5.1.10",
-    "@types/uuid": "^8.3.3"
+    "@types/react": "^17.0.14",
+    "@types/uuid": "^8.3.3",
+    "graphql-codegen-apollo-next-ssr": "^1.7.1"
   }
 }

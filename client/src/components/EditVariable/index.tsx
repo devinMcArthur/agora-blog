@@ -5,20 +5,25 @@ import { Controller, SubmitHandler } from "react-hook-form";
 import { useEditVariableForm } from "../../forms/variable";
 import {
   NewVariableEditProposalData,
+  RestSsrVariableSnippetFragment,
   useNewVariableEditProposalMutation,
   VariableEditProposalSnippetFragment,
   VariableEditProposalSnippetFragmentDoc,
-  VariableSnippetFragment,
 } from "../../generated/graphql";
 import TextField from "../Common/TextField";
 import ErrorMessage from "../Common/ErrorMessage";
 
 interface IEditVariable {
-  variable: VariableSnippetFragment;
+  variableId: string;
+  variableCache?: RestSsrVariableSnippetFragment;
   onSuccess?: (variable: VariableEditProposalSnippetFragment) => void;
 }
 
-const EditVariable = ({ variable, onSuccess }: IEditVariable) => {
+const EditVariable = ({
+  variableId,
+  variableCache,
+  onSuccess,
+}: IEditVariable) => {
   const [generalError, setGeneralError] = React.useState<string>();
 
   const [newEditProposal] = useNewVariableEditProposalMutation();
@@ -32,26 +37,29 @@ const EditVariable = ({ variable, onSuccess }: IEditVariable) => {
       variables: {
         data: {
           ...value,
-          variable: variable._id,
+          variable: variableId,
         },
       },
       update: (cache, { data }) => {
-        cache.modify({
-          id: cache.identify(variable),
-          fields: {
-            editProposals: (cachedEditProposals) => {
-              if (data?.newVariableEditProposal) {
-                const newProposalRef = cache.writeFragment({
-                  data: data.newVariableEditProposal,
-                  fragment: VariableEditProposalSnippetFragmentDoc,
-                  fragmentName: "VariableEditProposalSnippet",
-                });
+        if (variableCache) {
+          console.log("variableCache", variableCache);
+          cache.modify({
+            id: cache.identify(variableCache),
+            fields: {
+              editProposals: (cachedEditProposals) => {
+                if (data?.newVariableEditProposal) {
+                  const newProposalRef = cache.writeFragment({
+                    data: data.newVariableEditProposal,
+                    fragment: VariableEditProposalSnippetFragmentDoc,
+                    fragmentName: "VariableEditProposalSnippet",
+                  });
 
-                return [...cachedEditProposals, newProposalRef];
-              } else return cachedEditProposals;
+                  return [...cachedEditProposals, newProposalRef];
+                } else return cachedEditProposals;
+              },
             },
-          },
-        });
+          });
+        }
       },
     })
       .then((res) => {
@@ -67,6 +75,20 @@ const EditVariable = ({ variable, onSuccess }: IEditVariable) => {
   return (
     <form onSubmit={handleSubmit(submitHandler)}>
       {generalError && <ErrorMessage description={generalError} />}
+      {variableType === "number" && (
+        <Controller
+          control={control}
+          name="value.number"
+          render={({ field, fieldState }) => (
+            <TextField
+              label="Value"
+              type="number"
+              errorMessage={fieldState.error?.message}
+              {...field}
+            />
+          )}
+        />
+      )}
       <Controller
         name="description"
         control={control}
@@ -89,20 +111,6 @@ const EditVariable = ({ variable, onSuccess }: IEditVariable) => {
           />
         )}
       />
-      {variableType === "number" && (
-        <Controller
-          control={control}
-          name="value.number"
-          render={({ field, fieldState }) => (
-            <TextField
-              label="Value"
-              type="number"
-              errorMessage={fieldState.error?.message}
-              {...field}
-            />
-          )}
-        />
-      )}
       <Button mt={2} type="submit">
         Submit
       </Button>

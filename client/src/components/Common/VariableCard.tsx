@@ -1,11 +1,11 @@
 import React from "react";
 
-import { Link as RouterLink } from "react-router-dom";
 import { Box, Divider, Link } from "@chakra-ui/layout";
 import { Tag } from "@chakra-ui/tag";
 
 import { VariableSearchSnippetFragment } from "../../generated/graphql";
 import Card from "./Card";
+import TextLink from "./TextLink";
 
 interface IVariableCard {
   variable: VariableSearchSnippetFragment;
@@ -14,9 +14,9 @@ interface IVariableCard {
 const VariableCard = ({ variable }: IVariableCard) => {
   return (
     <Card key={variable._id}>
-      <Link as={RouterLink} to={`/v/${variable._id}`} fontWeight="bold">
+      <TextLink link={`/v/${variable._id}`} fontWeight="bold" color="black">
         {variable.title}
-      </Link>
+      </TextLink>
       <Divider />
       <Box pt={2}>
         <Tag>

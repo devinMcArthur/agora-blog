@@ -28,7 +28,7 @@ const QuestionSearch = ({
   const [searchString, setSearchString] = React.useState(
     props.defaultValue?.toString() || ""
   );
-  const [searchTimeout, setSearchTimeout] = React.useState<number>();
+  const [searchTimeout, setSearchTimeout] = React.useState<NodeJS.Timeout>();
 
   const [search, { loading, data }] = useSearchQuestionsLazyQuery();
 
@@ -38,7 +38,7 @@ const QuestionSearch = ({
 
   const handleChange = (value: string) => {
     setSearchString(value);
-    clearTimeout(searchTimeout);
+    if (searchTimeout) clearTimeout(searchTimeout);
     if (value !== "") {
       setSearchTimeout(
         setTimeout(() => {

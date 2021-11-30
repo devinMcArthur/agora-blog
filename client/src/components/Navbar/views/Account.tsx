@@ -11,8 +11,8 @@ import {
   MenuList,
 } from "@chakra-ui/menu";
 import { useAuth } from "../../../contexts/Auth";
-import { useHistory } from "react-router";
 import Loading from "../../Common/Loading";
+import { useRouter } from "next/router";
 
 const NavbarAccount = () => {
   const {
@@ -21,7 +21,7 @@ const NavbarAccount = () => {
     state: { user },
   } = useAuth();
 
-  const history = useHistory();
+  const router = useRouter();
 
   const content = React.useMemo(() => {
     if (user) {
@@ -40,7 +40,7 @@ const NavbarAccount = () => {
           </MenuButton>
           <MenuList>
             <MenuGroup>
-              <MenuItem onClick={() => history.push(`/u/${user._id}`)}>
+              <MenuItem onClick={() => router.push(`/u/${user._id}`)}>
                 Profile
               </MenuItem>
               <MenuDivider />
@@ -67,7 +67,7 @@ const NavbarAccount = () => {
     } else {
       return <Loading />;
     }
-  }, [history, logout, openSignInModal, user]);
+  }, [router, logout, openSignInModal, user]);
 
   return content;
 };

@@ -48,8 +48,6 @@ const DrawerEditProposalStatement = () => {
     else return undefined;
   }, [editProposalStatement?.paragraphStatement, hasEdit]);
 
-  console.log("edittedVersionIndex", edittedVersionIndex);
-
   const defaultIndex = React.useMemo(() => {
     if (edittedVersionIndex !== undefined) return edittedVersionIndex;
     else if (editProposalStatement?.paragraphStatement)
@@ -63,8 +61,6 @@ const DrawerEditProposalStatement = () => {
   const [statementVersion, setStatementVersion] = React.useState<
     number | undefined
   >(defaultIndex);
-
-  console.log("statementVersion", statementVersion);
 
   /**
    * ----- Use-effects and other logic -----
@@ -137,7 +133,10 @@ const DrawerEditProposalStatement = () => {
                   cursor="pointer"
                   _hover={{ backgroundColor: "white" }}
                   onClick={() => {
-                    if (!leftChevronDisabled) {
+                    if (
+                      !leftChevronDisabled &&
+                      statementVersion !== undefined
+                    ) {
                       setStatementVersion(statementVersion - 1);
                     }
                   }}
@@ -158,7 +157,10 @@ const DrawerEditProposalStatement = () => {
                   cursor="pointer"
                   _hover={{ backgroundColor: "white" }}
                   onClick={() => {
-                    if (!rightChevronDisabled) {
+                    if (
+                      !rightChevronDisabled &&
+                      statementVersion !== undefined
+                    ) {
                       setStatementVersion(statementVersion + 1);
                     }
                   }}

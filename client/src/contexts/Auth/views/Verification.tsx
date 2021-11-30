@@ -30,17 +30,18 @@ const VerificationModal = ({ isOpen, close }: IVerificationModal) => {
 
   const [requestVerification, { loading }] = useRequestVerificationMutation();
 
-  const content = React.useMemo(() => {
+  React.useEffect(() => {
     if (!user) {
       close();
-      return <ErrorMessage />;
     }
+  }, [user]);
 
-    if (user.verified) {
+  const content = React.useMemo(() => {
+    if (user?.verified) {
       return <Text>You account is already verified!</Text>;
     }
 
-    if (!user.verificationRequested) {
+    if (!user?.verificationRequested) {
       return (
         <Box>
           <Text>

@@ -1,0 +1,16 @@
+fragment SSRVariableSnippet on VariableClass {
+  _id
+  title
+  versions {
+    finalValue
+    createdAt
+    sourceUrl
+    finalValue
+    sourceEditProposal {
+      ...VariableEditProposalSnippet
+    }
+  }
+  originalAuthor {
+    ...UserSnippet
+  }
+}

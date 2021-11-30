@@ -2,18 +2,18 @@ import React from "react";
 
 import { Box } from "@chakra-ui/layout";
 
-import { useHistory } from "react-router";
 import GeneralSearch from "../../Common/GeneralSearch";
+import { useRouter } from "next/router";
 
 const NavbarSearch = () => {
-  const history = useHistory();
+  const router = useRouter();
 
   return (
     <Box id="box" p="auto" w={["50%", "50%"]}>
       <GeneralSearch
         mt={1}
         placeholder="Search . . ."
-        handleSubmit={(value) => history.push(`/search?search_string=${value}`)}
+        handleSubmit={(value) => router.push(`/search?search_string=${value}`)}
         itemSelected={(value, extraData) => {
           if (!extraData) {
             console.warn("Internal Error: no extra data found");
@@ -22,15 +22,15 @@ const NavbarSearch = () => {
 
           switch (extraData.type) {
             case "page": {
-              history.push(`/p/${extraData.slug!}`);
+              router.push(`/p/${extraData.slug!}`);
               break;
             }
             case "question": {
-              history.push(`/q/${value.value}`);
+              router.push(`/q/${value.value}`);
               break;
             }
             case "variable": {
-              history.push(`/v/${value.value}`);
+              router.push(`/v/${value.value}`);
               break;
             }
           }

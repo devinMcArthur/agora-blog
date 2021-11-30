@@ -1,12 +1,30 @@
-# Build the client
-FROM node:lts-alpine as builder
+FROM node:alpine as BUILD_IMAGE
+
 WORKDIR /app
-COPY package*.json ./
-RUN npm install -qy
+
+COPY package.json yarn.lock ./
+
+RUN npm install 
+
 COPY . .
+
 RUN npm run build
 
-FROM nginx
+RUN npm prune --production
+
+FROM node:alpine
+
+ARG NODE_ENV="production"
+ENV NODE_ENV=${NODE_ENV}
+
+WORKDIR /app
+
+# copy from build image
+COPY --from=BUILD_IMAGE /app/package.json ./package.json
+COPY --from=BUILD_IMAGE /app/node_modules ./node_modules
+COPY --from=BUILD_IMAGE /app/.next ./.next
+COPY --from=BUILD_IMAGE /app/public ./public
+
 EXPOSE 3000
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=builder /app/build /usr/share/nginx/html
+# This run the server at default port 3000
+CMD ["npm", "run", "start"]

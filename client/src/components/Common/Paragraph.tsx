@@ -28,6 +28,7 @@ const Paragraph = ({ paragraph }: IParagraph) => {
           display="flex"
           flexDir="row"
           my={2}
+          pr={2}
           backgroundColor={selected ? "gray.200" : "gray.100"}
           borderRadius="0 1em 1em 0"
           cursor="pointer"

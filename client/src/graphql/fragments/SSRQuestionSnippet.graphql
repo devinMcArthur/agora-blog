@@ -1,0 +1,4 @@
+fragment SSRQuestionSnippet on QuestionClass {
+  _id
+  question
+}

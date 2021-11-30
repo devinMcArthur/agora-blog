@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Link } from "@chakra-ui/react";
+import { Link as ChakraLink } from "@chakra-ui/react";
 import { LinkProps } from "@chakra-ui/layout";
-import { Link as RouterLink } from "react-router-dom";
+import Link from "next/link";
 
 interface ITextLink extends LinkProps {
   children: React.ReactNode;
@@ -21,21 +21,22 @@ const TextLink = ({
     color: "blue.600",
   };
 
-  if (isExternal) {
-    linkProps.href = link;
-    linkProps.title = title;
-    linkProps.isExternal = true;
-  } else {
-    linkProps.as = RouterLink;
-    linkProps.to = link;
-    linkProps.title = title;
-  }
-
-  return (
-    <Link {...linkProps} {...rest}>
-      {children}
+  let content = (
+    <Link href={link} passHref>
+      <ChakraLink {...linkProps} {...rest}>
+        {children}
+      </ChakraLink>
     </Link>
   );
+  if (isExternal) {
+    content = (
+      <ChakraLink href={link} title={title} isExternal>
+        {children}
+      </ChakraLink>
+    );
+  }
+
+  return content;
 };
 
 export default TextLink;
