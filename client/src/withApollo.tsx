@@ -37,7 +37,7 @@ export const getApolloClient = (
     req.cookies;
   }
 
-  console.log("SSR_API_URL", process.env.SSR_API_URL);
+  console.log("SSR_API_URL", process.env);
 
   const httpLink = createUploadLink({
     uri: process.env.SSR_API_URL,
