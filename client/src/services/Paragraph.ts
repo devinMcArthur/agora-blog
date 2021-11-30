@@ -1,4 +1,4 @@
-import { DisplayParagraphSnippetFragment } from "../../../client/src/generated/graphql";
+import { DisplayParagraphSnippetFragment } from "../generated/graphql";
 
 export default function ParagraphService() {
   // Returns statement in paragraph that references a given page
