@@ -2,9 +2,9 @@ FROM node:alpine as BUILD_IMAGE
 
 WORKDIR /app
 
-COPY package.json yarn.lock ./
+COPY package*.json ./
 
-RUN npm install 
+RUN npm install -qy
 
 COPY . .
 
