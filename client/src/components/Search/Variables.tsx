@@ -18,7 +18,7 @@ const VariablesSearch = ({ searchString }: IVariablesSearch) => {
       return (
         <Box>
           {data.searchVariables.map((variable) => (
-            <VariableCard variable={variable} />
+            <VariableCard variable={variable} key={variable._id} />
           ))}
         </Box>
       );

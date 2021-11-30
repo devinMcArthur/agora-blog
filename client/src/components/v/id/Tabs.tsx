@@ -26,7 +26,7 @@ const VariablePageTabs = ({ id, onFetch }: IVariablePageTabs) => {
 
   React.useEffect(() => {
     if (data?.variable) onFetch(data.variable);
-  }, [data, loading]);
+  }, [data, loading, onFetch]);
 
   /**
    * ----- Rendering -----
@@ -61,7 +61,7 @@ const VariablePageTabs = ({ id, onFetch }: IVariablePageTabs) => {
     }
 
     return components;
-  }, [data, loading]);
+  }, [data, id, loading]);
 
   return (
     <Tabs variant="line">

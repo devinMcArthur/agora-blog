@@ -13,8 +13,6 @@ const QuestionIdClientContent = ({ id }: IQuestionIdClientContent) => {
     variables: { id },
   });
 
-  console.log(data?.question);
-
   /**
    * ----- Rendering -----
    */
@@ -32,7 +30,7 @@ const QuestionIdClientContent = ({ id }: IQuestionIdClientContent) => {
         />
       ));
     } else return <Loading />;
-  }, [data, loading]);
+  }, [data?.question, id, loading]);
 
   return (
     <Box>

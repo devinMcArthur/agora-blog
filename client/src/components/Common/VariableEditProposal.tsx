@@ -31,6 +31,7 @@ const VariableEditProposal = ({
       variables: {
         id: variableEditProposal._id,
       },
+      // eslint-disable-next-line no-console
     }).catch((err) => console.error(err));
   };
 

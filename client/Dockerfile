@@ -18,6 +18,7 @@ FROM node:lts-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
+ENV SSR_API_URL https://agora.voto/graphql
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001

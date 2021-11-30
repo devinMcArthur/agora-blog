@@ -21,7 +21,7 @@ const QuotedStatement = ({ statementID, ...props }: IQuotedStatement) => {
         <Loading />
       ) : (
         <Box as="span" {...props}>
-          "
+          &quot;
           <Statement statement={data?.statement!} />
           <Text as="sup">
             [
@@ -33,7 +33,7 @@ const QuotedStatement = ({ statementID, ...props }: IQuotedStatement) => {
             </TextLink>
             ]
           </Text>
-          "
+          &quot;
         </Box>
       )}
     </span>

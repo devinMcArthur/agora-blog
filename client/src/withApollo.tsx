@@ -19,6 +19,7 @@ export type ApolloClientContext = {
   };
 };
 
+// eslint-disable-next-line react/display-name
 export const withApollo = (Comp: NextPage) => (props: any) => {
   return (
     <ApolloProvider client={getApolloClient(undefined, props.apolloState)}>
@@ -36,8 +37,6 @@ export const getApolloClient = (
     // Do something with the cookies here, maybe add a header for authentication
     req.cookies;
   }
-
-  console.log("SSR_API_URL", process.env);
 
   const httpLink = createUploadLink({
     uri: process.env.SSR_API_URL,

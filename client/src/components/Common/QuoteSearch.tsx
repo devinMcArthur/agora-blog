@@ -23,6 +23,7 @@ const QuoteSearch: React.FC<IQuoteSearch> = ({ statementSelect, ...props }) => {
   const statementOptions = React.useMemo(() => {
     return fetchedPage?.currentParagraph.statements.map((statement) => (
       <Box
+        key={statement.statement._id}
         border="1px solid lightgray"
         padding={1}
         margin={1}

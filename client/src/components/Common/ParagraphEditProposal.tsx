@@ -53,6 +53,7 @@ const ParagraphEditProposal = ({
         .then(() => {
           if (onApproval) onApproval();
         })
+        // eslint-disable-next-line no-console
         .catch((err) => console.error(err));
     }
   }, [approve, editProposal, onApproval]);

@@ -55,7 +55,7 @@ const Variable: PageSsrVariableComp = ({ data: propsData }) => {
     if (version !== 0 && versions[version].sourceEditProposal)
       return versions[version].sourceEditProposal!.author;
     else return originalAuthor;
-  }, [version, versions[version], originalAuthor]);
+  }, [version, versions, originalAuthor]);
 
   const currentVersion = React.useMemo(() => {
     return versions[version];

@@ -28,7 +28,7 @@
     {
       "type": "npm",
       "script": "codegen",
-      "path": "nextjs-client/",
+      "path": "client/",
       "problemMatcher": [],
       "label": "GraphQL Gen",
       "detail": "generate graphql hooks",
@@ -36,6 +36,13 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "type": "npm",
+      "script": "lint",
+      "path": "client/",
+      "label": "Client Lint",
+      "detail": "Run ESLint on Client code"
     },
     {
       "label": "Docker Compose UP",

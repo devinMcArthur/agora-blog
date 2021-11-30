@@ -44,24 +44,25 @@ const TextField = React.forwardRef<HTMLInputElement, ITextField>(
         {label && <FormLabel>{label}</FormLabel>}
         <InputGroup>
           {inputLeftElement && (
-            <InputLeftElement h="auto" children={inputLeftElement} />
+            <InputLeftElement h="auto">{inputLeftElement}</InputLeftElement>
           )}
-          {inputLeftAddon && <InputLeftAddon children={inputLeftAddon} />}
+          {inputLeftAddon && <InputLeftAddon>{inputLeftAddon}</InputLeftAddon>}
           <Input ref={ref} {...props} />
           {inputRightElement && (
-            <InputRightElement
-              h="auto"
-              py="auto"
-              children={inputRightElement}
-              {...inputRightElementProps}
-            />
+            <InputRightElement h="auto" py="auto" {...inputRightElementProps}>
+              {inputRightElement}
+            </InputRightElement>
           )}
-          {inputRightAddon && <InputRightAddon children={inputRightAddon} />}
+          {inputRightAddon && (
+            <InputRightAddon>{inputRightAddon}</InputRightAddon>
+          )}
         </InputGroup>
         {errorMessage && <FormErrorMessage>{errorMessage}</FormErrorMessage>}
       </FormControl>
     );
   }
 );
+
+TextField.displayName = "TextField";
 
 export default TextField;

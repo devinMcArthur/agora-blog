@@ -4,6 +4,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "lint": "next lint",
     "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
@@ -23,16 +24,16 @@
     "graphql": "15.4.0",
     "lodash": "^4.17.21",
     "mongoose": "5.10.17",
-    "qs": "^6.10.1",
     "next": "12.0.1",
+    "qs": "^6.10.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-ga": "3.3.0",
     "react-hook-form": "^7.18.0",
     "react-icons": "4.1.0",
+    "react-scripts": "4.0.1",
     "remark": "^14.0.1",
     "remark-html": "^15.0.0",
-    "react-scripts": "4.0.1",
     "slate": "^0.66.0",
     "slate-history": "^0.66.0",
     "slate-react": "^0.66.0",
@@ -54,6 +55,7 @@
     "@types/qs": "^6.9.7",
     "@types/react": "^17.0.14",
     "@types/uuid": "^8.3.3",
+    "eslint-config-next": "12.0.4",
     "graphql-codegen-apollo-next-ssr": "^1.7.1"
   }
 }

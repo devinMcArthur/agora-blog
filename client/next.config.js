@@ -1,4 +1,7 @@
-module.exports = {
+/**
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = {
   webpackDevMiddleware: (config) => {
     config.watchOptions = {
       poll: 800,
@@ -6,7 +9,6 @@ module.exports = {
     };
     return config;
   },
-  serverRuntimeConfig: {
-    SSR_API_URL: process.env.SSR_API_URL,
-  },
 };
+
+module.exports = nextConfig;

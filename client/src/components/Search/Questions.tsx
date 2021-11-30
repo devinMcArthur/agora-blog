@@ -18,7 +18,7 @@ const QuestionsSearch = ({ searchString }: IQuestionsSearch) => {
       return (
         <Box>
           {data.searchQuestions.map((question) => (
-            <QuestionCard question={question} />
+            <QuestionCard question={question} key={question._id} />
           ))}
         </Box>
       );

@@ -165,6 +165,7 @@ const StyleMenu = ({ editor, buttonSize }: IStyleMenu) => {
       };
 
       reader.onerror = (error) => {
+        // eslint-disable-next-line no-console
         console.warn(error);
       };
 

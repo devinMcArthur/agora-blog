@@ -11,6 +11,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import Image from "next/image";
 import { RiFullscreenLine, RiFullscreenExitLine } from "react-icons/ri";
 import React, { useState } from "react";
 import { ImageSnippetFragment } from "../../../generated/graphql";
@@ -61,16 +62,15 @@ const ImageDisplay: React.FC<IImageDisplay> = ({
   return (
     <>
       <Flex flexDir="column" align="center" backgroundColor="gray.200" p={2}>
-        <img
-          src={src}
-          alt={image.file._id}
-          onClick={() => {
-            if (canExpand) onOpen();
-          }}
-          style={{
-            cursor: "pointer",
-          }}
-        />
+        <Box cursor="pointer">
+          <Image
+            src={src}
+            alt={image.file._id}
+            onClick={() => {
+              if (canExpand) onOpen();
+            }}
+          />
+        </Box>
         {showCaption && (
           <Text
             align="center"
@@ -109,17 +109,16 @@ const ImageDisplay: React.FC<IImageDisplay> = ({
             </Box>
             <ModalCloseButton />
             <ModalBody padding={3} mt={8}>
-              <img
-                src={src}
-                alt={image.file._id}
-                onClick={() => {
-                  if (image.sourceUrl) window.open(image.sourceUrl);
-                  return null;
-                }}
-                style={{
-                  cursor: "pointer",
-                }}
-              />
+              <Box cursor="pointer">
+                <Image
+                  src={src}
+                  alt={image.file._id}
+                  onClick={() => {
+                    if (image.sourceUrl) window.open(image.sourceUrl);
+                    return null;
+                  }}
+                />
+              </Box>
               <Divider m={3} />
               <Text align="center">{image.caption}</Text>
               <Divider m={3} />

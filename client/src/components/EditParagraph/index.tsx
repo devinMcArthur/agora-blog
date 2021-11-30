@@ -46,6 +46,7 @@ const EditParagraph = ({ pageId, paragraphId, onCancel }: IEditParagraph) => {
         })
         .catch((err) => {
           setGeneralError(err.message);
+          // eslint-disable-next-line no-console
           console.error(err);
         });
   };

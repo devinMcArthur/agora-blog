@@ -46,6 +46,7 @@ const CreatePage = () => {
           router.push(`/p/${result.data?.newPage.slug}`);
         })
         .catch((err) => {
+          // eslint-disable-next-line no-console
           console.warn(err);
           setGeneralError(err.message);
         });

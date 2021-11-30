@@ -25,7 +25,9 @@ const RadioForm = ({
       <RadioGroup {...radioGroupProps}>
         <HStack spacing={1}>
           {options.map((option) => (
-            <Radio value={option.value}>{option.label}</Radio>
+            <Radio value={option.value} key={option.value}>
+              {option.label}
+            </Radio>
           ))}
         </HStack>
       </RadioGroup>

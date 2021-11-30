@@ -42,7 +42,6 @@ const EditVariable = ({
       },
       update: (cache, { data }) => {
         if (variableCache) {
-          console.log("variableCache", variableCache);
           cache.modify({
             id: cache.identify(variableCache),
             fields: {

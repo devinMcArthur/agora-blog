@@ -106,7 +106,7 @@ const Navbar = () => {
         </Menu>
       );
     }
-  }, [isLargerThan480, user, requiresVerification, router, logout]);
+  }, [isLarger, user, requiresVerification, router, logout]);
 
   return (
     <Box

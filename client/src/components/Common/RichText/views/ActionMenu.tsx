@@ -214,6 +214,7 @@ const ActionMenu: React.FC<IActionMenu> = ({ editor }) => {
         el.style.left = `${
           rect.left + window.pageXOffset - el.offsetWidth / 2 + rect.width / 2
         }px`;
+        // eslint-disable-next-line no-console
       } else console.warn("Unable to find range");
     }
   });

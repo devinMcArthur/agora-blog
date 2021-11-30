@@ -16,6 +16,7 @@ const NavbarSearch = () => {
         handleSubmit={(value) => router.push(`/search?search_string=${value}`)}
         itemSelected={(value, extraData) => {
           if (!extraData) {
+            // eslint-disable-next-line no-console
             console.warn("Internal Error: no extra data found");
             return;
           }

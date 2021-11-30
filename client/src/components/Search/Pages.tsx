@@ -20,7 +20,7 @@ const PagesSearch = ({ searchString }: IPagesSearch) => {
       return (
         <Box>
           {data.searchPages.map((page) => (
-            <PageCard page={page} />
+            <PageCard page={page} key={page._id} />
           ))}
         </Box>
       );

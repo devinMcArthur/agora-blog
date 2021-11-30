@@ -40,7 +40,7 @@ const User: PageSsrUserComp = ({ data: propsData }) => {
     if (propsUser._id === authUser?._id) {
       return <Button onClick={onOpen}>Edit Profile</Button>;
     }
-  }, [propsUser, authUser]);
+  }, [propsUser, authUser, onOpen]);
 
   return (
     <Container minW="80%" p={4}>
