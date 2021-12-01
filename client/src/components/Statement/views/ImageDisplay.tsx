@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import {
   Box,
   Divider,
@@ -62,15 +63,16 @@ const ImageDisplay: React.FC<IImageDisplay> = ({
   return (
     <>
       <Flex flexDir="column" align="center" backgroundColor="gray.200" p={2}>
-        <Box cursor="pointer">
-          <Image
-            src={src}
-            alt={image.file._id}
-            onClick={() => {
-              if (canExpand) onOpen();
-            }}
-          />
-        </Box>
+        <img
+          src={src}
+          alt={image.file._id}
+          onClick={() => {
+            if (canExpand) onOpen();
+          }}
+          style={{
+            cursor: "pointer",
+          }}
+        />
         {showCaption && (
           <Text
             align="center"
@@ -110,12 +112,15 @@ const ImageDisplay: React.FC<IImageDisplay> = ({
             <ModalCloseButton />
             <ModalBody padding={3} mt={8}>
               <Box cursor="pointer">
-                <Image
+                <img
                   src={src}
                   alt={image.file._id}
                   onClick={() => {
                     if (image.sourceUrl) window.open(image.sourceUrl);
                     return null;
+                  }}
+                  style={{
+                    cursor: "pointer",
                   }}
                 />
               </Box>

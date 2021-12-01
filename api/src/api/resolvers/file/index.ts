@@ -6,8 +6,8 @@ import { FieldResolver, Resolver, Root } from "type-graphql";
 export default class FileResolver {
   @FieldResolver(() => String)
   async buffer(@Root() file: FileDocument): Promise<string | null> {
-    return Buffer.from((await getFile(file._id.toString()))!.Body!).toString(
-      "base64"
-    );
+    const doFile = await getFile(file._id.toString());
+    console.log(doFile);
+    return Buffer.from(doFile!.Body!).toString("base64");
   }
 }
