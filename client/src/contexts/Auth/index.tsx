@@ -6,6 +6,7 @@ import {
   FullUserSnippetFragment,
   useCurrentUserLazyQuery,
 } from "../../generated/graphql";
+import useMounted from "../../hooks/useMounted";
 import useStorage from "../../hooks/useStorage";
 import SignIn from "./views/SignIn";
 import VerificationModal from "./views/Verification";
@@ -214,6 +215,7 @@ const AuthProvider = ({ children }: IAuthProvider) => {
     } else if (!token && !localStorageToken) {
       deauthorizeSession();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deauthorizeSession, state.user, token]);
 
   // Close sign in modal if logged in

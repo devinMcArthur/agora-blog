@@ -12,7 +12,6 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import Image from "next/image";
 import { RiFullscreenLine, RiFullscreenExitLine } from "react-icons/ri";
 import React, { useState } from "react";
 import { ImageSnippetFragment } from "../../../generated/graphql";
