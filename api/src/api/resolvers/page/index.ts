@@ -57,8 +57,10 @@ export default class PageResolver {
 
   @Query(() => PageClass, { nullable: true })
   async page(
-    @Args() { id, slug }: GetPageArgs
+    @Args() { id, slug }: GetPageArgs,
+    @Ctx() ctx: IContext
   ): Promise<PageDocument | null | undefined> {
+    console.log(ctx.req.connection.remoteAddress);
     return queries.page({ id, slug });
   }
 

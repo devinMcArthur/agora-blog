@@ -1,7 +1,7 @@
 import React from "react";
 
-import { Box } from "@chakra-ui/react";
-import { Divider, Flex } from "@chakra-ui/layout";
+import { Box, IconButton, Tooltip } from "@chakra-ui/react";
+import { Divider, Flex, Text } from "@chakra-ui/layout";
 import { usePageQuery } from "../../../generated/graphql";
 import Loading from "../../Common/Loading";
 import PageCard from "../../Common/PageCard";
@@ -10,6 +10,9 @@ import Paragraphs from "../../Common/Paragraphs";
 import EditParagraph from "../../EditParagraph";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs";
 import { useDrawer } from "../../../contexts/Drawer";
+import { FiShare2 } from "react-icons/fi";
+import Share from "../../Common/Share";
+import { useRouter } from "next/router";
 
 interface IPageSlugClientContent {
   slug: string;
@@ -133,8 +136,27 @@ const PageSlugClientContent = ({
 
       <Tabs variant="line">
         <TabList>
-          <Tab>Related</Tab>
-          <Tab>Edit Proposals</Tab>
+          <Box
+            display="flex"
+            flexDir="row"
+            justifyContent="space-between"
+            w="100%"
+          >
+            <Box display="flex" flexDir="row">
+              <Tab>Related</Tab>
+              <Tab>Edit Proposals</Tab>
+            </Box>
+            <Tooltip label="Share">
+              <Share
+                link={window.location.href}
+                shareText={
+                  data?.page
+                    ? `${data?.page?.title} on Agora`
+                    : "Check out this information on Agora"
+                }
+              />
+            </Tooltip>
+          </Box>
         </TabList>
         <TabPanels>
           <TabPanel>

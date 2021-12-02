@@ -71,6 +71,10 @@ const Page: PageSsrComp = ({ data: propsData }) => {
           <Heading size="lg">{title}</Heading>
           <IconButton
             aria-label="edit"
+            backgroundColor="transparent"
+            _hover={{
+              backgroundColor: "gray.100",
+            }}
             icon={<FiEdit />}
             onClick={() => requiresVerification(() => setEditting(true))}
           />
