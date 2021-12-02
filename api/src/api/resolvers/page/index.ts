@@ -60,7 +60,6 @@ export default class PageResolver {
     @Args() { id, slug }: GetPageArgs,
     @Ctx() ctx: IContext
   ): Promise<PageDocument | null | undefined> {
-    console.log(ctx.req.connection.remoteAddress);
     return queries.page({ id, slug });
   }
 

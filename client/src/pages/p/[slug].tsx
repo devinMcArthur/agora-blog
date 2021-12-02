@@ -100,6 +100,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   params,
   ...ctx
 }) => {
+  console.log(ctx.req.socket.remoteAddress);
   const res = await ssrSsr.getServerPage(
     { variables: { slug: params?.slug as string } },
     ctx
