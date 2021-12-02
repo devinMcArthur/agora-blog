@@ -1,10 +1,30 @@
 import { Types } from "mongoose";
 import { Field, ID, ObjectType } from "type-graphql";
 
-import { PageClass, StatementClass, QuestionClass } from "@models";
-import { prop, Ref } from "@typegoose/typegoose";
+import {
+  PageClass,
+  StatementClass,
+  QuestionClass,
+  QuestionPageConnectionDocument,
+  Question,
+} from "@models";
+import { post, prop, Ref } from "@typegoose/typegoose";
 import SchemaVersions from "@constants/SchemaVersions";
 
+@post<QuestionPageConnectionDocument>(
+  "save",
+  async (questionPageConnection) => {
+    // Update question based on connection
+    await Question.updateForQuestionPageConnection(questionPageConnection);
+  }
+)
+@post<QuestionPageConnectionDocument>(
+  "remove",
+  async (questionPageConnection) => {
+    // Update question based on connection
+    await Question.updateForQuestionPageConnection(questionPageConnection);
+  }
+)
 @ObjectType()
 export class QuestionPageConnectionSchema {
   @Field(() => ID, { nullable: false })

@@ -13,6 +13,10 @@ export class QuestionSchema {
   @prop({ required: true, trim: true })
   public question!: string;
 
+  @Field()
+  @prop({ required: true, default: 0 })
+  public referencedCount!: number;
+
   @Field({ nullable: false })
   @prop({ required: true, default: SchemaVersions.Question })
   public schemaVersion!: number;

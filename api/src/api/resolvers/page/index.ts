@@ -23,7 +23,7 @@ import {
 import fieldResolver from "./fieldResolver";
 import queries from "./queries";
 import mutations, { NewPageData } from "./mutations";
-import { IContext } from "@typescript/graphql";
+import { IContext, ListOptionData } from "@typescript/graphql";
 
 @ArgsType()
 class GetPageArgs {
@@ -51,11 +51,6 @@ export default class PageResolver {
     return fieldResolver.relatedPages(page);
   }
 
-  @FieldResolver(() => Number)
-  async referencedCount(@Root() page: PageDocument) {
-    return fieldResolver.referencedCount(page);
-  }
-
   /**
    * Queries
    */
@@ -68,8 +63,11 @@ export default class PageResolver {
   }
 
   @Query(() => [PageClass])
-  async pages(): Promise<PageDocument[]> {
-    return queries.pages();
+  async pages(
+    @Arg("options", () => ListOptionData, { nullable: true })
+    options?: ListOptionData
+  ): Promise<PageDocument[]> {
+    return queries.pages(options);
   }
 
   @Query(() => [PageClass])

@@ -1,4 +1,12 @@
-import { Arg, FieldResolver, ID, Query, Resolver, Root } from "type-graphql";
+import {
+  Arg,
+  Args,
+  FieldResolver,
+  ID,
+  Query,
+  Resolver,
+  Root,
+} from "type-graphql";
 import { Types } from "mongoose";
 
 import {
@@ -10,16 +18,13 @@ import {
 
 import fieldResolvers from "./fieldResolvers";
 import queries from "./queries";
+import { ListOptionData } from "@typescript/graphql";
 
 @Resolver(() => QuestionClass)
 export default class QuestionResolver {
   /**
    * Field Resolvers
    */
-  @FieldResolver(() => Number)
-  async referencedCount(@Root() question: QuestionDocument): Promise<number> {
-    return fieldResolvers.referencedCount(question);
-  }
 
   @FieldResolver(() => [PageClass])
   async relatedPages(
@@ -40,8 +45,11 @@ export default class QuestionResolver {
   }
 
   @Query(() => [QuestionClass])
-  async questions(): Promise<QuestionDocument[]> {
-    return queries.questions();
+  async questions(
+    @Arg("options", () => ListOptionData, { nullable: true })
+    options?: ListOptionData
+  ): Promise<QuestionDocument[]> {
+    return queries.questions(options);
   }
 
   @Query(() => [QuestionClass])

@@ -1,10 +1,23 @@
-import { prop, Ref } from "@typegoose/typegoose";
+import { post, prop, Ref } from "@typegoose/typegoose";
 import { Types } from "mongoose";
 import { Field, ID, ObjectType } from "type-graphql";
 
-import { PageClass, StatementClass } from "@models";
+import {
+  Page,
+  PageClass,
+  PageConnectionDocument,
+  StatementClass,
+} from "@models";
 import SchemaVersions from "@constants/SchemaVersions";
 
+@post<PageConnectionDocument>("save", async (pageConnection) => {
+  // Update pages based on connection
+  await Page.updateForPageConnection(pageConnection);
+})
+@post<PageConnectionDocument>("remove", async (pageConnection) => {
+  // Update pages based on connection
+  await Page.updateForPageConnection(pageConnection);
+})
 @ObjectType()
 export class PageConnectionSchema {
   @Field(() => ID, { nullable: false })

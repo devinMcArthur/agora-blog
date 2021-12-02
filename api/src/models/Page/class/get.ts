@@ -11,6 +11,7 @@ import {
 } from "@models";
 import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
+import { IListOptions } from "@typescript/interface/list_Options";
 
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,
@@ -62,10 +63,27 @@ const bySlug = (
   });
 };
 
-const list = (Page: PageModel): Promise<PageDocument[]> => {
+const listDefaultOptions: IListOptions<PageDocument> = {
+  pageLimit: 9,
+  offset: 0,
+};
+const list = (
+  Page: PageModel,
+  options?: IListOptions<PageDocument>
+): Promise<PageDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const pages = await Page.find({});
+      options = populateOptions(options, listDefaultOptions);
+
+      const pages = await Page.find(options?.query || {}, undefined, {
+        limit: options?.pageLimit,
+        skip: options?.offset,
+        sort: {
+          referencedCount: -1,
+          createdAt: -1,
+          title: -1,
+        },
+      });
 
       resolve(pages);
     } catch (e) {
@@ -143,17 +161,23 @@ const search = (
 const pagesThatReference = (page: PageDocument): Promise<PageDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      let pages: PageDocument[] = [];
+      // let pages: PageDocument[] = [];
 
       const pageConnections: PageConnectionDocument[] =
         await PageConnection.find({
           referencedPage: page._id,
         });
 
-      for (const connection of pageConnections) {
-        const page = await Page.getById(connection.referrerPage!.toString());
-        if (page) pages.push(page);
-      }
+      const pages = await Page.getList({
+        query: {
+          _id: {
+            $in: pageConnections.map((connection) =>
+              connection.referrerPage!.toString()
+            ),
+          },
+        },
+        pageLimit: 50,
+      });
 
       resolve(pages);
     } catch (e) {

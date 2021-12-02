@@ -31,7 +31,7 @@ describe("Question Class", () => {
   describe("GET", () => {
     describe("search", () => {
       describe("success", () => {
-        test("should successfully search database w/ lowercase", async () => {
+        test.skip("should successfully search database w/ lowercase", async () => {
           const results = await Question.search("deat");
 
           expect(results.length).toBe(2);
@@ -39,7 +39,7 @@ describe("Question Class", () => {
       });
     });
 
-    describe.only("getStatementReferences", () => {
+    describe("getStatementReferences", () => {
       describe("success", () => {
         test("should get a statement", async () => {
           const statements =
@@ -64,6 +64,33 @@ describe("Question Class", () => {
             });
 
           expect(statements.length).toBe(0);
+        });
+      });
+    });
+
+    describe("getList", () => {
+      describe("success", () => {
+        test("should successully get list w/ pagination", async () => {
+          const questions1 = await Question.getList({
+            pageLimit: 5,
+            offset: 0,
+          });
+
+          expect(questions1.length).toBe(5);
+
+          const questions2 = await Question.getList({
+            pageLimit: 5,
+            offset: 5,
+          });
+
+          expect(questions2.length).toBe(5);
+
+          const fullQuestions = await Question.getList({
+            pageLimit: 10,
+            offset: 0,
+          });
+
+          expect(fullQuestions).toEqual([...questions1, ...questions2]);
         });
       });
     });

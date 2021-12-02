@@ -1,10 +1,6 @@
 import { Page, PageDocument } from "@models";
 import { IContext } from "@typescript/graphql";
 import { IPageBuildData } from "@typescript/models/Page";
-import {
-  IStringArrayBuildData,
-  IStylesBuildData,
-} from "@typescript/models/Statement";
 import resolverHelpers from "@utils/resolverHelpers";
 import { Field, ID, InputType } from "type-graphql";
 import { StringArrayData } from "../statement/mutations";

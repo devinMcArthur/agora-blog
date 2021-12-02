@@ -34,6 +34,3 @@ generates:
       typesPath: ./graphql
     plugins:
       - graphql-codegen-apollo-next-ssr
-hooks:
-  afterAllFileWrite:
-    - prettier --write

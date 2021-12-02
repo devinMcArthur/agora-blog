@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 import { ObjectType } from "type-graphql";
 
 import GetByIDOptions from "@typescript/interface/getById_Options";
-import { PageDocument, PageModel } from "@models";
+import { PageConnectionDocument, PageDocument, PageModel } from "@models";
 
 import get from "./get";
 import create from "./create";
@@ -10,6 +10,9 @@ import { PageSchema } from "../schema";
 import validate from "./validate";
 import { IPageBuildData } from "@typescript/models/Page";
 import build from "./build";
+import schema_update from "./schema_update";
+import update from "./update";
+import { IListOptions } from "@typescript/interface/list_Options";
 
 @ObjectType()
 export class PageClass extends PageSchema {
@@ -41,8 +44,11 @@ export class PageClass extends PageSchema {
     return get.bySlug(this, slug, options);
   }
 
-  public static async getList(this: PageModel) {
-    return get.list(this);
+  public static async getList(
+    this: PageModel,
+    options?: IListOptions<PageDocument>
+  ) {
+    return get.list(this, options);
   }
 
   public async getPagesThatReference(this: PageDocument) {
@@ -74,10 +80,36 @@ export class PageClass extends PageSchema {
   }
 
   /**
+   * ----- Update -----
+   */
+
+  public async updateReferencedCount(this: PageDocument) {
+    return update.referencedCount(this);
+  }
+
+  public static async updateForPageConnection(
+    this: PageModel,
+    pageConnection: PageConnectionDocument
+  ) {
+    return update.forPageConnection(this, pageConnection);
+  }
+  /**
    * ----- Validate -----
    */
 
   public async validateDocument(this: PageDocument) {
     return validate.document(this);
+  }
+
+  /**
+   * ----- Schema Update -----
+   */
+
+  public static async updateAllFromV1ToV2(this: PageModel) {
+    return schema_update.allFromV1ToV2(this);
+  }
+
+  public async updateFromV1ToV2(this: PageDocument) {
+    return schema_update.fromV1ToV2(this);
   }
 }

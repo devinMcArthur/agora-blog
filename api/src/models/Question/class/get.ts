@@ -12,6 +12,7 @@ import {
 } from "@models";
 import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
+import { IListOptions } from "@typescript/interface/list_Options";
 
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,
@@ -38,10 +39,27 @@ const byId = (
   });
 };
 
-const list = (Question: QuestionModel): Promise<QuestionDocument[]> => {
+const listDefaultOptions: IListOptions<QuestionDocument> = {
+  pageLimit: 9,
+  offset: 0,
+};
+const list = (
+  Question: QuestionModel,
+  options?: IListOptions<QuestionDocument>
+): Promise<QuestionDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const questions = await Question.find({});
+      options = populateOptions(options, listDefaultOptions);
+
+      const questions = await Question.find(options?.query || {}, undefined, {
+        sort: {
+          referencedCount: -1,
+          createdAt: -1,
+          question: -1,
+        },
+        limit: options?.pageLimit,
+        skip: options?.offset,
+      });
 
       resolve(questions);
     } catch (e) {

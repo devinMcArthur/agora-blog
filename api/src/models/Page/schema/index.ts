@@ -22,6 +22,10 @@ export class PageSchema {
   @prop({ ref: () => ParagraphClass })
   public paragraphs!: Ref<ParagraphClass>[];
 
+  @Field()
+  @prop({ required: true, default: 0 })
+  public referencedCount!: number;
+
   @Field({ nullable: false })
   @prop({ required: true, default: SchemaVersions.Page })
   public schemaVersion!: number;

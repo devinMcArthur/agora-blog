@@ -12,11 +12,13 @@ interface IQuestionCard {
 
 const QuestionCard = ({ question }: IQuestionCard) => {
   return (
-    <Card>
-      <TextLink link={`/q/${question._id}`} fontWeight="bold" color="black">
-        {question.question}
-      </TextLink>
-      <Divider />
+    <Card
+      heading={
+        <TextLink link={`/q/${question._id}`} fontWeight="bold" color="black">
+          {question.question}
+        </TextLink>
+      }
+    >
       <Box pt={2}>
         <Tag>
           <b>Answers: {question.referencedCount || 0}</b>

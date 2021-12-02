@@ -1,5 +1,5 @@
-query Questions {
-  questions {
+query Questions($options: ListOptionData) {
+  questions(options: $options) {
     ...QuestionCardSnippet
   }
 }

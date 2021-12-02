@@ -37,6 +37,11 @@ export type FileClass = {
   schemaVersion: Scalars['Float'];
 };
 
+export type ListOptionData = {
+  offset?: InputMaybe<Scalars['Float']>;
+  pageLimit?: InputMaybe<Scalars['Float']>;
+};
+
 export type LoginData = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -227,6 +232,11 @@ export type QueryPageArgs = {
 };
 
 
+export type QueryPagesArgs = {
+  options?: InputMaybe<ListOptionData>;
+};
+
+
 export type QueryParagraphArgs = {
   id: Scalars['String'];
 };
@@ -239,6 +249,11 @@ export type QueryParagraphEditProposalArgs = {
 
 export type QueryQuestionArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryQuestionsArgs = {
+  options?: InputMaybe<ListOptionData>;
 };
 
 
@@ -602,7 +617,9 @@ export type PageQueryVariables = Exact<{
 
 export type PageQuery = { __typename?: 'Query', page?: { __typename?: 'PageClass', _id: string, title: string, slug: string, paragraphs: Array<{ __typename?: 'ParagraphClass', _id: string }>, currentParagraph: { __typename?: 'ParagraphClass', _id: string, statements: Array<{ __typename?: 'ParagraphStatementClass', versionIndex: number, statement: { __typename?: 'StatementClass', _id: string, versions: Array<{ __typename?: 'StatementVersionClass', stringArray: Array<{ __typename?: 'StringArrayClass', string?: string | null | undefined, styles: Array<{ __typename?: 'StatementStyleClass', type: string, variant?: string | null | undefined, value: { __typename?: 'StatementValueClass', url?: string | null | undefined, page?: { __typename?: 'PageClass', _id: string, slug: string, title: string } | null | undefined, statement?: { __typename?: 'StatementClass', _id: string } | null | undefined, variable?: { __typename?: 'VariableClass', _id: string, title: string, finalValue: number } | null | undefined, image?: { __typename?: 'StatementImageClass', sourceUrl?: string | null | undefined, caption?: string | null | undefined, file: { __typename?: 'FileClass', _id: string, buffer: string, mimetype: string } } | null | undefined } }> }>, quotedStatement?: { __typename?: 'StatementClass', _id: string } | null | undefined, questions: Array<{ __typename?: 'QuestionClass', _id: string, question: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined }> } }>, page: { __typename?: 'PageClass', _id: string }, editProposals: Array<{ __typename?: 'ParagraphEditProposalClass', _id: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined }, relatedPages: Array<{ __typename?: 'PageClass', _id: string, title: string, slug: string, referencedCount: number, currentParagraph: { __typename?: 'ParagraphClass', _id: string, statements: Array<{ __typename?: 'ParagraphStatementClass', versionIndex: number, statement: { __typename?: 'StatementClass', _id: string, versions: Array<{ __typename?: 'StatementVersionClass', stringArray: Array<{ __typename?: 'StringArrayClass', string?: string | null | undefined, styles: Array<{ __typename?: 'StatementStyleClass', type: string, variant?: string | null | undefined, value: { __typename?: 'StatementValueClass', url?: string | null | undefined, page?: { __typename?: 'PageClass', _id: string, slug: string, title: string } | null | undefined, statement?: { __typename?: 'StatementClass', _id: string } | null | undefined, variable?: { __typename?: 'VariableClass', _id: string, title: string, finalValue: number } | null | undefined, image?: { __typename?: 'StatementImageClass', sourceUrl?: string | null | undefined, caption?: string | null | undefined, file: { __typename?: 'FileClass', _id: string, buffer: string, mimetype: string } } | null | undefined } }> }>, quotedStatement?: { __typename?: 'StatementClass', _id: string } | null | undefined, questions: Array<{ __typename?: 'QuestionClass', _id: string, question: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined }> } }>, page: { __typename?: 'PageClass', _id: string }, editProposals: Array<{ __typename?: 'ParagraphEditProposalClass', _id: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined } }> } | null | undefined };
 
-export type PagesQueryVariables = Exact<{ [key: string]: never; }>;
+export type PagesQueryVariables = Exact<{
+  options?: InputMaybe<ListOptionData>;
+}>;
 
 
 export type PagesQuery = { __typename?: 'Query', pages: Array<{ __typename?: 'PageClass', _id: string, title: string, slug: string, referencedCount: number, currentParagraph: { __typename?: 'ParagraphClass', _id: string, statements: Array<{ __typename?: 'ParagraphStatementClass', versionIndex: number, statement: { __typename?: 'StatementClass', _id: string, versions: Array<{ __typename?: 'StatementVersionClass', stringArray: Array<{ __typename?: 'StringArrayClass', string?: string | null | undefined, styles: Array<{ __typename?: 'StatementStyleClass', type: string, variant?: string | null | undefined, value: { __typename?: 'StatementValueClass', url?: string | null | undefined, page?: { __typename?: 'PageClass', _id: string, slug: string, title: string } | null | undefined, statement?: { __typename?: 'StatementClass', _id: string } | null | undefined, variable?: { __typename?: 'VariableClass', _id: string, title: string, finalValue: number } | null | undefined, image?: { __typename?: 'StatementImageClass', sourceUrl?: string | null | undefined, caption?: string | null | undefined, file: { __typename?: 'FileClass', _id: string, buffer: string, mimetype: string } } | null | undefined } }> }>, quotedStatement?: { __typename?: 'StatementClass', _id: string } | null | undefined, questions: Array<{ __typename?: 'QuestionClass', _id: string, question: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined }> } }>, page: { __typename?: 'PageClass', _id: string }, editProposals: Array<{ __typename?: 'ParagraphEditProposalClass', _id: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined } }> };
@@ -644,7 +661,9 @@ export type QuestionQueryVariables = Exact<{
 
 export type QuestionQuery = { __typename?: 'Query', question?: { __typename?: 'QuestionClass', _id: string, question: string, referencedCount: number, relatedPages: Array<{ __typename?: 'PageClass', _id: string, title: string, slug: string, referencedCount: number, currentParagraph: { __typename?: 'ParagraphClass', _id: string, statements: Array<{ __typename?: 'ParagraphStatementClass', versionIndex: number, statement: { __typename?: 'StatementClass', _id: string, versions: Array<{ __typename?: 'StatementVersionClass', stringArray: Array<{ __typename?: 'StringArrayClass', string?: string | null | undefined, styles: Array<{ __typename?: 'StatementStyleClass', type: string, variant?: string | null | undefined, value: { __typename?: 'StatementValueClass', url?: string | null | undefined, page?: { __typename?: 'PageClass', _id: string, slug: string, title: string } | null | undefined, statement?: { __typename?: 'StatementClass', _id: string } | null | undefined, variable?: { __typename?: 'VariableClass', _id: string, title: string, finalValue: number } | null | undefined, image?: { __typename?: 'StatementImageClass', sourceUrl?: string | null | undefined, caption?: string | null | undefined, file: { __typename?: 'FileClass', _id: string, buffer: string, mimetype: string } } | null | undefined } }> }>, quotedStatement?: { __typename?: 'StatementClass', _id: string } | null | undefined, questions: Array<{ __typename?: 'QuestionClass', _id: string, question: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined }> } }>, page: { __typename?: 'PageClass', _id: string }, editProposals: Array<{ __typename?: 'ParagraphEditProposalClass', _id: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined } }> } | null | undefined };
 
-export type QuestionsQueryVariables = Exact<{ [key: string]: never; }>;
+export type QuestionsQueryVariables = Exact<{
+  options?: InputMaybe<ListOptionData>;
+}>;
 
 
 export type QuestionsQuery = { __typename?: 'Query', questions: Array<{ __typename?: 'QuestionClass', _id: string, question: string, referencedCount: number }> };
@@ -1492,8 +1511,8 @@ export type PageQueryHookResult = ReturnType<typeof usePageQuery>;
 export type PageLazyQueryHookResult = ReturnType<typeof usePageLazyQuery>;
 export type PageQueryResult = Apollo.QueryResult<PageQuery, PageQueryVariables>;
 export const PagesDocument = gql`
-    query Pages {
-  pages {
+    query Pages($options: ListOptionData) {
+  pages(options: $options) {
     ...PageCardSnippet
   }
 }
@@ -1511,6 +1530,7 @@ export const PagesDocument = gql`
  * @example
  * const { data, loading, error } = usePagesQuery({
  *   variables: {
+ *      options: // value for 'options'
  *   },
  * });
  */
@@ -1703,8 +1723,8 @@ export type QuestionQueryHookResult = ReturnType<typeof useQuestionQuery>;
 export type QuestionLazyQueryHookResult = ReturnType<typeof useQuestionLazyQuery>;
 export type QuestionQueryResult = Apollo.QueryResult<QuestionQuery, QuestionQueryVariables>;
 export const QuestionsDocument = gql`
-    query Questions {
-  questions {
+    query Questions($options: ListOptionData) {
+  questions(options: $options) {
     ...QuestionCardSnippet
   }
 }
@@ -1722,6 +1742,7 @@ export const QuestionsDocument = gql`
  * @example
  * const { data, loading, error } = useQuestionsQuery({
  *   variables: {
+ *      options: // value for 'options'
  *   },
  * });
  */

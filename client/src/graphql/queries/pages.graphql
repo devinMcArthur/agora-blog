@@ -1,5 +1,5 @@
-query Pages {
-  pages {
+query Pages($options: ListOptionData) {
+  pages(options: $options) {
     ...PageCardSnippet
   }
 }

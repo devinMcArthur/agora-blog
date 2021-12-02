@@ -7,33 +7,31 @@ interface ISkeletonCard extends Omit<ICard, "variant"> {
 }
 
 const SkeletonCard = ({ variant, ...props }: ISkeletonCard) => {
-  // Page default
   let content = (
-    <Card {...props}>
-      <Skeleton height={5} width="70%" m={2} />
-      <Divider />
-      <Skeleton height={4} m={2} />
-      <Skeleton height={4} m={2} />
-      <Skeleton height={4} width="70%" m={2} />
-    </Card>
+    <Box>
+      <Skeleton height={3} m={2} />
+      <Skeleton height={3} m={2} />
+      <Skeleton height={3} width="70%" m={2} />
+    </Box>
   );
+
   if (variant === "question") {
     content = (
-      <Card {...props}>
-        <Skeleton height={5} width="70%" m={2} />
-        <Divider />
-        <Box pt={2}>
-          <Tag>
-            <b>
-              Answers: <Spinner size="xs" />
-            </b>
-          </Tag>
-        </Box>
-      </Card>
+      <Box pt={2}>
+        <Tag>
+          <b>
+            Answers: <Spinner size="xs" />
+          </b>
+        </Tag>
+      </Box>
     );
   }
 
-  return content;
+  return (
+    <Card heading={<Skeleton height={4} width="70%" m={2} />} {...props}>
+      {content}
+    </Card>
+  );
 };
 
 export default SkeletonCard;

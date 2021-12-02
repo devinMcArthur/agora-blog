@@ -1,4 +1,5 @@
 import { Page } from "@models";
+import { ListOptionData } from "@typescript/graphql";
 
 const page = async ({ id, slug }: { id?: string; slug?: string }) => {
   if (id) {
@@ -10,8 +11,8 @@ const page = async ({ id, slug }: { id?: string; slug?: string }) => {
   }
 };
 
-const pages = async () => {
-  return await Page.getList();
+const pages = async (options?: ListOptionData) => {
+  return await Page.getList(options);
 };
 
 const searchPages = async (searchString: string, limit?: number) => {

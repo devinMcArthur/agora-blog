@@ -1,9 +1,9 @@
 export default {
-  Page: 1,
+  Page: 2,
   PageConnection: 1,
   Paragraph: 1,
   ParagraphEditProposal: 1,
-  Question: 1,
+  Question: 2,
   QuestionPageConnection: 1,
   Statement: 1,
   Variable: 1,
