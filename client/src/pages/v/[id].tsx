@@ -65,6 +65,10 @@ const Variable: PageSsrVariableComp = ({ data: propsData }) => {
     <Container minW="80%" p={4}>
       <Head>
         <title>{title}</title>
+        <meta
+          name="description"
+          content={`Currently known value for ${title}`}
+        />
       </Head>
       <Flex flexDir="column">
         <Box display="flex" flexDir="row" justifyContent="space-between">

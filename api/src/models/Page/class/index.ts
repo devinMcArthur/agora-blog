@@ -71,6 +71,14 @@ export class PageClass extends PageSchema {
     return get.search(this, searchString, limit);
   }
 
+  public async getDescription(this: PageDocument) {
+    return get.description(this);
+  }
+
+  public async getCurrentParagraph(this: PageDocument) {
+    return get.currentParagraph(this);
+  }
+
   /**
    * ----- Build -----
    */

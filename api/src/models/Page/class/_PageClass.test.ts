@@ -80,12 +80,25 @@ describe("Page Class", () => {
   });
 
   describe("GET", () => {
-    describe("search", () => {
+    describe.skip("search", () => {
       describe("success", () => {
         test("should successfully search database w/ lowercase", async () => {
           const results = await Page.search("mask");
 
           expect(results.length).toBe(1);
+        });
+      });
+    });
+
+    describe("getDescription", () => {
+      describe("success", () => {
+        test("should successfully get description for page", async () => {
+          const description =
+            await documents.pages.page_covid_2019.getDescription();
+
+          expect(description).toBe(
+            "A contagious disease caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2)."
+          );
         });
       });
     });

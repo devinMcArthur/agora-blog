@@ -39,6 +39,7 @@ export default class PageResolver {
   /**
    * Field Resolvers
    */
+
   @FieldResolver(() => ParagraphClass)
   async currentParagraph(
     @Root() page: PageDocument
@@ -49,6 +50,11 @@ export default class PageResolver {
   @FieldResolver(() => [PageClass])
   async relatedPages(@Root() page: PageDocument) {
     return fieldResolver.relatedPages(page);
+  }
+
+  @FieldResolver(() => String)
+  async description(@Root() page: PageDocument) {
+    return page.getDescription();
   }
 
   /**

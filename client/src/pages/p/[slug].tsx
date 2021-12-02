@@ -6,7 +6,7 @@ import { useAuth } from "../../contexts/Auth";
 import Head from "next/head";
 
 import { PageSsrComp, ssrSsr } from "../../generated/page";
-import { Box, Container, Flex, Heading } from "@chakra-ui/layout";
+import { Box, Container, Flex, Heading, Text } from "@chakra-ui/layout";
 import { IconButton } from "@chakra-ui/button";
 import { FiEdit } from "react-icons/fi";
 import ClientOnly from "../../components/Common/ClientOnly";
@@ -14,7 +14,7 @@ import PageSlugClientContent from "../../components/p/slug/ClientContent";
 import useMounted from "../../hooks/useMounted";
 
 const Page: PageSsrComp = ({ data: propsData }) => {
-  const { title, slug } = propsData!.page!;
+  const { title, slug, description } = propsData!.page!;
   /**
    * ----- Hook Initialization -----
    */
@@ -65,6 +65,7 @@ const Page: PageSsrComp = ({ data: propsData }) => {
     <Container minW="80%" p={4}>
       <Head>
         <title>{title}</title>
+        <meta name="description" content={description} />
       </Head>
       <Flex flexDirection="column">
         <Box display="flex" flexDir="row" justifyContent="space-between" my={2}>
@@ -100,7 +101,6 @@ export const getServerSideProps: GetServerSideProps = async ({
   params,
   ...ctx
 }) => {
-  console.log(ctx.req.socket.remoteAddress);
   const res = await ssrSsr.getServerPage(
     { variables: { slug: params?.slug as string } },
     ctx

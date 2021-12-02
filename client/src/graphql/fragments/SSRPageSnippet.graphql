@@ -2,4 +2,5 @@ fragment SSRPageSnippet on PageClass {
   _id
   title
   slug
+  description
 }

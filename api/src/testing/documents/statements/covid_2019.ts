@@ -16,7 +16,7 @@ const page_covid_2019_statement_1_v1 = new Statement({
         },
         {
           string:
-            "severe actute respiratory syndrome coronavirus 2 (SARS-CoV-2)",
+            "severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2)",
           styles: [
             {
               type: "mention",

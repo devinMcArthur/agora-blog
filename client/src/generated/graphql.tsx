@@ -139,6 +139,7 @@ export type PageClass = {
   _id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
   currentParagraph: ParagraphClass;
+  description: Scalars['String'];
   paragraphs: Array<ParagraphClass>;
   referencedCount: Scalars['Float'];
   relatedPages: Array<PageClass>;
@@ -512,7 +513,7 @@ export type QuestionSnippetFragment = { __typename?: 'QuestionClass', _id: strin
 
 export type RestSsrVariableSnippetFragment = { __typename?: 'VariableClass', _id: string, relatedPages: Array<{ __typename?: 'PageClass', _id: string, title: string, slug: string, referencedCount: number, currentParagraph: { __typename?: 'ParagraphClass', _id: string, statements: Array<{ __typename?: 'ParagraphStatementClass', versionIndex: number, statement: { __typename?: 'StatementClass', _id: string, versions: Array<{ __typename?: 'StatementVersionClass', stringArray: Array<{ __typename?: 'StringArrayClass', string?: string | null | undefined, styles: Array<{ __typename?: 'StatementStyleClass', type: string, variant?: string | null | undefined, value: { __typename?: 'StatementValueClass', url?: string | null | undefined, page?: { __typename?: 'PageClass', _id: string, slug: string, title: string } | null | undefined, statement?: { __typename?: 'StatementClass', _id: string } | null | undefined, variable?: { __typename?: 'VariableClass', _id: string, title: string, finalValue: number } | null | undefined, image?: { __typename?: 'StatementImageClass', sourceUrl?: string | null | undefined, caption?: string | null | undefined, file: { __typename?: 'FileClass', _id: string, buffer: string, mimetype: string } } | null | undefined } }> }>, quotedStatement?: { __typename?: 'StatementClass', _id: string } | null | undefined, questions: Array<{ __typename?: 'QuestionClass', _id: string, question: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined }> } }>, page: { __typename?: 'PageClass', _id: string }, editProposals: Array<{ __typename?: 'ParagraphEditProposalClass', _id: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined } }>, editProposals: Array<{ __typename?: 'VariableEditProposalClass', _id: string, finalValue: number, description: string, author: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string }, value: { __typename?: 'Version', sourceUrl?: string | null | undefined } }> };
 
-export type SsrPageSnippetFragment = { __typename?: 'PageClass', _id: string, title: string, slug: string };
+export type SsrPageSnippetFragment = { __typename?: 'PageClass', _id: string, title: string, slug: string, description: string };
 
 export type SsrQuestionSnippetFragment = { __typename?: 'QuestionClass', _id: string, question: string };
 
@@ -697,7 +698,7 @@ export type SsrPageQueryVariables = Exact<{
 }>;
 
 
-export type SsrPageQuery = { __typename?: 'Query', page?: { __typename?: 'PageClass', _id: string, title: string, slug: string } | null | undefined };
+export type SsrPageQuery = { __typename?: 'Query', page?: { __typename?: 'PageClass', _id: string, title: string, slug: string, description: string } | null | undefined };
 
 export type SsrQuestionQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1003,6 +1004,7 @@ export const SsrPageSnippetFragmentDoc = gql`
   _id
   title
   slug
+  description
 }
     `;
 export const SsrQuestionSnippetFragmentDoc = gql`

@@ -69,6 +69,10 @@ const Questions = () => {
     <Container minW="80%" p={4}>
       <Head>
         <title>Questions - agora</title>
+        <meta
+          name="description"
+          content="Collection of all questions answered by Agora"
+        />
       </Head>
       <InfiniteScroll nextPage={nextPage} content={content} />
     </Container>

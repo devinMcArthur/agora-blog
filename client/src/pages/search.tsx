@@ -28,6 +28,10 @@ const Search = () => {
     <Container minW="80%" p={4}>
       <Head>
         <title>Search - {searchString}</title>
+        <meta
+          name="description"
+          content={`Search results for: ${searchString}`}
+        />
       </Head>
       {searchString ? (
         <ClientOnly>

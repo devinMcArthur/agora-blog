@@ -65,6 +65,10 @@ const Home = () => {
     <Container minW="80%" p={4}>
       <Head>
         <title>agora</title>
+        <meta
+          name="description"
+          content="Agora is a crowdsourced information aggregation platform. We are creating Wikipedia 2.0 to improve the sense-making of the masses."
+        />
       </Head>
       <InfiniteScroll nextPage={nextPage} content={content} />
     </Container>

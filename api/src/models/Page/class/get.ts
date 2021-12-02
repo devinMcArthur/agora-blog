@@ -8,10 +8,13 @@ import {
   PageConnectionDocument,
   Statement,
   StatementDocument,
+  ParagraphDocument,
+  Paragraph,
 } from "@models";
 import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
 import { IListOptions } from "@typescript/interface/list_Options";
+import statementToString from "@utils/statementToString";
 
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,
@@ -219,11 +222,51 @@ const statementReferences = (
   });
 };
 
+const currentParagraph = (page: PageDocument) => {
+  return new Promise<ParagraphDocument>(async (resolve, reject) => {
+    try {
+      const paragraph = await Paragraph.getById(
+        page.paragraphs[page.paragraphs.length - 1]!.toString()
+      );
+
+      if (!paragraph) throw new Error("could not find pages current paragraph");
+
+      resolve(paragraph);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+const description = (page: PageDocument) => {
+  return new Promise<string>(async (resolve, reject) => {
+    try {
+      const currentParagraph = await page.getCurrentParagraph();
+
+      const firstStatement = await Statement.getById(
+        currentParagraph.statements[0].statement!.toString()
+      );
+      if (!firstStatement) throw new Error("Could not find first statement");
+
+      resolve(
+        await statementToString(
+          firstStatement,
+          currentParagraph.statements[0].versionIndex
+        )
+      );
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 export default {
   list,
   byID,
   bySlug,
   search,
+  description,
+  currentParagraph,
   pagesThatReference,
   referencedCount,
   statementReferences,

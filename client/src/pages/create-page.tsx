@@ -102,6 +102,7 @@ const CreatePage = () => {
     <Container minW="80%">
       <Head>
         <title>Create Page</title>
+        <meta name="description" content="Create a new page on Agora" />
       </Head>
       <Box>
         <Heading>Create a new page</Heading>

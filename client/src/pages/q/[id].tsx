@@ -12,6 +12,10 @@ const Question: PageSsrQuestionComp = ({ data: propsData }) => {
     <Container minW="80%" p={4}>
       <Head>
         <title>{questionTitle}</title>
+        <meta
+          name="description"
+          content={`All answers to the question: ${questionTitle}`}
+        />
       </Head>
       <Heading as="h5">{questionTitle}</Heading>
       <ClientOnly>

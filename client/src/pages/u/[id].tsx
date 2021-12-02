@@ -48,6 +48,10 @@ const User: PageSsrUserComp = ({ data: propsData }) => {
         <title>
           {propsUser.firstName} {propsUser.lastName}
         </title>
+        <meta
+          name="description"
+          content={`Page for ${propsUser.firstName} ${propsUser.lastName}`}
+        />
       </Head>
       <Box display="flex" flexDir="row" justifyContent="space-between">
         <Box display="flex" flexDir="row">
