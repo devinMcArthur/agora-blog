@@ -1,5 +1,6 @@
 import React from "react";
 
+import requestip from "request-ip";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useAuth } from "../../contexts/Auth";
@@ -101,6 +102,8 @@ export const getServerSideProps: GetServerSideProps = async ({
   params,
   ...ctx
 }) => {
+  console.log(await requestip.getClientIp(ctx.req));
+
   const res = await ssrSsr.getServerPage(
     { variables: { slug: params?.slug as string } },
     ctx

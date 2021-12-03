@@ -138,7 +138,11 @@ const Variable: PageSsrVariableComp = ({ data: propsData }) => {
           />
         </ClientOnly>
       </Flex>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        lockFocusAcrossFrames={undefined}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Propose an edit</ModalHeader>
