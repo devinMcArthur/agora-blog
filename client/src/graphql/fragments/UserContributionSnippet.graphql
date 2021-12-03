@@ -1,0 +1,14 @@
+fragment UserContributionsSnippet on UserClass {
+  authoredPages {
+    ...PageCardSnippet
+  }
+  authoredParagraphEditProposals {
+    ...FullParagraphEditProposalSnippet
+  }
+  authoredVariables {
+    ...SSRVariableSnippet
+  }
+  authoredVariableEditProposals {
+    ...VariableEditProposalSnippet
+  }
+}

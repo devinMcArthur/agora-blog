@@ -1,8 +1,12 @@
 import {
+  PageClass,
+  ParagraphEditProposalClass,
   UserClass,
   UserDocument,
   UserVerificationRequest,
   UserVerificationRequestClass,
+  VariableClass,
+  VariableEditProposalClass,
 } from "@models";
 import { IContext } from "@typescript/graphql";
 import {
@@ -27,6 +31,26 @@ export default class UserResolver {
   @FieldResolver(() => UserVerificationRequestClass, { nullable: true })
   async verificationRequested(@Root() user: UserDocument) {
     return UserVerificationRequest.getByUserId(user._id);
+  }
+
+  @FieldResolver(() => [PageClass])
+  async authoredPages(@Root() user: UserDocument) {
+    return user.getAuthoredPages();
+  }
+
+  @FieldResolver(() => [ParagraphEditProposalClass])
+  async authoredParagraphEditProposals(@Root() user: UserDocument) {
+    return user.getAuthoredParagraphEditProposals();
+  }
+
+  @FieldResolver(() => [VariableClass])
+  async authoredVariables(@Root() user: UserDocument) {
+    return user.getAuthoredVariables();
+  }
+
+  @FieldResolver(() => [VariableEditProposalClass])
+  async authoredVariableEditProposals(@Root() user: UserDocument) {
+    return user.getAuthoredVariableEditProposals();
   }
 
   /**

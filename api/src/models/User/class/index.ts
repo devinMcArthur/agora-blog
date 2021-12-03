@@ -33,6 +33,22 @@ export class UserClass extends UserSchema {
     return get.byEmail(this, email, options);
   }
 
+  public async getAuthoredPages(this: UserDocument) {
+    return get.authoredPages(this);
+  }
+
+  public async getAuthoredParagraphEditProposals(this: UserDocument) {
+    return get.authoredParagraphEditProposals(this);
+  }
+
+  public async getAuthoredVariables(this: UserDocument) {
+    return get.authoredVariables(this);
+  }
+
+  public async getAuthoredVariableEditProposals(this: UserDocument) {
+    return get.authoredVariableEditProposals(this);
+  }
+
   /**
    * ----- Build -----
    */

@@ -13,7 +13,6 @@ import {
   Root,
 } from "type-graphql";
 
-import requestip from "request-ip";
 import {
   ParagraphDocument,
   PageDocument,
@@ -64,10 +63,8 @@ export default class PageResolver {
 
   @Query(() => PageClass, { nullable: true })
   async page(
-    @Args() { id, slug }: GetPageArgs,
-    @Ctx() ctx: IContext
+    @Args() { id, slug }: GetPageArgs
   ): Promise<PageDocument | null | undefined> {
-    console.log(await requestip.getClientIp(ctx.req));
     return queries.page({ id, slug });
   }
 

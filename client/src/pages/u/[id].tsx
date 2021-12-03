@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/modal";
 import ClientOnly from "../../components/Common/ClientOnly";
 import UserSettings from "../../components/u/id/Settings";
+import UserContributions from "../../components/u/id/Contributions";
 
 const User: PageSsrUserComp = ({ data: propsData }) => {
   const { user: propsUser } = propsData!;
@@ -62,6 +63,9 @@ const User: PageSsrUserComp = ({ data: propsData }) => {
         </Box>
         {settingsButton}
       </Box>
+      <ClientOnly>
+        <UserContributions id={propsUser._id} />
+      </ClientOnly>
       {/* SETTINGS MODAL */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

@@ -1,6 +1,7 @@
 fragment SSRVariableSnippet on VariableClass {
   _id
   title
+  finalValue
   versions {
     finalValue
     createdAt

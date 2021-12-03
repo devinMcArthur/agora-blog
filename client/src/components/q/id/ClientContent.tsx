@@ -19,9 +19,9 @@ const QuestionIdClientContent = ({ id }: IQuestionIdClientContent) => {
 
   const content = React.useMemo(() => {
     if (data?.question && !loading) {
-      return data.question.relatedPages.map((relatedPage) => (
+      return data.question.relatedPages.map((relatedPage, index) => (
         <PageCard
-          key={relatedPage._id}
+          key={index}
           page={relatedPage}
           referenceObject={{
             type: "question",

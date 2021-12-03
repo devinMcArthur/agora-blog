@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Box, Link, Stack, Heading } from "@chakra-ui/react";
+import { Box, Stack, Heading } from "@chakra-ui/react";
 
 import { navbarHeight } from "../../constants/styles";
 import NavbarAccount from "./views/Account";

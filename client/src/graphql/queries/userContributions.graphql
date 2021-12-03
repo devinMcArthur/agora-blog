@@ -1,0 +1,5 @@
+query UserContributions($id: String!) {
+  user(id: $id) {
+    ...UserContributionsSnippet
+  }
+}

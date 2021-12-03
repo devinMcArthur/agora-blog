@@ -10,7 +10,6 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <link rel="shortcut icon" href="/favicon.ico" />
-        <html lang="en" />
       </Head>
       <Provider>
         <Navbar />

@@ -1,5 +1,16 @@
 import { Types } from "mongoose";
-import { UserDocument, UserModel } from "@models";
+import {
+  Page,
+  PageDocument,
+  ParagraphEditProposal,
+  ParagraphEditProposalDocument,
+  UserDocument,
+  UserModel,
+  Variable,
+  VariableDocument,
+  VariableEditProposal,
+  VariableEditProposalDocument,
+} from "@models";
 import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
 
@@ -52,7 +63,67 @@ const byEmail = (
   });
 };
 
+const authoredPages = (user: UserDocument) => {
+  return new Promise<PageDocument[]>(async (resolve, reject) => {
+    try {
+      const pages = await Page.find({ originalAuthor: user._id });
+
+      resolve(pages);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+const authoredParagraphEditProposals = (user: UserDocument) => {
+  return new Promise<ParagraphEditProposalDocument[]>(
+    async (resolve, reject) => {
+      try {
+        const paragraphEditProposals = ParagraphEditProposal.find({
+          author: user._id,
+        });
+
+        resolve(paragraphEditProposals);
+      } catch (e) {
+        reject(e);
+      }
+    }
+  );
+};
+
+const authoredVariables = (user: UserDocument) => {
+  return new Promise<VariableDocument[]>(async (resolve, reject) => {
+    try {
+      const variables = await Variable.find({ originalAuthor: user._id });
+
+      resolve(variables);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+const authoredVariableEditProposals = (user: UserDocument) => {
+  return new Promise<VariableEditProposalDocument[]>(
+    async (resolve, reject) => {
+      try {
+        const variableEditProposals = await VariableEditProposal.find({
+          author: user._id,
+        });
+
+        resolve(variableEditProposals);
+      } catch (e) {
+        reject(e);
+      }
+    }
+  );
+};
+
 export default {
   byId,
   byEmail,
+  authoredPages,
+  authoredParagraphEditProposals,
+  authoredVariables,
+  authoredVariableEditProposals,
 };

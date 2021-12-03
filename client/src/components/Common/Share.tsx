@@ -13,6 +13,7 @@ import {
 import { FiFacebook, FiShare2, FiTwitter } from "react-icons/fi";
 import { IoLogoReddit } from "react-icons/io";
 import TextField from "./TextField";
+import { Tooltip } from "@chakra-ui/tooltip";
 
 interface IShare {
   link: string;
@@ -42,15 +43,17 @@ const Share = ({ link, shareText }: IShare) => {
 
   return (
     <>
-      <IconButton
-        icon={<FiShare2 />}
-        aria-label="share"
-        backgroundColor="transparent"
-        _hover={{
-          backgroundColor: "gray.100",
-        }}
-        onClick={onOpen}
-      />
+      <Tooltip label="Share">
+        <IconButton
+          icon={<FiShare2 />}
+          aria-label="share"
+          backgroundColor="transparent"
+          _hover={{
+            backgroundColor: "gray.100",
+          }}
+          onClick={onOpen}
+        />
+      </Tooltip>
       <Modal size="lg" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>

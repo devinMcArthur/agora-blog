@@ -751,6 +751,41 @@ export const ssrUser = {
       withPage: withPageUser,
       usePage: useUser,
     }
+export async function getServerPageUserContributions
+    (options: Omit<Apollo.QueryOptions<Types.UserContributionsQueryVariables>, 'query'>, ctx: ApolloClientContext ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.UserContributionsQuery>({ ...options, query: Operations.UserContributionsDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useUserContributions = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.UserContributionsQuery, Types.UserContributionsQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.UserContributionsDocument, options);
+};
+export type PageUserContributionsComp = React.FC<{data?: Types.UserContributionsQuery, error?: Apollo.ApolloError}>;
+export const withPageUserContributions = (optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.UserContributionsQuery, Types.UserContributionsQueryVariables>) => (WrappedComponent:PageUserContributionsComp) : NextPage  => (props) => {
+                const router = useRouter()
+                const options = optionsFunc ? optionsFunc(router) : {};
+                const {data, error } = useQuery(Operations.UserContributionsDocument, options)    
+                return <WrappedComponent {...props} data={data} error={error} /> ;
+                   
+            }; 
+export const ssrUserContributions = {
+      getServerPage: getServerPageUserContributions,
+      withPage: withPageUserContributions,
+      usePage: useUserContributions,
+    }
 export async function getServerPageVariable
     (options: Omit<Apollo.QueryOptions<Types.VariableQueryVariables>, 'query'>, ctx: ApolloClientContext ){
         const apolloClient = getApolloClient(ctx);

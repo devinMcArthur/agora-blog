@@ -140,6 +140,7 @@ export type PageClass = {
   createdAt: Scalars['DateTime'];
   currentParagraph: ParagraphClass;
   description: Scalars['String'];
+  originalAuthor: UserClass;
   paragraphs: Array<ParagraphClass>;
   referencedCount: Scalars['Float'];
   relatedPages: Array<PageClass>;
@@ -390,6 +391,10 @@ export type UserClass = {
   __typename?: 'UserClass';
   _id: Scalars['ID'];
   admin: Scalars['Boolean'];
+  authoredPages: Array<PageClass>;
+  authoredParagraphEditProposals: Array<ParagraphEditProposalClass>;
+  authoredVariableEditProposals: Array<VariableEditProposalClass>;
+  authoredVariables: Array<VariableClass>;
   createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   firstName: Scalars['String'];
@@ -519,7 +524,9 @@ export type SsrQuestionSnippetFragment = { __typename?: 'QuestionClass', _id: st
 
 export type SsrUserSnippetFragment = { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string, verified: boolean, createdAt: any, verificationRequested?: { __typename?: 'UserVerificationRequestClass', _id: string, createdAt: any } | null | undefined };
 
-export type SsrVariableSnippetFragment = { __typename?: 'VariableClass', _id: string, title: string, versions: Array<{ __typename?: 'VariableVersionClass', finalValue: number, createdAt: any, sourceUrl?: string | null | undefined, sourceEditProposal?: { __typename?: 'VariableEditProposalClass', _id: string, finalValue: number, description: string, author: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string }, value: { __typename?: 'Version', sourceUrl?: string | null | undefined } } | null | undefined }>, originalAuthor: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string } };
+export type SsrVariableSnippetFragment = { __typename?: 'VariableClass', _id: string, title: string, finalValue: number, versions: Array<{ __typename?: 'VariableVersionClass', finalValue: number, createdAt: any, sourceUrl?: string | null | undefined, sourceEditProposal?: { __typename?: 'VariableEditProposalClass', _id: string, finalValue: number, description: string, author: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string }, value: { __typename?: 'Version', sourceUrl?: string | null | undefined } } | null | undefined }>, originalAuthor: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string } };
+
+export type UserContributionsSnippetFragment = { __typename?: 'UserClass', authoredPages: Array<{ __typename?: 'PageClass', _id: string, title: string, slug: string, referencedCount: number, currentParagraph: { __typename?: 'ParagraphClass', _id: string, statements: Array<{ __typename?: 'ParagraphStatementClass', versionIndex: number, statement: { __typename?: 'StatementClass', _id: string, versions: Array<{ __typename?: 'StatementVersionClass', stringArray: Array<{ __typename?: 'StringArrayClass', string?: string | null | undefined, styles: Array<{ __typename?: 'StatementStyleClass', type: string, variant?: string | null | undefined, value: { __typename?: 'StatementValueClass', url?: string | null | undefined, page?: { __typename?: 'PageClass', _id: string, slug: string, title: string } | null | undefined, statement?: { __typename?: 'StatementClass', _id: string } | null | undefined, variable?: { __typename?: 'VariableClass', _id: string, title: string, finalValue: number } | null | undefined, image?: { __typename?: 'StatementImageClass', sourceUrl?: string | null | undefined, caption?: string | null | undefined, file: { __typename?: 'FileClass', _id: string, buffer: string, mimetype: string } } | null | undefined } }> }>, quotedStatement?: { __typename?: 'StatementClass', _id: string } | null | undefined, questions: Array<{ __typename?: 'QuestionClass', _id: string, question: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined }> } }>, page: { __typename?: 'PageClass', _id: string }, editProposals: Array<{ __typename?: 'ParagraphEditProposalClass', _id: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined } }>, authoredParagraphEditProposals: Array<{ __typename?: 'ParagraphEditProposalClass', _id: string, description: string, createdAt: any, statementItems: Array<{ __typename?: 'ParagraphEditProposalStatementClass', _id: string, changeType: string, newQuestions: Array<string>, paragraphStatement?: { __typename?: 'ParagraphStatementClass', versionIndex: number, statement: { __typename?: 'StatementClass', _id: string, versions: Array<{ __typename?: 'StatementVersionClass', stringArray: Array<{ __typename?: 'StringArrayClass', string?: string | null | undefined, styles: Array<{ __typename?: 'StatementStyleClass', type: string, variant?: string | null | undefined, value: { __typename?: 'StatementValueClass', url?: string | null | undefined, page?: { __typename?: 'PageClass', _id: string, slug: string, title: string } | null | undefined, statement?: { __typename?: 'StatementClass', _id: string } | null | undefined, variable?: { __typename?: 'VariableClass', _id: string, title: string, finalValue: number } | null | undefined, image?: { __typename?: 'StatementImageClass', sourceUrl?: string | null | undefined, caption?: string | null | undefined, file: { __typename?: 'FileClass', _id: string, buffer: string, mimetype: string } } | null | undefined } }> }>, quotedStatement?: { __typename?: 'StatementClass', _id: string } | null | undefined, questions: Array<{ __typename?: 'QuestionClass', _id: string, question: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined }> } } | null | undefined, stringArray: Array<{ __typename?: 'StringArrayClass', string?: string | null | undefined, styles: Array<{ __typename?: 'StatementStyleClass', type: string, variant?: string | null | undefined, value: { __typename?: 'StatementValueClass', url?: string | null | undefined, page?: { __typename?: 'PageClass', _id: string, slug: string, title: string } | null | undefined, statement?: { __typename?: 'StatementClass', _id: string } | null | undefined, variable?: { __typename?: 'VariableClass', _id: string, title: string, finalValue: number } | null | undefined, image?: { __typename?: 'StatementImageClass', sourceUrl?: string | null | undefined, caption?: string | null | undefined, file: { __typename?: 'FileClass', _id: string, buffer: string, mimetype: string } } | null | undefined } }> }>, quotedStatement?: { __typename?: 'StatementClass', _id: string } | null | undefined, questions: Array<{ __typename?: 'QuestionClass', _id: string, question: string }> }>, author: { __typename?: 'UserClass', _id: string, firstName: string, lastName: string }, paragraph: { __typename?: 'ParagraphClass', page: { __typename?: 'PageClass', slug: string } } }>, authoredVariables: Array<{ __typename?: 'VariableClass', _id: string, title: string, finalValue: number, versions: Array<{ __typename?: 'VariableVersionClass', finalValue: number, createdAt: any, sourceUrl?: string | null | undefined, sourceEditProposal?: { __typename?: 'VariableEditProposalClass', _id: string, finalValue: number, description: string, author: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string }, value: { __typename?: 'Version', sourceUrl?: string | null | undefined } } | null | undefined }>, originalAuthor: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string } }>, authoredVariableEditProposals: Array<{ __typename?: 'VariableEditProposalClass', _id: string, finalValue: number, description: string, author: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string }, value: { __typename?: 'Version', sourceUrl?: string | null | undefined } }> };
 
 export type UserSnippetFragment = { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string };
 
@@ -719,7 +726,7 @@ export type SsrVariableQueryVariables = Exact<{
 }>;
 
 
-export type SsrVariableQuery = { __typename?: 'Query', variable?: { __typename?: 'VariableClass', _id: string, title: string, versions: Array<{ __typename?: 'VariableVersionClass', finalValue: number, createdAt: any, sourceUrl?: string | null | undefined, sourceEditProposal?: { __typename?: 'VariableEditProposalClass', _id: string, finalValue: number, description: string, author: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string }, value: { __typename?: 'Version', sourceUrl?: string | null | undefined } } | null | undefined }>, originalAuthor: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string } } | null | undefined };
+export type SsrVariableQuery = { __typename?: 'Query', variable?: { __typename?: 'VariableClass', _id: string, title: string, finalValue: number, versions: Array<{ __typename?: 'VariableVersionClass', finalValue: number, createdAt: any, sourceUrl?: string | null | undefined, sourceEditProposal?: { __typename?: 'VariableEditProposalClass', _id: string, finalValue: number, description: string, author: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string }, value: { __typename?: 'Version', sourceUrl?: string | null | undefined } } | null | undefined }>, originalAuthor: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string } } | null | undefined };
 
 export type StatementQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -743,6 +750,13 @@ export type UserQueryVariables = Exact<{
 
 export type UserQuery = { __typename?: 'Query', user: { __typename?: 'UserClass', firstName: string, lastName: string, middleName?: string | null | undefined, verified: boolean } };
 
+export type UserContributionsQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type UserContributionsQuery = { __typename?: 'Query', user: { __typename?: 'UserClass', authoredPages: Array<{ __typename?: 'PageClass', _id: string, title: string, slug: string, referencedCount: number, currentParagraph: { __typename?: 'ParagraphClass', _id: string, statements: Array<{ __typename?: 'ParagraphStatementClass', versionIndex: number, statement: { __typename?: 'StatementClass', _id: string, versions: Array<{ __typename?: 'StatementVersionClass', stringArray: Array<{ __typename?: 'StringArrayClass', string?: string | null | undefined, styles: Array<{ __typename?: 'StatementStyleClass', type: string, variant?: string | null | undefined, value: { __typename?: 'StatementValueClass', url?: string | null | undefined, page?: { __typename?: 'PageClass', _id: string, slug: string, title: string } | null | undefined, statement?: { __typename?: 'StatementClass', _id: string } | null | undefined, variable?: { __typename?: 'VariableClass', _id: string, title: string, finalValue: number } | null | undefined, image?: { __typename?: 'StatementImageClass', sourceUrl?: string | null | undefined, caption?: string | null | undefined, file: { __typename?: 'FileClass', _id: string, buffer: string, mimetype: string } } | null | undefined } }> }>, quotedStatement?: { __typename?: 'StatementClass', _id: string } | null | undefined, questions: Array<{ __typename?: 'QuestionClass', _id: string, question: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined }> } }>, page: { __typename?: 'PageClass', _id: string }, editProposals: Array<{ __typename?: 'ParagraphEditProposalClass', _id: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined } }>, authoredParagraphEditProposals: Array<{ __typename?: 'ParagraphEditProposalClass', _id: string, description: string, createdAt: any, statementItems: Array<{ __typename?: 'ParagraphEditProposalStatementClass', _id: string, changeType: string, newQuestions: Array<string>, paragraphStatement?: { __typename?: 'ParagraphStatementClass', versionIndex: number, statement: { __typename?: 'StatementClass', _id: string, versions: Array<{ __typename?: 'StatementVersionClass', stringArray: Array<{ __typename?: 'StringArrayClass', string?: string | null | undefined, styles: Array<{ __typename?: 'StatementStyleClass', type: string, variant?: string | null | undefined, value: { __typename?: 'StatementValueClass', url?: string | null | undefined, page?: { __typename?: 'PageClass', _id: string, slug: string, title: string } | null | undefined, statement?: { __typename?: 'StatementClass', _id: string } | null | undefined, variable?: { __typename?: 'VariableClass', _id: string, title: string, finalValue: number } | null | undefined, image?: { __typename?: 'StatementImageClass', sourceUrl?: string | null | undefined, caption?: string | null | undefined, file: { __typename?: 'FileClass', _id: string, buffer: string, mimetype: string } } | null | undefined } }> }>, quotedStatement?: { __typename?: 'StatementClass', _id: string } | null | undefined, questions: Array<{ __typename?: 'QuestionClass', _id: string, question: string }>, sourceEditProposal?: { __typename?: 'ParagraphEditProposalClass', _id: string } | null | undefined }> } } | null | undefined, stringArray: Array<{ __typename?: 'StringArrayClass', string?: string | null | undefined, styles: Array<{ __typename?: 'StatementStyleClass', type: string, variant?: string | null | undefined, value: { __typename?: 'StatementValueClass', url?: string | null | undefined, page?: { __typename?: 'PageClass', _id: string, slug: string, title: string } | null | undefined, statement?: { __typename?: 'StatementClass', _id: string } | null | undefined, variable?: { __typename?: 'VariableClass', _id: string, title: string, finalValue: number } | null | undefined, image?: { __typename?: 'StatementImageClass', sourceUrl?: string | null | undefined, caption?: string | null | undefined, file: { __typename?: 'FileClass', _id: string, buffer: string, mimetype: string } } | null | undefined } }> }>, quotedStatement?: { __typename?: 'StatementClass', _id: string } | null | undefined, questions: Array<{ __typename?: 'QuestionClass', _id: string, question: string }> }>, author: { __typename?: 'UserClass', _id: string, firstName: string, lastName: string }, paragraph: { __typename?: 'ParagraphClass', page: { __typename?: 'PageClass', slug: string } } }>, authoredVariables: Array<{ __typename?: 'VariableClass', _id: string, title: string, finalValue: number, versions: Array<{ __typename?: 'VariableVersionClass', finalValue: number, createdAt: any, sourceUrl?: string | null | undefined, sourceEditProposal?: { __typename?: 'VariableEditProposalClass', _id: string, finalValue: number, description: string, author: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string }, value: { __typename?: 'Version', sourceUrl?: string | null | undefined } } | null | undefined }>, originalAuthor: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string } }>, authoredVariableEditProposals: Array<{ __typename?: 'VariableEditProposalClass', _id: string, finalValue: number, description: string, author: { __typename?: 'UserClass', _id: string, firstName: string, middleName?: string | null | undefined, lastName: string }, value: { __typename?: 'Version', sourceUrl?: string | null | undefined } }> } };
+
 export type VariableQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -758,21 +772,25 @@ export const DisplayUserSnippetFragmentFragmentDoc = gql`
   verified
 }
     `;
-export const PreviewParagraphEditProposalSnippetFragmentDoc = gql`
-    fragment PreviewParagraphEditProposalSnippet on ParagraphEditProposalClass {
+export const FullUserSnippetFragmentDoc = gql`
+    fragment FullUserSnippet on UserClass {
   _id
-  author {
-    _id
-    firstName
-    lastName
-  }
-  description
+  firstName
+  middleName
+  lastName
+  verified
   createdAt
-  paragraph {
-    page {
-      slug
-    }
+  verificationRequested {
+    _id
+    createdAt
   }
+}
+    `;
+export const LinkFormPageSnippetFragmentDoc = gql`
+    fragment LinkFormPageSnippet on PageClass {
+  _id
+  title
+  slug
 }
     `;
 export const ImageSnippetFragmentDoc = gql`
@@ -847,57 +865,6 @@ export const FullParagraphStatementSnippetFragmentDoc = gql`
   }
 }
     ${DisplayStatementSnippetFragmentDoc}`;
-export const ParagraphEditProposalStatementSnippetFragmentDoc = gql`
-    fragment ParagraphEditProposalStatementSnippet on ParagraphEditProposalStatementClass {
-  _id
-  changeType
-  paragraphStatement {
-    ...FullParagraphStatementSnippet
-  }
-  stringArray {
-    ...FullStringArraySnippet
-  }
-  quotedStatement {
-    _id
-  }
-  questions {
-    _id
-    question
-  }
-  newQuestions
-}
-    ${FullParagraphStatementSnippetFragmentDoc}
-${FullStringArraySnippetFragmentDoc}`;
-export const FullParagraphEditProposalSnippetFragmentDoc = gql`
-    fragment FullParagraphEditProposalSnippet on ParagraphEditProposalClass {
-  ...PreviewParagraphEditProposalSnippet
-  statementItems {
-    ...ParagraphEditProposalStatementSnippet
-  }
-}
-    ${PreviewParagraphEditProposalSnippetFragmentDoc}
-${ParagraphEditProposalStatementSnippetFragmentDoc}`;
-export const FullUserSnippetFragmentDoc = gql`
-    fragment FullUserSnippet on UserClass {
-  _id
-  firstName
-  middleName
-  lastName
-  verified
-  createdAt
-  verificationRequested {
-    _id
-    createdAt
-  }
-}
-    `;
-export const LinkFormPageSnippetFragmentDoc = gql`
-    fragment LinkFormPageSnippet on PageClass {
-  _id
-  title
-  slug
-}
-    `;
 export const DisplayParagraphSnippetFragmentDoc = gql`
     fragment DisplayParagraphSnippet on ParagraphClass {
   _id
@@ -1027,10 +994,58 @@ export const SsrUserSnippetFragmentDoc = gql`
   }
 }
     `;
+export const PreviewParagraphEditProposalSnippetFragmentDoc = gql`
+    fragment PreviewParagraphEditProposalSnippet on ParagraphEditProposalClass {
+  _id
+  author {
+    _id
+    firstName
+    lastName
+  }
+  description
+  createdAt
+  paragraph {
+    page {
+      slug
+    }
+  }
+}
+    `;
+export const ParagraphEditProposalStatementSnippetFragmentDoc = gql`
+    fragment ParagraphEditProposalStatementSnippet on ParagraphEditProposalStatementClass {
+  _id
+  changeType
+  paragraphStatement {
+    ...FullParagraphStatementSnippet
+  }
+  stringArray {
+    ...FullStringArraySnippet
+  }
+  quotedStatement {
+    _id
+  }
+  questions {
+    _id
+    question
+  }
+  newQuestions
+}
+    ${FullParagraphStatementSnippetFragmentDoc}
+${FullStringArraySnippetFragmentDoc}`;
+export const FullParagraphEditProposalSnippetFragmentDoc = gql`
+    fragment FullParagraphEditProposalSnippet on ParagraphEditProposalClass {
+  ...PreviewParagraphEditProposalSnippet
+  statementItems {
+    ...ParagraphEditProposalStatementSnippet
+  }
+}
+    ${PreviewParagraphEditProposalSnippetFragmentDoc}
+${ParagraphEditProposalStatementSnippetFragmentDoc}`;
 export const SsrVariableSnippetFragmentDoc = gql`
     fragment SSRVariableSnippet on VariableClass {
   _id
   title
+  finalValue
   versions {
     finalValue
     createdAt
@@ -1046,6 +1061,25 @@ export const SsrVariableSnippetFragmentDoc = gql`
 }
     ${VariableEditProposalSnippetFragmentDoc}
 ${UserSnippetFragmentDoc}`;
+export const UserContributionsSnippetFragmentDoc = gql`
+    fragment UserContributionsSnippet on UserClass {
+  authoredPages {
+    ...PageCardSnippet
+  }
+  authoredParagraphEditProposals {
+    ...FullParagraphEditProposalSnippet
+  }
+  authoredVariables {
+    ...SSRVariableSnippet
+  }
+  authoredVariableEditProposals {
+    ...VariableEditProposalSnippet
+  }
+}
+    ${PageCardSnippetFragmentDoc}
+${FullParagraphEditProposalSnippetFragmentDoc}
+${SsrVariableSnippetFragmentDoc}
+${VariableEditProposalSnippetFragmentDoc}`;
 export const VariableSearchSnippetFragmentDoc = gql`
     fragment VariableSearchSnippet on VariableClass {
   _id
@@ -2122,6 +2156,41 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const UserContributionsDocument = gql`
+    query UserContributions($id: String!) {
+  user(id: $id) {
+    ...UserContributionsSnippet
+  }
+}
+    ${UserContributionsSnippetFragmentDoc}`;
+
+/**
+ * __useUserContributionsQuery__
+ *
+ * To run a query within a React component, call `useUserContributionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserContributionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserContributionsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUserContributionsQuery(baseOptions: Apollo.QueryHookOptions<UserContributionsQuery, UserContributionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserContributionsQuery, UserContributionsQueryVariables>(UserContributionsDocument, options);
+      }
+export function useUserContributionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserContributionsQuery, UserContributionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserContributionsQuery, UserContributionsQueryVariables>(UserContributionsDocument, options);
+        }
+export type UserContributionsQueryHookResult = ReturnType<typeof useUserContributionsQuery>;
+export type UserContributionsLazyQueryHookResult = ReturnType<typeof useUserContributionsLazyQuery>;
+export type UserContributionsQueryResult = Apollo.QueryResult<UserContributionsQuery, UserContributionsQueryVariables>;
 export const VariableDocument = gql`
     query Variable($id: ID!) {
   variable(id: $id) {

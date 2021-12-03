@@ -1,6 +1,6 @@
 import { index, prop, Ref } from "@typegoose/typegoose";
 import { Types } from "mongoose";
-import { ParagraphClass } from "@models";
+import { ParagraphClass, UserClass } from "@models";
 import { Field, ID, ObjectType } from "type-graphql";
 import SchemaVersions from "@constants/SchemaVersions";
 
@@ -21,6 +21,10 @@ export class PageSchema {
   @Field(() => [ParagraphClass])
   @prop({ ref: () => ParagraphClass })
   public paragraphs!: Ref<ParagraphClass>[];
+
+  @Field(() => UserClass)
+  @prop({ ref: () => UserClass, required: true, immutable: true })
+  public originalAuthor!: Ref<UserClass>;
 
   @Field()
   @prop({ required: true, default: 0 })
