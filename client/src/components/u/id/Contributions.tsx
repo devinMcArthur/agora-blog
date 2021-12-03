@@ -73,7 +73,7 @@ const UserContributions = ({ id }: IUserContributions) => {
     }
   }, [data?.user]);
 
-  return <Box>{content}</Box>;
+  return <Box mt={2}>{content}</Box>;
 };
 
 export default UserContributions;

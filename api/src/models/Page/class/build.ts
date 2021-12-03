@@ -18,6 +18,7 @@ const build = (Page: PageModel, data: IPageBuildData) => {
       const page = new Page({
         title: data.title,
         slug: replaceSpaces(data.title),
+        originalAuthor: data.author._id,
       });
 
       const { paragraph, statements } = await Paragraph.buildFirst({
