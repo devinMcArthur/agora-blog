@@ -46,6 +46,8 @@ const allFromV1ToV2 = (Question: QuestionModel) => {
 const fromV2ToV3 = (question: QuestionDocument) => {
   return new Promise<void>(async (resolve, reject) => {
     try {
+      question.schemaVersion = 3;
+
       await question.save();
 
       resolve();
@@ -60,10 +62,14 @@ const allFromV2ToV3 = (Question: QuestionModel) => {
     try {
       const questions = await Question.find({ schemaVersion: 2 });
 
-      for (let i = 0; i < questions.length; i++) {
-        questions[i].schemaVersion = 3;
+      if (questions.length > 0) {
+        console.log(
+          `Updating ${questions.length} question(s) from version 2 to version 3`
+        );
 
-        await questions[i].save();
+        for (let i = 0; i < questions.length; i++) {
+          await questions[i].updateFromV2ToV3();
+        }
       }
 
       resolve();
