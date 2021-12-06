@@ -43,7 +43,39 @@ const allFromV1ToV2 = (Question: QuestionModel) => {
   });
 };
 
+const fromV2ToV3 = (question: QuestionDocument) => {
+  return new Promise<void>(async (resolve, reject) => {
+    try {
+      await question.save();
+
+      resolve();
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+const allFromV2ToV3 = (Question: QuestionModel) => {
+  return new Promise<void>(async (resolve, reject) => {
+    try {
+      const questions = await Question.find({ schemaVersion: 2 });
+
+      for (let i = 0; i < questions.length; i++) {
+        questions[i].schemaVersion = 3;
+
+        await questions[i].save();
+      }
+
+      resolve();
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 export default {
   fromV1ToV2,
   allFromV1ToV2,
+  fromV2ToV3,
+  allFromV2ToV3,
 };

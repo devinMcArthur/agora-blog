@@ -3,7 +3,7 @@ export default {
   PageConnection: 1,
   Paragraph: 1,
   ParagraphEditProposal: 1,
-  Question: 2,
+  Question: 3,
   QuestionPageConnection: 1,
   Statement: 1,
   Variable: 1,

@@ -1,5 +1,7 @@
 import SchemaVersions from "@constants/SchemaVersions";
+import { QuestionDocument } from "@models";
 import { prop, index } from "@typegoose/typegoose";
+import replaceSpaces from "@utils/replaceSpaces";
 import { Types } from "mongoose";
 import { Field, ID, ObjectType } from "type-graphql";
 
@@ -12,6 +14,18 @@ export class QuestionSchema {
   @Field()
   @prop({ required: true, trim: true })
   public question!: string;
+
+  @Field()
+  @prop({
+    required: true,
+    trim: true,
+    default: function (this: QuestionDocument) {
+      if (this) {
+        return replaceSpaces(this.question);
+      }
+    },
+  })
+  public slug!: string;
 
   @Field()
   @prop({ required: true, default: 0 })

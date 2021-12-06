@@ -17,7 +17,7 @@ import {
 } from "@models";
 
 import fieldResolvers from "./fieldResolvers";
-import queries from "./queries";
+import queries, { GetQuestionArgs } from "./queries";
 import { ListOptionData } from "@typescript/graphql";
 
 @Resolver(() => QuestionClass)
@@ -39,9 +39,9 @@ export default class QuestionResolver {
 
   @Query(() => QuestionClass, { nullable: true })
   async question(
-    @Arg("id", () => ID) id: Types.ObjectId
+    @Args() { id, slug }: GetQuestionArgs
   ): Promise<QuestionDocument | null> {
-    return queries.question(id);
+    return queries.question({ id, slug });
   }
 
   @Query(() => [QuestionClass])

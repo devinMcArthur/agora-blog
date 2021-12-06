@@ -2,9 +2,25 @@ import { Types } from "mongoose";
 
 import { Question } from "@models";
 import { ListOptionData } from "@typescript/graphql";
+import { ArgsType, Field, ID } from "type-graphql";
 
-const question = async (id: Types.ObjectId) => {
-  return await Question.getById(id);
+@ArgsType()
+export class GetQuestionArgs {
+  @Field(() => ID, { nullable: true })
+  id?: string;
+
+  @Field({ nullable: true })
+  slug?: string;
+}
+
+const question = async ({ id, slug }: GetQuestionArgs) => {
+  if (id) {
+    return Question.getById(id);
+  } else if (slug) {
+    return Question.getBySlug(slug);
+  } else {
+    return null;
+  }
 };
 
 const questions = async (options?: ListOptionData) => {

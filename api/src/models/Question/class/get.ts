@@ -39,6 +39,31 @@ const byId = (
   });
 };
 
+const bySlugDefaultOptions: GetByIDOptions = {
+  throwError: false,
+};
+const bySlug = (
+  Question: QuestionModel,
+  slug: string,
+  options: GetByIDOptions = bySlugDefaultOptions
+): Promise<QuestionDocument | null> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      options = populateOptions(options, bySlugDefaultOptions);
+
+      const question = await Question.findOne({ slug });
+
+      if (!question && options.throwError) {
+        throw new Error("Question.getBySlug: Unable to find question");
+      }
+
+      resolve(question);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 const listDefaultOptions: IListOptions<QuestionDocument> = {
   pageLimit: 9,
   offset: 0,
@@ -248,6 +273,7 @@ const byQuestion = (Question: QuestionModel, question: string) => {
 
 export default {
   byId,
+  bySlug,
   list,
   pagesThatReference,
   referencedCount,

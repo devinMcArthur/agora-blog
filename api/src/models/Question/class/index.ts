@@ -30,6 +30,14 @@ export class QuestionClass extends QuestionSchema {
     return get.byId(this, id, options);
   }
 
+  public static async getBySlug(
+    this: QuestionModel,
+    slug: string,
+    options?: GetByIDOptions
+  ) {
+    return get.bySlug(this, slug, options);
+  }
+
   public static async getList(
     this: QuestionModel,
     options?: IListOptions<QuestionDocument>
@@ -97,5 +105,13 @@ export class QuestionClass extends QuestionSchema {
 
   public async updateFromV1ToV2(this: QuestionDocument) {
     return schema_update.fromV1ToV2(this);
+  }
+
+  public static async updateAllFromV2ToV3(this: QuestionModel) {
+    return schema_update.allFromV2ToV3(this);
+  }
+
+  public async updateFromV2ToV3(this: QuestionDocument) {
+    return schema_update.fromV2ToV3(this);
   }
 }
