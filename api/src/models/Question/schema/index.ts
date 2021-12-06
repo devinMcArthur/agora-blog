@@ -21,7 +21,7 @@ export class QuestionSchema {
     trim: true,
     default: function (this: QuestionDocument) {
       if (this) {
-        return replaceSpaces(this.question);
+        return encodeURIComponent(replaceSpaces(this.question));
       }
     },
   })

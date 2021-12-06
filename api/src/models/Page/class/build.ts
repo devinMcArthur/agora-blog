@@ -17,7 +17,6 @@ const build = (Page: PageModel, data: IPageBuildData) => {
     try {
       const page = new Page({
         title: data.title,
-        slug: replaceSpaces(data.title),
         originalAuthor: data.author._id,
       });
 
