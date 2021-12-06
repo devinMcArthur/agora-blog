@@ -4,6 +4,7 @@ import { Box } from "@chakra-ui/layout";
 
 import GeneralSearch from "../../Common/GeneralSearch";
 import { useRouter } from "next/router";
+import createLink from "../../../utils/createLink";
 
 const NavbarSearch = () => {
   const router = useRouter();
@@ -27,7 +28,7 @@ const NavbarSearch = () => {
               break;
             }
             case "question": {
-              router.push(`/q/${value.value}`);
+              router.push(createLink.questionLink(extraData.slug!));
               break;
             }
             case "variable": {

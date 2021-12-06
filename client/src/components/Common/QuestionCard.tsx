@@ -1,10 +1,11 @@
 import * as React from "react";
-import { Box, Divider, Tag } from "@chakra-ui/react";
+import { Box, Tag } from "@chakra-ui/react";
 
 import Card from "./Card";
 
 import { QuestionCardSnippetFragment } from "../../generated/graphql";
 import TextLink from "./TextLink";
+import createLink from "../../utils/createLink";
 
 interface IQuestionCard {
   question: QuestionCardSnippetFragment;
@@ -14,7 +15,7 @@ const QuestionCard = ({ question }: IQuestionCard) => {
   return (
     <Card
       heading={
-        <TextLink link={`/q/${question._id}`} fontWeight="bold" color="black">
+        <TextLink link={createLink.questionLink(question.slug)} fontWeight="bold" color="black">
           {question.question}
         </TextLink>
       }

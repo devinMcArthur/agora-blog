@@ -1,4 +1,5 @@
 fragment QuestionSearchSnippet on QuestionClass {
   _id
+  slug
   question
 }

@@ -9,6 +9,7 @@ fragment DisplayStatementSnippet on StatementClass {
     }
     questions {
       _id
+      slug
       question
     }
     sourceEditProposal {

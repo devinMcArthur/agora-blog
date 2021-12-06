@@ -1,5 +1,5 @@
-query Question($id: ID!) {
-  question(id: $id) {
+query Question($id: ID, $slug: String) {
+  question(id: $id, slug: $slug) {
     ...QuestionSnippet
   }
 }

@@ -1,5 +1,5 @@
-query SSRQuestion($id: ID!) {
-  question(id: $id) {
+query SSRQuestion($id: ID, $slug: String) {
+  question(id: $id, slug: $slug) {
     ...SSRQuestionSnippet
   }
 }

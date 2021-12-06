@@ -31,6 +31,7 @@ export type StyledText = {
 export interface ISlateQuestion {
   _id: string;
   question: string;
+  slug: string;
 }
 
 export type StatementElementType = {

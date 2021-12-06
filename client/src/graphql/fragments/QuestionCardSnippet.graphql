@@ -1,5 +1,6 @@
 fragment QuestionCardSnippet on QuestionClass {
   _id
+  slug
   question
   referencedCount
 }

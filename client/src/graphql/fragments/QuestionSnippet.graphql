@@ -1,5 +1,6 @@
 fragment QuestionSnippet on QuestionClass {
   _id
+  slug
   question
   relatedPages {
     ...PageCardSnippet

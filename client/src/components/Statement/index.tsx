@@ -1,5 +1,6 @@
 import React from "react";
 import { DisplayStatementSnippetFragment } from "../../generated/graphql";
+import createLink from "../../utils/createLink";
 
 import StringArray from "../Common/StringArray";
 import TextLink from "../Common/TextLink";
@@ -28,7 +29,10 @@ const Statement = ({ statement, versionIndex }: IStatement) => {
         return (
           <sup key={index}>
             [
-            <TextLink link={`/q/${question._id}`} title={question.question}>
+            <TextLink
+              link={createLink.questionLink(question.slug)}
+              title={question.question}
+            >
               q{index + 1}
             </TextLink>
             ]

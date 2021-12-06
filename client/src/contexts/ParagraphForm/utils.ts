@@ -63,6 +63,7 @@ export const convertStatementToSlate = (
       return {
         _id: question._id,
         question: question.question,
+        slug: question.slug,
       };
     }),
     newQuestions: [],
@@ -273,6 +274,7 @@ export const convertSlateParagraphToStatements = (
               return {
                 _id: question._id,
                 question: question.question,
+                slug: question.slug,
               };
             }),
             quotedStatement,

@@ -1,7 +1,7 @@
 import { Container, Heading } from "@chakra-ui/layout";
 import { GetServerSideProps } from "next";
 import ClientOnly from "../../components/Common/ClientOnly";
-import QuestionIdClientContent from "../../components/q/id/ClientContent";
+import QuestionIdClientContent from "../../components/q/slug/ClientContent";
 import { PageSsrQuestionComp, ssrSsrQuestion } from "../../generated/page";
 import Head from "next/head";
 
@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   ...ctx
 }) => {
   const res = await ssrSsrQuestion.getServerPage(
-    { variables: { id: params?.id as string } },
+    { variables: { slug: encodeURIComponent(params?.slug as string) } },
     ctx
   );
 

@@ -118,7 +118,7 @@ const GeneralSearch = ({
         return {
           label: question.question,
           value: question._id,
-          extraData: { type: "question" },
+          extraData: { type: "question", slug: question.slug },
         };
       }),
     };

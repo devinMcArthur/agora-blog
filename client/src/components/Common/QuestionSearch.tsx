@@ -10,7 +10,11 @@ import { BoxProps } from "@chakra-ui/layout";
 import { ITextField } from "./TextField";
 
 interface IQuestionSearch extends ITextField {
-  questionSelected: (question: { _id: string; question: string }) => void;
+  questionSelected: (question: {
+    _id: string;
+    question: string;
+    slug: string;
+  }) => void;
   handleSubmit?: (question: string) => void;
   dropdownProps?: BoxProps;
 }
@@ -57,6 +61,9 @@ const QuestionSearch = ({
       return {
         label: question.question,
         value: question._id,
+        extraData: {
+          slug: question.slug,
+        },
       };
     });
   }, [foundQuestions]);
@@ -78,9 +85,13 @@ const QuestionSearch = ({
       inputRightElement={inputRightElement}
       options={options}
       placeholder="Search Questions"
-      onOptionSelection={(value) => {
+      onOptionSelection={(value, extraData) => {
         setSearchString(value.label);
-        questionSelected({ _id: value.value, question: value.label });
+        questionSelected({
+          _id: value.value,
+          question: value.label,
+          slug: extraData?.slug!,
+        });
         setFoundQuestions([]);
       }}
       handleSubmit={() => {

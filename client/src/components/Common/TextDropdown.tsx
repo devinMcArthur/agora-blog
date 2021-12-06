@@ -231,7 +231,7 @@ const TextDropdown = <ExtraData extends object>({
           {Object.values(groupedOptions!).map((value, i) => {
             if (value && value.length > 0)
               return (
-                <Box>
+                <Box key={i}>
                   <Heading size="sm" w="100%" backgroundColor="gray.300" p={2}>
                     {Object.keys(groupedOptions!)[i].toUpperCase()}
                   </Heading>
