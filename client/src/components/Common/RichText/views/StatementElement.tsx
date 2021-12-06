@@ -83,7 +83,11 @@ const StatementElement = ({
     CustomEditor.setFullQuote(editor, quotedStatementId, element.index);
   };
 
-  const questionSelected = (question: { _id: string; question: string }) => {
+  const questionSelected = (question: {
+    _id: string;
+    question: string;
+    slug: string;
+  }) => {
     toggleQuestionForm();
 
     CustomEditor.addQuestion(editor, element.index, question);
