@@ -8,6 +8,7 @@ import { Button } from "@chakra-ui/button";
 import ErrorMessage from "../components/Common/ErrorMessage";
 import PageSearch from "../components/Common/PageSearch";
 import ParagraphForm from "../components/Common/ParagraphForm";
+import convertToParagraphEditProposal from "../utils/convertToParagraphEditProposal";
 
 const CreatePage = () => {
   /**

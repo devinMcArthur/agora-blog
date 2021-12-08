@@ -9,6 +9,7 @@ fragment PreviewParagraphEditProposalSnippet on ParagraphEditProposalClass {
   createdAt
   paragraph {
     page {
+      _id
       slug
     }
   }

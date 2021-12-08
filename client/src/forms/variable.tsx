@@ -54,7 +54,7 @@ const EditVariableSchema = yup.object().required().shape({
   value: VariableVersionSchema,
 });
 
-export const useEditVariableForm = () => {
+export const useEditVariableForm = (options?: any) => {
   const form = useForm({
     resolver: yupResolver(EditVariableSchema),
     defaultValues: {
@@ -64,6 +64,7 @@ export const useEditVariableForm = () => {
         sourceUrl: "",
         number: 0,
         equation: [],
+        ...options.defaultValues.value,
       },
     },
   });

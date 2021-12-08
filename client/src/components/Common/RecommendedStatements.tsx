@@ -89,7 +89,7 @@ const RecommendedStatements = ({
           w="100%"
           textAlign="center"
         >
-          No statements found
+          No other statements found
         </Text>
       </Center>
     );

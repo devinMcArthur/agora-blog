@@ -4,6 +4,7 @@ import React from "react";
 import { IParagraphFormState } from "../../contexts/ParagraphForm";
 import { useCreateParagraphEditProposalMutation } from "../../generated/graphql";
 import convertToParagraphEditProposal from "../../utils/convertToParagraphEditProposal";
+import createLink from "../../utils/createLink";
 import ErrorMessage from "../Common/ErrorMessage";
 import ParagraphForm from "../Common/ParagraphForm";
 import TextArea from "../Common/TextArea";
@@ -40,7 +41,13 @@ const EditParagraph = ({ pageId, paragraphId, onCancel }: IEditParagraph) => {
           if (res.data?.createParagraphEditProposal) {
             if (onCancel) onCancel();
             router.push(
-              `/p/${res.data?.createParagraphEditProposal.paragraph.page.slug}?proposal=${res.data.createParagraphEditProposal._id}`
+              createLink.pageLink(
+                res.data?.createParagraphEditProposal.paragraph.page.slug,
+                {
+                  type: "edit-proposal",
+                  proposalId: res.data.createParagraphEditProposal._id,
+                }
+              )
             );
           }
         })

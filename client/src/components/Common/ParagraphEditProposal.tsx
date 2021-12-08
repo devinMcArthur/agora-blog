@@ -13,6 +13,8 @@ import SkeletonCard from "./SkeletonCard";
 import UserLink from "./UserLink";
 import { Button } from "@chakra-ui/button";
 import { useAuth } from "../../contexts/Auth";
+import TextLink from "./TextLink";
+import createLink from "../../utils/createLink";
 
 interface IParagraphEditProposal extends BoxProps {
   paragraphEditProposalId: string;
@@ -20,12 +22,14 @@ interface IParagraphEditProposal extends BoxProps {
   onApproval?: () => void;
   editProposalSelected?: boolean;
   allowApproval?: boolean;
+  previewLink?: boolean;
 }
 
 const ParagraphEditProposal = ({
   paragraphEditProposalId,
   editProposalSelected,
   allowApproval = false,
+  previewLink = false,
   editProposalPreviewSelection,
   onApproval,
   ...props
@@ -114,6 +118,16 @@ const ParagraphEditProposal = ({
               >
                 Preview
               </Checkbox>
+            )}
+            {previewLink && (
+              <TextLink
+                link={createLink.pageLink(editProposal.paragraph.page.slug, {
+                  type: "edit-proposal",
+                  proposalId: editProposal._id,
+                })}
+              >
+                Preview
+              </TextLink>
             )}
             {allowApproval && user?.verified && (
               <Button

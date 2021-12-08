@@ -31,13 +31,13 @@ const QuestionTagRelated = ({
       return (
         <Box>
           <Box py={2}>
-            {questions.map((question, index) => {
+            {questions.map((question) => {
               const selected = selectedQuestionId === question._id;
               return (
                 <Tooltip label={question.question} key={question._id}>
                   <Tag
                     m={1}
-                    backgroundColor={selected ? "gray.300" : "gray.200"}
+                    backgroundColor={selected ? "gray.400" : "gray.300"}
                     width={selected ? "100%" : "auto"}
                   >
                     <Box display="flex" flexDir="column" width="100%">
@@ -54,7 +54,7 @@ const QuestionTagRelated = ({
                         {question.question}
                       </TagLabel>
                       {selectedQuestionId === question._id && (
-                        <Box mb={2}>
+                        <Box mb={2} maxW="inherit">
                           <Divider my={1} />
                           <RecommendedStatements
                             avoidedPage={avoidPageId}

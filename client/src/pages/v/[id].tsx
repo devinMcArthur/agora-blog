@@ -25,7 +25,8 @@ import EditVariable from "../../components/EditVariable";
 import { RestSsrVariableSnippetFragment } from "../../generated/graphql";
 
 const Variable: PageSsrVariableComp = ({ data: propsData }) => {
-  const { title, versions, originalAuthor, _id } = propsData!.variable!;
+  const { title, versions, originalAuthor, _id, finalValue } =
+    propsData!.variable!;
 
   /**
    * ----- Hook Initialization -----
@@ -148,6 +149,7 @@ const Variable: PageSsrVariableComp = ({ data: propsData }) => {
           <ModalHeader>Propose an edit</ModalHeader>
           <ModalBody>
             <EditVariable
+              defaultValue={finalValue}
               variableId={_id}
               variableCache={fetchedVariablePortion}
               onSuccess={() => {

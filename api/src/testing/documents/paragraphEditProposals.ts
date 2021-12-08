@@ -16,7 +16,8 @@ const createParagraphEditProposals = () => {
           _id: _ids.paragraphEditProposals.page_covid_19_paragraph_v1_proposal_1
             ._id,
           author: _ids.users.dev._id,
-          description: "Update first recorded case of COVID-19",
+          description:
+            "Update first recorded case of COVID-19, fix spelling mistake",
           paragraph: _ids.pages.page_covid_2019.paragraphs[0]._id,
           statementItems: [
             {
@@ -40,7 +41,7 @@ const createParagraphEditProposals = () => {
               stringArray: [
                 {
                   string:
-                    "The first case of this was reported by officians in Wuhan, China in December 2019, although it is ",
+                    "The first case of this was reported by officials in Wuhan, China in December 2019, although it is ",
                   styles: [],
                 },
                 {

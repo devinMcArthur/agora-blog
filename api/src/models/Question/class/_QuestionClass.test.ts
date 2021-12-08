@@ -3,6 +3,7 @@ import MongoMemoryServer from "mongodb-memory-server-core";
 import { disconnectAndStopServer, prepareDatabase } from "@testing/jestDB";
 import seedDatabase, { SeededDatabase } from "@testing/seedDatabase";
 import { Question } from "@models";
+import { IQuestionBuildData } from "@typescript/models/Question";
 
 let documents: SeededDatabase, mongoServer: MongoMemoryServer;
 const setupDatabase = () => {
@@ -28,6 +29,27 @@ afterAll(async () => {
 });
 
 describe("Question Class", () => {
+  describe("BUILD", () => {
+    describe("build", () => {
+      describe("error", () => {
+        test("should not create a new question if question already exists", async () => {
+          const existingQuestion =
+            documents.questions.how_is_cycle_threshold_used;
+
+          const data: IQuestionBuildData = {
+            question: existingQuestion.question.toLowerCase(),
+          };
+
+          const newQuestion = await Question.build(data);
+
+          expect(newQuestion._id.toString()).toBe(
+            existingQuestion._id.toString()
+          );
+        });
+      });
+    });
+  });
+
   describe("GET", () => {
     describe("search", () => {
       describe("success", () => {

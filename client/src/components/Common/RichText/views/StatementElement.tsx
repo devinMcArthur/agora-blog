@@ -239,7 +239,6 @@ const StatementElement = ({
                   p={1}
                   borderRadius="0.375rem"
                 >
-                  {/* <Icon as={FiPlus} mx={1} /> */}
                   <QuestionSearch
                     questionSelected={questionSelected}
                     handleSubmit={questionSubmitted}

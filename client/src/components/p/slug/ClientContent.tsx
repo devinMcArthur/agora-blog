@@ -9,7 +9,6 @@ import ParagraphEditProposal from "../../Common/ParagraphEditProposal";
 import Paragraphs from "../../Common/Paragraphs";
 import EditParagraph from "../../EditParagraph";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs";
-import { useDrawer } from "../../../contexts/Drawer";
 import Share from "../../Common/Share";
 
 interface IPageSlugClientContent {
@@ -36,22 +35,6 @@ const PageSlugClientContent = ({
   const { data, loading } = usePageQuery({
     variables: { slug },
   });
-
-  const { setCurrentPage, clearState } = useDrawer();
-
-  /**
-   * ----- Use-effects and other logic -----
-   */
-
-  React.useEffect(() => {
-    if (data?.page) {
-      setCurrentPage(data.page._id);
-    }
-
-    return () => {
-      clearState();
-    };
-  }, [clearState, data?.page, setCurrentPage]);
 
   /**
    * ----- Rendering -----

@@ -15,12 +15,14 @@ import ErrorMessage from "../Common/ErrorMessage";
 
 interface IEditVariable {
   variableId: string;
+  defaultValue: number;
   variableCache?: RestSsrVariableSnippetFragment;
   onSuccess?: (variable: VariableEditProposalSnippetFragment) => void;
 }
 
 const EditVariable = ({
   variableId,
+  defaultValue,
   variableCache,
   onSuccess,
 }: IEditVariable) => {
@@ -28,7 +30,13 @@ const EditVariable = ({
 
   const [newEditProposal] = useNewVariableEditProposalMutation();
 
-  const { control, handleSubmit, watch } = useEditVariableForm();
+  const { control, handleSubmit, watch } = useEditVariableForm({
+    defaultValues: {
+      value: {
+        number: defaultValue,
+      },
+    },
+  });
 
   const variableType = watch("value.type");
 
