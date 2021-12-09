@@ -28,7 +28,6 @@ export class ParagraphEditProposalSchema {
   @prop({
     type: () => ParagraphEditProposalStatementClass,
     required: true,
-    default: [],
   })
   public statementItems!: ParagraphEditProposalStatementClass[];
 

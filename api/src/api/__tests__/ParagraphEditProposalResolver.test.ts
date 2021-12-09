@@ -11,6 +11,7 @@ import {
 import jestLogin from "@testing/jestLogin";
 import { StyleTypes, StyleVariants } from "@typescript/models/Statement";
 import _ids from "@testing/_ids";
+import { ParagraphEditProposal, Statement } from "@models";
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
@@ -73,6 +74,13 @@ describe("Paragraph Edit Proposal Resolver", () => {
                   }
                 }
               }
+              quotedStatement {
+                versions {
+                  stringArray {
+                    string
+                  }
+                }
+              }
             }
           }
         }
@@ -100,10 +108,13 @@ describe("Paragraph Edit Proposal Resolver", () => {
             documents.paragraphs.page_covid_2019_paragraph_v2._id.toString()
           );
 
+          const quotedStatement = await Statement.getById(
+            _ids.pages.page_sars_cov_2.paragraphs[0].statements[0]
+          );
           expect(
-            paragraphEditProposal.statementItems[0].stringArray[1].styles[0]
-              .value.page.title
-          ).toBe(documents.pages.page_sars_cov_2.title);
+            paragraphEditProposal.statementItems[0].quotedStatement.versions[0]
+              .stringArray[0].string
+          ).toBe(quotedStatement?.versions[0].stringArray[0].string);
           expect(
             paragraphEditProposal.statementItems[0].paragraphStatement.statement
               .current

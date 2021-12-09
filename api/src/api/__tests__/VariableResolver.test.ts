@@ -221,7 +221,7 @@ describe("Variable Resolver", () => {
       `;
 
       describe("success", () => {
-        test("should successfully search variables", async () => {
+        test.skip("should successfully search variables", async () => {
           const res = await request(app)
             .post("/graphql")
             .send({

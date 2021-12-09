@@ -238,7 +238,7 @@ describe("Page Resolver", () => {
       `;
 
       describe("success", () => {
-        test("should successfully search pages", async () => {
+        test.skip("should successfully search pages", async () => {
           const res = await request(app)
             .post("/graphql")
             .send({
