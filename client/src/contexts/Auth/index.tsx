@@ -99,6 +99,9 @@ const AuthProvider = ({ children }: IAuthProvider) => {
     getItem(localStorageTokenKey) || null
   );
 
+  const [verificationCallback, setVerificationCallback] =
+    React.useState<() => void>();
+
   /**
    * ----- Hook Initialization -----
    */
@@ -129,6 +132,23 @@ const AuthProvider = ({ children }: IAuthProvider) => {
   /**
    * ----- Functions -----
    */
+
+  const requiresVerification = React.useCallback(
+    (callback: () => void) => {
+      setVerificationCallback(undefined);
+
+      if (!state.user) {
+        setVerificationCallback(() => callback);
+        onSignInModalOpen();
+      } else if (!state.user?.verified) {
+        setVerificationCallback(() => callback);
+        onVerificationModalOpen();
+      } else if (state.user.verified) {
+        callback();
+      }
+    },
+    [onSignInModalOpen, onVerificationModalOpen, state.user]
+  );
 
   const login: IAuthContext["login"] = React.useCallback((jwt) => {
     setToken(jwt);
@@ -172,15 +192,6 @@ const AuthProvider = ({ children }: IAuthProvider) => {
     }
   }, [currentUser, currentUserRefetch]);
 
-  const requiresVerification = React.useCallback(
-    (callback: () => void) => {
-      if (!state.user) onSignInModalOpen();
-      else if (!state.user?.verified) onVerificationModalOpen();
-      else if (state.user.verified) callback();
-    },
-    [onSignInModalOpen, onVerificationModalOpen, state.user]
-  );
-
   /**
    * ----- Use-effects and other logic -----
    */
@@ -200,6 +211,14 @@ const AuthProvider = ({ children }: IAuthProvider) => {
     sessionLoading,
     deauthorizeSession,
   ]);
+
+  // try and call verification callback once authorized
+  React.useEffect(() => {
+    if (!!verificationCallback && state.user)
+      requiresVerification(verificationCallback);
+    // only trigger when state.user is updated
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.user]);
 
   // Handle token changes
   React.useEffect(() => {

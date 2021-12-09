@@ -8,12 +8,17 @@ import { Button } from "@chakra-ui/button";
 import ErrorMessage from "../components/Common/ErrorMessage";
 import PageSearch from "../components/Common/PageSearch";
 import ParagraphForm from "../components/Common/ParagraphForm";
-import convertToParagraphEditProposal from "../utils/convertToParagraphEditProposal";
+import { useAuth } from "../contexts/Auth";
+import AccessDeniedPage from "../components/Common/AccessDeniedPage";
 
 const CreatePage = () => {
   /**
    * ----- Hook Initialization -----
    */
+
+  const {
+    state: { user },
+  } = useAuth();
 
   const router = useRouter();
 
@@ -98,6 +103,8 @@ const CreatePage = () => {
   /**
    * ----- Rendering -----
    */
+
+  if (!user) return <AccessDeniedPage />;
 
   return (
     <Container minW="80%">

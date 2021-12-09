@@ -62,7 +62,9 @@ const Navbar = () => {
               m="auto"
               h={7}
               onClick={() =>
-                requiresVerification(() => router.push("/create-page"))
+                requiresVerification(() => {
+                  router.push("/create-page");
+                })
               }
             />
           </Box>
