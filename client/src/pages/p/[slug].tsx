@@ -102,7 +102,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   ...ctx
 }) => {
   const res = await ssrSsr.getServerPage(
-    { variables: { slug: params?.slug as string } },
+    { variables: { slug: encodeURIComponent(params?.slug as string) } },
     ctx
   );
 
