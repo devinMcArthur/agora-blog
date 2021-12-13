@@ -10,7 +10,7 @@ import useDidMountEffect from "../../hooks/useDidMountEffect";
 import EditProposalPreview from "./EditProposalPreview";
 import Loading from "./Loading";
 import Paragraph from "./Paragraph";
-import ParagraphEditProposal from "./ParagraphEditProposal";
+import ParagraphEditProposalCard from "./ParagraphEditProposalCard";
 
 interface IParagraphs {
   mostRecentParagraph?: DisplayParagraphSnippetFragment;
@@ -112,6 +112,20 @@ const Paragraphs = ({
     }
   }, [paragraphs.length, previewEditProposal]);
 
+  // update state if props update
+  React.useEffect(() => {
+    setParagraphs(
+      !!mostRecentParagraph
+        ? [
+            ...paragraphIds.slice(0, paragraphIds.length - 1),
+            mostRecentParagraph,
+          ]
+        : [...paragraphIds]
+    );
+
+    setSelectedParagraphIndex(paragraphIds.length - 1);
+  }, [paragraphIds, mostRecentParagraph]);
+
   /**
    * ----- Rendering -----
    */
@@ -136,7 +150,7 @@ const Paragraphs = ({
   const editProposalCard = React.useMemo(() => {
     if (showEditProposalCard && paragraph && paragraph.sourceEditProposal) {
       return (
-        <ParagraphEditProposal
+        <ParagraphEditProposalCard
           paragraphEditProposalId={paragraph.sourceEditProposal._id}
           editProposalPreviewSelection={(proposalId) =>
             setPreviewEditProposalId(proposalId)

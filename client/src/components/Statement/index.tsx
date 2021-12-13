@@ -13,7 +13,8 @@ interface IStatement {
 
 const Statement = ({ statement, versionIndex }: IStatement) => {
   const statementVersion = React.useMemo(() => {
-    if (versionIndex !== undefined) return versionIndex;
+    if (versionIndex !== undefined && statement.versions[versionIndex])
+      return versionIndex;
     else return statement.versions.length - 1;
   }, [versionIndex, statement]);
 

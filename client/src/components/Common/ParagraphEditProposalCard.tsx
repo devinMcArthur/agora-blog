@@ -4,6 +4,8 @@ import { Checkbox } from "@chakra-ui/checkbox";
 import { Box, BoxProps, Text } from "@chakra-ui/layout";
 
 import {
+  ApproveParagraphEditProposalMutation,
+  Exact,
   PreviewParagraphEditProposalSnippetFragment,
   useApproveParagraphEditProposalMutation,
   usePreviewParagraphEditProposalLazyQuery,
@@ -15,25 +17,39 @@ import { Button } from "@chakra-ui/button";
 import { useAuth } from "../../contexts/Auth";
 import TextLink from "./TextLink";
 import createLink from "../../utils/createLink";
+import {
+  ApolloCache,
+  DefaultContext,
+  MutationUpdaterFunction,
+} from "@apollo/client";
 
-interface IParagraphEditProposal extends BoxProps {
+interface IParagraphEditProposalCard extends BoxProps {
   paragraphEditProposalId: string;
   editProposalPreviewSelection?: (editProposalId?: string) => void;
   onApproval?: () => void;
   editProposalSelected?: boolean;
   allowApproval?: boolean;
   previewLink?: boolean;
+  approvalUpdate?: MutationUpdaterFunction<
+    ApproveParagraphEditProposalMutation,
+    Exact<{
+      id: string;
+    }>,
+    DefaultContext,
+    ApolloCache<any>
+  >;
 }
 
-const ParagraphEditProposal = ({
+const ParagraphEditProposalCard = ({
   paragraphEditProposalId,
   editProposalSelected,
   allowApproval = false,
+  approvalUpdate,
   previewLink = false,
   editProposalPreviewSelection,
   onApproval,
   ...props
-}: IParagraphEditProposal) => {
+}: IParagraphEditProposalCard) => {
   const {
     state: { user },
   } = useAuth();
@@ -53,6 +69,7 @@ const ParagraphEditProposal = ({
     if (editProposal) {
       approve({
         variables: { id: editProposal?._id },
+        update: approvalUpdate,
       })
         .then(() => {
           if (onApproval) onApproval();
@@ -60,7 +77,7 @@ const ParagraphEditProposal = ({
         // eslint-disable-next-line no-console
         .catch((err) => console.error(err));
     }
-  }, [approve, editProposal, onApproval]);
+  }, [approvalUpdate, approve, editProposal, onApproval]);
 
   /**
    * ----- Use-effects and other logic -----
@@ -148,4 +165,4 @@ const ParagraphEditProposal = ({
   return content;
 };
 
-export default ParagraphEditProposal;
+export default ParagraphEditProposalCard;

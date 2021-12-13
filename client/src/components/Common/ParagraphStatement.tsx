@@ -7,7 +7,7 @@ import { FullParagraphStatementSnippetFragment } from "../../generated/graphql";
 import { IconButton } from "@chakra-ui/button";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import QuestionTagRelated from "./QuestionTagRelated";
-import ParagraphEditProposal from "./ParagraphEditProposal";
+import ParagraphEditProposalCard from "./ParagraphEditProposalCard";
 
 interface IParagraphStatement {
   paragraphStatement: FullParagraphStatementSnippetFragment;
@@ -23,6 +23,18 @@ const ParagraphStatement = ({
   const [statementVersion, setStatementVersion] = React.useState(
     paragraphStatement.versionIndex
   );
+
+  /**
+   * ----- Use-effects and other logic -----
+   */
+
+  React.useEffect(() => {
+    setStatementVersion(paragraphStatement.versionIndex);
+  }, [paragraphStatement]);
+
+  /**
+   * ----- Rendering -----
+   */
 
   const expandedContent = React.useMemo(() => {
     if (expanded && paragraphStatement.statement.versions[statementVersion]) {
@@ -84,7 +96,7 @@ const ParagraphStatement = ({
               .sourceEditProposal && (
               <Box>
                 <Heading size="sm">Source</Heading>
-                <ParagraphEditProposal
+                <ParagraphEditProposalCard
                   backgroundColor="gray.100"
                   paragraphEditProposalId={
                     paragraphStatement.statement.versions[statementVersion]

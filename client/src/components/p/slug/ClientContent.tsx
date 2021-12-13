@@ -5,7 +5,7 @@ import { Divider, Flex } from "@chakra-ui/layout";
 import { usePageQuery } from "../../../generated/graphql";
 import Loading from "../../Common/Loading";
 import PageCard from "../../Common/PageCard";
-import ParagraphEditProposal from "../../Common/ParagraphEditProposal";
+import ParagraphEditProposalCard from "../../Common/ParagraphEditProposalCard";
 import Paragraphs from "../../Common/Paragraphs";
 import EditParagraph from "../../EditParagraph";
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/tabs";
@@ -66,7 +66,7 @@ const PageSlugClientContent = ({
 
       components.editProposals = page.currentParagraph.editProposals.map(
         (editProposal, index) => (
-          <ParagraphEditProposal
+          <ParagraphEditProposalCard
             key={index}
             editProposalSelected={
               editProposal._id === previewParagraphEditProposalId
@@ -76,6 +76,7 @@ const PageSlugClientContent = ({
             }}
             paragraphEditProposalId={editProposal._id}
             allowApproval
+            onApproval={() => setPreviewParagraphEditProposalId(undefined)}
           />
         )
       );

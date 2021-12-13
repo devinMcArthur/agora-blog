@@ -5,7 +5,7 @@ import React from "react";
 import { useUserContributionsQuery } from "../../../generated/graphql";
 import Loading from "../../Common/Loading";
 import PageCard from "../../Common/PageCard";
-import ParagraphEditProposal from "../../Common/ParagraphEditProposal";
+import ParagraphEditProposalCard from "../../Common/ParagraphEditProposalCard";
 import VariableCard from "../../Common/VariableCard";
 import VariableEditProposal from "../../Common/VariableEditProposal";
 
@@ -43,7 +43,7 @@ const UserContributions = ({ id }: IUserContributions) => {
             <TabPanel>
               {data.user.authoredParagraphEditProposals.map(
                 (paragraphEditProposal) => (
-                  <ParagraphEditProposal
+                  <ParagraphEditProposalCard
                     paragraphEditProposalId={paragraphEditProposal._id}
                     key={paragraphEditProposal._id}
                   />
