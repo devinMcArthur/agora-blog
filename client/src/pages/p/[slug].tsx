@@ -6,7 +6,7 @@ import { useAuth } from "../../contexts/Auth";
 import Head from "next/head";
 
 import { PageSsrComp, ssrSsr } from "../../generated/page";
-import { Box, Container, Flex, Heading, Text } from "@chakra-ui/layout";
+import { Box, Container, Flex, Heading } from "@chakra-ui/layout";
 import { IconButton } from "@chakra-ui/button";
 import { FiEdit } from "react-icons/fi";
 import ClientOnly from "../../components/Common/ClientOnly";

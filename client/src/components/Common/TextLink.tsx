@@ -30,7 +30,7 @@ const TextLink = ({
   );
   if (isExternal) {
     content = (
-      <ChakraLink href={link} title={title} isExternal>
+      <ChakraLink href={link} title={title} isExternal {...linkProps} {...rest}>
         {children}
       </ChakraLink>
     );

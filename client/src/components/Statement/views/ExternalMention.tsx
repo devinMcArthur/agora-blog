@@ -8,10 +8,10 @@ interface IExternalMention extends Omit<LinkProps, "style"> {
   style: DisplayStyleSnippetFragment;
 }
 
-const ExternalMention = ({ style, ...props }: IExternalMention) => {
+const ExternalMention = ({ style, children, ...props }: IExternalMention) => {
   return (
     <TextLink link={style.value.url!} isExternal={true} {...props}>
-      {props.children}
+      {children}
     </TextLink>
   );
 };
