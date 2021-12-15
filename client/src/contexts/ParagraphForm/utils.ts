@@ -293,6 +293,7 @@ export const convertSlateParagraphToStatements = (
   return statements;
 };
 
+// used for CreatePage
 export const convertSlateParagraphToStatementData = (
   slateParagraph: Descendant[]
 ): NewStatementData[] => {
@@ -387,7 +388,7 @@ export const convertSlateParagraphToStatementData = (
         newQuestions: element.newQuestions.map((question) => question.question),
         questions: element.questions.map((question) => question._id),
         quotedStatement: element.quotedStatementId,
-        stringArray: stringArray,
+        stringArray: !!element.quotedStatementId ? [] : stringArray,
       });
     }
   }
