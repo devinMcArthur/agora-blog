@@ -16,6 +16,76 @@ import { getApolloClient , ApolloClientContext} from '../withApollo';
 
 
 
+export async function getServerPageAlls
+    (options: Omit<Apollo.QueryOptions<Types.AllPagesQueryVariables>, 'query'>, ctx: ApolloClientContext ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.AllPagesQuery>({ ...options, query: Operations.AllPagesDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useAlls = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.AllPagesQuery, Types.AllPagesQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.AllPagesDocument, options);
+};
+export type PageAllsComp = React.FC<{data?: Types.AllPagesQuery, error?: Apollo.ApolloError}>;
+export const withPageAlls = (optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.AllPagesQuery, Types.AllPagesQueryVariables>) => (WrappedComponent:PageAllsComp) : NextPage  => (props) => {
+                const router = useRouter()
+                const options = optionsFunc ? optionsFunc(router) : {};
+                const {data, error } = useQuery(Operations.AllPagesDocument, options)    
+                return <WrappedComponent {...props} data={data} error={error} /> ;
+                   
+            }; 
+export const ssrAlls = {
+      getServerPage: getServerPageAlls,
+      withPage: withPageAlls,
+      usePage: useAlls,
+    }
+export async function getServerPageAllQuestions
+    (options: Omit<Apollo.QueryOptions<Types.AllQuestionsQueryVariables>, 'query'>, ctx: ApolloClientContext ){
+        const apolloClient = getApolloClient(ctx);
+        
+        const data = await apolloClient.query<Types.AllQuestionsQuery>({ ...options, query: Operations.AllQuestionsDocument });
+        
+        const apolloState = apolloClient.cache.extract();
+
+        return {
+            props: {
+                apolloState: apolloState,
+                data: data?.data,
+                error: data?.error ?? data?.errors ?? null,
+            },
+        };
+      }
+export const useAllQuestions = (
+  optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.AllQuestionsQuery, Types.AllQuestionsQueryVariables>) => {
+  const router = useRouter();
+  const options = optionsFunc ? optionsFunc(router) : {};
+  return useQuery(Operations.AllQuestionsDocument, options);
+};
+export type PageAllQuestionsComp = React.FC<{data?: Types.AllQuestionsQuery, error?: Apollo.ApolloError}>;
+export const withPageAllQuestions = (optionsFunc?: (router: NextRouter)=> QueryHookOptions<Types.AllQuestionsQuery, Types.AllQuestionsQueryVariables>) => (WrappedComponent:PageAllQuestionsComp) : NextPage  => (props) => {
+                const router = useRouter()
+                const options = optionsFunc ? optionsFunc(router) : {};
+                const {data, error } = useQuery(Operations.AllQuestionsDocument, options)    
+                return <WrappedComponent {...props} data={data} error={error} /> ;
+                   
+            }; 
+export const ssrAllQuestions = {
+      getServerPage: getServerPageAllQuestions,
+      withPage: withPageAllQuestions,
+      usePage: useAllQuestions,
+    }
 export async function getServerPageCurrentUser
     (options: Omit<Apollo.QueryOptions<Types.CurrentUserQueryVariables>, 'query'>, ctx: ApolloClientContext ){
         const apolloClient = getApolloClient(ctx);

@@ -211,6 +211,8 @@ export type ParagraphStatementData = {
 
 export type Query = {
   __typename?: 'Query';
+  allPages: Array<PageClass>;
+  allQuestions: Array<QuestionClass>;
   currentUser: UserClass;
   page?: Maybe<PageClass>;
   pages: Array<PageClass>;
@@ -598,6 +600,16 @@ export type UserLoginMutationVariables = Exact<{
 
 
 export type UserLoginMutation = { __typename?: 'Mutation', login: string };
+
+export type AllPagesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllPagesQuery = { __typename?: 'Query', allPages: Array<{ __typename?: 'PageClass', slug: string }> };
+
+export type AllQuestionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllQuestionsQuery = { __typename?: 'Query', allQuestions: Array<{ __typename?: 'QuestionClass', slug: string }> };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1415,6 +1427,74 @@ export function useUserLoginMutation(baseOptions?: Apollo.MutationHookOptions<Us
 export type UserLoginMutationHookResult = ReturnType<typeof useUserLoginMutation>;
 export type UserLoginMutationResult = Apollo.MutationResult<UserLoginMutation>;
 export type UserLoginMutationOptions = Apollo.BaseMutationOptions<UserLoginMutation, UserLoginMutationVariables>;
+export const AllPagesDocument = gql`
+    query AllPages {
+  allPages {
+    slug
+  }
+}
+    `;
+
+/**
+ * __useAllPagesQuery__
+ *
+ * To run a query within a React component, call `useAllPagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllPagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllPagesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllPagesQuery(baseOptions?: Apollo.QueryHookOptions<AllPagesQuery, AllPagesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllPagesQuery, AllPagesQueryVariables>(AllPagesDocument, options);
+      }
+export function useAllPagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllPagesQuery, AllPagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllPagesQuery, AllPagesQueryVariables>(AllPagesDocument, options);
+        }
+export type AllPagesQueryHookResult = ReturnType<typeof useAllPagesQuery>;
+export type AllPagesLazyQueryHookResult = ReturnType<typeof useAllPagesLazyQuery>;
+export type AllPagesQueryResult = Apollo.QueryResult<AllPagesQuery, AllPagesQueryVariables>;
+export const AllQuestionsDocument = gql`
+    query AllQuestions {
+  allQuestions {
+    slug
+  }
+}
+    `;
+
+/**
+ * __useAllQuestionsQuery__
+ *
+ * To run a query within a React component, call `useAllQuestionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllQuestionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllQuestionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllQuestionsQuery(baseOptions?: Apollo.QueryHookOptions<AllQuestionsQuery, AllQuestionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllQuestionsQuery, AllQuestionsQueryVariables>(AllQuestionsDocument, options);
+      }
+export function useAllQuestionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllQuestionsQuery, AllQuestionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllQuestionsQuery, AllQuestionsQueryVariables>(AllQuestionsDocument, options);
+        }
+export type AllQuestionsQueryHookResult = ReturnType<typeof useAllQuestionsQuery>;
+export type AllQuestionsLazyQueryHookResult = ReturnType<typeof useAllQuestionsLazyQuery>;
+export type AllQuestionsQueryResult = Apollo.QueryResult<AllQuestionsQuery, AllQuestionsQueryVariables>;
 export const CurrentUserDocument = gql`
     query CurrentUser {
   currentUser {

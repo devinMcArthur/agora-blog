@@ -18,6 +18,7 @@ import {
   PageDocument,
   PageClass,
   ParagraphClass,
+  Page,
 } from "@models";
 
 import fieldResolver from "./fieldResolver";
@@ -82,6 +83,11 @@ export default class PageResolver {
     @Arg("limit", { nullable: true }) limit?: number
   ) {
     return queries.searchPages(searchString, limit);
+  }
+
+  @Query(() => [PageClass])
+  async allPages() {
+    return Page.find();
   }
 
   /**

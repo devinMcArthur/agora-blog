@@ -14,6 +14,7 @@ import {
   QuestionDocument,
   PageDocument,
   PageClass,
+  Question,
 } from "@models";
 
 import fieldResolvers from "./fieldResolvers";
@@ -58,5 +59,10 @@ export default class QuestionResolver {
     @Arg("limit", { nullable: true }) limit?: number
   ) {
     return queries.searchQuestions(searchString, limit);
+  }
+
+  @Query(() => [QuestionClass])
+  async allQuestions() {
+    return Question.find();
   }
 }
