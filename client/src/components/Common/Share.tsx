@@ -64,7 +64,7 @@ const Share = ({ link, shareText }: IShare) => {
               display="flex"
               flexDir="row"
               justifyContent="space-evenly"
-              my={2}
+              mb={6}
             >
               <IconButton
                 isRound
