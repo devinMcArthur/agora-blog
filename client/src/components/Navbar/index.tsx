@@ -118,7 +118,7 @@ const Navbar = () => {
       height={navbarHeight}
       width="100%"
       zIndex="998"
-      backgroundColor="gray.500"
+      backgroundColor="white"
     >
       <Box
         display="flex"

@@ -1,9 +1,10 @@
 const baseStyle = {
-  border: "1px solid gray",
+  backgroundColor: "white",
   padding: "2",
   margin: "2",
   borderRadius: "0.25em",
   width: "100%",
+  boxShadow: "bottomShadow",
 };
 
 const Card = {

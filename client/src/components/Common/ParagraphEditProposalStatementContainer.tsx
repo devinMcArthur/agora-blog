@@ -48,7 +48,7 @@ const ParagraphEditProposalStatementContainer = ({
         return "green.100";
     }
 
-    return "gray.100";
+    return "white";
   }, [editProposalStatement.changeType]);
 
   /**
@@ -232,10 +232,10 @@ const ParagraphEditProposalStatementContainer = ({
         <Box
           display="flex"
           flexDir="column"
-          p={2}
+          p={expanded ? 3 : 2}
           w="100%"
           cursor="pointer"
-          borderRadius="1em"
+          borderRadius="0 1em 1em 0"
           onClick={() => setExpanded(!expanded)}
           backgroundColor={backgroundColor}
         >

@@ -122,7 +122,7 @@ const ParagraphStatement = ({
       flexDir="row"
       my={2}
       pr={2}
-      backgroundColor={expanded ? "gray.200" : "gray.100"}
+      backgroundColor={expanded ? "gray.200" : "white"}
       borderRadius="0 1em 1em 0"
     >
       <Box flexShrink={0} width="5px" backgroundColor="gray.600" mr={4} />
@@ -130,10 +130,10 @@ const ParagraphStatement = ({
         <Box
           w="100%"
           cursor="pointer"
-          p={2}
-          borderRadius="1em"
+          p={expanded ? 3 : 2}
+          borderRadius="0 1em 1em 0"
           onClick={() => setExpanded(!expanded)}
-          backgroundColor="gray.100"
+          backgroundColor="white"
         >
           <Statement
             statement={paragraphStatement.statement}

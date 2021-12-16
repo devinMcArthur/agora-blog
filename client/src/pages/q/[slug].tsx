@@ -17,6 +17,9 @@ const Question: PageSsrQuestionComp = ({ data: propsData }) => {
           content={`All answers to the question: ${questionTitle}`}
         />
       </Head>
+      <Heading size="sm" color="gray.400">
+        Question
+      </Heading>
       <Heading as="h5">{questionTitle}</Heading>
       <ClientOnly>
         <QuestionIdClientContent id={_id} />

@@ -69,7 +69,6 @@ const Home = () => {
           name="description"
           content="Agora is a crowdsourced information aggregation platform. We are creating Wikipedia 2.0 to improve the sense-making of the masses."
         />
-        <meta name="robots" content="all" />
       </Head>
       <InfiniteScroll nextPage={nextPage} content={content} />
     </Container>

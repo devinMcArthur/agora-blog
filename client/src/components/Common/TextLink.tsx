@@ -21,16 +21,35 @@ const TextLink = ({
     color: "blue.600",
   };
 
+  const activeAndFocusProps = {
+    outline: 0,
+    border: "none",
+    "-moz-outline-style": "none",
+  };
+
   let content = (
     <Link href={link} passHref>
-      <ChakraLink {...linkProps} {...rest}>
+      <ChakraLink
+        _active={activeAndFocusProps}
+        _focus={activeAndFocusProps}
+        {...linkProps}
+        {...rest}
+      >
         {children}
       </ChakraLink>
     </Link>
   );
   if (isExternal) {
     content = (
-      <ChakraLink href={link} title={title} isExternal {...linkProps} {...rest}>
+      <ChakraLink
+        _active={activeAndFocusProps}
+        _focus={activeAndFocusProps}
+        href={link}
+        title={title}
+        isExternal
+        {...linkProps}
+        {...rest}
+      >
         {children}
       </ChakraLink>
     );

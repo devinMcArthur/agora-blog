@@ -33,4 +33,8 @@ export default extendTheme({
   components: {
     Card,
   },
+  config: {
+    initialColorMode: "light",
+    useSystemColorMode: false,
+  },
 });
