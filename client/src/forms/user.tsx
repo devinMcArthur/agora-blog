@@ -199,6 +199,7 @@ export const useUserSignupForm = (options?: any) => {
             render={({ field, fieldState }) => (
               <TextArea
                 {...field}
+                // @ts-expect-error
                 errorMessage={fieldState.error?.bio}
                 label="Bio"
                 bgColor="white"
@@ -304,6 +305,7 @@ export const useUserUpdateForm = (options?: any) => {
                 <TextArea
                   {...field}
                   label="Bio"
+                  // @ts-expect-error
                   errorMessage={fieldState.error?.bio}
                   isDisabled={isLoading}
                   bgColor="white"
