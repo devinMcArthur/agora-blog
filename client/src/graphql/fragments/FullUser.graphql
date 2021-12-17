@@ -3,6 +3,7 @@ fragment FullUserSnippet on UserClass {
   firstName
   middleName
   lastName
+  bio
   verified
   createdAt
   verificationRequested {

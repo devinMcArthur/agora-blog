@@ -8,22 +8,22 @@ import jwt from "jsonwebtoken";
 
 import { IContext } from "@typescript/graphql";
 
-import UserResolver from "@api/resolvers/user";
-import PageResolver from "@api/resolvers/page";
-import FileResolver from "@api/resolvers/file";
-import VariableResolver from "@api/resolvers/variable";
-import QuestionResolver from "@api/resolvers/question";
-import ParagraphResolver from "@api/resolvers/paragraph";
-import StatementResolver from "@api/resolvers/statement";
-import StatementImageResolver from "@api/resolvers/statementImage";
-import StatementValueResolver from "@api/resolvers/statementValue";
-import VariableVersionResolver from "@api/resolvers/variableVersion";
-import StatementVersionResolver from "@api/resolvers/statementVersion";
-import VariableEquationResolver from "@api/resolvers/variableEquation";
-import ParagraphStatementResolver from "@api/resolvers/paragraphStatement";
-import VariableEditProposalResolver from "@api/resolvers/variableEditProposal";
-import ParagraphEditProposalResolver from "@api/resolvers/paragraphEditProposal";
-import ParagraphEditProposalStatementResolver from "@api/resolvers/paragraphEditProposalStatement";
+import UserResolver from "@graphql/resolvers/user";
+import PageResolver from "@graphql/resolvers/page";
+import FileResolver from "@graphql/resolvers/file";
+import VariableResolver from "@graphql/resolvers/variable";
+import QuestionResolver from "@graphql/resolvers/question";
+import ParagraphResolver from "@graphql/resolvers/paragraph";
+import StatementResolver from "@graphql/resolvers/statement";
+import StatementImageResolver from "@graphql/resolvers/statementImage";
+import StatementValueResolver from "@graphql/resolvers/statementValue";
+import VariableVersionResolver from "@graphql/resolvers/variableVersion";
+import StatementVersionResolver from "@graphql/resolvers/statementVersion";
+import VariableEquationResolver from "@graphql/resolvers/variableEquation";
+import ParagraphStatementResolver from "@graphql/resolvers/paragraphStatement";
+import VariableEditProposalResolver from "@graphql/resolvers/variableEditProposal";
+import ParagraphEditProposalResolver from "@graphql/resolvers/paragraphEditProposal";
+import ParagraphEditProposalStatementResolver from "@graphql/resolvers/paragraphEditProposalStatement";
 
 import { User, UserDocument } from "@models";
 import authChecker from "@utils/authChecker";

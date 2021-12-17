@@ -36,7 +36,7 @@
       "@typescript/*": ["typescript/*"],
       "@utils/*": ["utils/*"],
       "@validation/*": ["validation/*"],
-      "@api/*": ["api/*"]
+      "@graphql/*": ["graphql/*"]
     }
   },
   "exclude": ["node_modules"],

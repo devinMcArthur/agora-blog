@@ -19,7 +19,11 @@ import {
   Resolver,
   Root,
 } from "type-graphql";
-import mutations, { CreateUserData, LoginData } from "./mutations";
+import mutations, {
+  CreateUserData,
+  LoginData,
+  UpdateUserData,
+} from "./mutations";
 import queries from "./queries";
 
 @Resolver(() => UserClass)
@@ -80,6 +84,15 @@ export default class UserResolver {
   @Mutation(() => String)
   async createUser(@Arg("data") data: CreateUserData) {
     return mutations.create(data);
+  }
+
+  @Mutation(() => UserClass)
+  async updateUser(
+    @Arg("userId") userId: string,
+    @Arg("data") data: UpdateUserData,
+    @Ctx() ctx: IContext
+  ) {
+    return mutations.updateUser(userId, data, ctx);
   }
 
   @Authorized()

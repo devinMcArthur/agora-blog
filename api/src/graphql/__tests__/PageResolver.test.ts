@@ -5,7 +5,7 @@ import seedDatabase, { SeededDatabase } from "@testing/seedDatabase";
 
 import createApp from "../../app";
 import jestLogin from "@testing/jestLogin";
-import { NewPageData } from "@api/resolvers/page/mutations";
+import { NewPageData } from "@graphql/resolvers/page/mutations";
 import { StyleTypes } from "@typescript/models/Statement";
 import path from "path";
 import { Page } from "@models";

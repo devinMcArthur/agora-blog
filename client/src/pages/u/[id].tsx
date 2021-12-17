@@ -1,6 +1,7 @@
 import React from "react";
 
 import Head from "next/head";
+import { Text } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Box, Container, Heading } from "@chakra-ui/layout";
 import { GetServerSideProps } from "next";
@@ -21,8 +22,6 @@ import UserSettings from "../../components/u/id/Settings";
 import UserContributions from "../../components/u/id/Contributions";
 
 const User: PageSsrUserComp = ({ data: propsData }) => {
-  const { user: propsUser } = propsData!;
-
   /**
    * ----- Hook Initialization -----
    */
@@ -31,40 +30,51 @@ const User: PageSsrUserComp = ({ data: propsData }) => {
     state: { user: authUser },
   } = useAuth();
 
+  const [user, setUser] = React.useState(propsData!.user);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  /**
+   * ----- Use-effects and other logic -----
+   */
+
+  React.useEffect(() => {
+    if (propsData?.user) setUser(propsData.user);
+  }, [propsData]);
 
   /**
    * ----- Rendering -----
    */
 
   const settingsButton = React.useMemo(() => {
-    if (propsUser._id === authUser?._id) {
+    if (user._id === authUser?._id) {
       return <Button onClick={onOpen}>Edit Profile</Button>;
     }
-  }, [propsUser, authUser, onOpen]);
+  }, [user, authUser, onOpen]);
 
   return (
     <Container minW="80%" p={4}>
       <Head>
         <title>
-          {propsUser.firstName} {propsUser.lastName}
+          {user.firstName} {user.lastName}
         </title>
         <meta
           name="description"
-          content={`Page for ${propsUser.firstName} ${propsUser.lastName}`}
+          content={`Page for ${user.firstName} ${user.lastName}`}
         />
       </Head>
       <Box display="flex" flexDir="row" justifyContent="space-between">
         <Box display="flex" flexDir="row">
           <Heading>
-            {propsUser.firstName} {propsUser.middleName} {propsUser.lastName}
+            {user.firstName} {user.middleName} {user.lastName}
           </Heading>
           <Icon margin="auto" mx={2} as={GoVerified} />
         </Box>
         {settingsButton}
       </Box>
+      <Box>{user.bio && <Text m={2}>{user.bio}</Text>}</Box>
       <ClientOnly>
-        <UserContributions id={propsUser._id} />
+        <UserContributions id={user._id} />
       </ClientOnly>
       {/* SETTINGS MODAL */}
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -73,7 +83,12 @@ const User: PageSsrUserComp = ({ data: propsData }) => {
           <ModalHeader>Settings</ModalHeader>
           <ModalBody>
             <ClientOnly>
-              <UserSettings />
+              <UserSettings
+                onUpdate={(data) => {
+                  onClose();
+                  setUser(data);
+                }}
+              />
             </ClientOnly>
           </ModalBody>
         </ModalContent>

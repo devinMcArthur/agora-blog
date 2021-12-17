@@ -1,0 +1,5 @@
+mutation UpdateUser($userId: String!, $data: UpdateUserData!) {
+  updateUser(userId: $userId, data: $data) {
+    ...SSRUserSnippet
+  }
+}

@@ -1,5 +1,4 @@
-import { NewPageData } from "@api/resolvers/page/mutations";
-import { StringArrayData } from "@api/resolvers/statement/mutations";
+import { StringArrayData } from "@graphql/resolvers/statement/mutations";
 import { IContext } from "@typescript/graphql";
 import {
   IStringArrayBuildData,

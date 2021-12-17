@@ -107,13 +107,13 @@ const ParagraphEditProposalCard = ({
    * ----- Rendering -----
    */
 
-  let content = <SkeletonCard variant="page" />;
+  let content = <SkeletonCard minW="10em" variant="page" />;
   if (editProposal) {
     content = (
       <Card w="100%" {...props}>
         <Box display="flex" flexDir="column">
           <Box display="flex" flexDir="row" justifyContent="space-between">
-            <Text>{editProposal.description}</Text>
+            <Text pr={2}>{editProposal.description}</Text>
             <UserLink user={editProposal.author} />
           </Box>
           <Box

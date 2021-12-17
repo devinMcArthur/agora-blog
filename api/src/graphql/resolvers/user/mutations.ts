@@ -22,6 +22,9 @@ export class CreateUserData {
   @Field({ nullable: true })
   public middleName?: string;
 
+  @Field({ nullable: true })
+  public bio?: string;
+
   @Field({ nullable: false })
   public email!: string;
 
@@ -30,6 +33,12 @@ export class CreateUserData {
 
   @Field({ nullable: true })
   public confirmationPassword?: string;
+}
+
+@InputType()
+export class UpdateUserData {
+  @Field({ nullable: true })
+  public bio?: string;
 }
 
 const login = (data: LoginData) => {
@@ -78,8 +87,29 @@ const requestVerification = (ctx: IContext) => {
   });
 };
 
+const updateUser = (userId: string, data: UpdateUserData, ctx: IContext) => {
+  return new Promise<UserDocument>(async (resolve, reject) => {
+    try {
+      const user = await User.getById(userId);
+      if (!user) throw new Error("unable to find this user");
+
+      if (!ctx.user || ctx.user._id.toString() !== user._id.toString())
+        throw new Error("you do not have permission to do this");
+
+      await user.change(data);
+
+      await user.save();
+
+      resolve(user);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 export default {
   login,
   create,
   requestVerification,
+  updateUser,
 };

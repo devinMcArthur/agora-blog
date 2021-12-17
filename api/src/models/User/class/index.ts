@@ -6,7 +6,7 @@ import { UserSchema } from "../schema";
 import GetByIDOptions from "@typescript/interface/getById_Options";
 import get from "./get";
 import interact from "./interact";
-import { IUserData } from "@typescript/models/User";
+import { IUserData, IUserUpdateData } from "@typescript/models/User";
 import build from "./build";
 import validate from "./validate";
 import update from "./update";
@@ -63,6 +63,10 @@ export class UserClass extends UserSchema {
 
   public async requestVerification(this: UserDocument) {
     return update.requestVerification(this);
+  }
+
+  public async change(this: UserDocument, data: IUserUpdateData) {
+    return update.change(this, data);
   }
 
   /**

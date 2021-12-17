@@ -24,6 +24,10 @@ export class UserSchema {
   @prop({ required: true })
   public email!: string;
 
+  @Field({ nullable: true })
+  @prop({ maxlength: 160 })
+  public bio?: string;
+
   @Field({ nullable: false })
   @prop({ required: true })
   public password!: string;

@@ -4,9 +4,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 
-import { CreateUserData, LoginData } from "../generated/graphql";
+import {
+  CreateUserData,
+  LoginData,
+  UpdateUserData,
+} from "../generated/graphql";
 import TextField from "../components/Common/TextField";
 import ErrorMessage from "../components/Common/ErrorMessage";
+import TextArea from "../components/Common/TextArea";
 
 const UserLoginSchema = yup
   .object()
@@ -95,6 +100,7 @@ const UserSignupSchema = yup
       .string()
       .max(50, "must be less than 50 characters")
       .optional(),
+    bio: yup.string().max(160, "must be less than 160 characters").optional(),
     email: yup
       .string()
       .email("must provide a valid email")
@@ -107,11 +113,12 @@ const UserSignupSchema = yup
   })
   .required();
 
-export const useUserSignupForm = () => {
+export const useUserSignupForm = (options?: any) => {
   const [generalError, setGeneralError] = React.useState<string>();
 
   const form = useForm({
     resolver: yupResolver(UserSignupSchema),
+    ...options,
   });
 
   const { control, handleSubmit } = form;
@@ -183,6 +190,24 @@ export const useUserSignupForm = () => {
         ),
         []
       ),
+    Bio: () =>
+      React.useMemo(
+        () => (
+          <Controller
+            control={control}
+            name="bio"
+            render={({ field, fieldState }) => (
+              <TextArea
+                {...field}
+                errorMessage={fieldState.error?.bio}
+                label="Bio"
+                bgColor="white"
+              />
+            )}
+          />
+        ),
+        []
+      ),
     Email: () =>
       React.useMemo(
         () => (
@@ -243,4 +268,56 @@ export const useUserSignupForm = () => {
   };
 
   return { ...form, FormComponents, setGeneralError };
+};
+
+const UserUpdateSchema = yup
+  .object()
+  .shape({
+    bio: yup.string().max(160, "must be less than 160 characters").optional(),
+  })
+  .required();
+
+export const useUserUpdateForm = (options?: any) => {
+  const form = useForm({
+    resolver: yupResolver(UserUpdateSchema),
+    ...options,
+  });
+
+  const { control, handleSubmit } = form;
+
+  const FormComponents = {
+    Form: ({
+      children,
+      submitHandler,
+    }: {
+      children: React.ReactNode;
+      submitHandler: SubmitHandler<UpdateUserData>;
+    }) => <form onSubmit={handleSubmit(submitHandler)}>{children}</form>,
+    Bio: ({ isLoading }: { isLoading?: boolean }) =>
+      React.useMemo(
+        () => (
+          <Controller
+            control={control}
+            name="bio"
+            render={({ field, fieldState }) => {
+              return (
+                <TextArea
+                  {...field}
+                  label="Bio"
+                  errorMessage={fieldState.error?.bio}
+                  isDisabled={isLoading}
+                  bgColor="white"
+                />
+              );
+            }}
+          />
+        ),
+        [isLoading]
+      ),
+  };
+
+  return {
+    FormComponents,
+    ...form,
+  };
 };

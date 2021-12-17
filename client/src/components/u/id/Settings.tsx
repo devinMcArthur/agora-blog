@@ -5,10 +5,19 @@ import { useAuth } from "../../../contexts/Auth";
 import { Alert, AlertDescription, AlertIcon } from "@chakra-ui/alert";
 import ErrorMessage from "../../../components/Common/ErrorMessage";
 import { Button } from "@chakra-ui/button";
-import { useRequestVerificationMutation } from "../../../generated/graphql";
+import {
+  SsrUserSnippetFragment,
+  useRequestVerificationMutation,
+  useUpdateUserMutation,
+} from "../../../generated/graphql";
 import dayjs from "dayjs";
+import { useUserUpdateForm } from "../../../forms/user";
 
-const UserSettings = () => {
+interface IUserSettings {
+  onUpdate: (data: SsrUserSnippetFragment) => void;
+}
+
+const UserSettings = ({ onUpdate }: IUserSettings) => {
   /**
    * ----- Hook Initialization -----
    */
@@ -18,6 +27,13 @@ const UserSettings = () => {
   } = useAuth();
 
   const [requestVerification, { loading }] = useRequestVerificationMutation();
+  const [updateUser, { loading: updateLoading }] = useUpdateUserMutation();
+
+  const { FormComponents } = useUserUpdateForm({
+    defaultValues: {
+      bio: user?.bio,
+    },
+  });
 
   /**
    * ----- Rendering -----
@@ -95,6 +111,34 @@ const UserSettings = () => {
       <Heading size="sm">Verification</Heading>
       <Divider />
       {verificationContent}
+      {user && (
+        <Box mt={3}>
+          <Heading size="md">Update</Heading>
+          <FormComponents.Form
+            submitHandler={(data) => {
+              updateUser({
+                variables: {
+                  userId: user._id,
+                  data,
+                },
+              }).then((data) => {
+                if (data.data) onUpdate(data.data.updateUser);
+              });
+            }}
+          >
+            <FormComponents.Bio />
+            <Button
+              border="1px solid black"
+              isLoading={updateLoading}
+              type="submit"
+              w="100%"
+              mt={3}
+            >
+              Submit
+            </Button>
+          </FormComponents.Form>
+        </Box>
+      )}
     </Box>
   );
 };

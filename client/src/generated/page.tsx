@@ -16,6 +16,7 @@ import { getApolloClient , ApolloClientContext} from '../withApollo';
 
 
 
+
 export async function getServerPageAlls
     (options: Omit<Apollo.QueryOptions<Types.AllPagesQueryVariables>, 'query'>, ctx: ApolloClientContext ){
         const apolloClient = getApolloClient(ctx);

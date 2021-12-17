@@ -6,12 +6,11 @@ import seedDatabase, { SeededDatabase } from "@testing/seedDatabase";
 import createApp from "../../app";
 import jestLogin from "@testing/jestLogin";
 import {
-  IVariableBuildData,
   VariableEquationTypes,
   VariableOperatorTypes,
   VariableVersionTypes,
 } from "@typescript/models/Variable";
-import { NewVariableData } from "@api/resolvers/variable/mutations";
+import { NewVariableData } from "@graphql/resolvers/variable/mutations";
 import { Variable } from "@models";
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;

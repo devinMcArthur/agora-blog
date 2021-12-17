@@ -4,7 +4,7 @@ import { disconnectAndStopServer, prepareDatabase } from "@testing/jestDB";
 import seedDatabase, { SeededDatabase } from "@testing/seedDatabase";
 import { User } from "@models";
 import _ids from "@testing/_ids";
-import { IUserData } from "@typescript/models/User";
+import { IUserData, IUserUpdateData } from "@typescript/models/User";
 import { compare } from "bcryptjs";
 
 let documents: SeededDatabase, mongoServer: MongoMemoryServer;
@@ -41,6 +41,7 @@ describe("User Class", () => {
             lastName: "last",
             email: "test@email.com",
             password: "123456",
+            bio: "this is the bio",
           };
 
           const user = await User.build(data);
@@ -53,6 +54,8 @@ describe("User Class", () => {
           expect(
             await compare(data.password, fetchedUser!.password)
           ).toBeTruthy();
+
+          expect(fetchedUser!.bio).toBe(data.bio);
         });
       });
 
@@ -87,6 +90,19 @@ describe("User Class", () => {
           expect(request.user!.toString()).toBe(
             documents.users.nonVerified._id.toString()
           );
+        });
+      });
+    });
+
+    describe("change", () => {
+      describe("success", () => {
+        test("should successfully update user", async () => {
+          const data: IUserUpdateData = {
+            bio: "New bio",
+          };
+          await documents.users.dev.change(data);
+
+          expect(documents.users.dev.bio).toBe(data.bio);
         });
       });
     });

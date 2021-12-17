@@ -6,8 +6,11 @@ import seedDatabase, { SeededDatabase } from "@testing/seedDatabase";
 
 import createApp from "../../app";
 import jestLogin from "@testing/jestLogin";
-import { CreateUserData } from "@api/resolvers/user/mutations";
-import { UserVerificationRequest } from "@models";
+import {
+  CreateUserData,
+  UpdateUserData,
+} from "@graphql/resolvers/user/mutations";
+import { User, UserVerificationRequest } from "@models";
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
@@ -86,6 +89,7 @@ describe("User Resolver", () => {
             lastName: "last",
             email: "new@email.com",
             password: "password",
+            bio: "bio",
           };
 
           const res = await request(app).post("/graphql").send({
@@ -108,6 +112,7 @@ describe("User Resolver", () => {
               query CurrentUser {
                 currentUser {
                   firstName
+                  bio
                 }
               }
             `,
@@ -119,6 +124,48 @@ describe("User Resolver", () => {
           expect(authorizedRes.body.data.currentUser.firstName).toBe(
             data.firstName
           );
+          expect(authorizedRes.body.data.currentUser.bio).toBe(data.bio);
+        });
+      });
+    });
+
+    describe("updateUser", () => {
+      const updateUserMutation = `
+        mutation UpdateUser($userId: String!, $data: UpdateUserData!) {
+          updateUser(userId: $userId, data: $data) {
+            bio
+          }
+        }
+      `;
+
+      describe("success", () => {
+        test("should successfully update user bio", async () => {
+          const token = await jestLogin(app, documents.users.dev.email);
+
+          const data: UpdateUserData = {
+            bio: "New Bio",
+          };
+
+          const res = await request(app)
+            .post("/graphql")
+            .send({
+              query: updateUserMutation,
+              variables: {
+                userId: documents.users.dev._id,
+                data,
+              },
+            })
+            .set("Authorization", token);
+
+          expect(res.status).toBe(200);
+
+          const newUser = res.body.data.updateUser;
+
+          expect(newUser.bio).toBe(data.bio);
+
+          const fetchedUser = await User.getById(documents.users.dev._id);
+
+          expect(fetchedUser!.bio).toBe(data.bio);
         });
       });
     });

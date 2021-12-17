@@ -19,6 +19,7 @@ const createUsers = () => {
         middleName: "Mic",
         email: "dev@agora.voto",
         password: await hashPassword("password"),
+        bio: "I am verified and have authored nearly everything in the test database :)",
         verified: true,
       });
 
@@ -28,6 +29,7 @@ const createUsers = () => {
         lastName: "Verified",
         email: "not-verified@agora.voto",
         password: await hashPassword("password"),
+        bio: "I am not verified",
       });
 
       const verificationRequested = new User({
@@ -36,6 +38,7 @@ const createUsers = () => {
         lastName: "Requested",
         email: "requested-verification@agora.voto",
         password: await hashPassword("password"),
+        bio: "I have requested verification",
       });
 
       const users: ISeededUsers = {

@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 
 import { Question, Statement } from "@models";
 import { Field, ID, InputType } from "type-graphql";
-import { PaginationOptions } from "@api/types";
+import { PaginationOptions } from "@graphql/types";
 
 @InputType()
 export class StatementsFromQuestionOptions extends PaginationOptions {

@@ -87,6 +87,7 @@ const SignIn = ({ isOpen, close }: ISignIn) => {
                 <SignupFormComponents.FirstName />
                 <SignupFormComponents.LastName />
                 <SignupFormComponents.MiddleName />
+                <SignupFormComponents.Bio />
                 <SignupFormComponents.Email />
                 <SignupFormComponents.Password />
                 <SignupFormComponents.ConfirmationPassword />
