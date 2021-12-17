@@ -229,7 +229,7 @@ const StyleMenu = ({ editor, buttonSize }: IStyleMenu) => {
 
   return (
     <Box display="flex" flexDir="column">
-      <Box display="flex" flexDir="row">
+      <Box display="flex" flexDir="row" flexWrap="wrap">
         <MarkButton
           size={buttonSize}
           editor={editor}

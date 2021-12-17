@@ -50,11 +50,11 @@ const Navbar = () => {
             color="black"
             link="/questions"
             fontWeight="bold"
-            pt={user ? 2 : 1}
+            pt={user ? "0.45em" : "0.2em"}
           >
             Questions
           </TextLink>
-          <Box height="100%" pt={user ? 2 : 1}>
+          <Box height="100%" pt={user ? "0.35em" : "0.1em"}>
             <Icon
               cursor="pointer"
               as={FiPlusSquare}
@@ -72,12 +72,15 @@ const Navbar = () => {
         </Stack>
       );
     } else {
+      /**
+       * ----- Mobile -----
+       */
       return (
         <Menu>
           {/* @ts-expect-error */}
           <MenuButton
             bgColor="transparent"
-            mt={user ? 1 : 2}
+            mt={1}
             aria-label="menu"
             as={IconButton}
             icon={<FiMenu />}
@@ -100,7 +103,13 @@ const Navbar = () => {
                 <MenuItem onClick={() => logout()}>Logout</MenuItem>
               </MenuGroup>
             ) : (
-              <Box m="auto" w="100%" display="flex" justifyContent="center">
+              <Box
+                m="auto"
+                py={2}
+                w="100%"
+                display="flex"
+                justifyContent="center"
+              >
                 <NavbarAccount />
               </Box>
             )}
@@ -135,7 +144,13 @@ const Navbar = () => {
           pt={1}
           ml={4}
         >
-          <Heading as="h4" fontSize={["2xl", "2xl", "3xl"]} h="100%" p="auto">
+          <Heading
+            as="h4"
+            fontSize={["2xl", "2xl", "3xl"]}
+            h="100%"
+            p="auto"
+            mt={[1, 0]}
+          >
             agora
           </Heading>
         </TextLink>

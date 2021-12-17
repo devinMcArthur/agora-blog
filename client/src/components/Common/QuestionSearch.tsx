@@ -99,6 +99,7 @@ const QuestionSearch = ({
       }}
       dropdownProps={dropdownProps}
       autoComplete="off"
+      selectOptionsWithEnter
       {...props}
     />
   );

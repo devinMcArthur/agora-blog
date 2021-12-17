@@ -53,6 +53,7 @@ const RichTextForm = ({
               onClick={onCancel}
               mx={1}
               isLoading={submitLoading}
+              backgroundColor="white"
             >
               Cancel
             </Button>
@@ -60,6 +61,7 @@ const RichTextForm = ({
           {onSubmit && (
             <Button
               borderColor="black"
+              backgroundColor="white"
               onClick={onSubmit}
               mx={1}
               isLoading={submitLoading}

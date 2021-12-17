@@ -104,7 +104,7 @@ const CreatePage = () => {
    * ----- Rendering -----
    */
 
-  if (!user) return <AccessDeniedPage />;
+  if (user === null) return <AccessDeniedPage />;
 
   return (
     <Container minW="80%">
@@ -112,19 +112,19 @@ const CreatePage = () => {
         <title>Create Page</title>
         <meta name="description" content="Create a new page on Agora" />
       </Head>
-      <Box>
+      <Box display="flex" flexDir="row" justifyContent="space-between" py={2}>
         <Heading>Create a new page</Heading>
-        <Button isLoading={loading} onClick={() => handleSubmit()}>
+        <Button
+          variant="outline"
+          isLoading={loading}
+          onClick={() => handleSubmit()}
+          bgColor={"white"}
+          my="auto"
+        >
           Submit
         </Button>
       </Box>
-      <Box
-        m={2}
-        border="1px solid black"
-        borderColor="gray.800"
-        borderRadius={3}
-        p={4}
-      >
+      <Box m={2} p={4}>
         {generalError && <ErrorMessage description={generalError} my={2} />}
         <Heading size="md">Title</Heading>
         <PageSearch
@@ -135,7 +135,9 @@ const CreatePage = () => {
           dropdownProps={{ backgroundColor: "gray.200" }}
           errorMessage={titleError}
         />
-        <Heading size="md">Paragraph</Heading>
+        <Heading size="md" py={4}>
+          Paragraph
+        </Heading>
         {paragraphError && <ErrorMessage description={paragraphError} my={2} />}
         <ParagraphForm
           onChange={(data) => setStatements(data.statements || [])}

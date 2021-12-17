@@ -1,7 +1,7 @@
 import React from "react";
 import { RenderElementProps } from "slate-react";
 
-import { Box, BoxProps, Heading, Text } from "@chakra-ui/layout";
+import { Box, BoxProps, Divider, Heading, Text } from "@chakra-ui/layout";
 import { Button, ButtonGroup, IconButton } from "@chakra-ui/button";
 import { Tooltip } from "@chakra-ui/tooltip";
 import { FiChevronsDown, FiChevronsUp, FiPlus, FiStar } from "react-icons/fi";
@@ -146,8 +146,10 @@ const StatementElement = ({
         id={element.statementId}
         marginX={1}
         marginY={4}
-        border="1px solid gray"
-        borderRadius={2}
+        p={2}
+        // border="1px solid gray"
+        borderRadius={3}
+        backgroundColor="white"
         {...focusedStyling}
       >
         <Box
@@ -156,7 +158,7 @@ const StatementElement = ({
           flexDir="column"
           p={1}
           contentEditable={false}
-          backgroundColor="gray.100"
+          // backgroundColor="gray.100"
         >
           <Box
             display="flex"
@@ -333,6 +335,7 @@ const StatementElement = ({
             </Box>
           )}
         </Box>
+        {!hideChildren || element.quotedStatementId ? <Divider /> : null}
         {element.quotedStatementId && (
           <Box contentEditable={false} m={2}>
             <Box

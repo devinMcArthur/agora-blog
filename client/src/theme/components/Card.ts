@@ -1,7 +1,7 @@
 const baseStyle = {
   backgroundColor: "white",
   padding: "2",
-  margin: "2",
+  my: "2",
   borderRadius: "0.25em",
   width: "100%",
   boxShadow: "bottomShadow",

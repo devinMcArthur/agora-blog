@@ -1,7 +1,8 @@
 import React from "react";
 
+import { Text } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/react";
-import { Divider, Flex } from "@chakra-ui/layout";
+import { Center, Divider, Flex } from "@chakra-ui/layout";
 import { usePageQuery } from "../../../generated/graphql";
 import Loading from "../../Common/Loading";
 import PageCard from "../../Common/PageCard";
@@ -64,22 +65,29 @@ const PageSlugClientContent = ({
         )
       );
 
-      components.editProposals = page.currentParagraph.editProposals.map(
-        (editProposal, index) => (
-          <ParagraphEditProposalCard
-            key={index}
-            editProposalSelected={
-              editProposal._id === previewParagraphEditProposalId
-            }
-            editProposalPreviewSelection={(proposal) => {
-              setPreviewParagraphEditProposalId(proposal);
-            }}
-            paragraphEditProposalId={editProposal._id}
-            allowApproval
-            onApproval={() => setPreviewParagraphEditProposalId(undefined)}
-          />
-        )
-      );
+      if (page.currentParagraph.editProposals.length === 0) {
+        components.editProposals = (
+          <Center>
+            <Text>- no proposals -</Text>
+          </Center>
+        );
+      } else
+        components.editProposals = page.currentParagraph.editProposals.map(
+          (editProposal, index) => (
+            <ParagraphEditProposalCard
+              key={index}
+              editProposalSelected={
+                editProposal._id === previewParagraphEditProposalId
+              }
+              editProposalPreviewSelection={(proposal) => {
+                setPreviewParagraphEditProposalId(proposal);
+              }}
+              paragraphEditProposalId={editProposal._id}
+              allowApproval
+              onApproval={() => setPreviewParagraphEditProposalId(undefined)}
+            />
+          )
+        );
 
       components.paragraphContent = (
         <Paragraphs

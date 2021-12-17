@@ -67,6 +67,7 @@ const EditParagraph = ({ pageId, paragraphId, onCancel }: IEditParagraph) => {
       {generalError && <ErrorMessage description={generalError} />}
       <Box display="flex" flexDir="row">
         <TextArea
+          bgColor="white"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           errorMessage={descriptionError}

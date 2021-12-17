@@ -115,6 +115,7 @@ const MarkButton: React.FC<IMarkButton> = ({
   return (
     <Tooltip label={tooltip}>
       <Button
+        backgroundColor="white"
         onClick={(event) => {
           event.preventDefault();
           onClick();
