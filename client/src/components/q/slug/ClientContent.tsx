@@ -35,7 +35,9 @@ const QuestionIdClientContent = ({ id }: IQuestionIdClientContent) => {
   return (
     <Box>
       <Divider />
-      <Flex pt={2}>{content}</Flex>
+      <Flex flexDir="column" pt={2}>
+        {content}
+      </Flex>
     </Box>
   );
 };

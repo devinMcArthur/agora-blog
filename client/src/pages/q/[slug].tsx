@@ -8,14 +8,18 @@ import Head from "next/head";
 const Question: PageSsrQuestionComp = ({ data: propsData }) => {
   const { question: questionTitle, _id } = propsData!.question!;
 
+  const description = `All answers to the question: ${questionTitle}`;
+
   return (
     <Container minW="80%" p={4}>
       <Head>
         <title>{questionTitle}</title>
-        <meta
-          name="description"
-          content={`All answers to the question: ${questionTitle}`}
-        />
+        <meta name="description" content={description} />
+        <meta property="og:url" content="https://agora.voto" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={questionTitle} />
+        <meta name="twitter:card" content="summary" />
+        <meta property="og:description" content={description} />
       </Head>
       <Heading size="sm" color="gray.400">
         Question
