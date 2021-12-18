@@ -32,6 +32,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <link rel="shortcut icon" href="/favicon.ico" />
+        <meta property="og:image" content="/images/logo.png" />
         <meta name="robots" content="all" />
       </Head>
       <Provider>
