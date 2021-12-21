@@ -6,11 +6,17 @@ import { HistoryEditor, withHistory } from "slate-history";
 import { Editable, ReactEditor, Slate, withReact } from "slate-react";
 import { IRichText } from ".";
 import { Button } from "@chakra-ui/button";
+import isHotkey from "is-hotkey";
 
-import { CustomElements, StyledText } from "../../../models/slate";
+import {
+  CustomElements,
+  SlateStyleTypes,
+  StyledText,
+} from "../../../models/slate";
 import Element from "./views/Element";
 import Leaf from "./views/Leaf";
 import StyleMenu from "./views/StyleMenu";
+import { CustomEditor } from "./utils";
 
 declare module "slate" {
   interface CustomTypes {
@@ -19,6 +25,11 @@ declare module "slate" {
     Text: StyledText;
   }
 }
+
+const Hotkeys = {
+  "mod+b": SlateStyleTypes.bold,
+  "mod+i": SlateStyleTypes.italic,
+};
 
 const RichTextForm = ({
   value,
@@ -77,6 +88,22 @@ const RichTextForm = ({
           renderLeaf={renderLeaf}
           spellCheck
           autoFocus
+          onKeyDown={(event) => {
+            for (const hotkey in Hotkeys) {
+              if (isHotkey(hotkey, event)) {
+                event.preventDefault();
+                switch (hotkey) {
+                  case "mod+b": {
+                    CustomEditor.toggleBold(editor);
+                    break;
+                  }
+                  case "mod+i": {
+                    CustomEditor.toggleItalic(editor);
+                  }
+                }
+              }
+            }
+          }}
         />
       </Box>
     </Slate>

@@ -1,4 +1,4 @@
-import { Box, Center, Divider, Heading } from "@chakra-ui/react";
+import { Box, Center, Heading } from "@chakra-ui/react";
 import TextLink from "../components/Common/TextLink";
 
 const FourOhFour = () => {
