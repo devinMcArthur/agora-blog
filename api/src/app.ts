@@ -33,6 +33,8 @@ const createApp = async () => {
 
   app.use(cors());
 
+  app.use(express.json({ limit: "100mb" }));
+
   const { typeDefs, resolvers } = await buildTypeDefsAndResolvers({
     resolvers: [
       UserResolver,

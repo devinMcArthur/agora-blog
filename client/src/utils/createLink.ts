@@ -19,9 +19,14 @@ const pageLink = (slug: string, queryParams?: PageQueryParams) => {
   return `/p/${slug}${!!paramString ? `?${paramString}` : ""}`;
 };
 
+const variableLink = (id: string) => {
+  return `/v/${id}`;
+};
+
 const createLink = {
   questionLink,
   pageLink,
+  variableLink,
 };
 
 export default createLink;

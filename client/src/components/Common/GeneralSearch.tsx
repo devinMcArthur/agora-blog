@@ -11,6 +11,7 @@ import {
   useSearchVariablesLazyQuery,
   VariableSearchSnippetFragment,
 } from "../../generated/graphql";
+import createLink from "../../utils/createLink";
 
 interface IItems {
   pages: LinkFormPageSnippetFragment[];
@@ -21,6 +22,7 @@ interface IItems {
 interface IExtraData {
   type: "page" | "variable" | "question";
   slug?: string;
+  link: string;
 }
 
 interface IGeneralSearch extends Omit<InputProps, "onChange"> {
@@ -104,21 +106,32 @@ const GeneralSearch = ({
         return {
           label: page.title,
           value: page._id,
-          extraData: { slug: page.slug, type: "page" },
+          extraData: {
+            slug: page.slug,
+            type: "page",
+            link: createLink.pageLink(page.slug),
+          },
         };
       }),
       variables: foundItems.variables.map((variable) => {
         return {
           label: variable.title,
           value: variable._id,
-          extraData: { type: "variable" },
+          extraData: {
+            type: "variable",
+            link: createLink.variableLink(variable._id),
+          },
         };
       }),
       questions: foundItems.questions.map((question) => {
         return {
           label: question.question,
           value: question._id,
-          extraData: { type: "question", slug: question.slug },
+          extraData: {
+            type: "question",
+            slug: question.slug,
+            link: createLink.questionLink(question.slug),
+          },
         };
       }),
     };

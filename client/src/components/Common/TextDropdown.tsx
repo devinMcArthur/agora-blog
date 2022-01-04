@@ -3,6 +3,7 @@ import React from "react";
 import { useOutsideClick } from "@chakra-ui/hooks";
 import { Box, BoxProps, Heading, Stack } from "@chakra-ui/layout";
 import TextField, { ITextField } from "./TextField";
+import TextLink from "./TextLink";
 
 export interface IOptions<ExtraData> {
   value: string;
@@ -258,7 +259,18 @@ const TextDropdown = <ExtraData extends object>({
                           key={index}
                           fontWeight={index === selectedIndex ? "bold" : ""}
                         >
-                          {option.label}
+                          {/** @ts-expect-error */}
+                          {!!option.extraData?.link ? (
+                            <TextLink
+                              // @ts-expect-error
+                              link={option.extraData.link || ""}
+                              color="black"
+                            >
+                              {option.label}
+                            </TextLink>
+                          ) : (
+                            option.label
+                          )}
                         </Box>
                       );
                     })}

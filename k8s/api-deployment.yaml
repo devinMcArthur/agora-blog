@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: api-deployment
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
 spec:
   replicas: 1
   selector:
