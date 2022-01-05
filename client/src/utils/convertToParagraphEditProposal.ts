@@ -65,22 +65,7 @@ const convertToParagraphEditProposal = (
       // Handle NEW statments
       if (slateStatement.statementId.includes("NEW")) {
         changeType = EditProposalChangeTypes.ADD;
-        stringArray = currentStringArray.map((object) => {
-          return {
-            ...object,
-            styles: object.styles.map((style) => {
-              return {
-                ...style,
-                value: {
-                  ...style.value,
-                  page: style.value.page?._id,
-                  statement: style.value.statement?._id,
-                  variable: style.value.variable?._id,
-                },
-              };
-            }),
-          };
-        });
+
         questions = slateStatement.questions.map((question) => question._id);
         newQuestions = slateStatement.newQuestions.map(
           (newQuestion) => newQuestion.question

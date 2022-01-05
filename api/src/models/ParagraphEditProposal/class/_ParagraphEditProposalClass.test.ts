@@ -9,6 +9,7 @@ import {
 } from "@typescript/models/ParagraphEditProposal";
 import _ids from "@testing/_ids";
 import { StyleTypes, StyleVariants } from "@typescript/models/Statement";
+import { createReadStream } from "fs";
 
 let documents: SeededDatabase, mongoServer: MongoMemoryServer;
 const setupDatabase = () => {
@@ -193,6 +194,59 @@ describe("Paragraph Edit Proposal Class", () => {
           const proposal = await ParagraphEditProposal.build(data);
 
           expect(proposal).toBeDefined();
+        });
+
+        test("should successfully add proposal with an image", async () => {
+          const data: IParagraphEditProposalBuildData = {
+            author: _ids.users.dev._id,
+            description: "Add a new image",
+            paragraph: _ids.pages.page_covid_19_pandemic.paragraphs[0]._id,
+            statementItems: [
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_pandemic.paragraphs[0]
+                      .statements[0],
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.ADD,
+                newQuestions: ["Does this have an image?"],
+                questions: [],
+                stringArray: [
+                  {
+                    string: "",
+                    styles: [
+                      {
+                        type: StyleTypes.image,
+                        value: {
+                          image: {
+                            file: {
+                              mimetype: "image/jpeg",
+                              stream: createReadStream(
+                                "src/testing/assets/viral-culture-per-ct-value.jpg"
+                              ),
+                            },
+                            caption: "caption",
+                            sourceUrl: "google.ca",
+                          },
+                        },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          };
+
+          const proposal = await ParagraphEditProposal.build(data);
+
+          expect(
+            proposal.statementItems[1].stringArray[0].styles[0].value.image
+              ?.file
+          ).toBeDefined();
         });
       });
 

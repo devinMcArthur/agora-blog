@@ -328,6 +328,9 @@ const _ids = {
     page_rt_pcr_cycle_threshold_statement_3_v1_image: {
       _id: Types.ObjectId("5eda8581d24f0800000b78dd"),
     },
+    page_covid_2019_paragraph_v2_proposal_1_item_7_image: {
+      _id: Types.ObjectId("5eda8581d24f0800100b78dd"),
+    },
   },
 };
 

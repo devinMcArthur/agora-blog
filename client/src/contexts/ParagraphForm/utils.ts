@@ -293,7 +293,7 @@ export const convertSlateParagraphToStatements = (
   return statements;
 };
 
-// used for CreatePage
+// used for CreatePage and EditPage
 export const convertSlateParagraphToStatementData = (
   slateParagraph: Descendant[]
 ): NewStatementData[] => {

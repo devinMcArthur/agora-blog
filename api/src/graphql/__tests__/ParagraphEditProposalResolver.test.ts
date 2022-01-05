@@ -11,7 +11,9 @@ import {
 import jestLogin from "@testing/jestLogin";
 import { StyleTypes, StyleVariants } from "@typescript/models/Statement";
 import _ids from "@testing/_ids";
-import { ParagraphEditProposal, Statement } from "@models";
+import { File, Statement } from "@models";
+import path from "path";
+import { ParagraphEditProposalData } from "@graphql/resolvers/paragraphEditProposal/mutations";
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
@@ -139,6 +141,17 @@ describe("Paragraph Edit Proposal Resolver", () => {
                   _id
                 }
               }
+              stringArray {
+                styles {
+                  value {
+                    image {
+                      file {
+                        _id
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -260,6 +273,83 @@ describe("Paragraph Edit Proposal Resolver", () => {
             res.body.data.createParagraphEditProposal.statementItems[3]
               .quotedStatement
           ).toBe(data.statementItems[3].quotedStatement);
+        });
+
+        test("should create edit proposal with image", async () => {
+          const token = await jestLogin(app, documents.users.dev.email);
+
+          const data: ParagraphEditProposalData = {
+            description: "add image",
+            paragraph:
+              _ids.pages.page_covid_19_pandemic.paragraphs[0]._id.toString(),
+            statementItems: [
+              {
+                changeType: EditProposalChangeTypes.NONE,
+                paragraphStatement: {
+                  statement:
+                    _ids.pages.page_covid_19_pandemic.paragraphs[0].statements[0].toString(),
+                  versionIndex: 0,
+                },
+              },
+              {
+                changeType: EditProposalChangeTypes.ADD,
+                newQuestions: ["Does this have an image?"],
+                questions: [],
+                stringArray: [
+                  {
+                    string: "",
+                    styles: [
+                      {
+                        type: StyleTypes.image,
+                        value: {
+                          image: {
+                            // @ts-expect-error
+                            file: null,
+                            caption: "caption",
+                            sourceUrl: "google.ca",
+                          },
+                        },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          };
+
+          const filename = "viral-culture-per-ct-value.jpg";
+          const res = await request(app)
+            .post("/graphql")
+            .field(
+              "operations",
+              JSON.stringify({
+                query: createParagraphEditProposal,
+                variables: { data },
+              })
+            )
+            .field(
+              "map",
+              JSON.stringify({
+                1: [
+                  "variables.data.statementItems.1.stringArray.0.styles.0.value.image.file",
+                ],
+              })
+            )
+            .attach(
+              "1",
+              path.resolve(__dirname, `../../testing/assets/${filename}`)
+            )
+            .set("Authorization", token);
+
+          expect(res.status).toBe(200);
+
+          const fileId =
+            res.body.data.createParagraphEditProposal.statementItems[1]
+              .stringArray[0].styles[0].value.image.file._id;
+          expect(fileId).toBeDefined();
+
+          const file = await File.getById(fileId);
+          expect(file).toBeDefined();
         });
       });
     });

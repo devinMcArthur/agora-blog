@@ -198,6 +198,28 @@ const createParagraphEditProposals = () => {
               quotedStatement:
                 _ids.pages.page_covid_19_deaths.paragraphs[0].statements[1],
             },
+            {
+              changeType: EditProposalChangeTypes.ADD,
+              newQuestions: ["Does this have an image?"],
+              stringArray: [
+                {
+                  styles: [
+                    {
+                      type: StyleTypes.image,
+                      value: {
+                        image: {
+                          file: _ids.files
+                            .page_covid_2019_paragraph_v2_proposal_1_item_7_image
+                            ._id,
+                          caption: "caption",
+                          sourceUrl: "agora.voto",
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
           ],
         }
       );

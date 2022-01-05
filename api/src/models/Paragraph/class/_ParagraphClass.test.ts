@@ -37,6 +37,7 @@ describe("Paragraph Class", () => {
           const newPage = new Page({
             title: "test",
             slug: "test",
+            originalAuthor: documents.users.dev._id,
           });
 
           const data: IParagraphBuildData = {
@@ -162,7 +163,7 @@ describe("Paragraph Class", () => {
       });
     });
 
-    describe.only("buildFromProposal", () => {
+    describe("buildFromProposal", () => {
       describe("success", () => {
         test("should successfully create a new paragraph", async () => {
           expect(
@@ -211,7 +212,7 @@ describe("Paragraph Class", () => {
             documents.paragraphEditProposals.page_covid_2019_paragraph_v2_proposal_1._id.toHexString()
           );
 
-          expect(newParagraph.statements.length).toBe(6);
+          expect(newParagraph.statements.length).toBe(7);
 
           // check statements
 
@@ -321,6 +322,32 @@ describe("Paragraph Class", () => {
           );
 
           expect(statement6.versions.length).toBe(1);
+
+          // statement7 - added
+          const paragraphStatement7 = newParagraph.statements[6];
+          const statement7 = (await Statement.getById(
+            paragraphStatement7.statement!.toString()
+          ))!;
+
+          expect(statement7.current).toBeTruthy();
+          expect(statement7.versions.length).toBe(1);
+
+          expect(statement7.versions[0].questions.length).toBe(1);
+
+          const statement7Image =
+            statement7.versions[0].stringArray[0].styles[0].value.image!;
+          expect(statement7Image).toBeDefined();
+          expect(statement7Image.caption).toBe(
+            editProposal.statementItems[7].stringArray[0].styles[0].value.image
+              ?.caption
+          );
+          expect(statement7Image.sourceUrl).toBe(
+            editProposal.statementItems[7].stringArray[0].styles[0].value.image
+              ?.sourceUrl
+          );
+          expect(statement7Image.file!.toString()).toBe(
+            editProposal.statementItems[7].stringArray[0].styles[0].value.image?.file!.toString()
+          );
         });
       });
 

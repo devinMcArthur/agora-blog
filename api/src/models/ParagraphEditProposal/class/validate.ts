@@ -2,10 +2,8 @@ import {
   Paragraph,
   ParagraphEditProposalDocument,
   Statement,
-  StatementClass,
   User,
 } from "@models";
-import statements from "@testing/documents/statements/covid_19_deaths";
 import { EditProposalChangeTypes } from "@typescript/models/ParagraphEditProposal";
 import validateNewQuestionArray from "@validation/validateNewQuestionArray";
 import validateQuestionArray from "@validation/validateQuestionArray";

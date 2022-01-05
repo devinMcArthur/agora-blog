@@ -12,6 +12,7 @@ import {
 import { EditProposalChangeTypes } from "@typescript/models/ParagraphEditProposal";
 import { IStatementBuildData, StyleTypes } from "@typescript/models/Statement";
 import { Ref } from "@typegoose/typegoose";
+import buildStringArray from "@utils/buildStringArray";
 
 const build = (Statement: StatementModel, data: IStatementBuildData) => {
   return new Promise<StatementDocument>(async (resolve, reject) => {
@@ -28,39 +29,8 @@ const build = (Statement: StatementModel, data: IStatementBuildData) => {
         newQuestions.push(newQuestion);
       }
 
-      const versionStringArray = await Promise.all(
-        data.version.stringArray.map(async (item) => {
-          return {
-            ...item,
-            styles: await Promise.all(
-              item.styles.map(async (style) => {
-                let value = {};
-
-                switch (style.type) {
-                  case StyleTypes.image: {
-                    value = {
-                      image: {
-                        caption: style.value?.image?.caption,
-                        sourceUrl: style.value?.image?.sourceUrl,
-                        file: (await File.build(style.value!.image!.file))._id,
-                      },
-                    };
-                    break;
-                  }
-                  default: {
-                    value = { ...style.value };
-                  }
-                }
-
-                return {
-                  type: style.type,
-                  variant: style.variant,
-                  value,
-                };
-              })
-            ),
-          };
-        })
+      const versionStringArray = await buildStringArray(
+        data.version.stringArray
       );
 
       const statement = new Statement({
