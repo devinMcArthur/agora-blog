@@ -36,7 +36,9 @@
       "@typescript/*": ["typescript/*"],
       "@utils/*": ["utils/*"],
       "@validation/*": ["validation/*"],
-      "@graphql/*": ["graphql/*"]
+      "@graphql/*": ["graphql/*"],
+      "@logger": ["./logger"],
+      "@elasticsearch/*": ["elasticsearch/*"]
     }
   },
   "exclude": ["node_modules"],

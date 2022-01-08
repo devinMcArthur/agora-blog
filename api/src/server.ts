@@ -12,6 +12,8 @@ if (process.env.NODE_ENV === "development" || !process.env.NODE_ENV) {
 
 import createApp from "./app";
 import updateDocuments from "@utils/updateDocuments";
+import { logger } from "logger";
+import elasticsearchTesting from "@elasticsearch/_test_";
 
 const main = async () => {
   if (process.env.NODE_ENV !== "test") {
@@ -32,6 +34,12 @@ const main = async () => {
   let port = process.env.PORT || 8080;
 
   const app = await createApp();
+
+  try {
+    // await elasticsearchTesting();
+  } catch (e) {
+    console.error(e);
+  }
 
   app.listen(port, () => console.log(`Server running on port ${port}`));
 };

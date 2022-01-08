@@ -1,12 +1,16 @@
-import { index, prop, Ref } from "@typegoose/typegoose";
+import { index, post, prop, Ref } from "@typegoose/typegoose";
 import { Types } from "mongoose";
 import { PageDocument, ParagraphClass, UserClass } from "@models";
 import { Field, ID, ObjectType } from "type-graphql";
 import SchemaVersions from "@constants/SchemaVersions";
 import replaceSpaces from "@utils/replaceSpaces";
+import { ES_updatePage } from "@elasticsearch/helpers/page";
 
 @index({ title: "text" })
 @ObjectType()
+@post<PageDocument>("save", async (page) => {
+  await ES_updatePage(page);
+})
 export class PageSchema {
   @Field(() => ID, { nullable: false })
   public _id!: Types.ObjectId;

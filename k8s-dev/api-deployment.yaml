@@ -17,16 +17,18 @@ spec:
           image: agoraplatform/api
           ports:
             - containerPort: 8080
-          # env:
-          #   - name: REDIS_HOST
-          #     value: redis-cluster-ip-service
-          #   - name: REDIS_PORT
-          #     value: "6379"
-          #   - name: PGHOST
-          #     value: postgres-cluster-ip-service
-          #   - name: PGPORT
-          #     value: "5432"
-          #   - name: PGDATABASE
-          #     value: postgres
-          #   - name: PGPASSWORD
-          #     value: password
+          env:
+            - name: NODE_ENV
+              value: development
+            - name: MONGO_URI
+              value: mongodb+srv://devin:chaos1@cluster0.hlyry.mongodb.net/development?retryWrites=true&w=majority
+            - name: JWT_SECRET
+              value: donttellanyoneaboutthissecretplease
+            - name: SPACES_NAME
+              value: agora-dev
+            - name: SPACES_REGION
+              value: sfo3
+            - name: SPACES_KEY
+              value: WSSFOK5LKJ5PP5XIHQEA
+            - name: SPACES_SECRET
+              value: fFtvsxm4rX7QzX09RXLWchJUXb1Uda3bbnJREKTVVH0

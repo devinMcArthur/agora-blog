@@ -15,6 +15,7 @@ import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
 import { IListOptions } from "@typescript/interface/list_Options";
 import statementToString from "@utils/statementToString";
+import ElasticsearchClient from "@elasticsearch/client";
 
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,
@@ -104,58 +105,82 @@ const search = (
     try {
       let reminaingLimit = limit || 250;
 
-      /**
-       * Partial Search
-       */
-      const partialSearch = async () => {
-        const escapeRegex = (text: string) => {
-          return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-        };
+      // /**
+      //  * Partial Search
+      //  */
+      // const partialSearch = async () => {
+      //   const escapeRegex = (text: string) => {
+      //     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+      //   };
 
-        return Page.find({
-          title: new RegExp(escapeRegex(searchString), "gi"),
-        }).limit(reminaingLimit);
-      };
+      //   return Page.find({
+      //     title: new RegExp(escapeRegex(searchString), "gi"),
+      //   }).limit(reminaingLimit);
+      // };
 
-      /**
-       * Full Search
-       */
-      const fullSearch = async () => {
-        // requires Atlas Search Index
-        const aggregates = await Page.aggregate([
-          {
-            $search: {
-              text: {
+      // /**
+      //  * Full Search
+      //  */
+      // const fullSearch = async () => {
+      //   // requires Atlas Search Index
+      //   const aggregates = await Page.aggregate([
+      //     {
+      //       $search: {
+      //         text: {
+      //           query: searchString,
+      //           path: {
+      //             wildcard: "*",
+      //           },
+      //         },
+      //       },
+      //     },
+      //   ]).limit(reminaingLimit);
+
+      //   const pages: PageDocument[] = [];
+      //   for (let i = 0; i < aggregates.length; i++) {
+      //     const page = await Page.getById(aggregates[i]._id);
+      //     if (page) pages.push(page);
+      //   }
+
+      //   return pages;
+      // };
+
+      // /**
+      //  * Final Combination
+      //  */
+
+      // let pages: PageDocument[] = await fullSearch();
+      // if (pages.length < 1) {
+      //   pages = await partialSearch();
+      // }
+
+      const res = await ElasticsearchClient.search({
+        index: "page",
+        body: {
+          query: {
+            match: {
+              "page.title": {
                 query: searchString,
-                path: {
-                  wildcard: "*",
-                },
+                fuzziness: "AUTO",
               },
             },
           },
-        ]).limit(reminaingLimit);
+        },
+        size: limit,
+      });
 
-        const pages: PageDocument[] = [];
-        for (let i = 0; i < aggregates.length; i++) {
-          const page = await Page.getById(aggregates[i]._id);
-          if (page) pages.push(page);
-        }
+      console.log(JSON.stringify(res.body));
 
-        return pages;
-      };
+      const pageIds: string[] = res.body.hits.hits.map((item: any) => item._id);
 
-      /**
-       * Final Combination
-       */
-
-      let pages: PageDocument[] = await fullSearch();
-      if (pages.length < 1) {
-        pages = await partialSearch();
+      const pages: PageDocument[] = [];
+      for (let i = 0; i < pageIds.length; i++) {
+        const page = await Page.getById(pageIds[i]);
+        if (page) pages.push(page);
       }
 
       resolve(pages);
     } catch (e) {
-      console.error(e);
       reject(e);
     }
   });

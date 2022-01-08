@@ -2,7 +2,7 @@ apiVersion: skaffold/v2beta10
 kind: Config
 build:
   local:
-    push: false
+    push: false # Setting false will not push the image to remote repository
   tagPolicy:
     gitCommit: {}
   artifacts:
@@ -10,7 +10,7 @@ build:
       context: client
       docker:
         dockerfile: Dockerfile.dev
-        noCache: true
+        # noCache: true
       sync:
         # Whenever these types of files are updated, inject into the pod (Mode 2)
         # If any other files are changed, will fall back to Mode 1
@@ -29,7 +29,7 @@ build:
       context: api
       docker:
         dockerfile: Dockerfile.dev
-        noCache: true
+        # noCache: true
       # Must be using nodemon
       sync:
         manual:
@@ -41,6 +41,11 @@ build:
 deploy:
   kubectl:
     manifests:
+      - k8s-dev/kube-devops.yaml
+      - k8s-dev/elasticsearch_service.yaml
+      - k8s-dev/elasticsearch_statefulset.yaml
+      - k8s-dev/kibana.yaml
+      - k8s-dev/filebeat.yaml
       - k8s-dev/api-deployment.yaml
       - k8s-dev/client-deployment.yaml
       - k8s-dev/api-cluster-ip-service.yaml
