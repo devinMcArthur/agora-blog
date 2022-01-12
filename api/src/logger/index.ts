@@ -7,14 +7,28 @@ import {
 const esTransportOpts: ElasticsearchTransportOptions = {
   level: "info",
   clientOpts: {
-    node: "http://elasticsearch.kube-devops.svc:9200",
+    node:
+      process.env.ELASTICSEARCH_URL ||
+      "http://elasticsearch-client.kube-devops.svc:9200",
+    auth: {
+      username: (process.env.ELASTICSEARCH_USERNAME as string) || "elastic",
+      password: (process.env.ELASTICSEARCH_PASSWORD as string) || "changeme",
+    },
   },
 };
+
+const consoleTransport = new winston.transports.Console({
+  level: "error",
+  format: winston.format.combine(
+    winston.format.colorize(),
+    winston.format.simple()
+  ),
+});
 
 const esTransport = new ElasticsearchTransport(esTransportOpts);
 
 export const logger = winston.createLogger({
-  transports: [esTransport],
+  transports: [esTransport, consoleTransport],
 });
 
 /**
@@ -26,8 +40,4 @@ logger.on("error", (error) => {
 });
 esTransport.on("error", (error) => {
   console.error("Error in logger caught", error);
-});
-
-logger.on("data", (chunk) => {
-  console.log("chunk", chunk);
 });

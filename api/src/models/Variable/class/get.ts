@@ -17,6 +17,7 @@ import {
 import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
 import getVariableVersionValue from "@utils/getVariableVersionValue";
+import ElasticsearchClient from "@elasticsearch/client";
 
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,
@@ -103,54 +104,29 @@ const search = (
 ) => {
   return new Promise<VariableDocument[]>(async (resolve, reject) => {
     try {
-      let remainingLimit = limit || 250;
-
-      /**
-       * Partial Search
-       */
-      const partialSearch = async () => {
-        const escapeRegex = (text: string) => {
-          return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-        };
-
-        return Variable.find({
-          title: new RegExp(escapeRegex(searchString), "gi"),
-        }).limit(remainingLimit);
-      };
-
-      /**
-       * Full Search
-       */
-      const fullSearch = async () => {
-        const aggregates = await Variable.aggregate([
-          {
-            $search: {
-              text: {
+      const res = await ElasticsearchClient.search({
+        index: "variable",
+        body: {
+          query: {
+            match: {
+              "variable.title": {
                 query: searchString,
-                path: {
-                  wildcard: "*",
-                },
+                fuzziness: "AUTO",
               },
             },
           },
-        ]).limit(remainingLimit);
+        },
+        size: limit,
+      });
 
-        const variables: VariableDocument[] = [];
-        for (let i = 0; i < aggregates.length; i++) {
-          const variable = await Variable.getById(aggregates[i]._id);
-          if (variable) variables.push(variable);
-        }
+      const variableIds: string[] = res.body.hits.hits.map(
+        (item: any) => item._id
+      );
 
-        return variables;
-      };
-
-      /**
-       * Final Combination
-       */
-
-      let variables: VariableDocument[] = await fullSearch();
-      if (variables.length < 1) {
-        variables = await partialSearch();
+      const variables: VariableDocument[] = [];
+      for (let i = 0; i < variableIds.length; i++) {
+        const variable = await Variable.getById(variableIds[i]);
+        if (variable) variables.push(variable);
       }
 
       resolve(variables);

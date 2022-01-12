@@ -103,57 +103,6 @@ const search = (
 ): Promise<PageDocument[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      let reminaingLimit = limit || 250;
-
-      // /**
-      //  * Partial Search
-      //  */
-      // const partialSearch = async () => {
-      //   const escapeRegex = (text: string) => {
-      //     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-      //   };
-
-      //   return Page.find({
-      //     title: new RegExp(escapeRegex(searchString), "gi"),
-      //   }).limit(reminaingLimit);
-      // };
-
-      // /**
-      //  * Full Search
-      //  */
-      // const fullSearch = async () => {
-      //   // requires Atlas Search Index
-      //   const aggregates = await Page.aggregate([
-      //     {
-      //       $search: {
-      //         text: {
-      //           query: searchString,
-      //           path: {
-      //             wildcard: "*",
-      //           },
-      //         },
-      //       },
-      //     },
-      //   ]).limit(reminaingLimit);
-
-      //   const pages: PageDocument[] = [];
-      //   for (let i = 0; i < aggregates.length; i++) {
-      //     const page = await Page.getById(aggregates[i]._id);
-      //     if (page) pages.push(page);
-      //   }
-
-      //   return pages;
-      // };
-
-      // /**
-      //  * Final Combination
-      //  */
-
-      // let pages: PageDocument[] = await fullSearch();
-      // if (pages.length < 1) {
-      //   pages = await partialSearch();
-      // }
-
       const res = await ElasticsearchClient.search({
         index: "page",
         body: {
@@ -168,8 +117,6 @@ const search = (
         },
         size: limit,
       });
-
-      console.log(JSON.stringify(res.body));
 
       const pageIds: string[] = res.body.hits.hits.map((item: any) => item._id);
 

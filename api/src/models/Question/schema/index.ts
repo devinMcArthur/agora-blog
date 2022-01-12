@@ -1,12 +1,16 @@
 import SchemaVersions from "@constants/SchemaVersions";
+import { ES_updateQuestion } from "@elasticsearch/helpers/question";
 import { QuestionDocument } from "@models";
-import { prop, index } from "@typegoose/typegoose";
+import { prop, index, post } from "@typegoose/typegoose";
 import replaceSpaces from "@utils/replaceSpaces";
 import { Types } from "mongoose";
 import { Field, ID, ObjectType } from "type-graphql";
 
 @index({ question: "text" })
 @ObjectType()
+@post<QuestionDocument>("save", async (page) => {
+  await ES_updateQuestion(page);
+})
 export class QuestionSchema {
   @Field(() => ID, { nullable: false })
   public _id!: Types.ObjectId;

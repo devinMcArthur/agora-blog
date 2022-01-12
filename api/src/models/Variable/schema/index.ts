@@ -1,6 +1,7 @@
 import SchemaVersions from "@constants/SchemaVersions";
-import { UserClass, VariableVersionClass } from "@models";
-import { index, prop, Ref } from "@typegoose/typegoose";
+import { ES_updateVariable } from "@elasticsearch/helpers/variable";
+import { UserClass, VariableDocument, VariableVersionClass } from "@models";
+import { index, post, prop, Ref } from "@typegoose/typegoose";
 import { Types } from "mongoose";
 import { Field, ID, ObjectType } from "type-graphql";
 
@@ -8,6 +9,9 @@ export * from "./subDocuments";
 
 @index({ title: "text" })
 @ObjectType()
+@post<VariableDocument>("save", async (variable) => {
+  await ES_updateVariable(variable);
+})
 export class VariableSchema {
   @Field(() => ID, { nullable: false })
   public _id!: Types.ObjectId;

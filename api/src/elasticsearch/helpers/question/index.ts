@@ -1,26 +1,27 @@
-import ElasticsearchClient from "../../client";
-import { PageDocument } from "@models";
-import PageMapping from "../../mappings/page.json";
-import _ from "lodash";
+import ElasticsearchClient from "@elasticsearch/client";
 import { logger } from "@logger";
+import { QuestionDocument } from "@models";
+import _ from "lodash";
 
-export const ES_ensurePageIndex = () => {
+import QuestionMapping from "../../mappings/question.json";
+
+export const ES_ensureQuestionIndex = () => {
   return new Promise<void>(async (resolve, reject) => {
     try {
       const exists = (
         await ElasticsearchClient.indices.exists({
-          index: "page",
+          index: "question",
         })
       ).body;
 
       if (exists === false) {
         // If no index exists, create with mapping
 
-        logger.info("Creating page ES index");
+        logger.info("Creating question ES index");
         await ElasticsearchClient.indices.create({
-          index: "page",
+          index: "question",
           body: {
-            mappings: PageMapping,
+            mappings: QuestionMapping,
           },
         });
       } else {
@@ -28,22 +29,22 @@ export const ES_ensurePageIndex = () => {
 
         const currentMapping = (
           await ElasticsearchClient.indices.getMapping({
-            index: "page",
+            index: "question",
           })
-        ).body["page"].mappings;
+        ).body["question"].mappings;
 
         if (
           !_.isEqual(
             JSON.parse(JSON.stringify(currentMapping)),
-            JSON.parse(JSON.stringify(PageMapping))
+            JSON.parse(JSON.stringify(QuestionMapping))
           )
         ) {
           // Mappings do not match, update ES map
 
-          logger.info("Updating page ES index mapping");
+          logger.info("Updating question ES index mapping");
           await ElasticsearchClient.indices.putMapping({
-            index: "page",
-            body: PageMapping,
+            index: "question",
+            body: QuestionMapping,
           });
         }
       }
@@ -55,19 +56,19 @@ export const ES_ensurePageIndex = () => {
   });
 };
 
-export const ES_updatePage = (page: PageDocument) => {
+export const ES_updateQuestion = (question: QuestionDocument) => {
   return new Promise<void>(async (resolve, reject) => {
     try {
-      await ES_ensurePageIndex();
+      await ES_ensureQuestionIndex();
 
-      logger.debug(`Updating page ${page._id} in ES`);
+      logger.debug(`Updating question ${question._id} in ES`);
       await ElasticsearchClient.update({
-        index: "page",
-        id: page._id.toString(),
+        index: "question",
+        id: question._id.toString(),
         body: {
           doc: {
-            page: {
-              title: page.title,
+            question: {
+              question: question.question,
             },
           },
           doc_as_upsert: true,
