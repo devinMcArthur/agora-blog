@@ -33,6 +33,8 @@ const main = async () => {
 
   const app = await createApp();
 
+  console.log("hello");
+
   app.listen(port, () => console.log(`Server running on port ${port}`));
 };
 
