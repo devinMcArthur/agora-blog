@@ -39,6 +39,7 @@ build:
             dest: .
 # Automatically apply config files, remove them when stopped
 deploy:
+  kubeContext: minikube
   kubectl:
     manifests:
       - k8s-dev/api-deployment.yaml
