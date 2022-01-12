@@ -28,26 +28,26 @@ spec:
   selector:
     app: kibana
 ---
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: kibana
-  namespace: kube-devops
-  annotations:
-    kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/scheme: internal
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/backend-protocol: HTTP
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
-spec:
-  rules:
-    - http:
-        paths:
-          - path: /*
-            backend:
-              serviceName: kibana
-              servicePort: 5601
----
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: kibana
+#   namespace: kube-devops
+#   annotations:
+#     kubernetes.io/ingress.class: alb
+#     alb.ingress.kubernetes.io/scheme: internal
+#     alb.ingress.kubernetes.io/target-type: ip
+#     alb.ingress.kubernetes.io/backend-protocol: HTTP
+#     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+# spec:
+#   rules:
+#     - http:
+#         paths:
+#           - path: /*
+#             backend:
+#               serviceName: kibana
+#               servicePort: 5601
+# ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

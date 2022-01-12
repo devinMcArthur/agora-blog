@@ -49,7 +49,7 @@ deploy:
       - k8s-dev/es-data.yaml
       - k8s-dev/es-client.yaml
       - k8s-dev/kibana.yaml
-      - k8s-dev/filebeat.yaml
+      # - k8s-dev/filebeat.yaml
       - k8s-dev/api-deployment.yaml
       - k8s-dev/client-deployment.yaml
       - k8s-dev/api-cluster-ip-service.yaml

@@ -1,3 +1,8 @@
+# General Setup
+
+Before deploying or running skaffold, be sure to replace all instances of `agoraplatform/*`
+Docker Hub references with your own Docker Hub images.
+
 # Development
 
 ## Docker Compose
@@ -6,7 +11,9 @@
 
 ## Skaffold
 
-- `skaffold dev --port-forward`
+- `skaffold dev`
+  - NOTE - if you have this error: `updates to statefulset spec for fields other than 'replicas', 'template', and 'updateStrategy' are forbidden`
+  - run the command again - haven't found a better fix for this
 
 # Production
 
@@ -20,6 +27,10 @@
 
 - Create a secret containing the password for user `elastic`
 
+  - This password will be used to login to Kibana in production w/ username `elastic`
+
 - `kubectl create secret generic elasticsearch-secrets -n kube-devops --from-literal=password=<user-elastic-password>`
 
 - `kubectl apply -f ./k8s-es/kibana.yaml`
+
+- `kubectl apply -f ./k8s-es/ingress.yaml`
