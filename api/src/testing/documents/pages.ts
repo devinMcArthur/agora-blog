@@ -2,6 +2,8 @@ import _ids from "../_ids";
 
 import { Page, PageDocument } from "@models";
 
+import { ES_updatePage } from "@elasticsearch/helpers/page";
+
 export interface SeededPages {
   page_sars_cov_2: PageDocument;
   page_covid_2019: PageDocument;

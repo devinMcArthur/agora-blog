@@ -27,6 +27,7 @@ import ParagraphEditProposalStatementResolver from "@graphql/resolvers/paragraph
 
 import { User, UserDocument } from "@models";
 import authChecker from "@utils/authChecker";
+import { logger } from "@logger";
 
 const createApp = async () => {
   const app = express();
@@ -83,6 +84,24 @@ const createApp = async () => {
       };
     },
     uploads: false,
+    plugins: [
+      {
+        requestDidStart: () => {
+          return {
+            didEncounterErrors: (context) => {
+              logger.error({
+                message: context.errors[0].message || "Apollo request error",
+                meta: {
+                  variables: context.request.variables,
+                  errors: context.errors,
+                  operationName: context.operationName,
+                },
+              });
+            },
+          };
+        },
+      },
+    ],
   });
 
   app.use(

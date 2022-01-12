@@ -18,6 +18,7 @@ spec:
     - hosts:
         - agora.voto
         - www.agora.voto
+        - dev.agora.voto
       secretName: agora-tls
   rules:
     - host: agora.voto
@@ -42,13 +43,3 @@ spec:
             backend:
               serviceName: api-cluster-ip-service
               servicePort: 8080
-    # - http:
-    #     paths:
-    #       - path: /?(.*)
-    #         backend:
-    #           serviceName: client-cluster-ip-service
-    #           servicePort: 3000
-    #       - path: /graphql/?(.*)
-    #         backend:
-    #           serviceName: server-cluster-ip-service
-    #           servicePort: 5000

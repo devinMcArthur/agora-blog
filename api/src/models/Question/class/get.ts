@@ -13,6 +13,7 @@ import {
 import GetByIDOptions from "@typescript/interface/getById_Options";
 import populateOptions from "@utils/populateOptions";
 import { IListOptions } from "@typescript/interface/list_Options";
+import ElasticsearchClient from "@elasticsearch/client";
 
 const byIDDefaultOptions: GetByIDOptions = {
   throwError: false,
@@ -200,54 +201,29 @@ const search = (
 ) => {
   return new Promise<QuestionDocument[]>(async (resolve, reject) => {
     try {
-      let remainingLimit = limit || 250;
-
-      /**
-       * Partial Search
-       */
-      const partialSearch = async () => {
-        const escapeRegex = (text: string) => {
-          return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-        };
-
-        return Question.find({
-          question: new RegExp(escapeRegex(searchString), "gi"),
-        }).limit(remainingLimit);
-      };
-
-      /**
-       * Full Search
-       */
-      const fullSearch = async () => {
-        const aggregates = await Question.aggregate([
-          {
-            $search: {
-              text: {
+      const res = await ElasticsearchClient.search({
+        index: "question",
+        body: {
+          query: {
+            match: {
+              "question.question": {
                 query: searchString,
-                path: {
-                  wildcard: "*",
-                },
+                fuzziness: "AUTO",
               },
             },
           },
-        ]).limit(remainingLimit);
+        },
+        size: limit,
+      });
 
-        const questions: QuestionDocument[] = [];
-        for (let i = 0; i < aggregates.length; i++) {
-          const question = await Question.getById(aggregates[i]._id);
-          if (question) questions.push(question);
-        }
+      const questionIds: string[] = res.body.hits.hits.map(
+        (item: any) => item._id
+      );
 
-        return questions;
-      };
-
-      /**
-       * Final Combination
-       */
-
-      let questions: QuestionDocument[] = await fullSearch();
-      if (questions.length < 1) {
-        questions = await partialSearch();
+      const questions: QuestionDocument[] = [];
+      for (let i = 0; i < questionIds.length; i++) {
+        const question = await Question.getById(questionIds[i]);
+        if (question) questions.push(question);
       }
 
       resolve(questions);

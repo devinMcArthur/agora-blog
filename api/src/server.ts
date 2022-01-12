@@ -12,28 +12,38 @@ if (process.env.NODE_ENV === "development" || !process.env.NODE_ENV) {
 
 import createApp from "./app";
 import updateDocuments from "@utils/updateDocuments";
+import { logger } from "@logger";
 
 const main = async () => {
-  if (process.env.NODE_ENV !== "test") {
-    await mongoose.connect(process.env.MONGO_URI!, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log("MongoDB Connected");
+  try {
+    if (process.env.NODE_ENV !== "test") {
+      await mongoose.connect(process.env.MONGO_URI!, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+      console.log("MongoDB Connected");
 
-    if (process.env.NODE_ENV !== "production") {
-      console.log("Database seeding...");
-      await seedDatabase();
+      if (process.env.NODE_ENV !== "production") {
+        console.log("Database seeding...");
+        await seedDatabase();
+      }
     }
+
+    await updateDocuments();
+
+    let port = process.env.PORT || 8080;
+
+    const app = await createApp();
+
+    app.listen(port, () => console.log(`Server running on port ${port}`));
+  } catch (error: any) {
+    logger.error({
+      message: error.message || "Server errror",
+      meta: {
+        ...error,
+      },
+    });
   }
-
-  await updateDocuments();
-
-  let port = process.env.PORT || 8080;
-
-  const app = await createApp();
-
-  app.listen(port, () => console.log(`Server running on port ${port}`));
 };
 
 main().catch((err) => console.error(err));
