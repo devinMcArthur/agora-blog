@@ -50,3 +50,8 @@ spec:
                 secretKeyRef:
                   name: api-secrets
                   key: spacesSecret
+            - name: ELASTICSEARCH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: elasticsearchPassword
