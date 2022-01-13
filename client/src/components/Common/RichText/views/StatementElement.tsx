@@ -147,7 +147,6 @@ const StatementElement = ({
         marginX={1}
         marginY={4}
         p={2}
-        // border="1px solid gray"
         borderRadius={3}
         backgroundColor="white"
         {...focusedStyling}
@@ -158,7 +157,6 @@ const StatementElement = ({
           flexDir="column"
           p={1}
           contentEditable={false}
-          // backgroundColor="gray.100"
         >
           <Box
             display="flex"
@@ -244,7 +242,7 @@ const StatementElement = ({
                   <QuestionSearch
                     questionSelected={questionSelected}
                     handleSubmit={questionSubmitted}
-                    placeholder="Add question"
+                    placeholder="Add question . . ."
                     size="xs"
                     border="none"
                     maxH="1em"

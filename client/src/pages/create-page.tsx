@@ -130,7 +130,7 @@ const CreatePage = () => {
         <PageSearch
           value={title}
           onChange={(value) => setTitle(value)}
-          pageSelected={() => {}}
+          pageSelected={(value) => setTitle(value.title)}
           bgColor="gray.200"
           dropdownProps={{ backgroundColor: "gray.200" }}
           errorMessage={titleError}

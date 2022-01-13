@@ -23,7 +23,7 @@ const main = async () => {
       });
       console.log("MongoDB Connected");
 
-      if (process.env.NODE_ENV !== "production") {
+      if (process.env.NODE_ENV !== "production" && !!process.env.NODE_ENV) {
         console.log("Database seeding...");
         await seedDatabase();
       }
