@@ -33,6 +33,7 @@ const LinkForm: React.FC<ILinkForm> = ({
         _focus={{
           outline: "none",
         }}
+        id="link-form"
       />
       {markActive && (
         <IconButton

@@ -353,11 +353,7 @@ const StatementElement = ({
             </Box>
           </Box>
         )}
-        <Box
-          m={2}
-          tabIndex={element.index + 1}
-          display={hideChildren ? "none" : ""}
-        >
+        <Box m={2} display={hideChildren ? "none" : ""}>
           {children}
         </Box>
       </Box>

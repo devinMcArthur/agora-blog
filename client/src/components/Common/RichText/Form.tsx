@@ -1,4 +1,4 @@
-import { Box, Text } from "@chakra-ui/layout";
+import { Box } from "@chakra-ui/layout";
 import React from "react";
 
 import {
@@ -8,6 +8,7 @@ import {
   Descendant,
   Editor,
   Range,
+  Text,
 } from "slate";
 import { HistoryEditor, withHistory } from "slate-history";
 import { Editable, ReactEditor, Slate, withReact } from "slate-react";
@@ -22,10 +23,13 @@ import {
 } from "../../../models/slate";
 import Element from "./views/Element";
 import Leaf from "./views/Leaf";
-import StyleMenu from "./views/StyleMenu";
 import { CustomEditor } from "./utils";
-import Portal from "./views/Portal";
-import { FiAnchor, FiCamera, FiEdit3 } from "react-icons/fi";
+import {
+  ICommandList,
+  InputMenuTypes,
+  useRichText,
+} from "../../../contexts/RichText";
+import Menu from "./views/Menu";
 
 declare module "slate" {
   interface CustomTypes {
@@ -35,34 +39,12 @@ declare module "slate" {
   }
 }
 
-interface ICommand {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-}
-
 const Hotkeys = {
   "mod+b": SlateStyleTypes.bold,
   "mod+i": SlateStyleTypes.italic,
+  "mod+k": SlateStyleTypes.link,
+  escape: "remove",
 };
-
-const Commands: ICommand[] = [
-  {
-    title: "Variable",
-    description: "Add or create a new variable",
-    icon: <FiAnchor />,
-  },
-  {
-    title: "Quote",
-    description: "Insert a quote from another page",
-    icon: <FiEdit3 />,
-  },
-  {
-    title: "Image",
-    description: "Add an image",
-    icon: <FiCamera />,
-  },
-];
 
 const RichTextForm = ({
   value,
@@ -76,11 +58,16 @@ const RichTextForm = ({
    * ----- Hook Initialization -----
    */
 
-  const [command, setCommand] =
-    React.useState<{ text: string; range: BaseRange }>();
-  const [commandIndex, setCommandIndex] = React.useState<number>();
-
-  const commandPortalRef = React.useRef<HTMLDivElement | null>(null);
+  const {
+    command,
+    commandIndex,
+    filteredCommands,
+    inputMenu,
+    savedSelection,
+    setCommand,
+    setCommandIndex,
+    setInputMenu,
+  } = useRichText();
 
   /**
    * ----- Variables -----
@@ -90,14 +77,6 @@ const RichTextForm = ({
     () => withInlineElements(withHistory(withReact(createEditor()))),
     []
   );
-
-  const filteredCommands = React.useMemo(() => {
-    if (command && !!command.text) {
-      return Commands.filter((com) =>
-        com.title.toLowerCase().startsWith(command?.text.toLowerCase())
-      );
-    } else return Commands;
-  }, [command]);
 
   /**
    * ----- Functions -----
@@ -124,6 +103,14 @@ const RichTextForm = ({
         beforeMatch = beforeText && beforeText.match(/^\/$/);
       }
 
+      // Handle '*/'
+      if (!beforeMatch) {
+        const newBefore = Editor.before(editor, start, { unit: "character" });
+        beforeRange = newBefore && Editor.range(editor, newBefore, start);
+        const beforeText = beforeRange && Editor.string(editor, beforeRange);
+        beforeMatch = beforeText && beforeText.match(/^\/$/);
+      }
+
       const after = Editor.after(editor, start);
       const afterRange = Editor.range(editor, start, after);
       const afterText = Editor.string(editor, afterRange);
@@ -137,7 +124,7 @@ const RichTextForm = ({
         setCommandIndex(undefined);
       }
     }
-  }, [editor]);
+  }, [editor, setCommand, setCommandIndex]);
 
   const handleChange = React.useCallback(
     (value: Descendant[]) => {
@@ -149,24 +136,44 @@ const RichTextForm = ({
     [onChange, handleCommands]
   );
 
-  const handleCommand = React.useCallback((comm: ICommand) => {
-    console.log("command", comm);
-  }, []);
+  const handleCommand = React.useCallback(
+    (comm: ICommandList, range: BaseRange) => {
+      switch (comm.title) {
+        case "Variable": {
+          setInputMenu({ type: InputMenuTypes.variable, range });
+          break;
+        }
+        case "Quote": {
+          setInputMenu({ type: InputMenuTypes.quote, range });
+          break;
+        }
+        case "Image": {
+          setInputMenu({ type: InputMenuTypes.image, range });
+          break;
+        }
+      }
+    },
+    [setInputMenu]
+  );
 
   /**
-   * ----- Use-effects and other logic -----
+   * ----- Use-effect and other logic -----
    */
 
   React.useEffect(() => {
-    if (command) {
-      const el = commandPortalRef.current;
-      const domRange = ReactEditor.toDOMRange(editor, command.range);
-      const rect = domRange.getBoundingClientRect();
-      if (el) {
-        el.style.top = `${rect.top + window.pageYOffset + 24}px`;
-        el.style.left = `${rect.left + window.pageXOffset}px`;
+    const escapeFunction = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setCommand(undefined);
+        setCommandIndex(undefined);
+        setInputMenu(undefined);
       }
-    }
+    };
+
+    document.addEventListener("keydown", escapeFunction, false);
+
+    return () => {
+      document.removeEventListener("keydown", escapeFunction, false);
+    };
   });
 
   /**
@@ -184,7 +191,7 @@ const RichTextForm = ({
   return (
     <Slate editor={editor} value={value} onChange={handleChange}>
       <Box display="flex" flexDir="row" justifyContent="space-between">
-        <StyleMenu editor={editor} />
+        <Menu editor={editor} />
         <Box>
           {onCancel && (
             <Button
@@ -211,90 +218,91 @@ const RichTextForm = ({
           )}
         </Box>
       </Box>
-      <Box overflowY="scroll" height="45rem">
-        <Editable
-          renderElement={renderElement}
-          renderLeaf={renderLeaf}
-          spellCheck
-          autoFocus
-          placeholder="Type '/' for commands"
-          onKeyDown={(event) => {
-            if (command && commandIndex !== undefined) {
-              switch (event.code) {
-                case "ArrowDown": {
-                  event.preventDefault();
-                  if (commandIndex + 1 < filteredCommands.length) {
-                    setCommandIndex(commandIndex + 1);
-                  }
-                  break;
-                }
-                case "ArrowUp": {
-                  event.preventDefault();
-                  if (commandIndex !== 0) {
-                    setCommandIndex(commandIndex - 1);
-                  }
-                  break;
-                }
-                case "Enter": {
-                  event.preventDefault();
-                  if (filteredCommands[commandIndex]) {
-                    handleCommand(filteredCommands[commandIndex]);
-                  }
-                }
-              }
-            }
-            for (const hotkey in Hotkeys) {
-              if (isHotkey(hotkey, event)) {
+      <Editable
+        renderElement={renderElement}
+        renderLeaf={renderLeaf}
+        spellCheck
+        placeholder="Type '/' for commands"
+        onKeyDown={(event) => {
+          if (command && commandIndex !== undefined) {
+            switch (event.code) {
+              case "ArrowDown": {
                 event.preventDefault();
-                switch (hotkey) {
-                  case "mod+b": {
-                    CustomEditor.toggleBold(editor);
-                    break;
-                  }
-                  case "mod+i": {
-                    CustomEditor.toggleItalic(editor);
-                  }
+                if (commandIndex + 1 < filteredCommands.length) {
+                  setCommandIndex(commandIndex + 1);
+                }
+                break;
+              }
+              case "ArrowUp": {
+                event.preventDefault();
+                if (commandIndex !== 0) {
+                  setCommandIndex(commandIndex - 1);
+                }
+                break;
+              }
+              case "Tab":
+              case "Enter": {
+                event.preventDefault();
+                if (filteredCommands[commandIndex]) {
+                  handleCommand(filteredCommands[commandIndex], command.range);
                 }
               }
             }
-          }}
-        />
-        {command && filteredCommands.length > 0 && (
-          <Portal>
-            <Box
-              ref={commandPortalRef!}
-              top="-9999px"
-              left="-9999px"
-              position="absolute"
-              zIndex={1}
-              padding="3px"
-              background="white"
-              borderRadius="4px"
-              boxShadow="0 1px 5px rgba(0,0,0,.2"
-            >
-              {filteredCommands.map((com, i) => (
-                <Box
-                  key={com.title}
-                  p="1em"
-                  backgroundColor={
-                    i === commandIndex ? "gray.100" : "transparent"
+          }
+          if (inputMenu) setInputMenu(undefined);
+          for (const hotkey in Hotkeys) {
+            if (isHotkey(hotkey, event)) {
+              event.preventDefault();
+              switch (hotkey) {
+                case "mod+b": {
+                  CustomEditor.toggleBold(editor);
+                  break;
+                }
+                case "mod+i": {
+                  CustomEditor.toggleItalic(editor);
+                  break;
+                }
+                case "mod+k": {
+                  if (
+                    !inputMenu &&
+                    editor.selection &&
+                    !Range.isCollapsed(editor.selection)
+                  ) {
+                    setInputMenu({
+                      type: InputMenuTypes.link,
+                      range: editor.selection,
+                    });
                   }
-                >
-                  <Box display="flex" flexDir="row" w="100%">
-                    <Box minW="1em" maxW="1em" my="auto" mr="0.5em">
-                      {com.icon}
-                    </Box>
-                    <Box w="100%">
-                      <Text fontWeight="bold">{com.title}</Text>
-                      <Text>{com.description}</Text>
-                    </Box>
-                  </Box>
-                </Box>
-              ))}
-            </Box>
-          </Portal>
-        )}
-      </Box>
+                  break;
+                }
+              }
+            }
+          }
+        }}
+        decorate={([node, path]) => {
+          if (
+            Text.isText(node) &&
+            !editor.selection &&
+            !!savedSelection?.slateSelection
+          ) {
+            const intersection = Range.intersection(
+              savedSelection.slateSelection,
+              Editor.range(editor, path)
+            );
+
+            if (!intersection) return [];
+
+            const range = {
+              highlight: true,
+              ...intersection,
+            };
+
+            return [range];
+          }
+
+          return [];
+        }}
+      />
     </Slate>
   );
 };

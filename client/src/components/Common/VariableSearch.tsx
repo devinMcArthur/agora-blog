@@ -94,6 +94,8 @@ const VariableSearch: React.FC<IVariableSearch> = ({
         if (handleSubmit) handleSubmit(searchString);
       }}
       containerId={dropdownId}
+      selectOptionsWithEnter
+      autoFocus
       {...props}
     />
   );

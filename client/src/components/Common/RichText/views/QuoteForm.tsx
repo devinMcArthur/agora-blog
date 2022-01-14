@@ -12,6 +12,7 @@ const QuoteForm: React.FC<IQuoteForm> = ({ quoteSubmit }) => {
       <QuoteSearch
         placeholder="Search for a page"
         statementSelect={(id) => quoteSubmit(id)}
+        id="quote-form"
       />
     </Box>
   );

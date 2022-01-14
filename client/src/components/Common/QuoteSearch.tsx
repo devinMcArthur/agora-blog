@@ -56,7 +56,11 @@ const QuoteSearch: React.FC<IQuoteSearch> = ({ statementSelect, ...props }) => {
 
   return (
     <Box>
-      <PageSearch pageSelected={(page) => setPageId(page.id)} {...props} />
+      <PageSearch
+        pageSelected={(page) => setPageId(page.id)}
+        autoFocus
+        {...props}
+      />
       {fetchedPage && (
         <Box margin={1} padding={1}>
           <Box display="flex" justifyContent="flex-end">
