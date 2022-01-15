@@ -169,14 +169,15 @@ const Menu = ({ editor }: IMenu) => {
       const el = commandPortalRef.current;
       const domRange = ReactEditor.toDOMRange(editor, command.range);
       const rect = domRange.getBoundingClientRect();
-      console.log("---start---");
-      console.log(el?.offsetHeight);
-      console.log(window.innerHeight);
-      console.log(rect.top);
-      console.log(window.pageYOffset);
-      console.log("---end---");
+
       if (el) {
-        el.style.top = `${rect.top + window.pageYOffset + 24}px`;
+        // Move the menu to above if it goes off screen
+        let top = rect.top + window.pageYOffset + 24;
+        if (top > window.innerHeight) {
+          top = rect.top + window.pageYOffset - 5 - (el?.offsetHeight || 0);
+        }
+
+        el.style.top = `${top}px`;
         el.style.left = `${rect.left + window.pageXOffset}px`;
       }
     } else if (inputMenu !== undefined) {

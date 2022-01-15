@@ -4,6 +4,8 @@
       "properties": {
         "title": {
           "type": "text",
+          "analyzer": "autocomplete",
+          "search_analyzer": "autocomplete_search",
           "fields": {
             "keyword": {
               "type": "keyword",

@@ -13,9 +13,12 @@ if (process.env.NODE_ENV === "development" || !process.env.NODE_ENV) {
 import createApp from "./app";
 import updateDocuments from "@utils/updateDocuments";
 import { logger } from "@logger";
+import elasticsearch from "./elasticsearch";
 
 const main = async () => {
   try {
+    await elasticsearch();
+
     if (process.env.NODE_ENV !== "test") {
       await mongoose.connect(process.env.MONGO_URI!, {
         useNewUrlParser: true,
