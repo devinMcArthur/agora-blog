@@ -207,7 +207,7 @@ const search = (
           query: {
             match: {
               "question.question": {
-                query: searchString,
+                query: searchString.toLowerCase(),
                 fuzziness: "AUTO",
               },
             },

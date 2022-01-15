@@ -109,7 +109,7 @@ const search = (
           query: {
             match: {
               "page.title": {
-                query: searchString,
+                query: searchString.toLowerCase(),
                 fuzziness: "AUTO",
               },
             },
