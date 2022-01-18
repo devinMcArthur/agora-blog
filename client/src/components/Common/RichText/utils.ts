@@ -131,18 +131,7 @@ export const CustomEditor = {
       at: [nodeIndex],
     });
   },
-  moveStatement: (
-    editor: Editor,
-    nodeIndex: number,
-    direction: "up" | "down"
-  ) => {
-    let toIndex = 0;
-    if (direction === "up") {
-      toIndex = nodeIndex + 1;
-    } else {
-      if (nodeIndex !== 0) toIndex = nodeIndex - 1;
-    }
-
+  moveStatement: (editor: Editor, nodeIndex: number, toIndex: number) => {
     Transforms.moveNodes(editor, {
       at: [nodeIndex],
       to: [toIndex],

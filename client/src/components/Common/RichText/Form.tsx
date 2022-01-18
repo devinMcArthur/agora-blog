@@ -188,6 +188,8 @@ const RichTextForm = ({
 
   const renderLeaf = React.useCallback((props) => <Leaf {...props} />, []);
 
+  console.log("value", value);
+
   return (
     <Slate editor={editor} value={value} onChange={handleChange}>
       <Box display="flex" flexDir="row" justifyContent="space-between">

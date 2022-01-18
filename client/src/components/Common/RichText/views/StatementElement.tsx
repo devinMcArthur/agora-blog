@@ -20,6 +20,9 @@ import RecommendedStatements from "../../RecommendedStatements";
 import QuotedStatement from "../../../Statement/views/QuotedStatement";
 import { CloseButton } from "@chakra-ui/close-button";
 import { useRichText } from "../../../../contexts/RichText";
+import { MdDragHandle } from "react-icons/md";
+import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
+import { DragItemTypes } from "../../../../constants/dragItemTypes";
 
 enum Form {
   Question = "Question",
@@ -38,9 +41,86 @@ const StatementElement = ({
   editor,
   pageId,
 }: IStatementElement) => {
+  /**
+   * ----- Hook Initialization -----
+   */
   const { savedSelection } = useRichText();
   const [form, setForm] = React.useState<Form>();
   const [selectedQuestionId, setSelectedQuestionId] = React.useState<string>();
+
+  const dragHandleRef = React.useRef<HTMLButtonElement>(null);
+  const containerRef = attributes.ref;
+
+  const [{ handlerId }, drop] = useDrop({
+    accept: DragItemTypes.STATEMENT,
+    collect: (monitor) => {
+      // will error more often with this log
+      // console.log("handlerId", monitor.getHandlerId());
+      return {
+        handlerId: monitor.getHandlerId(),
+      };
+    },
+    hover(item: { index: number }, monitor: DropTargetMonitor) {
+      if (!dragHandleRef.current) {
+        return;
+      }
+      const dragIndex = item.index;
+      const hoverIndex = element.index;
+
+      // Don't replace items with themselves
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+
+      // Determine rectangle on screen
+      const hoverBoundingRect = dragHandleRef.current?.getBoundingClientRect();
+
+      // Get vertical middle
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+
+      // Determine mouse position
+      const clientOffset = monitor.getClientOffset();
+
+      // Get pixels to the top
+      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
+
+      // Only perform the move when the mouse has crossed half of the items height
+      // When dragging downwards, only move when the cursor is below 50%
+      // When dragging upwards, only move when the cursor is above 50%
+
+      // Dragging downwards
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return;
+      }
+
+      // Dragging upwards
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
+
+      // Time to actually perform the action
+      console.log("drag - hover", dragIndex, hoverIndex);
+
+      CustomEditor.moveStatement(editor, element.index, dragIndex);
+
+      // Note: we're mutating the monitor item here!
+      // Generally it's better to avoid mutations,
+      // but it's good here for the sake of performance
+      // to avoid expensive index searches.
+      item.index = hoverIndex;
+    },
+  });
+
+  const [{ isDragging }, drag, preview] = useDrag({
+    type: DragItemTypes.STATEMENT,
+    item: () => {
+      return { id: element.statementId, index: element.index };
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
 
   /**
    * ----- Functions -----
@@ -130,18 +210,33 @@ const StatementElement = ({
   const hideChildren = React.useMemo(() => {
     if (
       (element.newQuestions.length < 1 && element.questions.length < 1) ||
-      element.quotedStatementId
+      element.quotedStatementId ||
+      isDragging
     )
       return true;
     else return false;
   }, [
+    isDragging,
     element.newQuestions.length,
     element.questions.length,
     element.quotedStatementId,
   ]);
 
+  /**
+   * @todo NOTICE THAT THE isDragging STATE IS RESET WHEN MOVED EVEN WHEN STILL DRAGGING
+   *  - hooks are reseting when moved, causing the targetIds to get out of sync
+   *  - updates fine while dragging, errors once let go
+   *  - errors once no longer dragging
+   *  - Slate error if moved slowly and dropped
+   *  - ReactDND error if moved and dropped fast
+   */
+
+  const opacity = isDragging ? 0.5 : 1;
+  drag(dragHandleRef);
+  drop(preview(containerRef));
+
   return (
-    <Box {...attributes}>
+    <Box {...attributes} ref={containerRef} data-handler-id={handlerId}>
       <Box
         id={element.statementId}
         marginX={1}
@@ -260,7 +355,13 @@ const StatementElement = ({
                   New
                 </Text>
               )}
-              <ButtonGroup
+              <IconButton
+                aria-label="drag"
+                _focus={{ outline: "none" }}
+                ref={dragHandleRef}
+                icon={<MdDragHandle />}
+              />
+              {/* <ButtonGroup
                 isAttached
                 variant="outline"
                 size="sm"
@@ -285,7 +386,7 @@ const StatementElement = ({
                     }
                   />
                 </Tooltip>
-              </ButtonGroup>
+              </ButtonGroup> */}
             </Box>
           </Box>
           {form && (

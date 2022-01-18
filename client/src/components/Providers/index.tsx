@@ -3,12 +3,15 @@ import * as React from "react";
 import ThemeProvider from "./ThemeProvider";
 import MyApolloProvider from "./ApolloProvider";
 import { AuthProvider } from "../../contexts/Auth";
+import MyDndProvider from "./DndProvider";
 
 export default function Provider(props: { children: React.ReactNode }) {
   return (
     <ThemeProvider>
       <MyApolloProvider>
-        <AuthProvider>{props.children}</AuthProvider>
+        <MyDndProvider>
+          <AuthProvider>{props.children}</AuthProvider>
+        </MyDndProvider>
       </MyApolloProvider>
     </ThemeProvider>
   );
