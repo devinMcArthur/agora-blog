@@ -1,4 +1,4 @@
-import { BaseSelection, Editor, Transforms } from "slate";
+import { BasePoint, BaseSelection, Editor, Transforms } from "slate";
 import {
   ImageElementType,
   ISlateQuestion,
@@ -135,6 +135,11 @@ export const CustomEditor = {
     Transforms.moveNodes(editor, {
       at: [nodeIndex],
       to: [toIndex],
+    });
+    const point: BasePoint = { path: [0, 0], offset: 0 };
+    Transforms.select(editor, {
+      anchor: point,
+      focus: point,
     });
   },
   addQuestion: (

@@ -112,6 +112,8 @@ const StatementElement = ({
     },
   });
 
+  console.log("selection", editor.selection);
+
   const [{ isDragging }, drag, preview] = useDrag({
     type: DragItemTypes.STATEMENT,
     item: () => {
@@ -210,13 +212,11 @@ const StatementElement = ({
   const hideChildren = React.useMemo(() => {
     if (
       (element.newQuestions.length < 1 && element.questions.length < 1) ||
-      element.quotedStatementId ||
-      isDragging
+      element.quotedStatementId
     )
       return true;
     else return false;
   }, [
-    isDragging,
     element.newQuestions.length,
     element.questions.length,
     element.quotedStatementId,
