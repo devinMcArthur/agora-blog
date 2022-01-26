@@ -30,6 +30,7 @@ const Questions = () => {
         },
       }).then((data) => {
         if (data.data.questions.length === 0) setFinished(true);
+        throw new Error("Hello this is an error");
       });
     }
   }, [data?.questions.length, fetchMore, finished, loading]);
