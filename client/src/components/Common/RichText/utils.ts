@@ -136,11 +136,12 @@ export const CustomEditor = {
       at: [nodeIndex],
       to: [toIndex],
     });
-    const point: BasePoint = { path: [0, 0], offset: 0 };
-    Transforms.select(editor, {
-      anchor: point,
-      focus: point,
-    });
+    // const point: BasePoint = { path: [0, 0], offset: 0 };
+    // Transforms.select(editor, {
+    //   anchor: point,
+    //   focus: point,
+    // });
+    Transforms.deselect(editor);
   },
   addQuestion: (
     editor: Editor,

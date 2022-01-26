@@ -57,7 +57,7 @@ const StatementElement = ({
       // will error more often with this log
       // console.log("handlerId", monitor.getHandlerId());
       return {
-        handlerId: monitor.getHandlerId(),
+        handlerId: monitor.getHandlerId() || Math.random().toString(),
       };
     },
     hover(item: { index: number }, monitor: DropTargetMonitor) {
@@ -234,6 +234,8 @@ const StatementElement = ({
   const opacity = isDragging ? 0.5 : 1;
   drag(dragHandleRef);
   drop(preview(containerRef));
+
+  console.log("handlerId", handlerId);
 
   return (
     <Box {...attributes} ref={containerRef} data-handler-id={handlerId}>
