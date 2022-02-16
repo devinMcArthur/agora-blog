@@ -38,7 +38,7 @@ const main = async () => {
 
     const app = await createApp();
 
-    app.listen(port, () => console.log(`Server running on port ${port}`));
+    app.listen(port, () => console.log(`Server running on port: ${port}`));
   } catch (error: any) {
     logger.error({
       message: error.message || "Server errror",
