@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: client-deployment
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       component: web
@@ -17,10 +17,10 @@ spec:
           image: agoraplatform/client:$COMMIT_SHA1
           resources:
             requests:
-              cpu: "166m"
-              memory: "333Mi"
+              cpu: "250m"
+              memory: "500Mi"
             limits:
-              cpu: "333m"
-              memory: "666Mi"
+              cpu: "500m"
+              memory: "1000Mi"
           ports:
             - containerPort: 3000
