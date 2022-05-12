@@ -15,5 +15,12 @@ spec:
       containers:
         - name: client
           image: agoraplatform/client:$COMMIT_SHA1
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1000Mi"
+            limits:
+              cpu: "1000m"
+              memory: "2000Mi"
           ports:
             - containerPort: 3000

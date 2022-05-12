@@ -6,7 +6,6 @@ import {
   FullUserSnippetFragment,
   useCurrentUserLazyQuery,
 } from "../../generated/graphql";
-import useMounted from "../../hooks/useMounted";
 import useStorage from "../../hooks/useStorage";
 import SignIn from "./views/SignIn";
 import VerificationModal from "./views/Verification";

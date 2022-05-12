@@ -21,15 +21,21 @@ Docker Hub references with your own Docker Hub images.
 
 - `kubectl apply -f ./k8s-es/kube-devops.yaml`
 
+- Create Password Beforehand: https://github.com/elastic/cloud-on-k8s/issues/967#issuecomment-497636249
+
+  - `kubectl create secret generic elasticsearch-es-elastic-user -n kube-devops --from-literal=elastic=<password>`
+
 - `kubectl apply -f ./k8s-es/es-master.yaml -f ./k8s-es/es-client.yaml -f ./k8s-es/es-data.yaml`
 
-- Shell into `es-client` deployment and run `bin/elasticsearch-setup-passwords auto -b` and save the output from the command
+- OR create password after
 
-- Create a secret containing the password for user `elastic`
+  - Shell into `es-client` deployment and run `bin/elasticsearch-setup-passwords auto -b` and save the output from the command
 
-  - This password will be used to login to Kibana in production w/ username `elastic`
+  - Create a secret containing the password for user `elastic`
 
-- `kubectl create secret generic elasticsearch-secrets -n kube-devops --from-literal=password=<user-elastic-password>`
+    - This password will be used to login to Kibana in production w/ username `elastic`
+
+  - `kubectl create secret generic elasticsearch-secrets -n kube-devops --from-literal=password=<user-elastic-password>`
 
 - `kubectl apply -f ./k8s-es/kibana.yaml`
 
