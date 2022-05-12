@@ -1,7 +1,12 @@
 import React from "react";
 
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import {
+  Controller,
+  SubmitHandler,
+  useForm,
+  UseFormProps,
+} from "react-hook-form";
 import * as yup from "yup";
 
 import {
@@ -21,12 +26,13 @@ const UserLoginSchema = yup
   })
   .required();
 
-export const useUserLoginForm = () => {
+export const useUserLoginForm = (options?: UseFormProps) => {
   const form = useForm({
     resolver: yupResolver(UserLoginSchema),
+    ...options,
   });
 
-  const { control, handleSubmit } = form;
+  const { handleSubmit, control } = form;
 
   const FormComponents = {
     Form: ({
