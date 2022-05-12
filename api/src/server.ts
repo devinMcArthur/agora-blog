@@ -14,6 +14,9 @@ import createApp from "./app";
 import updateDocuments from "@utils/updateDocuments";
 import { logger } from "@logger";
 import elasticsearch from "./elasticsearch";
+import saveAll from "@testing/saveAll";
+
+const production = process.env.NODE_ENV === "production";
 
 const main = async () => {
   try {
@@ -39,6 +42,12 @@ const main = async () => {
     const app = await createApp();
 
     app.listen(port, () => console.log(`Server running on port: ${port}`));
+
+    if (process.env.NODE_ENV !== "test") {
+      if (production) {
+        await saveAll();
+      }
+    }
   } catch (error: any) {
     logger.error({
       message: error.message || "Server errror",
