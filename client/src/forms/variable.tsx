@@ -49,10 +49,14 @@ export const useNewVariableForm = () => {
   return { ...form };
 };
 
-const EditVariableSchema = yup.object().required().shape({
-  description: yup.string().required(),
-  value: VariableVersionSchema,
-});
+const EditVariableSchema = yup
+  .object()
+  .shape({
+    description: yup.string().required(),
+    value: VariableVersionSchema,
+    variable: yup.string().required(),
+  })
+  .required();
 
 export const useEditVariableForm = (options?: any) => {
   const form = useForm({
@@ -66,6 +70,7 @@ export const useEditVariableForm = (options?: any) => {
         equation: [],
         ...options.defaultValues.value,
       },
+      ...options.defaultValues,
     },
   });
 

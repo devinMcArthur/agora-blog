@@ -35,12 +35,13 @@ const EditVariable = ({
       value: {
         number: defaultValue,
       },
+      variable: variableId,
     },
   });
 
   const variableType = watch("value.type");
 
-  const submitHandler = (value: NewVariableEditProposalData) => {
+  const submitHandler: SubmitHandler<NewVariableEditProposalData> = (value) => {
     newEditProposal({
       variables: {
         data: {
