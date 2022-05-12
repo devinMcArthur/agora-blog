@@ -66,4 +66,4 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: elasticsearchUrl
-                  name: server-secrets
+                  name: api-secrets
